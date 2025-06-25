@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_final_flutter/pages/home_page.dart';
+import 'package:projeto_final_flutter/pages/settings_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,19 +15,12 @@ class MyApp extends StatelessWidget {
       title: 'Roam',
       debugShowCheckedModeBanner: false,
 
-      routes: {'/home': (_) => const HomePage()},
+      routes: {
+        '/home': (_) => const HomePage(),
+        '/settings': (_) => const SettingsPage(),
+      },
+
       initialRoute: '/home',
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(child: Text('Hello World!')),
     );
   }
 }

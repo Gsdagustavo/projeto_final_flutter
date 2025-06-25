@@ -8,6 +8,8 @@ class Assets {
   static const String generatedAssets = 'lib/generated/assets.dart';
   static const String libDesafioFinalAcademyFlutter2025 = 'lib/desafio_final_academy_flutter_2025.pdf';
   static const String libMain = 'lib/main.dart';
+  static const String pagesHomePage = 'lib/pages/home_page.dart';
+  static const String pagesSettingsPage = 'lib/pages/settings_page.dart';
   static const String widgetsBottomNavigationBar = 'lib/widgets/bottom_navigation_bar.dart';
 
 }
