@@ -1,7 +1,18 @@
+### Flutter ###
+.dart_tool/
+.packages
+.pub-cache/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.melos_tool/
+
 ### IntelliJ IDEA ###
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+.idea/
+*.iml
 
 ### Kotlin ###
 .kotlin
@@ -28,5 +39,14 @@ bin/
 ### VS Code ###
 .vscode/
 
-### Mac OS ###
+### macOS ###
 .DS_Store
+
+### Others ###
+*.log
+*.lock
+*.tmp
+*.swp
+*.apk
+*.ipa
+*.keystore
