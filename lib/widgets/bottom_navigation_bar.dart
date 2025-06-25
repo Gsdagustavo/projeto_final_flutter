@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
 
-class _BottomNavigationBar extends StatefulWidget {
-  const _BottomNavigationBar({super.key});
+class MyBottomNavigationBar extends StatelessWidget {
+  const MyBottomNavigationBar({super.key, required this.currentIndex});
 
-  @override
-  State<_BottomNavigationBar> createState() => _BottomNavigationBarState();
-}
+  final int currentIndex;
 
-class _BottomNavigationBarState extends State<_BottomNavigationBar> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  void _onItemTapped(BuildContext context, int index) {
+    if (index == currentIndex) return;
 
     switch (index) {
       case 0:
         Navigator.pushReplacementNamed(context, '/home');
+        break;
+      case 1:
+        Navigator.pushReplacementNamed(context, '/settings');
         break;
     }
   }
@@ -25,11 +21,14 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      currentIndex: _selectedIndex,
+      currentIndex: currentIndex,
 
-      items: [BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home')],
+      items: const [
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+        BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+      ],
 
-      onTap: _onItemTapped,
+      onTap: (index) => _onItemTapped(context, index),
     );
   }
 }
