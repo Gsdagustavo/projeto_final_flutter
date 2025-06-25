@@ -1,0 +1,1 @@
+ C:\\Users\\gugad\\eclipse-workspace\\projeto_final_flutter\\.dart_tool\\flutter_build\\2003456e49e24d63e946dfd2d63178b7\\native_assets.json: 
