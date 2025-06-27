@@ -11,6 +11,7 @@ class Assets {
   static const String l10nAppEs = 'lib/l10n/app_es.arb';
   static const String l10nAppLocalizations = 'lib/l10n/app_localizations.dart';
   static const String l10nAppLocalizationsEn = 'lib/l10n/app_localizations_en.dart';
+  static const String l10nAppLocalizationsEs = 'lib/l10n/app_localizations_es.dart';
   static const String l10nAppLocalizationsPt = 'lib/l10n/app_localizations_pt.dart';
   static const String l10nAppPt = 'lib/l10n/app_pt.arb';
   static const String libDesafioFinalAcademyFlutter2025 = 'lib/desafio_final_academy_flutter_2025.pdf';
@@ -20,6 +21,7 @@ class Assets {
   static const String pagesSettingsPage = 'lib/ui/pages/settings_page.dart';
   static const String utilEnumsUtil = 'lib/ui/util/enums_util.dart';
   static const String widgetsBottomNavigationBar = 'lib/ui/widgets/bottom_navigation_bar.dart';
+  static const String widgetsMyApp = 'lib/ui/widgets/my_app.dart';
   static const String widgetsMyAppBar = 'lib/ui/widgets/my_app_bar.dart';
 
 }
