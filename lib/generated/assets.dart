@@ -23,7 +23,7 @@ class Assets {
   static const String pagesSettingsPage = 'lib/ui/pages/settings_page.dart';
   static const String providersThemeProvider = 'lib/providers/theme_provider.dart';
   static const String servicesThemeService = 'lib/services/theme_service.dart';
-  static const String utilEnumsUtil = 'lib/ui/util/enums_util.dart';
+  static const String utilEnumsUtil = 'lib/ui/util/enums_extensions.dart';
   static const String widgetsBottomNavigationBar = 'lib/ui/widgets/bottom_navigation_bar.dart';
   static const String widgetsMyApp = 'lib/ui/widgets/my_app.dart';
   static const String widgetsMyAppBar = 'lib/ui/widgets/my_app_bar.dart';

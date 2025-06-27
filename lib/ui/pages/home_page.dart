@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_final_flutter/ui/util/enums_util.dart';
+import 'package:projeto_final_flutter/ui/util/enums_extensions.dart';
 
 import '../../entities/enums.dart';
 import '../../l10n/app_localizations.dart';
