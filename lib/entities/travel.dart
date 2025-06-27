@@ -1,8 +1,12 @@
 import 'package:projeto_final_flutter/entities/enums.dart';
+import 'package:projeto_final_flutter/entities/participant.dart';
 import 'package:projeto_final_flutter/entities/travel_stop.dart';
 
 class Travel {
   final String travelName;
+
+  final List<Participant> participants;
+
   final DateTime startTime;
   final DateTime endTime;
 
@@ -16,6 +20,7 @@ class Travel {
 
   Travel({
     required this.travelName,
+    required this.participants,
     required this.startTime,
     required this.endTime,
     required this.transportType,
