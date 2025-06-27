@@ -18,6 +18,7 @@ class Assets {
   static const String libMain = 'lib/main.dart';
   static const String pagesFabPage = 'lib/ui/pages/fab_page.dart';
   static const String pagesHomePage = 'lib/ui/pages/home_page.dart';
+  static const String pagesRegisterTravelPage = 'lib/ui/pages/register_travel_page.dart';
   static const String pagesSettingsPage = 'lib/ui/pages/settings_page.dart';
   static const String providersThemeProvider = 'lib/providers/theme_provider.dart';
   static const String servicesThemeService = 'lib/services/theme_service.dart';

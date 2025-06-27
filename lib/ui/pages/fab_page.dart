@@ -7,20 +7,18 @@ class FabPage extends StatelessWidget {
   const FabPage({
     super.key,
     required this.body,
-    required this.pageIndex,
     required this.title,
   });
 
   final String title;
   final Widget body;
-  final int pageIndex;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(title: title),
       body: body,
-      bottomNavigationBar: MyBottomNavigationBar(currentIndex: pageIndex),
+      bottomNavigationBar: const MyBottomNavigationBar(),
     );
   }
 }

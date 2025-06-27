@@ -42,5 +42,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get title_home => 'Home';
 
   @override
+  String get title_register_travel => 'Register Travel';
+
+  @override
   String get title_settings => 'Settings';
 }

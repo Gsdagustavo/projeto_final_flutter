@@ -42,5 +42,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get title_home => 'Inicio';
 
   @override
+  String get title_register_travel => 'Registrar Viagen';
+
+  @override
   String get title_settings => 'Ajustes';
 }

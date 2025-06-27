@@ -163,6 +163,12 @@ abstract class AppLocalizations {
   /// **'Home'**
   String get title_home;
 
+  /// No description provided for @title_register_travel.
+  ///
+  /// In en, this message translates to:
+  /// **'Register Travel'**
+  String get title_register_travel;
+
   /// No description provided for @title_settings.
   ///
   /// In en, this message translates to:

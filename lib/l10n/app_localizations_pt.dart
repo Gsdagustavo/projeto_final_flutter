@@ -42,5 +42,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get title_home => 'Início';
 
   @override
+  String get title_register_travel => 'Registrar Viagem';
+
+  @override
   String get title_settings => 'Ajustes';
 }

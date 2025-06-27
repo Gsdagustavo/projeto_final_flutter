@@ -8,6 +8,8 @@ import 'fab_page.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  static const String routeName = '/home';
+
   @override
   Widget build(BuildContext context) {
     final List<TransportType> items = TransportType.values;
@@ -19,9 +21,7 @@ class HomePage extends StatelessWidget {
         itemBuilder: (context, index) {
           return Text(items[index].getIntlTransportType(context));
         },
-      ),
-
-      pageIndex: 0,
+      )
     );
   }
 }
