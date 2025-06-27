@@ -2,6 +2,7 @@
 class Assets {
   Assets._();
 
+  static const String constantsAppRoutes = 'lib/core/constants/app_routes.dart';
   static const String entitiesEnums = 'lib/entities/enums.dart';
   static const String entitiesParticipant = 'lib/entities/participant.dart';
   static const String entitiesTravel = 'lib/entities/travel.dart';

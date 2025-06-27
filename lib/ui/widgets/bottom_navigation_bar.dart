@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_final_flutter/l10n/app_localizations.dart';
-import 'package:projeto_final_flutter/ui/widgets/my_app.dart';
+
+import '../../core/constants/app_routes.dart';
 
 class MyBottomNavigationBar extends StatelessWidget {
   const MyBottomNavigationBar({super.key});
