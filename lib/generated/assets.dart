@@ -2,11 +2,16 @@
 class Assets {
   Assets._();
 
+  static const String entitiesEnums = 'lib/entities/enums.dart';
   static const String entitiesParticipant = 'lib/entities/participant.dart';
   static const String entitiesTravel = 'lib/entities/travel.dart';
   static const String entitiesTravelStop = 'lib/entities/travel_stop.dart';
   static const String generatedAssets = 'lib/generated/assets.dart';
   static const String l10nAppEn = 'lib/l10n/app_en.arb';
+  static const String l10nAppEs = 'lib/l10n/app_es.arb';
+  static const String l10nAppLocalizations = 'lib/l10n/app_localizations.dart';
+  static const String l10nAppLocalizationsEn = 'lib/l10n/app_localizations_en.dart';
+  static const String l10nAppLocalizationsPt = 'lib/l10n/app_localizations_pt.dart';
   static const String l10nAppPt = 'lib/l10n/app_pt.arb';
   static const String libDesafioFinalAcademyFlutter2025 = 'lib/desafio_final_academy_flutter_2025.pdf';
   static const String libMain = 'lib/main.dart';
