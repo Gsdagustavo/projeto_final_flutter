@@ -19,13 +19,12 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
 
       actions: [
-        /// TODO: Add theme toggling button
         Consumer<ThemeProvider>(
           builder: (_, themeState, __) {
             return IconButton(
               onPressed: themeState.toggleTheme,
               icon: Icon(
-                themeState.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                themeState.isDarkMode ? Icons.dark_mode : Icons.light_mode,
               ),
             );
           },

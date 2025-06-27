@@ -14,30 +14,26 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => ThemeProvider(),
       builder: (context, child) {
-        return Consumer<ThemeProvider>(
-          builder: (_, themeState, __) {
-            return MaterialApp(
-              title: 'Roam',
-              debugShowCheckedModeBanner: false,
+        final isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
 
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              supportedLocales: AppLocalizations.supportedLocales,
+        return MaterialApp(
+          title: 'Roam',
+          debugShowCheckedModeBanner: false,
 
-              theme: ThemeData(brightness: Brightness.light),
-              darkTheme: ThemeData(brightness: Brightness.dark),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
 
-              themeMode: themeState.isDarkMode
-                  ? ThemeMode.dark
-                  : ThemeMode.light,
+          theme: ThemeData(brightness: Brightness.light),
+          darkTheme: ThemeData(brightness: Brightness.dark),
 
-              routes: {
-                '/home': (_) => const HomePage(),
-                '/settings': (_) => const SettingsPage(),
-              },
+          themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
 
-              initialRoute: '/home',
-            );
+          routes: {
+            '/home': (_) => const HomePage(),
+            '/settings': (_) => const SettingsPage(),
           },
+
+          initialRoute: '/home',
         );
       },
     );
