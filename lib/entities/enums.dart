@@ -1,6 +1,6 @@
-enum TransportTypes { car, bike, bus, plane, cruise }
+enum TransportType { car, bike, bus, plane, cruise }
 
-enum Experiences {
+enum Experience {
   cultureImmersion,
   alternativeCuisines,
   visitHistoricalPlaces,

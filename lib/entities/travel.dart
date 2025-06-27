@@ -6,8 +6,8 @@ class Travel {
   final DateTime startTime;
   final DateTime endTime;
 
-  final String transportation;
-  final List<Experiences> experiences;
+  final TransportType transportType;
+  final List<Experience> experiences;
 
   /// Stops places
   final List<TravelStop> stops;
@@ -18,7 +18,7 @@ class Travel {
     required this.travelName,
     required this.startTime,
     required this.endTime,
-    required this.transportation,
+    required this.transportType,
     required this.experiences,
     required this.stops,
   });

@@ -7,7 +7,7 @@ class TravelStop {
   final DateTime arriveDate;
   final DateTime leaveDate;
   final Duration stayingTime;
-  final List<Experiences> experiences;
+  final List<Experience> experiences;
 
   TravelStop({
     required this.cityName,

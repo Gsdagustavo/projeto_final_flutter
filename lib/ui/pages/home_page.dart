@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<TransportTypes> items = TransportTypes.values;
+    final List<TransportType> items = TransportType.values;
 
     return FabPage(
       title: AppLocalizations.of(context)!.title_home,

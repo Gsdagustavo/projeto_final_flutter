@@ -3,39 +3,39 @@ import 'package:flutter/material.dart';
 import '../../entities/enums.dart';
 import '../../l10n/app_localizations.dart';
 
-extension TransportTypeIntlString on TransportTypes {
+extension TransportTypeIntlString on TransportType {
   String getIntlTransportType(BuildContext context) {
     final loc = AppLocalizations.of(context);
 
     switch (this) {
-      case TransportTypes.car:
+      case TransportType.car:
         return loc!.transport_type_car;
-      case TransportTypes.bike:
+      case TransportType.bike:
         return loc!.transport_type_bike;
-      case TransportTypes.bus:
+      case TransportType.bus:
         return loc!.transport_type_bus;
-      case TransportTypes.plane:
+      case TransportType.plane:
         return loc!.transport_type_plane;
-      case TransportTypes.cruise:
+      case TransportType.cruise:
         return loc!.transport_type_cruise;
     }
   }
 }
 
-extension ExperiencesIntlString on Experiences {
+extension ExperiencesIntlString on Experience {
   String getIntlTransportType(BuildContext context) {
     final loc = AppLocalizations.of(context);
 
     switch (this) {
-      case Experiences.alternativeCuisines:
+      case Experience.alternativeCuisines:
         return loc!.experience_alternative_cuisines;
-      case Experiences.contactWithNature:
+      case Experience.contactWithNature:
         return loc!.experience_contact_with_nature;
-      case Experiences.cultureImmersion:
+      case Experience.cultureImmersion:
         return loc!.experience_cultural_immersion;
-      case Experiences.visitHistoricalPlaces:
+      case Experience.visitHistoricalPlaces:
         return loc!.experience_historical_places;
-      case Experiences.visitLocalEstablishments:
+      case Experience.visitLocalEstablishments:
         return loc!.experience_visit_local_establishments;
     }
   }
