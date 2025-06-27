@@ -1,3 +1,5 @@
+import 'package:projeto_final_flutter/entities/enums.dart';
+
 class TravelStop {
   final String cityName;
   final double latitude;
@@ -5,7 +7,7 @@ class TravelStop {
   final DateTime arriveDate;
   final DateTime leaveDate;
   final Duration stayingTime;
-  final String activities;
+  final List<Experiences> experiences;
 
   TravelStop({
     required this.cityName,
@@ -14,6 +16,6 @@ class TravelStop {
     required this.arriveDate,
     required this.leaveDate,
     required this.stayingTime,
-    required this.activities,
+    required this.experiences,
   });
 }

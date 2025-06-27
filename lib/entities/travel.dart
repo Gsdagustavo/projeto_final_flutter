@@ -1,3 +1,4 @@
+import 'package:projeto_final_flutter/entities/enums.dart';
 import 'package:projeto_final_flutter/entities/travel_stop.dart';
 
 class Travel {
@@ -5,14 +6,13 @@ class Travel {
   final DateTime startTime;
   final DateTime endTime;
 
-  /// TODO: implement a way of internationalize the ways of transportation and experiences
   final String transportation;
-  final List<String> experiences;
+  final List<Experiences> experiences;
 
   /// Stops places
   final List<TravelStop> stops;
 
-  /// TODO: create a map based on the stops
+  /// TODO: create a graphical map based on the stops
 
   Travel({
     required this.travelName,
