@@ -6,6 +6,8 @@ class Assets {
   static const String entitiesTravel = 'lib/entities/travel.dart';
   static const String entitiesTravelStop = 'lib/entities/travel_stop.dart';
   static const String generatedAssets = 'lib/generated/assets.dart';
+  static const String l10nAppEn = 'lib/l10n/app_en.arb';
+  static const String l10nAppPt = 'lib/l10n/app_pt.arb';
   static const String libDesafioFinalAcademyFlutter2025 = 'lib/desafio_final_academy_flutter_2025.pdf';
   static const String libMain = 'lib/main.dart';
   static const String pagesFabPage = 'lib/pages/fab_page.dart';
