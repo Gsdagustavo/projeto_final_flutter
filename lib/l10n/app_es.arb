@@ -1,0 +1,13 @@
+{
+  "transport_type_car": "Auto",
+  "transport_type_bike": "Bicicleta",
+  "transport_type_bus": "Autobús",
+  "transport_type_plane": "Avión",
+  "transport_type_cruise": "Crucero",
+
+  "experience_cultural_immersion": "Inmersión Cultural",
+  "experience_alternative_cuisines": "Cocinas Alternativas",
+  "experience_historical_places": "Visitar Lugares Históricos",
+  "experience_visit_local_establishments": "Visitar Establecimientos Locales (Bares, Restaurantes, Parques, etc.)",
+  "experience_contact_with_nature": "Contacto con la Naturaleza"
+}

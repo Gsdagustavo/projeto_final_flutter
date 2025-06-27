@@ -1,3 +1,13 @@
 {
-  "test_label": "Test"
+  "transport_type_car": "Car",
+  "transport_type_bike": "Bike",
+  "transport_type_bus": "Bus",
+  "transport_type_plane": "Plane",
+  "transport_type_cruise": "Cruise",
+
+  "experience_cultural_immersion": "Cultural Immersion",
+  "experience_alternative_cuisines": "Alternative Cuisines",
+  "experience_historical_places": "Visit Historical Places",
+  "experience_visit_local_establishments": "Visit Local Establishments (Bars, Restaurants, Parks, etc.)",
+  "experience_contact_with_nature": "Contact With Nature"
 }
