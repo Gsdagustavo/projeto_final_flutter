@@ -7,6 +7,10 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FabPage(body: Center(child: Text('Settings page')), pageIndex: 1,);
+    return FabPage(
+      title: 'Settings',
+      body: Center(child: Text('Settings page')),
+      pageIndex: 1,
+    );
   }
 }

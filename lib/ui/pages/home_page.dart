@@ -12,13 +12,12 @@ class HomePage extends StatelessWidget {
     final List<TransportTypes> items = TransportTypes.values;
 
     return FabPage(
-      body: Center(
-        child: ListView.builder(
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            return Text(items[index].getIntlTransportType(context));
-          },
-        ),
+      title: 'Home',
+      body: ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          return Text(items[index].getIntlTransportType(context));
+        },
       ),
 
       pageIndex: 0,
