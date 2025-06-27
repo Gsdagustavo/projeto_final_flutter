@@ -4,16 +4,11 @@ import 'package:projeto_final_flutter/entities/travel_stop.dart';
 
 class Travel {
   final String travelName;
-
   final List<Participant> participants;
-
   final DateTime startTime;
   final DateTime endTime;
-
   final TransportType transportType;
   final List<Experience> experiences;
-
-  /// Stops places
   final List<TravelStop> stops;
 
   /// TODO: create a graphical map based on the stops
