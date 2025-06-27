@@ -9,9 +9,6 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get test_label => 'Test';
-
-  @override
   String get transport_type_car => 'Car';
 
   @override
@@ -40,4 +37,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get experience_contact_with_nature => 'Contact With Nature';
+
+  @override
+  String get title_home => 'Home';
+
+  @override
+  String get title_settings => 'Settings';
 }

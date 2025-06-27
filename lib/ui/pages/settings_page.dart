@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
 import 'fab_page.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -8,7 +9,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FabPage(
-      title: 'Settings',
+      title: AppLocalizations.of(context)!.title_settings,
       body: Center(child: Text('Settings page')),
       pageIndex: 1,
     );

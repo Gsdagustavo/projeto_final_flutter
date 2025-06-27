@@ -9,9 +9,6 @@ class AppLocalizationsPt extends AppLocalizations {
   AppLocalizationsPt([String locale = 'pt']) : super(locale);
 
   @override
-  String get test_label => 'Teste';
-
-  @override
   String get transport_type_car => 'Carro';
 
   @override
@@ -40,4 +37,10 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get experience_contact_with_nature => 'Contato com a Natureza';
+
+  @override
+  String get title_home => 'Início';
+
+  @override
+  String get title_settings => 'Ajustes';
 }

@@ -9,5 +9,8 @@
   "experience_alternative_cuisines": "Alternative Cuisines",
   "experience_historical_places": "Visit Historical Places",
   "experience_visit_local_establishments": "Visit Local Establishments (Bars, Restaurants, Parks, etc.)",
-  "experience_contact_with_nature": "Contact With Nature"
+  "experience_contact_with_nature": "Contact With Nature",
+
+  "title_home": "Home",
+  "title_settings": "Settings"
 }
