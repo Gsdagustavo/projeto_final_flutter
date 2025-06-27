@@ -15,9 +15,10 @@ class Assets {
   static const String l10nAppPt = 'lib/l10n/app_pt.arb';
   static const String libDesafioFinalAcademyFlutter2025 = 'lib/desafio_final_academy_flutter_2025.pdf';
   static const String libMain = 'lib/main.dart';
-  static const String pagesFabPage = 'lib/pages/fab_page.dart';
-  static const String pagesHomePage = 'lib/pages/home_page.dart';
-  static const String pagesSettingsPage = 'lib/pages/settings_page.dart';
-  static const String widgetsBottomNavigationBar = 'lib/widgets/bottom_navigation_bar.dart';
+  static const String pagesFabPage = 'lib/ui/pages/fab_page.dart';
+  static const String pagesHomePage = 'lib/ui/pages/home_page.dart';
+  static const String pagesSettingsPage = 'lib/ui/pages/settings_page.dart';
+  static const String utilEnumsUtil = 'lib/ui/util/enums_util.dart';
+  static const String widgetsBottomNavigationBar = 'lib/ui/widgets/bottom_navigation_bar.dart';
 
 }

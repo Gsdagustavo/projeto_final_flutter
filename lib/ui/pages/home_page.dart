@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_final_flutter/main.dart';
-import 'package:projeto_final_flutter/pages/fab_page.dart';
+import 'package:projeto_final_flutter/ui/util/enums_util.dart';
 
-import '../entities/enums.dart';
+import '../../entities/enums.dart';
+import 'fab_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
