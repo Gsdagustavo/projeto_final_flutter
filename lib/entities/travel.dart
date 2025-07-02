@@ -3,7 +3,7 @@ import 'package:projeto_final_flutter/entities/participant.dart';
 import 'package:projeto_final_flutter/entities/travel_stop.dart';
 
 class Travel {
-  final String travelName;
+  final String travelTitle;
   final List<Participant> participants;
   final DateTime startTime;
   final DateTime endTime;
@@ -14,7 +14,7 @@ class Travel {
   /// TODO: create a graphical map based on the stops
 
   Travel({
-    required this.travelName,
+    required this.travelTitle,
     required this.participants,
     required this.startTime,
     required this.endTime,

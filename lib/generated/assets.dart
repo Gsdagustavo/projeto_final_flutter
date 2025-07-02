@@ -3,6 +3,7 @@ class Assets {
   Assets._();
 
   static const String constantsAppRoutes = 'lib/core/constants/app_routes.dart';
+  static const String controllersTravelTableController = 'lib/database/controllers/travel_table_controller.dart';
   static const String databaseDatabase = 'lib/database/database.dart';
   static const String entitiesEnums = 'lib/entities/enums.dart';
   static const String entitiesParticipant = 'lib/entities/participant.dart';
@@ -24,7 +25,16 @@ class Assets {
   static const String pagesSettingsPage = 'lib/ui/pages/settings_page.dart';
   static const String providersThemeProvider = 'lib/providers/theme_provider.dart';
   static const String servicesThemeService = 'lib/services/theme_service.dart';
+  static const String tablesExperiencesTable = 'lib/database/tables/experiences_table.dart';
+  static const String tablesParticipantTable = 'lib/database/tables/participants_table.dart';
+  static const String tablesParticipantTravelTable = 'lib/database/tables/participant_travel_table.dart';
+  static const String tablesTransportTypesTable = 'lib/database/tables/transport_types_table.dart';
+  static const String tablesTravelExperiences = 'lib/database/tables/travel_experiences.dart';
+  static const String tablesTravelStopTable = 'lib/database/tables/travel_stop_table.dart';
+  static const String tablesTravelStopTableExperiences = 'lib/database/tables/travel_stop_table_experiences.dart';
+  static const String tablesTravelTable = 'lib/database/tables/travel_table.dart';
   static const String utilEnumsExtensions = 'lib/ui/util/enums_extensions.dart';
+  static const String utilExperiencesUtil = 'lib/database/util/experiences_util.dart';
   static const String widgetsBottomNavigationBar = 'lib/ui/widgets/bottom_navigation_bar.dart';
   static const String widgetsMyApp = 'lib/ui/widgets/my_app.dart';
   static const String widgetsMyAppBar = 'lib/ui/widgets/my_app_bar.dart';
