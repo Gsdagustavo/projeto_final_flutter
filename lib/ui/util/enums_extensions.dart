@@ -3,6 +3,39 @@ import 'package:flutter/material.dart';
 import '../../entities/enums.dart';
 import '../../l10n/app_localizations.dart';
 
+class EnumFormatUtils {
+  static String getFormattedString(String text) {
+    var result = '';
+    var idx = 0;
+
+    for (final letter in text.split('')) {
+      // means it is the first letter
+      if (idx == 0) {
+        result += letter.toUpperCase();
+        idx++;
+        continue;
+      }
+
+      // means it is another word
+      if (letter.toUpperCase() == letter) {
+        result += ' ';
+        result += letter;
+        idx += 2;
+        continue;
+      }
+
+      if (result.isNotEmpty) {
+        // the letter is in the middle of the word
+        result += letter;
+        idx++;
+        continue;
+      }
+    }
+
+    return result;
+  }
+}
+
 extension TransportTypeIntlString on TransportType {
   String getIntlTransportType(BuildContext context) {
     final loc = AppLocalizations.of(context);

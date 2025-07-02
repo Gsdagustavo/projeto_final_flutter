@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:projeto_final_flutter/database/controllers/travel_table_controller.dart';
 import 'package:projeto_final_flutter/database/database.dart';
 import 'package:projeto_final_flutter/database/tables/participant_travel_table.dart';
+import 'package:projeto_final_flutter/ui/util/enums_extensions.dart';
 
 import 'entities/enums.dart';
 import 'entities/participant.dart';
@@ -63,14 +64,26 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  final db = await DBConnection().getDatabase();
+  // final db = await DBConnection().getDatabase();
+  //
+  // // await TravelTableController().insert(travel);
+  // final res = await TravelTableController().select();
+  // debugPrint(res.toString());
+  //
+  // final res2 = await db.rawQuery('select * from ${ParticipantsTravelTable.tableName}');
+  // debugPrint(res2.toString());
 
-  // await TravelTableController().insert(travel);
-  final res = await TravelTableController().select();
-  debugPrint(res.toString());
+  final transports = TransportType.values;
 
-  final res2 = await db.rawQuery('select * from ${ParticipantsTravelTable.tableName}');
-  debugPrint(res2.toString());
+  for (final t in transports) {
+    debugPrint(EnumFormatUtils.getFormattedString(t.name));
+  }
+
+  final exp = Experience.values;
+
+  for (final e in exp) {
+    debugPrint(EnumFormatUtils.getFormattedString(e.name));
+  }
 
   // runApp(const MyApp());
 }

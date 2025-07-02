@@ -42,8 +42,6 @@ class DBConnection {
 
     await _onCreate(db, newVersion);
   }
-
-
   /// Faz os inserts nas tabelas Experiences e TransportTypes com os valores dos enums
   Future<void> _insertDefaultValuesIntoTables(Database db) async {
     final transportTypes = TransportType.values;
