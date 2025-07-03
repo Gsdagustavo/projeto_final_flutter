@@ -193,16 +193,22 @@ abstract class AppLocalizations {
   /// **'Experiences'**
   String get experiences_label;
 
+  /// No description provided for @select_dates_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Select dates'**
+  String get select_dates_label;
+
   /// No description provided for @travel_start_date_label.
   ///
   /// In en, this message translates to:
-  /// **'Select Travel Start Date'**
+  /// **'Travel Start Date'**
   String get travel_start_date_label;
 
   /// No description provided for @travel_end_date_label.
   ///
   /// In en, this message translates to:
-  /// **'Select Travel End Date'**
+  /// **'Travel End Date'**
   String get travel_end_date_label;
 
   /// No description provided for @err_invalid_date_snackbar.

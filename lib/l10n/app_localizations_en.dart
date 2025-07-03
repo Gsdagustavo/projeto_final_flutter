@@ -57,10 +57,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get experiences_label => 'Experiences';
 
   @override
-  String get travel_start_date_label => 'Select Travel Start Date';
+  String get select_dates_label => 'Select dates';
 
   @override
-  String get travel_end_date_label => 'Select Travel End Date';
+  String get travel_start_date_label => 'Travel Start Date';
+
+  @override
+  String get travel_end_date_label => 'Travel End Date';
 
   @override
   String get err_invalid_date_snackbar => 'You must select a start date first!';

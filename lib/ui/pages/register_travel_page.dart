@@ -140,6 +140,15 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                 ],
               ),
 
+              Padding(padding: EdgeInsets.all(16)),
+
+              Text(
+                AppLocalizations.of(context)!.select_dates_label,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              ),
+
+              Padding(padding: EdgeInsets.all(10)),
+
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
