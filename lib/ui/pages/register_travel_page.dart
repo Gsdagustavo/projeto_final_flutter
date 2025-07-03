@@ -140,59 +140,64 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                 ],
               ),
 
-              Row(
-                children: [
-                  TextButton(
-                    onPressed: () async {
-                      final now = DateTime.now();
-                      var startDate = await showDatePicker(
-                        context: context,
-                        firstDate: now,
-                        lastDate: now.add(Duration(days: 365)),
-                      );
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    TextButton(
+                      onPressed: () async {
+                        final now = DateTime.now();
+                        var startDate = await showDatePicker(
+                          context: context,
+                          firstDate: now,
+                          lastDate: now.add(Duration(days: 365)),
+                        );
 
-                      setState(() {
-                        _selectedStartDate = startDate;
-                      });
-                    },
+                        setState(() {
+                          _selectedStartDate = startDate;
+                        });
+                      },
 
-                    child: Text(
-                      AppLocalizations.of(context)!.travel_start_date_label,
+                      child: Text(
+                        AppLocalizations.of(context)!.travel_start_date_label,
+                      ),
                     ),
-                  ),
 
-                  TextButton(
-                    onPressed: () async {
-                      if (_selectedStartDate == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              AppLocalizations.of(
-                                context,
-                              )!.err_invalid_date_snackbar,
+                    TextButton(
+                      onPressed: () async {
+                        if (_selectedStartDate == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                AppLocalizations.of(
+                                  context,
+                                )!.err_invalid_date_snackbar,
+                              ),
                             ),
+                          );
+
+                          return;
+                        }
+
+                        var endDate = await showDatePicker(
+                          context: context,
+                          firstDate: _selectedStartDate!,
+                          lastDate: _selectedStartDate!.add(
+                            Duration(days: 365),
                           ),
                         );
 
-                        return;
-                      }
+                        setState(() {
+                          _selectedEndDate = endDate;
+                        });
+                      },
 
-                      var endDate = await showDatePicker(
-                        context: context,
-                        firstDate: _selectedStartDate!,
-                        lastDate: _selectedStartDate!.add(Duration(days: 365)),
-                      );
-
-                      setState(() {
-                        _selectedEndDate = endDate;
-                      });
-                    },
-
-                    child: Text(
-                      AppLocalizations.of(context)!.travel_end_date_label,
+                      child: Text(
+                        AppLocalizations.of(context)!.travel_end_date_label,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
 
               FloatingActionButton(onPressed: _sendData),
