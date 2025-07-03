@@ -13,5 +13,12 @@
 
   "title_home": "Inicio",
   "title_register_travel": "Registrar Viagen",
-  "title_settings": "Ajustes"
+  "title_settings": "Ajustes",
+
+  "travel_title_label": "Título del viaje",
+  "transport_type_label": "Tipo de transporte",
+  "experiences_label": "Experiencias",
+  "travel_start_date_label": "Selecciona la fecha de inicio del viaje",
+  "travel_end_date_label": "Selecciona la fecha de fin del viaje",
+  "err_invalid_date_snackbar": "¡Primero debes seleccionar una fecha de inicio!"
 }

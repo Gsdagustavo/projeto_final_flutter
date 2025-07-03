@@ -13,5 +13,12 @@
 
   "title_home": "Home",
   "title_register_travel": "Register Travel",
-  "title_settings": "Settings"
+  "title_settings": "Settings",
+
+  "travel_title_label": "Travel Title",
+  "transport_type_label": "Transport Type",
+  "experiences_label": "Experiences",
+  "travel_start_date_label": "Select Travel Start Date",
+  "travel_end_date_label": "Select Travel End Date",
+  "err_invalid_date_snackbar": "You must select a start date first!"
 }

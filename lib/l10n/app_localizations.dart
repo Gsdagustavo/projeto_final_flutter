@@ -174,6 +174,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Settings'**
   String get title_settings;
+
+  /// No description provided for @travel_title_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel Title'**
+  String get travel_title_label;
+
+  /// No description provided for @transport_type_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Transport Type'**
+  String get transport_type_label;
+
+  /// No description provided for @experiences_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Experiences'**
+  String get experiences_label;
+
+  /// No description provided for @travel_start_date_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Travel Start Date'**
+  String get travel_start_date_label;
+
+  /// No description provided for @travel_end_date_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Travel End Date'**
+  String get travel_end_date_label;
+
+  /// No description provided for @err_invalid_date_snackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'You must select a start date first!'**
+  String get err_invalid_date_snackbar;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

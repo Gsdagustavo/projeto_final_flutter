@@ -140,47 +140,53 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                 ],
               ),
 
-              TextButton(
-                onPressed: () async {
-                  final now = DateTime.now();
-                  var startDate = await showDatePicker(
-                    context: context,
-                    firstDate: now,
-                    lastDate: now.add(Duration(days: 365)),
-                  );
+              Row(
+                children: [
+                  TextButton(
+                    onPressed: () async {
+                      final now = DateTime.now();
+                      var startDate = await showDatePicker(
+                        context: context,
+                        firstDate: now,
+                        lastDate: now.add(Duration(days: 365)),
+                      );
 
-                  setState(() {
-                    _selectedStartDate = startDate;
-                  });
-                },
+                      setState(() {
+                        _selectedStartDate = startDate;
+                      });
+                    },
 
-                child: Text('Select travel start date'),
-              ),
+                    child: Text('Select travel start date'),
+                  ),
 
-              TextButton(
-                onPressed: () async {
-                  if (_selectedStartDate == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('You must select a start date first!'),
-                      ),
-                    );
+                  TextButton(
+                    onPressed: () async {
+                      if (_selectedStartDate == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'You must select a start date first!',
+                            ),
+                          ),
+                        );
 
-                    return;
-                  }
+                        return;
+                      }
 
-                  var endDate = await showDatePicker(
-                    context: context,
-                    firstDate: _selectedStartDate!,
-                    lastDate: _selectedStartDate!.add(Duration(days: 365)),
-                  );
+                      var endDate = await showDatePicker(
+                        context: context,
+                        firstDate: _selectedStartDate!,
+                        lastDate: _selectedStartDate!.add(Duration(days: 365)),
+                      );
 
-                  setState(() {
-                    _selectedEndDate = endDate;
-                  });
-                },
+                      setState(() {
+                        _selectedEndDate = endDate;
+                      });
+                    },
 
-                child: Text('Select travel end date'),
+                    child: Text('Select travel end date'),
+                  ),
+                ],
               ),
 
               FloatingActionButton(onPressed: _sendData),

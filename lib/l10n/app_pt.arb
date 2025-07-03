@@ -13,5 +13,12 @@
 
   "title_home": "Início",
   "title_register_travel": "Registrar Viagem",
-  "title_settings": "Ajustes"
+  "title_settings": "Ajustes",
+
+  "travel_title_label": "Título da viagem",
+  "transport_type_label": "Tipo de transporte",
+  "experiences_label": "Experiências",
+  "travel_start_date_label": "Selecione a data de início da viagem",
+  "travel_end_date_label": "Selecione a data de término da viagem",
+  "err_invalid_date_snackbar": "Você deve selecionar a data de início primeiro!"
 }

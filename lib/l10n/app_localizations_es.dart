@@ -46,4 +46,22 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get title_settings => 'Ajustes';
+
+  @override
+  String get travel_title_label => 'Título del viaje';
+
+  @override
+  String get transport_type_label => 'Tipo de transporte';
+
+  @override
+  String get experiences_label => 'Experiencias';
+
+  @override
+  String get travel_start_date_label => 'Selecciona la fecha de inicio del viaje';
+
+  @override
+  String get travel_end_date_label => 'Selecciona la fecha de fin del viaje';
+
+  @override
+  String get err_invalid_date_snackbar => '¡Primero debes seleccionar una fecha de inicio!';
 }
