@@ -1,6 +1,9 @@
-import 'package:projeto_final_flutter/database/tables/travel_table.dart';
+import 'travel_table.dart';
 
+/// This is a model class to be used when manipulating the TravelStop Table
+/// in the database
 class TravelStopTable {
+  /// The name of the table
   static const String tableName = 'travelStops';
 
   static const String id = 'id';
@@ -17,8 +20,9 @@ class TravelStopTable {
   /// Represented in seconds
   static const String stayingTime = 'stayingTime';
 
+  /// SQLite command for creating the table
   static const String createTable =
-      """
+      '''
       CREATE TABLE $tableName(
         $id INTEGER PRIMARY KEY AUTOINCREMENT,
         $cityName TEXT NOT NULL,
@@ -31,5 +35,5 @@ class TravelStopTable {
         
         FOREIGN KEY ($travelId) REFERENCES ${TravelTable.tableName} (${TravelTable.travelId})
       );
-      """;
+      ''';
 }
