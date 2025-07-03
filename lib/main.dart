@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:projeto_final_flutter/database/controllers/travel_table_controller.dart';
-import 'package:projeto_final_flutter/database/database.dart';
-import 'package:projeto_final_flutter/database/tables/participant_travel_table.dart';
 import 'package:projeto_final_flutter/ui/util/enums_extensions.dart';
+import 'package:projeto_final_flutter/ui/widgets/my_app.dart';
 
 import 'entities/enums.dart';
 import 'entities/participant.dart';
@@ -61,7 +59,6 @@ final travel = Travel(
 );
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
 
   // final db = await DBConnection().getDatabase();
@@ -85,5 +82,5 @@ void main() async {
     debugPrint(EnumFormatUtils.getFormattedString(e.name));
   }
 
-  // runApp(const MyApp());
+  runApp(const MyApp());
 }
