@@ -52,6 +52,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
 
               Padding(padding: EdgeInsets.all(10)),
 
+              /// Travel title text field
               TextField(
                 controller: _travelTitleController,
                 onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
@@ -74,7 +75,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
 
               Padding(padding: EdgeInsets.all(10)),
 
-              /// Transport type dropdown button
+              /// Transport types dropdown button
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
@@ -124,6 +125,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
 
               Padding(padding: EdgeInsets.all(10)),
 
+              /// Experiences checkboxes
               Column(
                 children: [
                   for (final item in _selectedExperiences.entries)
@@ -149,6 +151,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
 
               Padding(padding: EdgeInsets.all(10)),
 
+              /// Select dates
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -209,6 +212,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                 ),
               ),
 
+              /// FloatingButton for debug purposes
               FloatingActionButton(onPressed: _sendData),
             ],
           ),
