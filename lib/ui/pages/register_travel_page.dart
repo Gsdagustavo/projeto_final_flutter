@@ -21,11 +21,17 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
     for (final e in Experience.values) e: false,
   };
 
+  DateTime? _selectedStartDate;
+  DateTime? _selectedEndDate;
+
   void _sendData() async {
     final travelTitle = _travelTitleController.text;
     debugPrint('Travel title: $travelTitle');
 
     debugPrint('Selected experiences: $_selectedExperiences');
+
+    debugPrint('Start date: $_selectedStartDate');
+    debugPrint('End date: $_selectedEndDate');
   }
 
   @override
@@ -43,31 +49,31 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                 'Travel Title',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
               ),
-          
+
               Padding(padding: EdgeInsets.all(10)),
-          
+
               TextField(
                 controller: _travelTitleController,
                 onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
-          
+
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-          
+
                   label: Text('Titulo da viagem'),
                 ),
               ),
-          
+
               Padding(padding: EdgeInsets.all(16)),
-          
+
               Text(
                 'Transport Type',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
               ),
-          
+
               Padding(padding: EdgeInsets.all(10)),
-          
+
               /// Transport type dropdown button
               Container(
                 decoration: BoxDecoration(
@@ -77,14 +83,14 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                     width: 1,
                   ),
                 ),
-          
+
                 child: DropdownButton<TransportType>(
                   value: _selectedTransportType,
                   icon: Icon(Icons.arrow_downward),
                   underline: Container(color: Colors.transparent),
                   borderRadius: BorderRadius.circular(12),
                   isExpanded: true,
-          
+
                   items: [
                     for (final item in TransportType.values)
                       DropdownMenuItem(
@@ -99,7 +105,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                         ),
                       ),
                   ],
-          
+
                   onChanged: (value) {
                     setState(() {
                       _selectedTransportType =
@@ -108,16 +114,16 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                   },
                 ),
               ),
-          
+
               Padding(padding: EdgeInsets.all(16)),
-          
+
               Text(
                 'Experiences',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
               ),
-          
+
               Padding(padding: EdgeInsets.all(10)),
-          
+
               Column(
                 children: [
                   for (final item in _selectedExperiences.entries)
@@ -128,12 +134,55 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                           _selectedExperiences[item.key] = value ?? false;
                         });
                       },
-          
+
                       title: Text(item.key.getIntlTransportType(context)),
                     ),
                 ],
               ),
-          
+
+              TextButton(
+                onPressed: () async {
+                  final now = DateTime.now();
+                  var startDate = await showDatePicker(
+                    context: context,
+                    firstDate: now,
+                    lastDate: now.add(Duration(days: 365)),
+                  );
+
+                  setState(() {
+                    _selectedStartDate = startDate;
+                  });
+                },
+
+                child: Text('Select travel start date'),
+              ),
+
+              TextButton(
+                onPressed: () async {
+                  if (_selectedStartDate == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('You must select a start date first!'),
+                      ),
+                    );
+
+                    return;
+                  }
+
+                  var endDate = await showDatePicker(
+                    context: context,
+                    firstDate: _selectedStartDate!,
+                    lastDate: _selectedStartDate!.add(Duration(days: 365)),
+                  );
+
+                  setState(() {
+                    _selectedEndDate = endDate;
+                  });
+                },
+
+                child: Text('Select travel end date'),
+              ),
+
               FloatingActionButton(onPressed: _sendData),
             ],
           ),
