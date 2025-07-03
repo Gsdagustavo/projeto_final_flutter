@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_final_flutter/services/theme_service.dart';
 
+import '../services/theme_service.dart';
+
+/// This is a provider for the theme state of the application
 class ThemeProvider with ChangeNotifier {
   final ThemeService _themeService = ThemeService();
 
   bool _isDarkMode = false;
 
+  /// Initializes the provider
   ThemeProvider() {
     _init();
   }
@@ -15,11 +18,14 @@ class ThemeProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  /// Toggles the current theme and save it to [SharedPreferences] using the
+  /// [ThemeService] class
   void toggleTheme() async {
     _isDarkMode = !_isDarkMode;
-    await _themeService.saveMode(_isDarkMode);
+    await _themeService.saveMode(isDarkMode: _isDarkMode);
     notifyListeners();
   }
 
+  /// Returns the state of dark mode flag
   bool get isDarkMode => _isDarkMode;
 }

@@ -1,7 +1,8 @@
-import 'package:projeto_final_flutter/entities/enums.dart';
-import 'package:projeto_final_flutter/entities/participant.dart';
-import 'package:projeto_final_flutter/entities/travel_stop.dart';
+import 'enums.dart';
+import 'participant.dart';
+import 'travel_stop.dart';
 
+/// Represents a Travel
 class Travel {
   final String travelTitle;
   final List<Participant> participants;
@@ -11,8 +12,7 @@ class Travel {
   final List<Experience> experiences;
   final List<TravelStop> stops;
 
-  /// TODO: create a graphical map based on the stops
-
+  /// Named constructor for the Travel
   Travel({
     required this.travelTitle,
     required this.participants,
@@ -23,5 +23,6 @@ class Travel {
     required this.stops,
   });
 
+  /// Returns a [Duration] that represents the total duration of the travel
   Duration get totalDuration => endTime.difference(startTime);
 }

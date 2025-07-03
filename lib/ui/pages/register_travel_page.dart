@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_final_flutter/entities/enums.dart';
-import 'package:projeto_final_flutter/l10n/app_localizations.dart';
-import 'package:projeto_final_flutter/ui/pages/fab_page.dart';
-import 'package:projeto_final_flutter/ui/util/enums_extensions.dart';
 
+import '../../entities/enums.dart';
+import '../../l10n/app_localizations.dart';
+import '../util/enums_extensions.dart';
+import 'fab_page.dart';
+
+/// This is a page for registering a travel
 class RegisterTravelPage extends StatefulWidget {
   const RegisterTravelPage({super.key});
 
+  /// The route of the page
   static const String routeName = '/registerTravel';
 
   @override
@@ -99,7 +102,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8),
                           child: Text(
-                            EnumFormatUtils.getFormattedString(
+                            EnumFormatUtils().getFormattedString(
                               item.getIntlTransportType(context),
                             ),
                           ),
@@ -137,7 +140,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                         });
                       },
 
-                      title: Text(item.key.getIntlTransportType(context)),
+                      title: Text(item.key.getIntlExperience(context)),
                     ),
                 ],
               ),

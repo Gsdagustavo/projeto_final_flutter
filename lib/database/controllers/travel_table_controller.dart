@@ -1,15 +1,16 @@
-import 'package:projeto_final_flutter/database/tables/participant_travel_table.dart';
-
 import '../../entities/travel.dart';
 import '../database.dart';
 import '../tables/participants_table.dart';
 import '../tables/travel_experiences.dart';
+import '../tables/travel_participants_table.dart';
+import '../tables/travel_stop_experiences_table.dart';
 import '../tables/travel_stop_table.dart';
-import '../tables/travel_stop_table_experiences.dart';
 import '../tables/travel_table.dart';
 import '../util/experiences_util.dart';
 
+/// Contains methods to manipulate the travel database
 class TravelTableController {
+  /// Returns
   Future<List<Map<String, dynamic>>> select() async {
     final db = await DBConnection().getDatabase();
 
@@ -17,6 +18,7 @@ class TravelTableController {
     return res;
   }
 
+  /// Inserts a [Travel] into the database
   Future<void> insert(Travel travel) async {
     final db = await DBConnection().getDatabase();
 
@@ -29,11 +31,11 @@ class TravelTableController {
         TravelTable.endTime: travel.endTime.millisecondsSinceEpoch,
       };
 
-      final int travelId = await txn.insert(TravelTable.tableName, travelData);
+      final travelId = await txn.insert(TravelTable.tableName, travelData);
 
       /// Insert travel experiences into travel experiences table
       for (final exp in travel.experiences) {
-        final expId = await ExperiencesUtil.getIdByExperienceName(exp, txn);
+        final expId = await ExperiencesUtil().getIdByExperienceName(exp, txn);
 
         final travelExperiencesData = {
           TravelExperiencesTable.travelId: travelId,
@@ -58,14 +60,11 @@ class TravelTableController {
           TravelStopTable.stayingTime: stop.stayingTime.inSeconds,
         };
 
-        final int stopId = await txn.insert(
-          TravelStopTable.tableName,
-          stopData,
-        );
+        final stopId = await txn.insert(TravelStopTable.tableName, stopData);
 
         /// Insert experiences into travel stop experiences table
         for (final exp in stop.experiences) {
-          final expId = await ExperiencesUtil.getIdByExperienceName(exp, txn);
+          final expId = await ExperiencesUtil().getIdByExperienceName(exp, txn);
 
           final stopExpData = {
             TravelStopExperiencesTable.experienceId: expId,
@@ -90,12 +89,12 @@ class TravelTableController {
         );
 
         final participantTravelData = {
-          ParticipantsTravelTable.participantId: participantId,
-          ParticipantsTravelTable.travelId: travelId,
+          TravelParticipantsTable.participantId: participantId,
+          TravelParticipantsTable.travelId: travelId,
         };
 
         await txn.insert(
-          ParticipantsTravelTable.tableName,
+          TravelParticipantsTable.tableName,
           participantTravelData,
         );
       }

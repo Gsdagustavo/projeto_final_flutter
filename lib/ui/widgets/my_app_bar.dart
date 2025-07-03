@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_final_flutter/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/theme_provider.dart';
+
+/// This widget is a custom [AppBar] that is used in [FabPage]
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MyAppBar({super.key, required this.title, this.actions});
 

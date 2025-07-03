@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_final_flutter/l10n/app_localizations.dart';
 
 import '../../core/constants/app_routes.dart';
+import '../../l10n/app_localizations.dart';
+import '../pages/fab_page.dart';
 
+/// This widget is a custom [BottomNavigationBar] that is used in [FabPage]
 class MyBottomNavigationBar extends StatelessWidget {
   const MyBottomNavigationBar({super.key});
 

@@ -26,12 +26,12 @@ class Assets {
   static const String providersThemeProvider = 'lib/providers/theme_provider.dart';
   static const String servicesThemeService = 'lib/services/theme_service.dart';
   static const String tablesExperiencesTable = 'lib/database/tables/experiences_table.dart';
-  static const String tablesParticipantTravelTable = 'lib/database/tables/participant_travel_table.dart';
+  static const String tablesParticipantTravelTable = 'lib/database/tables/travel_participants_table.dart';
   static const String tablesParticipantsTable = 'lib/database/tables/participants_table.dart';
   static const String tablesTransportTypesTable = 'lib/database/tables/transport_types_table.dart';
   static const String tablesTravelExperiences = 'lib/database/tables/travel_experiences.dart';
   static const String tablesTravelStopTable = 'lib/database/tables/travel_stop_table.dart';
-  static const String tablesTravelStopTableExperiences = 'lib/database/tables/travel_stop_table_experiences.dart';
+  static const String tablesTravelStopTableExperiences = 'lib/database/tables/travel_stop_experiences_table.dart';
   static const String tablesTravelTable = 'lib/database/tables/travel_table.dart';
   static const String utilEnumsExtensions = 'lib/ui/util/enums_extensions.dart';
   static const String utilExperiencesUtil = 'lib/database/util/experiences_util.dart';

@@ -1,8 +1,10 @@
+/// Represents a  [Participant] of a [Travel]
 class Participant {
   final String name;
   final int age;
   final String? profilePictureUrl;
 
+  /// Named constructor for the participant
   Participant({
     required this.name,
     required this.age,

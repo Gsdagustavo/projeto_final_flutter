@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_final_flutter/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/constants/app_routes.dart';
 import '../../l10n/app_localizations.dart';
+import '../../providers/theme_provider.dart';
 import '../pages/home_page.dart';
 
+/// This widget is the [MaterialApp] of the application, which contains all
+/// important info about layout, theme, routes, localization, etc.
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

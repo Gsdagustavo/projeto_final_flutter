@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_final_flutter/ui/widgets/my_app_bar.dart';
 
 import '../widgets/bottom_navigation_bar.dart';
+import '../widgets/my_app_bar.dart';
 
 class FabPage extends StatelessWidget {
   const FabPage({

@@ -1,7 +1,7 @@
 import 'package:projeto_final_flutter/database/tables/participants_table.dart';
 import 'package:projeto_final_flutter/database/tables/travel_table.dart';
 
-class ParticipantsTravelTable {
+class TravelParticipantsTable {
   static const String tableName = 'participantTravel';
 
   static const String participantId = 'participantId';

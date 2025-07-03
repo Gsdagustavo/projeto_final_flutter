@@ -1,4 +1,4 @@
-import 'package:projeto_final_flutter/entities/enums.dart';
+import 'enums.dart';
 
 class TravelStop {
   final String cityName;

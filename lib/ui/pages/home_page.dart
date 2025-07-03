@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_final_flutter/ui/util/enums_extensions.dart';
 
 import '../../entities/enums.dart';
 import '../../l10n/app_localizations.dart';
+import '../util/enums_extensions.dart';
 import 'fab_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<TransportType> items = TransportType.values;
+    final items = TransportType.values;
 
     return FabPage(
       title: AppLocalizations.of(context)!.title_home,
@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
         itemBuilder: (context, index) {
           return Text(items[index].getIntlTransportType(context));
         },
-      )
+      ),
     );
   }
 }

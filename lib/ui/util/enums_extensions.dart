@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import '../../entities/enums.dart';
 import '../../l10n/app_localizations.dart';
 
+/// Contains util methods to format the program's enums
+/// (currently [Experience] and [TransportType]
 class EnumFormatUtils {
-  static String getFormattedString(String text) {
+  /// Returns a capitalized and spaced version the given text
+  String getFormattedString(String text) {
     var result = '';
     var idx = 0;
 
@@ -36,7 +39,11 @@ class EnumFormatUtils {
   }
 }
 
+/// This extension is a simple way to return the localized version of
+/// the [TransportType] enum
 extension TransportTypeIntlString on TransportType {
+
+  /// Returns the localized [TransportType]
   String getIntlTransportType(BuildContext context) {
     final loc = AppLocalizations.of(context);
 
@@ -55,8 +62,12 @@ extension TransportTypeIntlString on TransportType {
   }
 }
 
+/// This extension is a simple way to return the localized version of
+/// the [Experience] enum
 extension ExperiencesIntlString on Experience {
-  String getIntlTransportType(BuildContext context) {
+
+  /// Returns the localized [Experience]
+  String getIntlExperience(BuildContext context) {
     final loc = AppLocalizations.of(context);
 
     switch (this) {
