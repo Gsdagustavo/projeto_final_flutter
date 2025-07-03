@@ -46,7 +46,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Travel Title',
+                AppLocalizations.of(context)!.travel_title_label,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
               ),
 
@@ -61,14 +61,14 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                     borderRadius: BorderRadius.circular(12),
                   ),
 
-                  label: Text('Titulo da viagem'),
+                  label: Text(AppLocalizations.of(context)!.travel_title_label),
                 ),
               ),
 
               Padding(padding: EdgeInsets.all(16)),
 
               Text(
-                'Transport Type',
+                AppLocalizations.of(context)!.transport_type_label,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
               ),
 
@@ -118,7 +118,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
               Padding(padding: EdgeInsets.all(16)),
 
               Text(
-                'Experiences',
+                AppLocalizations.of(context)!.experiences_label,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
               ),
 
@@ -156,7 +156,9 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                       });
                     },
 
-                    child: Text('Select travel start date'),
+                    child: Text(
+                      AppLocalizations.of(context)!.travel_start_date_label,
+                    ),
                   ),
 
                   TextButton(
@@ -165,7 +167,9 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
-                              'You must select a start date first!',
+                              AppLocalizations.of(
+                                context,
+                              )!.err_invalid_date_snackbar,
                             ),
                           ),
                         );
@@ -184,7 +188,9 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                       });
                     },
 
-                    child: Text('Select travel end date'),
+                    child: Text(
+                      AppLocalizations.of(context)!.travel_end_date_label,
+                    ),
                   ),
                 ],
               ),
