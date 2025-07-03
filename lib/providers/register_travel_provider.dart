@@ -6,11 +6,7 @@ class RegisterTravelProvider with ChangeNotifier {
   final _travelTitleController = TextEditingController();
   var _selectedTransportType = TransportType.values.first;
 
-  final Map<Experience, bool> _selectedExperiences = {
-    for (final e in Experience.values) e: false,
-  };
-
-
+  final selectedExperiences = <Experience>[];
 
   DateTime? _selectedStartDate;
   DateTime? _selectedEndDate;
@@ -19,7 +15,8 @@ class RegisterTravelProvider with ChangeNotifier {
     final travelTitle = _travelTitleController.text;
     debugPrint('Travel title: $travelTitle');
 
-    debugPrint('Selected experiences: $_selectedExperiences');
+    debugPrint('Selected experiences: $selectedExperiences');
+    debugPrint('Selected transport type: $_selectedTransportType');
 
     debugPrint('Start date: $_selectedStartDate');
     debugPrint('End date: $_selectedEndDate');
@@ -31,9 +28,21 @@ class RegisterTravelProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void checkExperience(Experience item, bool? value) {
-    _selectedExperiences[item] = value ?? false;
+  void toggleExperience(Experience? item) {
+    if (item == null) return;
+
+    if (selectedExperiences.contains(item)) {
+      selectedExperiences.remove(item);
+    } else {
+      selectedExperiences.add(item);
+    }
+
     notifyListeners();
+  }
+
+  bool checkIfExperienceIsSelected(Experience item) {
+    final contains = selectedExperiences.contains(item);
+    return contains;
   }
 
   void selectStartDate(DateTime? date) {
@@ -62,8 +71,6 @@ class RegisterTravelProvider with ChangeNotifier {
   bool get isStartDateSelected => _selectedStartDate != null;
 
   get selectedTransportType => _selectedTransportType;
-
-  Map<Experience, bool> get selectedExperiences => _selectedExperiences;
 
   DateTime? get selectedStartDate => _selectedStartDate;
 

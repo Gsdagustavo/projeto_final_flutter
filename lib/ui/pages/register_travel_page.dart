@@ -112,12 +112,11 @@ class RegisterTravelPage extends StatelessWidget {
                 /// Experiences checkboxes
                 Column(
                   children: [
-                    for (final item in travelState.selectedExperiences.entries)
+                    for (final item in Experience.values)
                       CheckboxListTile(
-                        value: item.value,
-                        onChanged: (value) =>
-                            travelState.checkExperience(item.key, value),
-                        title: Text(item.key.getIntlExperience(context)),
+                        value: travelState.checkIfExperienceIsSelected(item),
+                        onChanged: (_) => travelState.toggleExperience(item),
+                        title: Text(item.getIntlExperience(context)),
                       ),
                   ],
                 ),
@@ -167,8 +166,6 @@ class RegisterTravelPage extends StatelessWidget {
 
                             return;
                           }
-
-                          final now = DateTime.now();
 
                           var date = await showDatePicker(
                             context: context,
