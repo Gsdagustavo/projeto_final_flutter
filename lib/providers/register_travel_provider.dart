@@ -11,6 +11,8 @@ class RegisterTravelProvider with ChangeNotifier {
   DateTime? _selectedStartDate;
   DateTime? _selectedEndDate;
 
+  int _numParticipants = 1;
+
   void registerTravel() {
     final travelTitle = _travelTitleController.text;
     debugPrint('Travel title: $travelTitle');
@@ -66,6 +68,13 @@ class RegisterTravelProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void changeNumParticipants(int newValue) {
+    if (_numParticipants == newValue) return;
+
+    _numParticipants = newValue;
+    notifyListeners();
+  }
+
   get travelTitleController => _travelTitleController;
 
   bool get isStartDateSelected => _selectedStartDate != null;
@@ -75,4 +84,6 @@ class RegisterTravelProvider with ChangeNotifier {
   DateTime? get selectedStartDate => _selectedStartDate;
 
   DateTime? get selectedEndDate => _selectedEndDate;
+
+  int get numParticipants => _numParticipants;
 }
