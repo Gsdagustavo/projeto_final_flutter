@@ -153,76 +153,98 @@ class _TransportTypesDropdownButton extends StatelessWidget {
 //   }
 // }
 
+String formatDate(DateTime date) {
+  var stringDate = '';
+  stringDate += '${date.day}/';
+  stringDate += '${date.month}/';
+  stringDate += date.year.toString();
+  return stringDate;
+}
+
 class _DateTextButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final travelState = Provider.of<RegisterTravelProvider>(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          AppLocalizations.of(context)!.select_dates_label,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-        ),
-        Padding(padding: EdgeInsets.all(10)),
-        Row(
-          children: [
-            Column(
-              children: [
-                TextButton(
-                  style: ButtonStyle(
-                    padding: WidgetStateProperty.all(EdgeInsets.zero),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            AppLocalizations.of(context)!.select_dates_label,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          ),
+          Padding(padding: EdgeInsets.all(10)),
+          Row(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  TextButton(
+                    style: ButtonStyle(
+                      padding: WidgetStateProperty.all(EdgeInsets.zero),
+                    ),
+                    onPressed: () async {
+                      final now = DateTime.now();
+                      var date = await showDatePicker(
+                        context: context,
+                        initialDate: travelState.selectedStartDate ?? now,
+                        firstDate: now,
+                        lastDate: now.add(Duration(days: 365)),
+                      );
+                      travelState.selectStartDate(date);
+                    },
+                    child: Text(
+                      AppLocalizations.of(context)!.travel_start_date_label,
+                    ),
                   ),
-                  onPressed: () async {
-                    final now = DateTime.now();
-                    var date = await showDatePicker(
-                      context: context,
-                      initialDate: travelState.selectedStartDate ?? now,
-                      firstDate: now,
-                      lastDate: now.add(Duration(days: 365)),
-                    );
-                    travelState.selectStartDate(date);
-                  },
-                  child: Text(
-                    AppLocalizations.of(context)!.travel_start_date_label,
-                  ),
-                ),
-                Text(
-                  'Date Registered: ${travelState.selectedStartDate.toString()}',
-                ),
-              ],
-            ),
-            TextButton(
-              onPressed: () async {
-                if (!travelState.isStartDateSelected) {
-                  final message = AppLocalizations.of(
-                    context,
-                  )!.err_invalid_date_snackbar;
 
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(message)));
+                  if (travelState.selectedStartDate != null)
+                    Text(formatDate(travelState.selectedStartDate!)),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () async {
+                      if (!travelState.isStartDateSelected) {
+                        final message = AppLocalizations.of(
+                          context,
+                        )!.err_invalid_date_snackbar;
 
-                  return;
-                }
-                var date = await showDatePicker(
-                  context: context,
-                  initialDate:
-                      travelState.selectedEndDate ??
-                      travelState.selectedStartDate,
-                  firstDate: travelState.selectedStartDate!,
-                  lastDate: travelState.selectedStartDate!.add(
-                    Duration(days: 365),
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text(message)));
+
+                        return;
+                      }
+                      var date = await showDatePicker(
+                        context: context,
+                        initialDate:
+                            travelState.selectedEndDate ??
+                            travelState.selectedStartDate,
+                        firstDate: travelState.selectedStartDate!,
+                        lastDate: travelState.selectedStartDate!.add(
+                          Duration(days: 365),
+                        ),
+                      );
+                      travelState.selectEndDate(date);
+                    },
+                    child: Text(
+                      AppLocalizations.of(context)!.travel_end_date_label,
+                    ),
                   ),
-                );
-                travelState.selectEndDate(date);
-              },
-              child: Text(AppLocalizations.of(context)!.travel_end_date_label),
-            ),
-          ],
-        ),
-      ],
+
+                  if (travelState.selectedEndDate != null)
+                    Text(formatDate(travelState.selectedEndDate!)),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -379,7 +401,7 @@ class _ParticipantListItem extends StatelessWidget {
           child: Image.network('https://i.redd.it/oqhs74f166511.png'),
         ),
         Padding(padding: EdgeInsets.all(8)),
-        Text('${participant.name}, ${participant.age}'),
+        Text('Name: ${participant.name}\nAge: ${participant.age}'),
       ],
     );
   }
