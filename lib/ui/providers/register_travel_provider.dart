@@ -61,6 +61,10 @@ class RegisterTravelProvider with ChangeNotifier {
       age: intAge,
       profilePictureUrl: profilePictureUrl,
     );
+
+    _nameController.clear();
+    _ageController.clear();
+
     _participants.add(participant);
     notifyListeners();
   }
