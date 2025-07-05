@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../entities/enums.dart';
+import '../../entities/participant.dart';
 import '../../l10n/app_localizations.dart';
-import '../../providers/register_travel_provider.dart';
+import '../providers/register_travel_provider.dart';
 import '../util/enums_extensions.dart';
 import 'fab_page.dart';
 
@@ -16,48 +17,33 @@ class RegisterTravelPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final travelState = Provider.of<RegisterTravelProvider>(
-      context,
-      listen: true,
-    );
+    return FabPage(
+      title: AppLocalizations.of(context)!.title_register_travel,
 
-    return ChangeNotifierProvider(
-      create: (context) => RegisterTravelProvider(),
-      child: FabPage(
-        title: AppLocalizations.of(context)!.title_register_travel,
+      body: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// Travel title text field
+              _TravelTitleTextField(),
 
-        body: Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                /// Travel title text field
-                TravelTitleTextField(),
+              Padding(padding: EdgeInsets.all(16)),
 
-                Padding(padding: EdgeInsets.all(16)),
+              /// Transport types dropdown button
+              _TransportTypesDropdownButton(),
 
-                /// Transport types dropdown button
-                TransportTypesDropdownButton(),
+              Padding(padding: EdgeInsets.all(16)),
 
-                Padding(padding: EdgeInsets.all(16)),
+              _DateTextButtons(),
 
-                /// Experiences checkboxes
-                // ExperiencesCheckboxes(),
-                Padding(padding: EdgeInsets.all(16)),
+              Padding(padding: EdgeInsets.all(16)),
 
-                DateTextButtons(),
+              _ParticipantsWidget(),
 
-                Padding(padding: EdgeInsets.all(16)),
-
-                Participants(),
-
-                Padding(padding: EdgeInsets.all(10)),
-
-                /// FloatingButton for debug purposes
-                FloatingActionButton(onPressed: travelState.registerTravel),
-              ],
-            ),
+              Padding(padding: EdgeInsets.all(10)),
+            ],
           ),
         ),
       ),
@@ -65,32 +51,25 @@ class RegisterTravelPage extends StatelessWidget {
   }
 }
 
-class TravelTitleTextField extends StatelessWidget {
-  const TravelTitleTextField({super.key});
-
+class _TravelTitleTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final travelState = Provider.of<RegisterTravelProvider>(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-
       children: [
         Text(
           AppLocalizations.of(context)!.travel_title_label,
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
-
         Padding(padding: EdgeInsets.all(12)),
-
         TextField(
           controller: travelState.travelTitleController,
           onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
-
           decoration: InputDecoration(
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-
             label: Text(AppLocalizations.of(context)!.travel_title_label),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
       ],
@@ -98,24 +77,19 @@ class TravelTitleTextField extends StatelessWidget {
   }
 }
 
-class TransportTypesDropdownButton extends StatelessWidget {
-  const TransportTypesDropdownButton({super.key});
-
+class _TransportTypesDropdownButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final travelState = Provider.of<RegisterTravelProvider>(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-
       children: [
         Text(
           AppLocalizations.of(context)!.transport_type_label,
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
-
         Padding(padding: EdgeInsets.all(12)),
-
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
@@ -152,244 +126,261 @@ class TransportTypesDropdownButton extends StatelessWidget {
   }
 }
 
-class ExperiencesCheckboxes extends StatelessWidget {
-  const ExperiencesCheckboxes({super.key});
+// class _ExperiencesCheckboxes extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     final travelState = Provider.of<RegisterTravelProvider>(context);
+//
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//
+//       children: [
+//         Text(
+//           AppLocalizations.of(context)!.experiences_label,
+//           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+//         ),
+//
+//         Padding(padding: EdgeInsets.all(12)),
+//
+//         for (final item in Experience.values)
+//           CheckboxListTile(
+//             value: travelState.checkIfExperienceIsSelected(item),
+//             onChanged: (_) => travelState.toggleExperience(item),
+//             title: Text(item.getIntlExperience(context)),
+//           ),
+//       ],
+//     );
+//   }
+// }
 
+class _DateTextButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final travelState = Provider.of<RegisterTravelProvider>(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-
-      children: [
-        Text(
-          AppLocalizations.of(context)!.experiences_label,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-        ),
-
-        Padding(padding: EdgeInsets.all(12)),
-
-        for (final item in Experience.values)
-          CheckboxListTile(
-            value: travelState.checkIfExperienceIsSelected(item),
-            onChanged: (_) => travelState.toggleExperience(item),
-            title: Text(item.getIntlExperience(context)),
-          ),
-      ],
-    );
-  }
-}
-
-class DateTextButtons extends StatelessWidget {
-  const DateTextButtons({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final travelState = Provider.of<RegisterTravelProvider>(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-
       children: [
         Text(
           AppLocalizations.of(context)!.select_dates_label,
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
-
         Padding(padding: EdgeInsets.all(10)),
-
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              TextButton(
-                onPressed: () async {
-                  final now = DateTime.now();
-                  var date = await showDatePicker(
-                    context: context,
-                    initialDate: travelState.selectedStartDate ?? now,
-                    firstDate: now,
-                    lastDate: now.add(Duration(days: 365)),
-                  );
-
-                  travelState.selectStartDate(date);
-                },
-
-                child: Text(
-                  AppLocalizations.of(context)!.travel_start_date_label,
+        Row(
+          children: [
+            Column(
+              children: [
+                TextButton(
+                  style: ButtonStyle(
+                    padding: WidgetStateProperty.all(EdgeInsets.zero),
+                  ),
+                  onPressed: () async {
+                    final now = DateTime.now();
+                    var date = await showDatePicker(
+                      context: context,
+                      initialDate: travelState.selectedStartDate ?? now,
+                      firstDate: now,
+                      lastDate: now.add(Duration(days: 365)),
+                    );
+                    travelState.selectStartDate(date);
+                  },
+                  child: Text(
+                    AppLocalizations.of(context)!.travel_start_date_label,
+                  ),
                 ),
-              ),
-
-              TextButton(
-                onPressed: () async {
-                  if (!travelState.isStartDateSelected) {
-                    final message = AppLocalizations.of(
-                      context,
-                    )!.err_invalid_date_snackbar;
-
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text(message)));
-
-                    return;
-                  }
-
-                  var date = await showDatePicker(
-                    context: context,
-                    initialDate:
-                        travelState.selectedEndDate ??
-                        travelState.selectedStartDate,
-                    firstDate: travelState.selectedStartDate!,
-                    lastDate: travelState.selectedStartDate!.add(
-                      Duration(days: 365),
-                    ),
-                  );
-
-                  travelState.selectEndDate(date);
-                },
-
-                child: Text(
-                  AppLocalizations.of(context)!.travel_end_date_label,
+                Text(
+                  'Date Registered: ${travelState.selectedStartDate.toString()}',
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+            TextButton(
+              onPressed: () async {
+                if (!travelState.isStartDateSelected) {
+                  final message = AppLocalizations.of(
+                    context,
+                  )!.err_invalid_date_snackbar;
+
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(message)));
+
+                  return;
+                }
+                var date = await showDatePicker(
+                  context: context,
+                  initialDate:
+                      travelState.selectedEndDate ??
+                      travelState.selectedStartDate,
+                  firstDate: travelState.selectedStartDate!,
+                  lastDate: travelState.selectedStartDate!.add(
+                    Duration(days: 365),
+                  ),
+                );
+                travelState.selectEndDate(date);
+              },
+              child: Text(AppLocalizations.of(context)!.travel_end_date_label),
+            ),
+          ],
         ),
       ],
     );
   }
 }
 
-class Participants extends StatelessWidget {
-  const Participants({super.key});
-
+class _ParticipantsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final travelState = Provider.of<RegisterTravelProvider>(context);
+    final travelState = Provider.of<RegisterTravelProvider>(
+      context,
+      listen: false,
+    );
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-
       children: [
-        Text(
-          'Participants',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-        ),
-
-        Padding(padding: EdgeInsets.all(12)),
-
-        TextButton(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                final numParticipantsController = TextEditingController(
-                  text: travelState.numParticipants.toString(),
-                );
-
-                return AlertDialog(
-                  title: Text('Numero de participantes'),
-                  actions: [
-                    TextField(
-                      controller: numParticipantsController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.person),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-
-                        label: Text('Inserir numero de participantes'),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Participants',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            ),
+            TextButton(
+              child: Text(
+                'Register Participant',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+              ),
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (context) {
+                    return SingleChildScrollView(
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.viewInsetsOf(context).bottom,
                       ),
-                    ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(32.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Register Participant',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                              ),
+                            ),
+                            Padding(padding: EdgeInsets.all(16)),
+                            TextField(
+                              onTapOutside: (_) =>
+                                  FocusScope.of(context).unfocus(),
+                              controller: travelState.nameController,
+                              decoration: InputDecoration(
+                                hintText: 'Name',
+                                prefixIcon: Icon(Icons.person),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                            Padding(padding: EdgeInsets.all(12)),
+                            TextField(
+                              onTapOutside: (_) =>
+                                  FocusScope.of(context).unfocus(),
+                              controller: travelState.ageController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                hintText: 'Age',
+                                prefixIcon: Icon(Icons.timer),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                            Padding(padding: EdgeInsets.all(8)),
 
-                    Padding(padding: EdgeInsets.all(12)),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text('Cancel'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    travelState.addParticipant();
+                                    Navigator.pop(context);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Participant registered'),
+                                      ),
+                                    );
+                                  },
 
-                    TextButton(
-                      onPressed: () {
-                        travelState.changeNumParticipants(
-                          int.parse(numParticipantsController.text),
-                        );
-
-                        Navigator.of(context).pop();
-                      },
-
-                      child: Text('Ok'),
-                    ),
-                  ],
+                                  child: Text('Register'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
-            );
-          },
-
-          child: Text('Selecionar numero de participantes'),
+            ),
+          ],
         ),
 
-        ParticipantsStepper(),
+        Padding(padding: EdgeInsets.all(8)),
+        _ListParticipants(),
       ],
     );
   }
 }
 
-class ParticipantsStepper extends StatefulWidget {
-  const ParticipantsStepper({super.key});
-
-  @override
-  State<ParticipantsStepper> createState() => _ParticipantsStepperState();
-}
-
-class _ParticipantsStepperState extends State<ParticipantsStepper> {
-  int step = 0;
-
+class _ListParticipants extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final travelState = Provider.of<RegisterTravelProvider>(context);
 
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   if (step >= travelState.numParticipants) {
-    //     setState(() {
-    //       step = travelState.numParticipants - 1;
-    //     });
-    //   }
-    // });
+    if (travelState.numParticipants <= 0) {
+      return Text('No participants in the list');
+    }
 
-    return Stepper(
-      steps: List.generate(travelState.numParticipants, (index) {
-        return Step(
-          title: Text('Participant ${index + 1}'),
-          content: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              TextField()
-            ],
+    return ListView.builder(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: travelState.numParticipants,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: _ParticipantListItem(
+            participant: travelState.participants[index],
           ),
         );
-      }),
-
-      currentStep: step,
-
-      onStepCancel: () {
-        if (step > 0) {
-          setState(() {
-            step--;
-          });
-        }
       },
+    );
+  }
+}
 
-      onStepContinue: () {
-        if (step < travelState.numParticipants - 1) {
-          setState(() {
-            step++;
-          });
-        }
-      },
+class _ParticipantListItem extends StatelessWidget {
+  const _ParticipantListItem({required this.participant});
 
-      onStepTapped: (value) {
-        setState(() {
-          step = value;
-        });
-      },
+  final Participant participant;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CircleAvatar(
+          child: Image.network('https://i.redd.it/oqhs74f166511.png'),
+        ),
+        Padding(padding: EdgeInsets.all(8)),
+        Text('${participant.name}, ${participant.age}'),
+      ],
     );
   }
 }

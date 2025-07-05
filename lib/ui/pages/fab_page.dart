@@ -8,10 +8,12 @@ class FabPage extends StatelessWidget {
     super.key,
     required this.body,
     required this.title,
+    this.floatingActionButton
   });
 
   final String title;
   final Widget body;
+  final Widget? floatingActionButton;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +21,7 @@ class FabPage extends StatelessWidget {
       appBar: MyAppBar(title: title),
       body: body,
       bottomNavigationBar: const MyBottomNavigationBar(),
+      floatingActionButton: floatingActionButton,
     );
   }
 }

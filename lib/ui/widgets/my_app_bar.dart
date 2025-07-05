@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../providers/theme_provider.dart';
+import '../providers/theme_provider.dart';
 
 /// This widget is a custom [AppBar] that is used in [FabPage]
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {

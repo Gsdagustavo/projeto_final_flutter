@@ -8,7 +8,7 @@ class Participant {
   Participant({
     required this.name,
     required this.age,
-    required this.profilePictureUrl,
+    this.profilePictureUrl,
   });
 
   @override

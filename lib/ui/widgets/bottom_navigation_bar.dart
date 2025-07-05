@@ -18,7 +18,7 @@ class MyBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
-    final routes = AppRoutes().appRoutes.keys.toList();
+    final routes = AppRoutes.appRoutes.keys.toList();
     final currentRoute = ModalRoute.of(context)?.settings.name;
     final currentIndex = routes.indexOf(currentRoute ?? '');
 

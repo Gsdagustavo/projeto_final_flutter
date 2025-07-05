@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../services/theme_service.dart';
+import '../../services/theme_service.dart';
 
 /// This is a provider for the theme state of the application
 class ThemeProvider with ChangeNotifier {

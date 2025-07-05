@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 
-import '../entities/enums.dart';
+import '../../entities/enums.dart';
+import '../../entities/participant.dart';
 
 class RegisterTravelProvider with ChangeNotifier {
   final _travelTitleController = TextEditingController();
   var _selectedTransportType = TransportType.values.first;
 
-  final selectedExperiences = <Experience>[];
+  final _participants = <Participant>[];
 
   DateTime? _selectedStartDate;
   DateTime? _selectedEndDate;
 
-  int _numParticipants = 1;
+  final _nameController = TextEditingController();
+  final _ageController = TextEditingController();
 
   void registerTravel() {
     final travelTitle = _travelTitleController.text;
     debugPrint('Travel title: $travelTitle');
 
-    debugPrint('Selected experiences: $selectedExperiences');
     debugPrint('Selected transport type: $_selectedTransportType');
 
     debugPrint('Start date: $_selectedStartDate');
@@ -28,23 +29,6 @@ class RegisterTravelProvider with ChangeNotifier {
     if (_selectedTransportType == value) return;
     _selectedTransportType = value ?? TransportType.values.first;
     notifyListeners();
-  }
-
-  void toggleExperience(Experience? item) {
-    if (item == null) return;
-
-    if (selectedExperiences.contains(item)) {
-      selectedExperiences.remove(item);
-    } else {
-      selectedExperiences.add(item);
-    }
-
-    notifyListeners();
-  }
-
-  bool checkIfExperienceIsSelected(Experience item) {
-    final contains = selectedExperiences.contains(item);
-    return contains;
   }
 
   void selectStartDate(DateTime? date) {
@@ -68,22 +52,34 @@ class RegisterTravelProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void changeNumParticipants(int newValue) {
-    if (_numParticipants == newValue) return;
+  void addParticipant([String? profilePictureUrl]) {
+    var intAge = int.tryParse(_ageController.text);
+    if (intAge == null) return;
 
-    _numParticipants = newValue;
+    var participant = Participant(
+      name: _nameController.text,
+      age: intAge,
+      profilePictureUrl: profilePictureUrl,
+    );
+    _participants.add(participant);
     notifyListeners();
   }
 
   get travelTitleController => _travelTitleController;
 
-  bool get isStartDateSelected => _selectedStartDate != null;
+  int get numParticipants => _participants.length;
 
   get selectedTransportType => _selectedTransportType;
+
+  get participants => _participants;
 
   DateTime? get selectedStartDate => _selectedStartDate;
 
   DateTime? get selectedEndDate => _selectedEndDate;
 
-  int get numParticipants => _numParticipants;
+  get nameController => _nameController;
+
+  get ageController => _ageController;
+
+  bool get isStartDateSelected => selectedStartDate != null;
 }

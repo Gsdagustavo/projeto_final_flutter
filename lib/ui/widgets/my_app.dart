@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../../core/constants/app_routes.dart';
 import '../../l10n/app_localizations.dart';
-import '../../providers/theme_provider.dart';
 import '../pages/home_page.dart';
+import '../providers/theme_provider.dart';
 
 /// This widget is the [MaterialApp] of the application, which contains all
 /// important info about layout, theme, routes, localization, etc.
@@ -13,27 +13,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ThemeProvider(),
-      builder: (context, child) {
-        final isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
+    final isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
+    return MaterialApp(
+      title: 'Roam',
+      debugShowCheckedModeBanner: false,
 
-        return MaterialApp(
-          title: 'Roam',
-          debugShowCheckedModeBanner: false,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
 
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
+      theme: ThemeData(brightness: Brightness.light),
+      darkTheme: ThemeData(brightness: Brightness.dark),
 
-          theme: ThemeData(brightness: Brightness.light),
-          darkTheme: ThemeData(brightness: Brightness.dark),
+      themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
 
-          themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-
-          routes: AppRoutes().appRoutes,
-          initialRoute: HomePage.routeName,
-        );
-      },
+      routes: AppRoutes.appRoutes,
+      initialRoute: HomePage.routeName,
     );
   }
 }
