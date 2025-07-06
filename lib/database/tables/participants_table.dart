@@ -7,7 +7,7 @@ class ParticipantsTable {
   static const String participantId = 'participantId';
   static const String name = 'name';
   static const String age = 'age';
-  static const String profilePictureUrl = 'profilePictureUrl';
+  static const String profilePicturePath = 'profilePicturePath';
 
   /// SQLite command for creating the table
   static const String createTable =
@@ -16,7 +16,7 @@ class ParticipantsTable {
         $participantId INTEGER PRIMARY KEY AUTOINCREMENT,
         $name TEXT NOT NULL,
         $age INTEGER NOT NULL,
-        $profilePictureUrl INTEGER
+        $profilePicturePath TEXT
       );
       ''';
 }

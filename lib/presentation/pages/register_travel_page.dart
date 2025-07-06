@@ -47,6 +47,38 @@ class RegisterTravelPage extends StatelessWidget {
           ),
         ),
       ),
+
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            child: Icon(Icons.app_registration),
+            onPressed: () async {
+              final registerTravelState = Provider.of<RegisterTravelProvider>(
+                context,
+                listen: false,
+              );
+
+              await registerTravelState.registerTravel();
+            },
+          ),
+
+          Padding(padding: EdgeInsets.all(16)),
+
+          FloatingActionButton(
+            child: Icon(Icons.get_app),
+            onPressed: () async {
+              final registerTravelState = Provider.of<RegisterTravelProvider>(
+                context,
+                listen: false,
+              );
+
+              await registerTravelState.select();
+            },
+          ),
+        ],
+      ),
     );
   }
 }
@@ -398,7 +430,7 @@ class _ParticipantListItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CircleAvatar(
-          child: Image.network('https://i.redd.it/oqhs74f166511.png'),
+          // child: Image.network('https://i.redd.it/oqhs74f166511.png'),
         ),
         Padding(padding: EdgeInsets.all(8)),
         Text('Name: ${participant.name}\nAge: ${participant.age}'),

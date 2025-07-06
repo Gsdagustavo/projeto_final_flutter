@@ -6,7 +6,7 @@ class TravelStopTable {
   /// The name of the table
   static const String tableName = 'travelStops';
 
-  static const String id = 'id';
+  static const String travelStopId = 'travelStopId';
   static const String travelId = 'travelId';
   static const String cityName = 'cityName';
   static const String latitude = 'latitude';
@@ -17,20 +17,16 @@ class TravelStopTable {
   static const String arriveDate = 'arriveDate';
   static const String leaveDate = 'leaveDate';
 
-  /// Represented in seconds
-  static const String stayingTime = 'stayingTime';
-
   /// SQLite command for creating the table
   static const String createTable =
       '''
       CREATE TABLE $tableName(
-        $id INTEGER PRIMARY KEY AUTOINCREMENT,
+        $travelStopId INTEGER PRIMARY KEY AUTOINCREMENT,
         $cityName TEXT NOT NULL,
         $latitude REAL NOT NULL,   
         $longitude REAL NOT NULL,
         $arriveDate INTEGER NOT NULL,
         $leaveDate INTEGER NOT NULL,
-        $stayingTime INTEGER NOT NULL,
         $travelId INTEGER NOT NULL,
         
         FOREIGN KEY ($travelId) REFERENCES ${TravelTable.tableName} (${TravelTable.travelId})

@@ -4,7 +4,7 @@ class ExperiencesTable {
   /// The name of the table
   static const String tableName = 'experiences';
 
-  static const String experienceId = 'id';
+  static const String experienceId = 'experienceId';
   static const String name = 'name';
 
   /// SQLite command for creating the table

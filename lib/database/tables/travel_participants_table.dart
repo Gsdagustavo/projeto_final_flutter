@@ -20,6 +20,8 @@ class TravelParticipantsTable {
         
         FOREIGN KEY ($participantId) REFERENCES ${ParticipantsTable.tableName} ($participantId),
         FOREIGN KEY ($travelId) REFERENCES ${TravelTable.travelId} ($travelId)
+        
+        PRIMARY KEY ($participantId, $travelId)
       );
       ''';
 }

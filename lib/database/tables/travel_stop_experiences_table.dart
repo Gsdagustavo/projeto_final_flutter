@@ -17,7 +17,7 @@ class TravelStopExperiencesTable {
         $travelStopId INTEGER NOT NULL,
         $experienceId INTEGER NOT NULL,
         
-        FOREIGN KEY ($travelStopId) REFERENCES ${TravelStopTable.tableName} (${TravelStopTable.id}),
+        FOREIGN KEY ($travelStopId) REFERENCES ${TravelStopTable.tableName} (${TravelStopTable.travelStopId}),
         FOREIGN KEY ($experienceId) REFERENCES ${ExperiencesTable.tableName} (${ExperiencesTable.experienceId}),
         
         PRIMARY KEY ($travelStopId, $experienceId)

@@ -2,8 +2,17 @@ import 'package:flutter/material.dart';
 
 import '../../entities/enums.dart';
 import '../../entities/participant.dart';
+import '../../entities/travel.dart';
+import '../../entities/travel_stop.dart';
+import '../../modules/travel/travel_repository.dart';
+import '../../modules/travel/travel_usecases.dart';
 
 class RegisterTravelProvider with ChangeNotifier {
+  final TravelRepositoryImpl _travelRepository;
+  final TravelUseCasesImpl _travelUseCases;
+
+  RegisterTravelProvider(this._travelRepository, this._travelUseCases);
+
   final _travelTitleController = TextEditingController();
   var _selectedTransportType = TransportType.values.first;
 
@@ -15,14 +24,48 @@ class RegisterTravelProvider with ChangeNotifier {
   final _nameController = TextEditingController();
   final _ageController = TextEditingController();
 
-  void registerTravel() {
-    final travelTitle = _travelTitleController.text;
-    debugPrint('Travel title: $travelTitle');
+  Future<void> registerTravel() async {
+    final travel = Travel(
+      travelTitle: _travelTitleController.text,
+      participants: participants,
+      startDate: _selectedStartDate,
+      endDate: _selectedEndDate,
+      transportType: _selectedTransportType,
+      stops: [
+        TravelStop(
+          cityName: 'Goiaba',
+          latitude: 10,
+          longitude: 10,
+          arriveDate: DateTime.now(),
+          leaveDate: DateTime.now().add(Duration(days: 1)),
+          experiences: [Experience.visitHistoricalPlaces],
+        ),
+      ],
+    );
 
-    debugPrint('Selected transport type: $_selectedTransportType');
+    debugPrint('TRAVEL INSTANCE:\n${travel.toString()}');
 
-    debugPrint('Start date: $_selectedStartDate');
-    debugPrint('End date: $_selectedEndDate');
+    await _travelUseCases.registerTravel(travel);
+    _resetForms();
+  }
+
+  void _resetForms() {
+    _selectedTransportType = TransportType.values.first;
+
+    _selectedStartDate = null;
+    _selectedEndDate = null;
+
+    _travelTitleController.clear();
+    _nameController.clear();
+    _ageController.clear();
+
+    _participants.clear();
+
+    notifyListeners();
+  }
+
+  Future<void> select() async {
+    await _travelRepository.getAllTravels();
   }
 
   void selectTransportType(TransportType? value) {
@@ -59,7 +102,7 @@ class RegisterTravelProvider with ChangeNotifier {
     var participant = Participant(
       name: _nameController.text,
       age: intAge,
-      profilePictureUrl: profilePictureUrl,
+      profilePicturePath: profilePictureUrl,
     );
 
     _nameController.clear();
