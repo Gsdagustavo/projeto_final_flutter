@@ -2,7 +2,7 @@ import 'travel_table.dart';
 
 /// This is a model class to be used when manipulating the TravelStop Table
 /// in the database
-class TravelStopTable {
+abstract final class TravelStopTable {
   /// The name of the table
   static const String tableName = 'travelStops';
 

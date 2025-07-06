@@ -1,6 +1,6 @@
 /// This is a model class to be used when manipulating the Participants Table
 /// in the database
-class ParticipantsTable {
+abstract final class ParticipantsTable {
   /// The name of the table
   static const String tableName = 'participants';
 

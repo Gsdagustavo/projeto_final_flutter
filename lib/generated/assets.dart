@@ -3,7 +3,6 @@ class Assets {
   Assets._();
 
   static const String constantsAppRoutes = 'lib/core/constants/app_routes.dart';
-  static const String controllersTravelTableController = 'lib/database/controllers/travel_table_controller.dart';
   static const String databaseDatabase = 'lib/database/database.dart';
   static const String entitiesEnums = 'lib/entities/enums.dart';
   static const String entitiesParticipant = 'lib/entities/participant.dart';
@@ -19,12 +18,12 @@ class Assets {
   static const String l10nAppPt = 'lib/l10n/app_pt.arb';
   static const String libDesafioFinalAcademyFlutter2025 = 'lib/desafio_final_academy_flutter_2025.pdf';
   static const String libMain = 'lib/main.dart';
-  static const String pagesFabPage = 'lib/ui/pages/fab_page.dart';
-  static const String pagesHomePage = 'lib/ui/pages/home_page.dart';
-  static const String pagesRegisterTravelPage = 'lib/ui/pages/register_travel_page.dart';
-  static const String pagesSettingsPage = 'lib/ui/pages/settings_page.dart';
-  static const String providersRegisterTravelProvider = 'lib/ui/providers/register_travel_provider.dart';
-  static const String providersThemeProvider = 'lib/ui/providers/theme_provider.dart';
+  static const String pagesFabPage = 'lib/presentation/pages/fab_page.dart';
+  static const String pagesHomePage = 'lib/presentation/pages/home_page.dart';
+  static const String pagesRegisterTravelPage = 'lib/presentation/pages/register_travel_page.dart';
+  static const String pagesSettingsPage = 'lib/presentation/pages/settings_page.dart';
+  static const String providersRegisterTravelProvider = 'lib/presentation/providers/register_travel_provider.dart';
+  static const String providersThemeProvider = 'lib/presentation/providers/theme_provider.dart';
   static const String servicesThemeService = 'lib/services/theme_service.dart';
   static const String tablesExperiencesTable = 'lib/database/tables/experiences_table.dart';
   static const String tablesParticipantsTable = 'lib/database/tables/participants_table.dart';
@@ -35,10 +34,10 @@ class Assets {
   static const String tablesTravelTable = 'lib/database/tables/travel_table.dart';
   static const String travelTravelRepository = 'lib/modules/travel/travel_repository.dart';
   static const String travelTravelUsecases = 'lib/modules/travel/travel_usecases.dart';
-  static const String utilEnumsExtensions = 'lib/ui/util/enums_extensions.dart';
+  static const String utilEnumsExtensions = 'lib/presentation/util/enums_extensions.dart';
   static const String utilExperiencesUtil = 'lib/database/util/experiences_util.dart';
-  static const String widgetsBottomNavigationBar = 'lib/ui/widgets/bottom_navigation_bar.dart';
-  static const String widgetsMyApp = 'lib/ui/widgets/my_app.dart';
-  static const String widgetsMyAppBar = 'lib/ui/widgets/my_app_bar.dart';
+  static const String widgetsBottomNavigationBar = 'lib/presentation/widgets/bottom_navigation_bar.dart';
+  static const String widgetsMyApp = 'lib/presentation/widgets/my_app.dart';
+  static const String widgetsMyAppBar = 'lib/presentation/widgets/my_app_bar.dart';
 
 }

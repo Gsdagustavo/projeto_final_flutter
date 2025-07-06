@@ -3,7 +3,7 @@ import 'travel_stop_table.dart';
 
 /// This is a model class to be used when manipulating the TravelStopExperiences
 /// Table in the database
-class TravelStopExperiencesTable {
+abstract final class TravelStopExperiencesTable {
   /// The name of the table
   static const String tableName = 'travelStopExperiences';
 

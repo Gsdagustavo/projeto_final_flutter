@@ -2,7 +2,7 @@ import 'transport_types_table.dart';
 
 /// This is a model class to be used when manipulating the Travel Table in the
 /// database
-class TravelTable {
+abstract final class TravelTable {
   /// The name of the table
   static const String tableName = 'travels';
 
