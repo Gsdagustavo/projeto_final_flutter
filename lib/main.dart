@@ -14,8 +14,10 @@ Future<void> main() async {
   final travelRepository = TravelRepositoryImpl();
   final travelUsecases = TravelUseCasesImpl(travelRepository);
 
-  final pos = await LocalizationService().getCurrentPosition();
+  final pos = await LocationService().getCurrentPosition();
   debugPrint('Current position: ${pos.toString()}');
+
+  await LocationService().getAddressByPosition(pos!);
 
   runApp(
     MultiProvider(

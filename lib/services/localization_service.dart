@@ -1,7 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 
-class LocalizationService {
+class LocationService {
+  static const String _apiUrl =
+      'https://nominatim.openstreetmap.org/reverse?format=jsonv2';
+
   Future<Position?> getCurrentPosition() async {
     var serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
@@ -33,5 +39,16 @@ class LocalizationService {
     return await Geolocator.getCurrentPosition(
       locationSettings: LocationSettings(accuracy: LocationAccuracy.low),
     );
+  }
+
+  Future<void> getAddressByPosition(Position position) async {
+    final latitude = position.latitude;
+    final longitude = position.longitude;
+
+    final url = '$_apiUrl&lat=$latitude&lon=$longitude';
+    final response = await http.get(Uri.parse(url));
+
+    final body = jsonDecode(response.body);
+    debugPrint('Body: $body');
   }
 }
