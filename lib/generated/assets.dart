@@ -24,6 +24,7 @@ class Assets {
   static const String pagesSettingsPage = 'lib/presentation/pages/settings_page.dart';
   static const String providersRegisterTravelProvider = 'lib/presentation/providers/register_travel_provider.dart';
   static const String providersThemeProvider = 'lib/presentation/providers/theme_provider.dart';
+  static const String servicesLocalizationService = 'lib/services/localization_service.dart';
   static const String servicesThemeService = 'lib/services/theme_service.dart';
   static const String tablesExperiencesTable = 'lib/database/tables/experiences_table.dart';
   static const String tablesParticipantsTable = 'lib/database/tables/participants_table.dart';
