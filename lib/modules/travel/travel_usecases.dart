@@ -16,29 +16,29 @@ class TravelUseCasesImpl implements TravelUseCases {
   Future<void> registerTravel(Travel travel) async {
     /// No title
     if (travel.travelTitle.trim().isEmpty) {
-      throw _TravelRegisterException('Invalid travel name');
+      throw TravelRegisterException('Invalid travel name');
     }
 
     /// Invalid start date
     if (travel.startDate == null) {
-      throw _TravelRegisterException('Invalid travel start date');
+      throw TravelRegisterException('Invalid travel start date');
     }
 
     /// Invalid end date
     if (travel.endDate == null) {
-      throw _TravelRegisterException('Invalid travel end date');
+      throw TravelRegisterException('Invalid travel end date');
     }
 
     /// No participants
     if (travel.participants.isEmpty) {
-      throw _TravelRegisterException(
+      throw TravelRegisterException(
         'Travel must contain at least 1 participant',
       );
     }
 
     /// No stops
     if (travel.stops.isEmpty) {
-      throw _TravelRegisterException('Travel must contain at least 1 stop');
+      throw TravelRegisterException('Travel must contain at least 1 stop');
     }
 
     await travelRepository.registerTravel(travel: travel);
@@ -50,8 +50,8 @@ class TravelUseCasesImpl implements TravelUseCases {
   }
 }
 
-class _TravelRegisterException implements Exception {
+class TravelRegisterException implements Exception {
   final String message;
 
-  _TravelRegisterException(this.message);
+  TravelRegisterException(this.message);
 }
