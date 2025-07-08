@@ -17,16 +17,6 @@ class TravelUseCasesImpl implements TravelUseCases {
       throw Exception('Invalid travel name');
     }
 
-    /// No stops
-    if (travel.stops.isEmpty) {
-      throw Exception('Travel must contain at least 1 stop');
-    }
-
-    /// No participants
-    if (travel.participants.isEmpty) {
-      throw Exception('Travel must contain at least 1 participant');
-    }
-
     /// Invalid start date
     if (travel.startDate == null) {
       throw Exception('Invalid travel start date');
@@ -35,6 +25,16 @@ class TravelUseCasesImpl implements TravelUseCases {
     /// Invalid end date
     if (travel.endDate == null) {
       throw Exception('Invalid travel end date');
+    }
+
+    /// No participants
+    if (travel.participants.isEmpty) {
+      throw Exception('Travel must contain at least 1 participant');
+    }
+
+    /// No stops
+    if (travel.stops.isEmpty) {
+      throw Exception('Travel must contain at least 1 stop');
     }
 
     await travelRepository.registerTravel(travel: travel);
