@@ -24,7 +24,7 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(
           create: (context) =>
-              RegisterTravelProvider(travelRepository, travelUsecases),
+              RegisterTravelProvider(travelUsecases),
         ),
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
       ],

@@ -4,14 +4,12 @@ import '../../entities/enums.dart';
 import '../../entities/participant.dart';
 import '../../entities/travel.dart';
 import '../../entities/travel_stop.dart';
-import '../../modules/travel/travel_repository.dart';
 import '../../modules/travel/travel_usecases.dart';
 
 class RegisterTravelProvider with ChangeNotifier {
-  final TravelRepositoryImpl _travelRepository;
   final TravelUseCasesImpl _travelUseCases;
 
-  RegisterTravelProvider(this._travelRepository, this._travelUseCases);
+  RegisterTravelProvider(this._travelUseCases);
 
   final _travelTitleController = TextEditingController();
   var _selectedTransportType = TransportType.values.first;
@@ -65,7 +63,7 @@ class RegisterTravelProvider with ChangeNotifier {
   }
 
   Future<void> select() async {
-    await _travelRepository.getAllTravels();
+    await _travelUseCases.getAllTravels();
   }
 
   void selectTransportType(TransportType? value) {
