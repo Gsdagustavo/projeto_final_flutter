@@ -3,6 +3,8 @@ import 'travel_repository.dart';
 
 abstract class TravelUseCases {
   Future<void> registerTravel(Travel travel);
+
+  Future<List<Travel>> getAllTravels();
 }
 
 class TravelUseCasesImpl implements TravelUseCases {
@@ -40,6 +42,11 @@ class TravelUseCasesImpl implements TravelUseCases {
     }
 
     await travelRepository.registerTravel(travel: travel);
+  }
+
+  @override
+  Future<List<Travel>> getAllTravels() async {
+    return await travelRepository.getAllTravels();
   }
 }
 
