@@ -6,7 +6,6 @@ import 'modules/travel/travel_usecases.dart';
 import 'presentation/providers/register_travel_provider.dart';
 import 'presentation/providers/theme_provider.dart';
 import 'presentation/widgets/my_app.dart';
-import 'services/localization_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,17 +13,11 @@ Future<void> main() async {
   final travelRepository = TravelRepositoryImpl();
   final travelUsecases = TravelUseCasesImpl(travelRepository);
 
-  final pos = await LocationService().getCurrentPosition();
-  debugPrint('Current position: ${pos.toString()}');
-
-  await LocationService().getAddressByPosition(pos!);
-
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) =>
-              RegisterTravelProvider(travelUsecases),
+          create: (context) => RegisterTravelProvider(travelUsecases),
         ),
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
       ],

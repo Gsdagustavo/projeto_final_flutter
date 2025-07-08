@@ -22,7 +22,13 @@ class RegisterTravelProvider with ChangeNotifier {
   final _nameController = TextEditingController();
   final _ageController = TextEditingController();
 
+  String? _error;
+  bool _isLoading = false;
+
   Future<void> registerTravel() async {
+    _isLoading = true;
+    notifyListeners();
+
     final travel = Travel(
       travelTitle: _travelTitleController.text,
       participants: participants,
@@ -41,9 +47,18 @@ class RegisterTravelProvider with ChangeNotifier {
       ],
     );
 
-    debugPrint('TRAVEL INSTANCE:\n${travel.toString()}');
+    try {
+      await _travelUseCases.registerTravel(travel);
+    } on TravelRegisterException catch (e) {
+      _error = e.message;
+      _isLoading = false;
+      notifyListeners();
+      return;
+    }
 
-    await _travelUseCases.registerTravel(travel);
+    _error = null;
+    _isLoading = false;
+
     _resetForms();
   }
 
@@ -58,6 +73,9 @@ class RegisterTravelProvider with ChangeNotifier {
     _ageController.clear();
 
     _participants.clear();
+
+    _error = null;
+    _isLoading = false;
 
     notifyListeners();
   }
@@ -127,4 +145,10 @@ class RegisterTravelProvider with ChangeNotifier {
   get ageController => _ageController;
 
   bool get isStartDateSelected => selectedStartDate != null;
+
+  String? get error => _error;
+
+  bool get hasError => _error != null;
+
+  bool get isLoading => _isLoading;
 }

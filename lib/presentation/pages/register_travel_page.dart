@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +16,55 @@ class RegisterTravelPage extends StatelessWidget {
 
   /// The route of the page
   static const String routeName = '/registerTravel';
+
+  void _showCustomDialog(BuildContext context) async {
+    unawaited(
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return Consumer<RegisterTravelProvider>(
+            builder: (context, state, child) {
+              final Widget icon;
+              Widget content;
+
+              if (state.isLoading) {
+                debugPrint('Is loading');
+                content = SizedBox(
+                  width: 48,
+                  height: 48,
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              /// Determine which icon and text to show
+              if (state.hasError) {
+                debugPrint('has error');
+                content = Text(
+                  state.error ?? 'Unknown error',
+                  textAlign: TextAlign.center,
+                );
+                icon = Icon(Icons.error, color: Colors.red);
+              } else {
+                debugPrint('doesnt have error');
+                content = Text(
+                  'Travel registered successfully!',
+                  textAlign: TextAlign.center,
+                );
+                icon = Icon(Icons.check_circle, color: Colors.green);
+              }
+
+              return AlertDialog(
+                icon: icon,
+                alignment: Alignment.center,
+                content: content,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +111,11 @@ class RegisterTravelPage extends StatelessWidget {
                 listen: false,
               );
 
+              _showCustomDialog(context);
               await registerTravelState.registerTravel();
+              await Future.delayed(Duration(seconds: 2));
+
+              Navigator.pop(context);
             },
           ),
 
