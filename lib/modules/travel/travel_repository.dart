@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../database/database.dart';
@@ -17,7 +16,7 @@ import '../../entities/travel_stop.dart';
 abstract class TravelRepository {
   Future<Travel?> registerTravel({required Travel travel});
 
-  Future<void> getAllTravels();
+  Future<List<Travel>> getAllTravels();
 }
 
 class TravelRepositoryImpl implements TravelRepository {
@@ -73,7 +72,7 @@ class TravelRepositoryImpl implements TravelRepository {
   }
 
   @override
-  Future<void> getAllTravels() async {
+  Future<List<Travel>> getAllTravels() async {
     final db = await _db;
 
     final travels = <Travel>[];
@@ -161,8 +160,7 @@ class TravelRepositoryImpl implements TravelRepository {
       }
     });
 
-    debugPrint('TRAVELS\n\n$travels');
-    // return travels;
+    return travels;
   }
 
   static Map<String, dynamic> toTravelParticipantsMap(
