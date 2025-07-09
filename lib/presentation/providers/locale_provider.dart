@@ -2,21 +2,28 @@ import 'package:flutter/material.dart';
 
 import '../../services/locale_service.dart';
 
-class LocaleProvider with ChangeNotifier {
+class LanguageCodeProvider with ChangeNotifier {
   final _localeService = LocaleService();
-  var _locale = Locale(LocaleService.defaultLanguageCode);
+  String _languageCode = LocaleService.defaultLanguageCode;
 
-  Future<void> changeLocale({required String languageCode}) async {
-    _locale = Locale.fromSubtags(languageCode: languageCode);
+  LanguageCodeProvider() {
+    _init();
+  }
+
+  _init() async {
+    await loadLanguageCode();
+  }
+
+  Future<void> loadLanguageCode() async {
+    _languageCode = await _localeService.loadLanguageCode();
+    notifyListeners();
+  }
+
+  Future<void> changeLanguageCode({required String languageCode}) async {
+    _languageCode = languageCode;
     await _localeService.saveLanguageCode(languageCode: languageCode);
     notifyListeners();
   }
 
-  Future<void> loadLocale() async {
-    final languageCode = await _localeService.loadLanguageCode();
-    _locale = Locale(languageCode);
-    notifyListeners();
-  }
-
-  Locale get locale => _locale;
+  get languageCode => _languageCode;
 }
