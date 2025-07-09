@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'modules/travel/travel_repository.dart';
 import 'modules/travel/travel_usecases.dart';
+import 'presentation/providers/locale_provider.dart';
 import 'presentation/providers/register_travel_provider.dart';
 import 'presentation/providers/theme_provider.dart';
 import 'presentation/widgets/my_app.dart';
@@ -20,6 +21,7 @@ Future<void> main() async {
           create: (context) => RegisterTravelProvider(travelUsecases),
         ),
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => LanguageCodeProvider()),
       ],
       child: const MyApp(),
     ),
