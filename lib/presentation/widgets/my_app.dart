@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../core/constants/app_routes.dart';
 import '../../l10n/app_localizations.dart';
 import '../pages/home_page.dart';
-import '../providers/locale_provider.dart';
+import '../providers/language_code_provider.dart';
 import '../providers/theme_provider.dart';
 
 /// This widget is the [MaterialApp] of the application, which contains all

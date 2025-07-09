@@ -28,6 +28,8 @@ class LocaleService {
       return languageCode;
     }
 
+    /// TODO: implement a better way of retrieving the device language code,
+    /// since [window] is deprecated
     final deviceLanguageCode = window.locale.languageCode;
     final finalLanguageCode = languageCodes.contains(deviceLanguageCode)
         ? deviceLanguageCode

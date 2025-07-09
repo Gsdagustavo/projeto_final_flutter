@@ -22,7 +22,7 @@ class Assets {
   static const String pagesHomePage = 'lib/presentation/pages/home_page.dart';
   static const String pagesRegisterTravelPage = 'lib/presentation/pages/register_travel_page.dart';
   static const String pagesSettingsPage = 'lib/presentation/pages/settings_page.dart';
-  static const String providersLocaleProvider = 'lib/presentation/providers/locale_provider.dart';
+  static const String providersLocaleProvider = 'lib/presentation/providers/language_code_provider.dart';
   static const String providersRegisterTravelProvider = 'lib/presentation/providers/register_travel_provider.dart';
   static const String providersThemeProvider = 'lib/presentation/providers/theme_provider.dart';
   static const String servicesLocaleService = 'lib/services/locale_service.dart';

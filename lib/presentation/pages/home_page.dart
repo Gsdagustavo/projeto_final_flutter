@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../../entities/enums.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/locale_service.dart';
-import '../providers/locale_provider.dart';
+import '../providers/language_code_provider.dart';
 import '../util/enums_extensions.dart';
 import 'fab_page.dart';
 

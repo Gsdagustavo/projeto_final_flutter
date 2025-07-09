@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'modules/travel/travel_repository.dart';
 import 'modules/travel/travel_usecases.dart';
-import 'presentation/providers/locale_provider.dart';
+import 'presentation/providers/language_code_provider.dart';
 import 'presentation/providers/register_travel_provider.dart';
 import 'presentation/providers/theme_provider.dart';
 import 'presentation/widgets/my_app.dart';
