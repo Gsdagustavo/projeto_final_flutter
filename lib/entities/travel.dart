@@ -30,6 +30,7 @@ class Travel {
     required List<TravelStop> stops,
   }) {
     return Travel(
+      travelId: map[TravelTable.travelId],
       travelTitle: map[TravelTable.travelTitle],
       startDate: DateTime.fromMillisecondsSinceEpoch(
         map[TravelTable.startDate],
