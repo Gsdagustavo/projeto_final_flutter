@@ -1,3 +1,4 @@
+import '../../entities/participant.dart';
 import '../../entities/travel.dart';
 import 'travel_repository.dart';
 
@@ -36,17 +37,44 @@ class TravelUseCasesImpl implements TravelUseCases {
       );
     }
 
+    /// A(some) participant(s) has invalid data
+    if (!_validateParticipants(travel.participants)) {
+      throw TravelRegisterException('Invalid participant data');
+    }
+
     /// No stops
     if (travel.stops.isEmpty) {
       throw TravelRegisterException('Travel must contain at least 1 stop');
     }
 
+    /// Register travel
     await travelRepository.registerTravel(travel: travel);
   }
 
   @override
   Future<List<Travel>> getAllTravels() async {
     return await travelRepository.getAllTravels();
+  }
+
+  bool _validateParticipants(List<Participant> participants) {
+    return participants.every((p) {
+      /// Invalid name
+      if (p.name.isEmpty) {
+        return false;
+      }
+
+      /// Short name
+      if (p.name.length < 3) {
+        return false;
+      }
+
+      /// Invalid age
+      if (p.age > 0 && p.age <= 120) {
+        return false;
+      }
+
+      return true;
+    });
   }
 }
 
