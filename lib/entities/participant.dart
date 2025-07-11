@@ -1,4 +1,4 @@
-import '../database/tables/participants_table.dart';
+import '../data/local/database/tables/participants_table.dart';
 
 /// Represents a  [Participant] of a [Travel]
 class Participant {

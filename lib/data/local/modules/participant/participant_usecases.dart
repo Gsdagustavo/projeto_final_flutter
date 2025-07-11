@@ -1,4 +1,4 @@
-import '../../entities/participant.dart';
+import '../../../../entities/participant.dart';
 import 'participant_repository.dart';
 
 abstract class ParticipantUseCases {

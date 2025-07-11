@@ -42,7 +42,6 @@ class EnumFormatUtils {
 /// This extension is a simple way to return the localized version of
 /// the [TransportType] enum
 extension TransportTypeIntlString on TransportType {
-
   /// Returns the localized [TransportType]
   String getIntlTransportType(BuildContext context) {
     final loc = AppLocalizations.of(context);
@@ -65,7 +64,6 @@ extension TransportTypeIntlString on TransportType {
 /// This extension is a simple way to return the localized version of
 /// the [Experience] enum
 extension ExperiencesIntlString on Experience {
-
   /// Returns the localized [Experience]
   String getIntlExperience(BuildContext context) {
     final loc = AppLocalizations.of(context);

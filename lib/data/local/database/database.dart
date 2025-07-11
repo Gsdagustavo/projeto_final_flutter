@@ -1,7 +1,7 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../entities/enums.dart';
+import '../../../entities/enums.dart';
 import 'tables/experiences_table.dart';
 import 'tables/participants_table.dart';
 import 'tables/transport_types_table.dart';

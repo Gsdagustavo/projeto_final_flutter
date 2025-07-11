@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../data/local/modules/travel/travel_usecases.dart';
 import '../../entities/enums.dart';
 import '../../entities/participant.dart';
 import '../../entities/travel.dart';
 import '../../entities/travel_stop.dart';
-import '../../modules/travel/travel_usecases.dart';
 
 class RegisterTravelProvider with ChangeNotifier {
   final TravelUseCasesImpl _travelUseCases;

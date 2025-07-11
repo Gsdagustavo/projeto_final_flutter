@@ -8,7 +8,7 @@ class FabPage extends StatelessWidget {
     super.key,
     required this.body,
     required this.title,
-    this.floatingActionButton
+    this.floatingActionButton,
   });
 
   final String title;

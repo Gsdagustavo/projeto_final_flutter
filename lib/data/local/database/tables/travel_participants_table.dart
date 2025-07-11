@@ -4,7 +4,6 @@ import 'travel_table.dart';
 /// This is a model class to be used when manipulating the TravelParticipants
 /// Table in the database
 abstract final class TravelParticipantsTable {
-
   /// The name of the table
   static const String tableName = 'participantTravel';
 
