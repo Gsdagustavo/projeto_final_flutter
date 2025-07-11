@@ -15,7 +15,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
-    final languageCode = Provider.of<LanguageCodeProvider>(context).languageCode;
+    final languageCode = Provider.of<LanguageCodeProvider>(
+      context,
+    ).languageCode;
     final locale = Locale(languageCode);
 
     return MaterialApp(
