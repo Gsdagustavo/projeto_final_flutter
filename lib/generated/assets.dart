@@ -18,6 +18,7 @@ class Assets {
   static const String l10nAppPt = 'lib/l10n/app_pt.arb';
   static const String libDesafioFinalAcademyFlutter2025 = 'lib/desafio_final_academy_flutter_2025.pdf';
   static const String libMain = 'lib/main.dart';
+  static const String modulesAuth = 'lib/data/remote/modules/auth.dart';
   static const String pagesFabPage = 'lib/presentation/pages/fab_page.dart';
   static const String pagesHomePage = 'lib/presentation/pages/home_page.dart';
   static const String pagesRegisterTravelPage = 'lib/presentation/pages/register_travel_page.dart';
