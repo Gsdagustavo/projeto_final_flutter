@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-class Auth {
+class AuthService {
   final _firebase = FirebaseAuth.instance;
 
   Future<User?> signinWithEmailAndPassword({
@@ -23,6 +23,8 @@ class Auth {
     required String email,
     required String password,
   }) async {
+    final User? user;
+
     if (email.isEmpty || !email.contains('@')) {
       return null;
     }
@@ -32,12 +34,16 @@ class Auth {
     }
 
     try {
-      await _firebase.createUserWithEmailAndPassword(
+      final credentials = await _firebase.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+
+      user = credentials.user;
     } on FirebaseAuthException {
       rethrow;
     }
+
+    return user;
   }
 }
