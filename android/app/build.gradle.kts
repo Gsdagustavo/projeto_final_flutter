@@ -23,8 +23,8 @@ android {
         applicationId = "com.example.projeto_final_flutter"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        minSdk = 23
+        targetSdk = 33
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
@@ -41,3 +41,5 @@ android {
 flutter {
     source = "../.."
 }
+
+apply<com.google.gms.googleservices.GoogleServicesPlugin>()
