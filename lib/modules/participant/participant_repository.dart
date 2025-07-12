@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../../../domain/entities/participant.dart';
-import '../../database/database.dart';
-import '../../database/tables/participants_table.dart';
-import '../../database/tables/travel_participants_table.dart';
+import '../../domain/entities/participant.dart';
+import '../../data/local/database/database.dart';
+import '../../data/local/database/tables/participants_table.dart';
+import '../../data/local/database/tables/travel_participants_table.dart';
 
 abstract class ParticipantRepository {
   Future<void> registerParticipant(Participant participant, int travelId);

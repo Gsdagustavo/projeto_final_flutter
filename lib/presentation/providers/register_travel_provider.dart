@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../data/local/modules/travel/travel_usecases.dart';
+import '../../modules/travel/travel_usecases.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';

@@ -2,8 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
-import 'data/local/modules/travel/travel_repository.dart';
-import 'data/local/modules/travel/travel_usecases.dart';
+import 'modules/travel/travel_repository.dart';
+import 'modules/travel/travel_usecases.dart';
 import 'presentation/providers/language_code_provider.dart';
 import 'presentation/providers/register_travel_provider.dart';
 import 'presentation/providers/theme_provider.dart';
