@@ -1,5 +1,5 @@
-import '../../../../entities/participant.dart';
-import '../../../../entities/travel.dart';
+import '../../../../domain/entities/participant.dart';
+import '../../../../domain/entities/travel.dart';
 import 'travel_repository.dart';
 
 abstract class TravelUseCases {

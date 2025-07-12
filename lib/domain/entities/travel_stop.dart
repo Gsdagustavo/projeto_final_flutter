@@ -1,4 +1,4 @@
-import '../data/local/database/tables/travel_stop_table.dart';
+import '../../data/local/database/tables/travel_stop_table.dart';
 import 'enums.dart';
 
 class TravelStop {

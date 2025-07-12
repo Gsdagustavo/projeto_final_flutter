@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../entities/enums.dart';
+import '../../domain/entities/enums.dart';
 import '../../l10n/app_localizations.dart';
 
 /// Contains util methods to format the program's enums

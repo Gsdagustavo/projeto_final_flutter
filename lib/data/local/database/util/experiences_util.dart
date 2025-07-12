@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../../entities/enums.dart';
+import '../../../../domain/entities/enums.dart';
 import '../tables/experiences_table.dart';
 import '../tables/transport_types_table.dart';
 

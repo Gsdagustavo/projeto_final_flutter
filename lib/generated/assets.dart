@@ -4,10 +4,10 @@ class Assets {
 
   static const String constantsAppRoutes = 'lib/core/constants/app_routes.dart';
   static const String databaseDatabase = 'lib/data/local/database/database.dart';
-  static const String entitiesEnums = 'lib/entities/enums.dart';
-  static const String entitiesParticipant = 'lib/entities/participant.dart';
-  static const String entitiesTravel = 'lib/entities/travel.dart';
-  static const String entitiesTravelStop = 'lib/entities/travel_stop.dart';
+  static const String entitiesEnums = 'lib/domain/entities/enums.dart';
+  static const String entitiesParticipant = 'lib/domain/entities/participant.dart';
+  static const String entitiesTravel = 'lib/domain/entities/travel.dart';
+  static const String entitiesTravelStop = 'lib/domain/entities/travel_stop.dart';
   static const String generatedAssets = 'lib/generated/assets.dart';
   static const String l10nAppEn = 'lib/l10n/app_en.arb';
   static const String l10nAppEs = 'lib/l10n/app_es.arb';

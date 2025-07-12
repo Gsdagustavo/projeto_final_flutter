@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../entities/enums.dart';
-import '../../entities/participant.dart';
+import '../../domain/entities/enums.dart';
+import '../../domain/entities/participant.dart';
 import '../../l10n/app_localizations.dart';
 import '../providers/register_travel_provider.dart';
 import '../util/enums_extensions.dart';

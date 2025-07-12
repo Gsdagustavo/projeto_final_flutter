@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../entities/enums.dart';
+import '../../domain/entities/enums.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/locale_service.dart';
 import '../providers/language_code_provider.dart';

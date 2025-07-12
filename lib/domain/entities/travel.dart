@@ -1,4 +1,4 @@
-import '../data/local/database/tables/travel_table.dart';
+import '../../data/local/database/tables/travel_table.dart';
 import 'enums.dart';
 import 'participant.dart';
 import 'travel_stop.dart';

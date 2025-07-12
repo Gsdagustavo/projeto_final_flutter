@@ -1,9 +1,9 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../../entities/enums.dart';
-import '../../../../entities/participant.dart';
-import '../../../../entities/travel.dart';
-import '../../../../entities/travel_stop.dart';
+import '../../../../domain/entities/enums.dart';
+import '../../../../domain/entities/participant.dart';
+import '../../../../domain/entities/travel.dart';
+import '../../../../domain/entities/travel_stop.dart';
 import '../../database/database.dart';
 import '../../database/tables/experiences_table.dart';
 import '../../database/tables/participants_table.dart';

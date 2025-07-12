@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../../../entities/participant.dart';
+import '../../../../domain/entities/participant.dart';
 import '../../database/database.dart';
 import '../../database/tables/participants_table.dart';
 import '../../database/tables/travel_participants_table.dart';
