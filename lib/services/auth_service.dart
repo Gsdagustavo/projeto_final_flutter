@@ -3,16 +3,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthService {
   final _firebase = FirebaseAuth.instance;
 
+  static const String _authTokenKey = 'auth_token';
+
   Future<User?> signinWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
+    // final storage = FlutterSecureStorage();
+
     try {
       final userCredential = await _firebase.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
+      // storage.write(key: _authTokenKey, value: userCredential.credential)
       return userCredential.user;
     } on FirebaseAuthException {
       rethrow;
@@ -45,5 +50,9 @@ class AuthService {
     }
 
     return user;
+  }
+
+  Future<User?> checkUserAvailable() async {
+    return _firebase.currentUser;
   }
 }
