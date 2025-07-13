@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../core/constants/app_routes.dart';
 import '../../l10n/app_localizations.dart';
 import '../pages/home_page.dart';
+import '../pages/login_page.dart';
 import '../providers/language_code_provider.dart';
 import '../providers/theme_provider.dart';
 
@@ -34,8 +35,10 @@ class MyApp extends StatelessWidget {
 
       themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
 
-      routes: AppRoutes.appRoutes,
-      initialRoute: HomePage.routeName,
+      home: LoginPage(),
+
+      // routes: AppRoutes.appRoutes,
+      // initialRoute: HomePage.routeName,
     );
   }
 }
