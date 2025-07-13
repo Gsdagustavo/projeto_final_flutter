@@ -17,8 +17,6 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
   /// Animation duration, in Milliseconds
   static const int _animationDuration = 300;
 
-  static const Color _selectedColor = Colors.purple;
-
   void _switchPage(int index) {
     setState(() {
       _selectedIndex = index;
@@ -51,7 +49,7 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
           Text(
             text,
             style: TextStyle(
-              color: isSelected ? _selectedColor : Colors.black,
+              color: isSelected ? Theme.of(context).primaryColor : Colors.black,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               fontSize: 24,
             ),
@@ -62,7 +60,7 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
             duration: Duration(milliseconds: _animationDuration),
             height: 2,
             width: isSelected ? 75 : 16,
-            color: _selectedColor,
+            color: Theme.of(context).primaryColor,
           ),
         ],
       ),
