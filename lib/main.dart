@@ -8,11 +8,13 @@ import 'presentation/providers/language_code_provider.dart';
 import 'presentation/providers/register_travel_provider.dart';
 import 'presentation/providers/theme_provider.dart';
 import 'presentation/widgets/my_app.dart';
+import 'services/auth_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
+  await AuthService().signOut();
 
   final travelRepository = TravelRepositoryImpl();
   final travelUsecases = TravelUseCasesImpl(travelRepository);

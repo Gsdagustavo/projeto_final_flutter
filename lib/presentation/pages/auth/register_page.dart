@@ -1,6 +1,10 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../services/auth_service.dart';
+import '../home_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -45,12 +49,33 @@ class _RegisterPageState extends State<RegisterPage> {
     final email = _emailController.text;
     final password = _passwordController.text;
 
-    final user = await AuthService().createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    try {
+      await AuthService().createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-    debugPrint('REGISTER: ${user.toString()}');
+      await AuthService().signinWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text(
+              'An error occurred while trying to sign in: ${e.message}',
+            ),
+          );
+        },
+      );
+
+      return;
+    }
+
+    unawaited(Navigator.pushReplacementNamed(context, HomePage.routeName));
   }
 
   void _togglePasswordVisibility() {
