@@ -17,21 +17,17 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _obscurePassword = true;
 
-  String? _passwordValidator(String? password) {
-    if (password == null || password.isEmpty) {
-      return 'Invalid Password';
-    }
-
-    if (password.length <= 3) {
-      return 'Password too short';
+  String? _emailValidator(String? email) {
+    if (email == null || email.isEmpty || !email.contains('@')) {
+      return 'Invalid Email';
     }
 
     return null;
   }
 
-  String? _emailValidator(String? email) {
-    if (email == null || email.isEmpty || !email.contains('@')) {
-      return 'Invalid Email';
+  String? _passwordValidator(String? password) {
+    if (password == null || password.isEmpty) {
+      return 'Invalid Password';
     }
 
     return null;
@@ -48,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
       password: password,
     );
 
-    debugPrint('OIEl: ${user.toString()}');
+    debugPrint('LOGIN: ${user.toString()}');
   }
 
   void _togglePasswordVisibility() {
@@ -65,8 +61,6 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(padding: EdgeInsets.all(75)),
-
             Text(
               'Login',
               style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
