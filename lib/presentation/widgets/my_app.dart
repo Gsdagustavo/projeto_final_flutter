@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../l10n/app_localizations.dart';
-import '../pages/auth_page_switcher.dart';
+import '../pages/auth/auth_page_switcher.dart';
 import '../providers/language_code_provider.dart';
 import '../providers/theme_provider.dart';
 
