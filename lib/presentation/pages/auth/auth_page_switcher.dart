@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../providers/theme_provider.dart';
+import '../../widgets/toggle_dark_mode_icon_button.dart';
 import 'login_page.dart';
 import 'register_page.dart';
 
@@ -32,37 +35,51 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
   }
 
   Widget _buildSwitcherBar() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Stack(
       children: [
-        _buildSwitcherOption('Login', 0),
-        Padding(padding: EdgeInsetsGeometry.all(12)),
-        _buildSwitcherOption('Register', 1),
+        Positioned(child: ToggleDarkModeIconButton(), right: 22),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildSwitcherOption('Login', 0),
+            Padding(padding: EdgeInsetsGeometry.all(12)),
+            _buildSwitcherOption('Register', 1),
+          ],
+        ),
       ],
     );
   }
 
   Widget _buildSwitcherOption(String text, int index) {
-    final bool isSelected = index == _selectedIndex;
+    final isSelected = index == _selectedIndex;
+    final isDarkMode = Provider.of<ThemeProvider>(
+      context,
+      listen: false,
+    ).isDarkMode;
+
+    final textStyle = Theme.of(context).textTheme.titleLarge?.copyWith(
+      color: isSelected
+          ? Theme.of(context).colorScheme.primary
+          : Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.6),
+      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+    );
+
     return InkWell(
       onTap: () => _switchPage(index),
       child: Column(
         children: [
-          Text(
-            text,
-            style: TextStyle(
-              color: isSelected ? Theme.of(context).primaryColor : Colors.black,
-              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              fontSize: 24,
-            ),
-          ),
+          Text(text, style: textStyle),
+
           Padding(padding: EdgeInsets.all(4)),
           AnimatedContainer(
             curve: Curves.easeInOut,
             duration: Duration(milliseconds: _animationDuration),
             height: 2,
             width: isSelected ? 75 : 16,
-            color: Theme.of(context).primaryColor,
+            color: isDarkMode
+                ? Theme.of(context).primaryColorLight
+                : Theme.of(context).primaryColorDark,
           ),
         ],
       ),

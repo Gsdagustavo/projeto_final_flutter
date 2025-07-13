@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../services/auth_service.dart';
+import '../../widgets/toggle_dark_mode_icon_button.dart';
 import '../home_page.dart';
 
 class LoginPage extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/theme_provider.dart';
+
+import 'toggle_dark_mode_icon_button.dart';
 
 /// This widget is a custom [AppBar] that is used in [FabPage]
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -19,20 +19,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
       centerTitle: true,
 
-      actions: [
-        Consumer<ThemeProvider>(
-          builder: (_, themeState, __) {
-            return IconButton(
-              onPressed: themeState.toggleTheme,
-              icon: Icon(
-                themeState.isDarkMode ? Icons.dark_mode : Icons.light_mode,
-              ),
-            );
-          },
-        ),
-
-        ...?actions,
-      ],
+      actions: [ToggleDarkModeIconButton(), ...?actions],
     );
   }
 
