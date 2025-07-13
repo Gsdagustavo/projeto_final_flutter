@@ -6,6 +6,8 @@ import 'register_page.dart';
 class AuthPageSwitcher extends StatefulWidget {
   const AuthPageSwitcher({super.key});
 
+  static const String routeName = '/authPageSwitcher';
+
   @override
   State<AuthPageSwitcher> createState() => _AuthPageSwitcherState();
 }

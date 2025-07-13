@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/constants/app_routes.dart';
 import '../../l10n/app_localizations.dart';
-import '../pages/auth/auth_page_switcher.dart';
 import '../providers/language_code_provider.dart';
 import '../providers/theme_provider.dart';
 
@@ -33,10 +33,8 @@ class MyApp extends StatelessWidget {
 
       themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
 
-      // home: LoginPage(),
-      home: AuthPageSwitcher(),
-      // routes: AppRoutes.appRoutes,
-      // initialRoute: HomePage.routeName,
+      routes: AppRoutes.appRoutes,
+      initialRoute: AppRoutes.initialRoute,
     );
   }
 }
