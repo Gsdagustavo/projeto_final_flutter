@@ -1,4 +1,22 @@
 {
+  "register_switcher": "Register",
+  "login": "Login",
+  "password": "Password",
+  "forgot_your_password": "Forgot your password?",
+
+  "logged_in_successfully": "Logged in successfully!",
+  "warning": "Warning",
+
+  "yes": "Yes",
+  "no": "No",
+
+  "account": "Account",
+  "account_creation": "Account creation",
+  "last_sign_in": "Last sign in",
+  "exit": "Exit",
+
+  "language": "Language",
+
   "transport_type_car": "Car",
   "transport_type_bike": "Bike",
   "transport_type_bus": "Bus",

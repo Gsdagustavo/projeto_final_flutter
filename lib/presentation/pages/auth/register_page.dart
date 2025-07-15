@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../providers/auth_provider.dart';
 import '../home_page.dart';
 
@@ -92,7 +93,7 @@ class _RegisterPageState extends State<RegisterPage> {
       context: context,
       builder: (_) => AlertDialog(
         title: Text('Register'),
-        content: Text('Your account was registered successfully!'),
+        content: Text(AppLocalizations.of(context)!.yes),
       ),
     );
 
@@ -114,7 +115,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Navigator.pushReplacementNamed(context, HomePage.routeName),
               );
             },
-            child: Text('Yes'),
+            child: Text(AppLocalizations.of(context)!.yes),
           ),
         ],
 
@@ -141,7 +142,7 @@ class _RegisterPageState extends State<RegisterPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Register',
+              AppLocalizations.of(context)!.register_switcher,
               style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
             ),
 
@@ -171,7 +172,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: _passwordController,
                     onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
                     decoration: InputDecoration(
-                      hintText: 'Password',
+                      hintText: AppLocalizations.of(context)!.password,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -200,7 +201,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: _register,
-                    child: Text('Register'),
+                    child: Text(
+                      AppLocalizations.of(context)!.register_switcher,
+                    ),
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.all(16),
                       shape: RoundedRectangleBorder(

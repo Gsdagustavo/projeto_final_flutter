@@ -9,6 +9,45 @@ class AppLocalizationsPt extends AppLocalizations {
   AppLocalizationsPt([String locale = 'pt']) : super(locale);
 
   @override
+  String get register_switcher => 'Registrar';
+
+  @override
+  String get login => 'Login';
+
+  @override
+  String get password => 'Senha';
+
+  @override
+  String get forgot_your_password => 'Esqueceu sua senha?';
+
+  @override
+  String get logged_in_successfully => 'Logado com sucesso!';
+
+  @override
+  String get warning => 'Aviso';
+
+  @override
+  String get yes => 'Sim';
+
+  @override
+  String get no => 'Não';
+
+  @override
+  String get account => 'Conta';
+
+  @override
+  String get account_creation => 'Criação de conta';
+
+  @override
+  String get last_sign_in => 'Último login';
+
+  @override
+  String get exit => 'Sair';
+
+  @override
+  String get language => 'Idioma';
+
+  @override
   String get transport_type_car => 'Carro';
 
   @override

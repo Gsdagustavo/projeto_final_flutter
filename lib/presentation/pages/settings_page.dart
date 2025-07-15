@@ -23,9 +23,10 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loginProvider = Provider.of<LoginProvider>(context, listen: false);
+    final as = AppLocalizations.of(context);
 
     return FabPage(
-      title: AppLocalizations.of(context)!.title_settings,
+      title: as!.title_settings,
       body: Consumer<LoginProvider>(
         builder: (_, authProvider, __) {
           final locale = Localizations.localeOf(context).toString();
@@ -68,7 +69,7 @@ class SettingsPage extends StatelessWidget {
                 Padding(padding: EdgeInsets.all(12)),
 
                 Text(
-                  'Account',
+                  as.account,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                 ),
 
@@ -84,11 +85,11 @@ class SettingsPage extends StatelessWidget {
                         style: TextStyle(fontSize: 16),
                       ),
                       Text(
-                        'Account creation: $formattedCreationTime',
+                        '${as.account_creation}: $formattedCreationTime',
                         style: TextStyle(fontSize: 16),
                       ),
                       Text(
-                        'Last sign in: $formattedSignInTime',
+                        '${as.last_sign_in}: $formattedSignInTime',
                         style: TextStyle(fontSize: 16),
                       ),
 
@@ -103,7 +104,7 @@ class SettingsPage extends StatelessWidget {
                               showDialog(
                                 context: context,
                                 builder: (_) => AlertDialog(
-                                  title: Text('Warning'),
+                                  title: Text(as.warning),
                                   content: Text(loginProvider.errorMsg),
                                 ),
                               ),
@@ -120,7 +121,7 @@ class SettingsPage extends StatelessWidget {
                         child: Row(
                           spacing: 10,
                           children: [
-                            Text('Exit', style: TextStyle(color: Colors.red)),
+                            Text(as.exit, style: TextStyle(color: Colors.red)),
                             Icon(Icons.logout, color: Colors.red, size: 18),
                           ],
                         ),
@@ -132,7 +133,7 @@ class SettingsPage extends StatelessWidget {
                 Padding(padding: EdgeInsets.all(12)),
 
                 Text(
-                  'Language',
+                  as.language,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                 ),
 

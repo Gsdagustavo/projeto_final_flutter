@@ -97,6 +97,84 @@ abstract class AppLocalizations {
     Locale('pt')
   ];
 
+  /// No description provided for @register_switcher.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get register_switcher;
+
+  /// No description provided for @login.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get login;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @forgot_your_password.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot your password?'**
+  String get forgot_your_password;
+
+  /// No description provided for @logged_in_successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged in successfully!'**
+  String get logged_in_successfully;
+
+  /// No description provided for @warning.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning'**
+  String get warning;
+
+  /// No description provided for @yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
+
+  /// No description provided for @account.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get account;
+
+  /// No description provided for @account_creation.
+  ///
+  /// In en, this message translates to:
+  /// **'Account creation'**
+  String get account_creation;
+
+  /// No description provided for @last_sign_in.
+  ///
+  /// In en, this message translates to:
+  /// **'Last sign in'**
+  String get last_sign_in;
+
+  /// No description provided for @exit.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit'**
+  String get exit;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
   /// No description provided for @transport_type_car.
   ///
   /// In en, this message translates to:

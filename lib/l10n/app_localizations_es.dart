@@ -9,6 +9,45 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
+  String get register_switcher => 'Registrarse';
+
+  @override
+  String get login => 'Login';
+
+  @override
+  String get password => 'Contraseña';
+
+  @override
+  String get forgot_your_password => '¿Olvidaste tu contraseña?';
+
+  @override
+  String get logged_in_successfully => 'Logado com sucesso!';
+
+  @override
+  String get warning => 'Warning';
+
+  @override
+  String get yes => 'Si';
+
+  @override
+  String get no => 'No';
+
+  @override
+  String get account => 'Cuenta';
+
+  @override
+  String get account_creation => 'Creación de cuenta';
+
+  @override
+  String get last_sign_in => 'Último inicio de sesión';
+
+  @override
+  String get exit => 'Salir';
+
+  @override
+  String get language => 'Idioma';
+
+  @override
   String get transport_type_car => 'Auto';
 
   @override

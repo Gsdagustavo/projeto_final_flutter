@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../providers/theme_provider.dart';
 import '../../widgets/toggle_dark_mode_icon_button.dart';
 import 'login_page.dart';
@@ -44,7 +45,10 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
           children: [
             _buildSwitcherOption('Login', 0),
             Padding(padding: EdgeInsetsGeometry.all(12)),
-            _buildSwitcherOption('Register', 1),
+            _buildSwitcherOption(
+              AppLocalizations.of(context)!.register_switcher,
+              1,
+            ),
           ],
         ),
       ],

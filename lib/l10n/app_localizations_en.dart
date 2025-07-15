@@ -9,6 +9,45 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get register_switcher => 'Register';
+
+  @override
+  String get login => 'Login';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get forgot_your_password => 'Forgot your password?';
+
+  @override
+  String get logged_in_successfully => 'Logged in successfully!';
+
+  @override
+  String get warning => 'Warning';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
+
+  @override
+  String get account => 'Account';
+
+  @override
+  String get account_creation => 'Account creation';
+
+  @override
+  String get last_sign_in => 'Last sign in';
+
+  @override
+  String get exit => 'Exit';
+
+  @override
+  String get language => 'Language';
+
+  @override
   String get transport_type_car => 'Car';
 
   @override

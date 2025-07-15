@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../providers/auth_provider.dart';
 import '../home_page.dart';
 
@@ -69,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (_) => AlertDialog(
         title: Text('Login'),
-        content: Text('Logged in successfully!'),
+        content: Text(AppLocalizations.of(context)!.logged_in_successfully),
       ),
     );
 
@@ -121,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _passwordController,
                     onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
                     decoration: InputDecoration(
-                      hintText: 'Password',
+                      hintText: AppLocalizations.of(context)!.password,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -164,7 +165,9 @@ class _LoginPageState extends State<LoginPage> {
 
                 TextButton(
                   onPressed: () {},
-                  child: Text('Forgot your password?'),
+                  child: Text(
+                    AppLocalizations.of(context)!.forgot_your_password,
+                  ),
                 ),
               ],
             ),

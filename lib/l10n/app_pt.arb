@@ -1,4 +1,21 @@
 {
+  "register_switcher": "Registrar",
+  "password": "Senha",
+  "forgot_your_password": "Esqueceu sua senha?",
+
+  "logged_in_successfully": "Logado com sucesso!",
+  "warning": "Aviso",
+
+  "yes": "Sim",
+  "no": "Não",
+
+  "account": "Conta",
+  "account_creation": "Criação de conta",
+  "last_sign_in": "Último login",
+  "exit": "Sair",
+
+  "language": "Idioma",
+
   "transport_type_car": "Carro",
   "transport_type_bike": "Moto",
   "transport_type_bus": "Ônibus",
