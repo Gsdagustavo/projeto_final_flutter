@@ -142,7 +142,7 @@ class _RegisterPageState extends State<RegisterPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              AppLocalizations.of(context)!.register_switcher,
+              AppLocalizations.of(context)!.register,
               style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
             ),
 
@@ -202,7 +202,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: ElevatedButton(
                     onPressed: _register,
                     child: Text(
-                      AppLocalizations.of(context)!.register_switcher,
+                      AppLocalizations.of(context)!.register,
                     ),
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.all(16),

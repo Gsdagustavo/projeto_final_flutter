@@ -46,7 +46,7 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
             _buildSwitcherOption('Login', 0),
             Padding(padding: EdgeInsetsGeometry.all(12)),
             _buildSwitcherOption(
-              AppLocalizations.of(context)!.register_switcher,
+              AppLocalizations.of(context)!.register,
               1,
             ),
           ],

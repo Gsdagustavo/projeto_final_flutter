@@ -97,12 +97,6 @@ abstract class AppLocalizations {
     Locale('pt')
   ];
 
-  /// No description provided for @register_switcher.
-  ///
-  /// In en, this message translates to:
-  /// **'Register'**
-  String get register_switcher;
-
   /// No description provided for @login.
   ///
   /// In en, this message translates to:
@@ -120,6 +114,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Forgot your password?'**
   String get forgot_your_password;
+
+  /// No description provided for @register.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get register;
 
   /// No description provided for @logged_in_successfully.
   ///

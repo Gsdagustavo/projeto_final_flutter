@@ -9,10 +9,7 @@ class AppLocalizationsPt extends AppLocalizations {
   AppLocalizationsPt([String locale = 'pt']) : super(locale);
 
   @override
-  String get register_switcher => 'Registrar';
-
-  @override
-  String get login => 'Login';
+  String get login => 'Entrar';
 
   @override
   String get password => 'Senha';
@@ -21,7 +18,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get forgot_your_password => 'Esqueceu sua senha?';
 
   @override
-  String get logged_in_successfully => 'Logado com sucesso!';
+  String get register => 'Registrar';
+
+  @override
+  String get logged_in_successfully => 'Login realizado com sucesso!';
 
   @override
   String get warning => 'Aviso';
@@ -36,7 +36,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get account => 'Conta';
 
   @override
-  String get account_creation => 'Criação de conta';
+  String get account_creation => 'Criação da conta';
 
   @override
   String get last_sign_in => 'Último login';
@@ -51,7 +51,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get transport_type_car => 'Carro';
 
   @override
-  String get transport_type_bike => 'Moto';
+  String get transport_type_bike => 'Bicicleta';
 
   @override
   String get transport_type_bus => 'Ônibus';
@@ -60,7 +60,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get transport_type_plane => 'Avião';
 
   @override
-  String get transport_type_cruise => 'Cruzeiro';
+  String get transport_type_cruise => 'Navio de cruzeiro';
 
   @override
   String get experience_cultural_immersion => 'Imersão Cultural';
@@ -69,7 +69,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get experience_alternative_cuisines => 'Culinárias Alternativas';
 
   @override
-  String get experience_historical_places => 'Visitar Locais Históricos';
+  String get experience_historical_places => 'Visitar Lugares Históricos';
 
   @override
   String get experience_visit_local_establishments => 'Visitar Estabelecimentos Locais (Bares, Restaurantes, Parques, etc.)';
@@ -84,13 +84,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get title_register_travel => 'Registrar Viagem';
 
   @override
-  String get title_settings => 'Ajustes';
+  String get title_settings => 'Configurações';
 
   @override
-  String get travel_title_label => 'Título da viagem';
+  String get travel_title_label => 'Título da Viagem';
 
   @override
-  String get transport_type_label => 'Tipo de transporte';
+  String get transport_type_label => 'Tipo de Transporte';
 
   @override
   String get experiences_label => 'Experiências';
@@ -99,11 +99,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get select_dates_label => 'Selecionar datas';
 
   @override
-  String get travel_start_date_label => 'Data de início da viagem';
+  String get travel_start_date_label => 'Data de Início da Viagem';
 
   @override
-  String get travel_end_date_label => 'Data de término da viagem';
+  String get travel_end_date_label => 'Data de Término da Viagem';
 
   @override
-  String get err_invalid_date_snackbar => 'Você deve selecionar a data de início primeiro!';
+  String get err_invalid_date_snackbar => 'Você deve selecionar uma data de início primeiro!';
 }

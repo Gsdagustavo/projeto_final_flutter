@@ -1,42 +1,52 @@
 {
-  "register_switcher": "Registrar",
+  "@@locale": "pt",
+
+  "@@login_page": {},
+  "login": "Entrar",
   "password": "Senha",
   "forgot_your_password": "Esqueceu sua senha?",
 
-  "logged_in_successfully": "Logado com sucesso!",
-  "warning": "Aviso",
+  "@@register": {},
+  "register": "Registrar",
 
+  "@@auth_messages": {},
+  "logged_in_successfully": "Login realizado com sucesso!",
+  "warning": "Aviso",
   "yes": "Sim",
   "no": "Não",
 
+  "@@settings_page": {},
   "account": "Conta",
-  "account_creation": "Criação de conta",
+  "account_creation": "Criação da conta",
   "last_sign_in": "Último login",
   "exit": "Sair",
-
   "language": "Idioma",
 
+  "@@transport_types": {},
   "transport_type_car": "Carro",
-  "transport_type_bike": "Moto",
+  "transport_type_bike": "Bicicleta",
   "transport_type_bus": "Ônibus",
   "transport_type_plane": "Avião",
-  "transport_type_cruise": "Cruzeiro",
+  "transport_type_cruise": "Navio de cruzeiro",
 
+  "@@experiences": {},
   "experience_cultural_immersion": "Imersão Cultural",
   "experience_alternative_cuisines": "Culinárias Alternativas",
-  "experience_historical_places": "Visitar Locais Históricos",
+  "experience_historical_places": "Visitar Lugares Históricos",
   "experience_visit_local_establishments": "Visitar Estabelecimentos Locais (Bares, Restaurantes, Parques, etc.)",
   "experience_contact_with_nature": "Contato com a Natureza",
 
+  "@@home_page": {},
   "title_home": "Início",
   "title_register_travel": "Registrar Viagem",
-  "title_settings": "Ajustes",
+  "title_settings": "Configurações",
 
-  "travel_title_label": "Título da viagem",
-  "transport_type_label": "Tipo de transporte",
+  "@@register_travel_page": {},
+  "travel_title_label": "Título da Viagem",
+  "transport_type_label": "Tipo de Transporte",
   "experiences_label": "Experiências",
   "select_dates_label": "Selecionar datas",
-  "travel_start_date_label": "Data de início da viagem",
-  "travel_end_date_label": "Data de término da viagem",
-  "err_invalid_date_snackbar": "Você deve selecionar a data de início primeiro!"
+  "travel_start_date_label": "Data de Início da Viagem",
+  "travel_end_date_label": "Data de Término da Viagem",
+  "err_invalid_date_snackbar": "Você deve selecionar uma data de início primeiro!"
 }

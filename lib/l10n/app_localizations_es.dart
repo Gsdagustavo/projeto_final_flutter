@@ -9,10 +9,7 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
-  String get register_switcher => 'Registrarse';
-
-  @override
-  String get login => 'Login';
+  String get login => 'Iniciar sesión';
 
   @override
   String get password => 'Contraseña';
@@ -21,13 +18,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get forgot_your_password => '¿Olvidaste tu contraseña?';
 
   @override
-  String get logged_in_successfully => 'Logado com sucesso!';
+  String get register => 'Registrarse';
 
   @override
-  String get warning => 'Warning';
+  String get logged_in_successfully => '¡Inicio de sesión exitoso!';
 
   @override
-  String get yes => 'Si';
+  String get warning => 'Advertencia';
+
+  @override
+  String get yes => 'Sí';
 
   @override
   String get no => 'No';
@@ -81,16 +81,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get title_home => 'Inicio';
 
   @override
-  String get title_register_travel => 'Registrar Viagen';
+  String get title_register_travel => 'Registrar Viaje';
 
   @override
-  String get title_settings => 'Ajustes';
+  String get title_settings => 'Configuración';
 
   @override
-  String get travel_title_label => 'Título del viaje';
+  String get travel_title_label => 'Título del Viaje';
 
   @override
-  String get transport_type_label => 'Tipo de transporte';
+  String get transport_type_label => 'Tipo de Transporte';
 
   @override
   String get experiences_label => 'Experiencias';
@@ -99,11 +99,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get select_dates_label => 'Seleccionar fechas';
 
   @override
-  String get travel_start_date_label => 'Fecha de inicio del viaje';
+  String get travel_start_date_label => 'Fecha de Inicio del Viaje';
 
   @override
-  String get travel_end_date_label => 'Fecha de fin del viaje';
+  String get travel_end_date_label => 'Fecha de Fin del Viaje';
 
   @override
-  String get err_invalid_date_snackbar => '¡Primero debes seleccionar una fecha de inicio!';
+  String get err_invalid_date_snackbar => '¡Debes seleccionar una fecha de inicio primero!';
 }
