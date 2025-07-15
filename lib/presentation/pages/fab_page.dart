@@ -18,7 +18,9 @@ class FabPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(title: title),
+      appBar: MyAppBar(
+        title: title,
+      ),
       body: body,
       bottomNavigationBar: const MyBottomNavigationBar(),
       floatingActionButton: floatingActionButton,
