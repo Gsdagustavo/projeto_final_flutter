@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 
 import '../../services/auth_service.dart';
 
-class UserProvider with ChangeNotifier {
+class LoginProvider with ChangeNotifier {
   final AuthService _authService = AuthService();
 
   late User? _loggedUser;
   String? _errorMsg;
 
-  UserProvider() {
+  LoginProvider() {
     _init();
   }
 
-  void _init() async {
-    _loggedUser = await _authService.currentUser();
+  void _init() {
+    _loggedUser = _authService.currentUser();
     notifyListeners();
   }
 
@@ -42,6 +42,8 @@ class UserProvider with ChangeNotifier {
         email: email,
         password: password,
       );
+
+      debugPrint('Current user: $_loggedUser');
     } on FirebaseAuthException catch (e) {
       debugPrint(e.message);
       _errorMsg = e.message;
@@ -62,6 +64,8 @@ class UserProvider with ChangeNotifier {
         email: email,
         password: password,
       );
+
+      debugPrint('Current user: $_loggedUser');
     } on FirebaseAuthException catch (e) {
       _errorMsg = e.message;
       debugPrint(_errorMsg);

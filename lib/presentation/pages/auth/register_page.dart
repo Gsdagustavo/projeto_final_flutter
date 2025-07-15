@@ -49,7 +49,7 @@ class _RegisterPageState extends State<RegisterPage> {
     final email = _emailController.text;
     final password = _passwordController.text;
 
-    final loginProvider = Provider.of<UserProvider>(context, listen: false);
+    final loginProvider = Provider.of<LoginProvider>(context, listen: false);
     await loginProvider.createUserWithEmailAndPassword(
       email: email,
       password: password,

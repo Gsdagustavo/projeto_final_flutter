@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../../services/auth_service.dart';
+import '../../providers/auth_provider.dart';
 import '../home_page.dart';
 import 'auth_page_switcher.dart';
 
@@ -18,11 +19,15 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    AuthService().currentUser().then((user) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final user = Provider.of<LoginProvider>(
+        context,
+        listen: false,
+      ).loggedUser;
       if (user == null) {
         Navigator.pushReplacementNamed(context, AuthPageSwitcher.routeName);
       } else {
-        Navigator.pushNamed(context, HomePage.routeName);
+        Navigator.pushReplacementNamed(context, HomePage.routeName);
       }
     });
   }

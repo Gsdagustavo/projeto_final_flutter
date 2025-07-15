@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../l10n/app_localizations.dart';
@@ -20,11 +21,85 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loginProvider = Provider.of<UserProvider>(context, listen: false);
+    final loginProvider = Provider.of<LoginProvider>(context, listen: false);
 
     return FabPage(
       title: AppLocalizations.of(context)!.title_settings,
-      body: Center(child: Text('Settings page')),
+      body: Consumer<LoginProvider>(
+        builder: (_, authProvider, __) {
+          final locale = Localizations.localeOf(context).toString();
+
+          final user = authProvider.loggedUser;
+          final emailInitial = user != null && user.email != null
+              ? user.email![0].toUpperCase()
+              : '?';
+
+          final creationTime = user!.metadata.creationTime;
+          final lastSignInTime = user.metadata.lastSignInTime;
+
+          final formattedCreationTime = creationTime != null
+              ? DateFormat.yMd(locale).format(creationTime)
+              : 'N/A';
+
+          final formattedSignInTime = lastSignInTime != null
+              ? DateFormat.yMd(locale).format(lastSignInTime)
+              : 'N/A';
+
+          return Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: CircleAvatar(
+                    radius: 64,
+                    child: Text(
+                      emailInitial,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 50,
+                      ),
+                    ),
+                  ),
+                ),
+
+                Padding(padding: EdgeInsets.all(12)),
+
+                Text(
+                  'Account',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                ),
+
+                Padding(padding: EdgeInsets.all(6)),
+
+                Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Email: ${user.email}',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        'Account creation: $formattedCreationTime',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        'Last sign in: $formattedSignInTime',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+
+
+              ],
+            ),
+          );
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await loginProvider.signOut();

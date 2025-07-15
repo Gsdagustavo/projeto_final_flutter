@@ -15,7 +15,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
-  await AuthService().signOut();
 
   final travelRepository = TravelRepositoryImpl();
   final travelUsecases = TravelUseCasesImpl(travelRepository);
@@ -28,7 +27,7 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ChangeNotifierProvider(create: (context) => LanguageCodeProvider()),
-        ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => LoginProvider()),
       ],
       child: const MyApp(),
     ),

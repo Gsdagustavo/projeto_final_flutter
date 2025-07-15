@@ -45,10 +45,9 @@ class _LoginPageState extends State<LoginPage> {
     final email = _emailController.text;
     final password = _passwordController.text;
 
-    final loginProvider = Provider.of<UserProvider>(context, listen: false);
+    final loginProvider = Provider.of<LoginProvider>(context, listen: false);
     await loginProvider.signinWithEmailAndPassword(
       email: email,
-
       password: password,
     );
 
