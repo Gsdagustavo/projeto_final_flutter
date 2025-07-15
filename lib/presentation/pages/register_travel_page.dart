@@ -29,7 +29,6 @@ class RegisterTravelPage extends StatelessWidget {
               Widget content;
 
               if (state.isLoading) {
-                debugPrint('Is loading');
                 content = SizedBox(
                   width: 48,
                   height: 48,
@@ -39,14 +38,12 @@ class RegisterTravelPage extends StatelessWidget {
 
               /// Determine which icon and text to show
               if (state.hasError) {
-                debugPrint('has error');
                 content = Text(
                   state.error ?? 'Unknown error',
                   textAlign: TextAlign.center,
                 );
                 icon = Icon(Icons.error, color: Colors.red);
               } else {
-                debugPrint('doesnt have error');
                 content = Text(
                   'Travel registered successfully!',
                   textAlign: TextAlign.center,
@@ -104,6 +101,7 @@ class RegisterTravelPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           FloatingActionButton(
+            tooltip: 'Register travel',
             child: Icon(Icons.app_registration),
             onPressed: () async {
               final registerTravelState = Provider.of<RegisterTravelProvider>(
@@ -122,6 +120,7 @@ class RegisterTravelPage extends StatelessWidget {
           Padding(padding: EdgeInsets.all(16)),
 
           FloatingActionButton(
+            tooltip: 'List travels',
             child: Icon(Icons.get_app),
             onPressed: () async {
               final registerTravelState = Provider.of<RegisterTravelProvider>(

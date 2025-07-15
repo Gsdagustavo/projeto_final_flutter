@@ -1,9 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../domain/entities/enums.dart';
-import '../../domain/entities/participant.dart';
-import '../../domain/entities/travel.dart';
-import '../../domain/entities/travel_stop.dart';
 import '../../data/local/database/database.dart';
 import '../../data/local/database/tables/experiences_table.dart';
 import '../../data/local/database/tables/participants_table.dart';
@@ -12,6 +9,10 @@ import '../../data/local/database/tables/travel_stop_experiences_table.dart';
 import '../../data/local/database/tables/travel_stop_table.dart';
 import '../../data/local/database/tables/travel_table.dart';
 import '../../data/local/database/util/experiences_util.dart';
+import '../../domain/entities/enums.dart';
+import '../../domain/entities/participant.dart';
+import '../../domain/entities/travel.dart';
+import '../../domain/entities/travel_stop.dart';
 
 abstract class TravelRepository {
   Future<Travel?> registerTravel({required Travel travel});
@@ -160,6 +161,7 @@ class TravelRepositoryImpl implements TravelRepository {
       }
     });
 
+    debugPrint('Travels::\n${travels.join('\n\n')}');
     return travels;
   }
 
