@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../providers/auth_provider.dart';
+import '../providers/language_code_provider.dart';
 import 'auth/auth_page_switcher.dart';
 import 'fab_page.dart';
 
@@ -32,10 +33,10 @@ class SettingsPage extends StatelessWidget {
           final user = authProvider.loggedUser;
           final emailInitial = user != null && user.email != null
               ? user.email![0].toUpperCase()
-              : '?';
+              : 'N/A';
 
-          final creationTime = user!.metadata.creationTime;
-          final lastSignInTime = user.metadata.lastSignInTime;
+          final creationTime = user?.metadata.creationTime;
+          final lastSignInTime = user?.metadata.lastSignInTime;
 
           final formattedCreationTime = creationTime != null
               ? DateFormat.yMd(locale).format(creationTime)
@@ -53,7 +54,7 @@ class SettingsPage extends StatelessWidget {
                 Align(
                   alignment: Alignment.center,
                   child: CircleAvatar(
-                    radius: 64,
+                    radius: 50,
                     child: Text(
                       emailInitial,
                       style: TextStyle(
@@ -79,7 +80,7 @@ class SettingsPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Email: ${user.email}',
+                        'Email: ${user?.email ?? 'N/A'}',
                         style: TextStyle(fontSize: 16),
                       ),
                       Text(
@@ -90,39 +91,116 @@ class SettingsPage extends StatelessWidget {
                         'Last sign in: $formattedSignInTime',
                         style: TextStyle(fontSize: 16),
                       ),
+
+                      Padding(padding: EdgeInsets.all(6)),
+
+                      InkWell(
+                        onTap: () async {
+                          await loginProvider.signOut();
+
+                          if (loginProvider.hasError) {
+                            unawaited(
+                              showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  title: Text('Warning'),
+                                  content: Text(loginProvider.errorMsg),
+                                ),
+                              ),
+                            );
+
+                            return;
+                          }
+
+                          Navigator.pushReplacementNamed(
+                            context,
+                            AuthPageSwitcher.routeName,
+                          );
+                        },
+                        child: Row(
+                          spacing: 10,
+                          children: [
+                            Text('Exit', style: TextStyle(color: Colors.red)),
+                            Icon(Icons.logout, color: Colors.red, size: 18),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
 
+                Padding(padding: EdgeInsets.all(12)),
 
+                Text(
+                  'Language',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                ),
+
+                Padding(padding: EdgeInsets.all(6)),
+
+                LanguagesRadio(),
               ],
             ),
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await loginProvider.signOut();
+    );
+  }
+}
 
-          if (loginProvider.hasError) {
-            unawaited(
-              showDialog(
-                context: context,
-                builder: (_) => AlertDialog(
-                  title: Text('Warning'),
-                  content: Text(loginProvider.errorMsg),
-                ),
-              ),
-            );
+class LanguagesRadio extends StatefulWidget {
+  const LanguagesRadio({super.key});
 
-            return;
-          }
+  @override
+  State<LanguagesRadio> createState() => _LanguagesRadioState();
+}
 
-          Navigator.pushReplacementNamed(context, AuthPageSwitcher.routeName);
-        },
+class _LanguagesRadioState extends State<LanguagesRadio> {
+  final locales = AppLocalizations.supportedLocales;
+  late String selectedOption;
 
-        child: Text('Sign out'),
-      ),
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        selectedOption = Provider.of<LanguageCodeProvider>(
+          context,
+          listen: false,
+        ).languageCode;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      direction: Axis.horizontal,
+      children: [
+        for (final locale in locales)
+          ListTile(
+            title: Text(locale.toString().toUpperCase()),
+            leading: Radio<String>(
+              value: locale.toString(),
+              groupValue: selectedOption,
+              onChanged: (value) async {
+                setState(() {
+                  debugPrint('Value: $value');
+                  selectedOption = value.toString();
+                });
+
+                final languageCodeProvider = Provider.of<LanguageCodeProvider>(
+                  context,
+                  listen: false,
+                );
+
+                await languageCodeProvider.changeLanguageCode(
+                  languageCode: locale.toString(),
+                );
+              },
+            ),
+          ),
+      ],
     );
   }
 }
