@@ -3,21 +3,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthService {
   final _firebase = FirebaseAuth.instance;
 
-  static const String _authTokenKey = 'auth_token';
-
   Future<User?> signinWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
-    // final storage = FlutterSecureStorage();
-
     try {
       final userCredential = await _firebase.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      // storage.write(key: _authTokenKey, value: userCredential.credential)
       return userCredential.user;
     } on FirebaseAuthException {
       rethrow;
@@ -29,15 +24,6 @@ class AuthService {
     required String password,
   }) async {
     final User? user;
-
-    if (email.isEmpty || !email.contains('@')) {
-      return null;
-    }
-
-    if (password.isEmpty || password.length <= 3) {
-      return null;
-    }
-
     try {
       final credentials = await _firebase.createUserWithEmailAndPassword(
         email: email,
@@ -52,11 +38,29 @@ class AuthService {
     return user;
   }
 
+  Future<void> resetPassword({required String newPassord}) async {}
+
+  Future<void> sendPasswordResetEmail() async {
+    final signedUser = await currentUser();
+
+    /// No user signed in
+    if (signedUser == null) return;
+
+    await _firebase.sendPasswordResetEmail(email: signedUser.email!);
+  }
+
+  Future<void> confirmPasswordReset({
+    required String code,
+    required String newPassword,
+  }) async {
+    await _firebase.confirmPasswordReset(code: code, newPassword: newPassword);
+  }
+
   Future<void> signOut() async {
     await _firebase.signOut();
   }
 
-  Future<User?> checkUserAvailable() async {
+  Future<User?> currentUser() async {
     return _firebase.currentUser;
   }
 }

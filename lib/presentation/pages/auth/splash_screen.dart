@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    AuthService().checkUserAvailable().then((user) {
+    AuthService().currentUser().then((user) {
       if (user == null) {
         Navigator.pushReplacementNamed(context, AuthPageSwitcher.routeName);
       } else {

@@ -1,10 +1,9 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../../services/auth_service.dart';
-import '../../widgets/toggle_dark_mode_icon_button.dart';
+import '../../providers/user_provider.dart';
 import '../home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -40,32 +39,40 @@ class _LoginPageState extends State<LoginPage> {
     return null;
   }
 
-  void _sendForms() async {
+  void _login() async {
     if (!_formKey.currentState!.validate()) return;
 
     final email = _emailController.text;
     final password = _passwordController.text;
 
-    try {
-      await AuthService().signinWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-    } on FirebaseAuthException catch (e) {
-      await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Error'),
-            content: Text(
-              'An error occurred while trying to sign in: ${e.message}',
-            ),
-          );
-        },
+    final loginProvider = Provider.of<UserProvider>(context, listen: false);
+    await loginProvider.signinWithEmailAndPassword(
+      email: email,
+
+      password: password,
+    );
+
+    if (loginProvider.hasError) {
+      unawaited(
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: Text('Warning'),
+            content: Text(loginProvider.errorMsg),
+          ),
+        ),
       );
 
       return;
     }
+
+    await showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Login'),
+        content: Text('Logged in successfully!'),
+      ),
+    );
 
     unawaited(Navigator.pushReplacementNamed(context, HomePage.routeName));
   }
@@ -143,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: _sendForms,
+                    onPressed: _login,
                     child: Text('Login'),
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.all(16),

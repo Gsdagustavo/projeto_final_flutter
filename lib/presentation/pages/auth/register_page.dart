@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../../services/auth_service.dart';
+import '../../providers/user_provider.dart';
 import '../home_page.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -36,46 +36,94 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   String? _emailValidator(String? email) {
-    if (email == null || email.isEmpty || !email.contains('@')) {
+    if (email == null || email.isEmpty) {
       return 'Invalid Email';
     }
 
     return null;
   }
 
-  void _sendForms() async {
+  void _register() async {
     if (!_formKey.currentState!.validate()) return;
 
     final email = _emailController.text;
     final password = _passwordController.text;
 
-    try {
-      await AuthService().createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+    final loginProvider = Provider.of<UserProvider>(context, listen: false);
+    await loginProvider.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
 
-      await AuthService().signinWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-    } on FirebaseAuthException catch (e) {
-      await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Error'),
-            content: Text(
-              'An error occurred while trying to sign in: ${e.message}',
-            ),
-          );
-        },
+    if (loginProvider.hasError) {
+      unawaited(
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: Text('Warning'),
+            content: Text(loginProvider.errorMsg),
+          ),
+        ),
       );
 
       return;
     }
 
-    unawaited(Navigator.pushReplacementNamed(context, HomePage.routeName));
+    await loginProvider.signinWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    if (loginProvider.hasError) {
+      unawaited(
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: Text('Warning'),
+            content: Text(loginProvider.errorMsg),
+          ),
+        ),
+      );
+
+      return;
+    }
+
+    await showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Register'),
+        content: Text('Your account was registered successfully!'),
+      ),
+    );
+
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AlertDialog(
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('No'),
+          ),
+
+          ElevatedButton(
+            onPressed: () {
+              unawaited(
+                Navigator.pushReplacementNamed(context, HomePage.routeName),
+              );
+            },
+            child: Text('Yes'),
+          ),
+        ],
+
+        actionsAlignment: MainAxisAlignment.spaceBetween,
+
+        title: Text('Login'),
+        content: Text('Would you want to login?'),
+      ),
+    );
   }
 
   void _togglePasswordVisibility() {
@@ -92,7 +140,6 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Padding(padding: EdgeInsets.all(75)),
             Text(
               'Register',
               style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
@@ -152,7 +199,7 @@ class _RegisterPageState extends State<RegisterPage> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: _sendForms,
+                    onPressed: _register,
                     child: Text('Register'),
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.all(16),
