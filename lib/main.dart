@@ -7,7 +7,7 @@ import 'modules/travel/travel_usecases.dart';
 import 'presentation/providers/language_code_provider.dart';
 import 'presentation/providers/register_travel_provider.dart';
 import 'presentation/providers/theme_provider.dart';
-import 'presentation/providers/user_provider.dart';
+import 'presentation/providers/auth_provider.dart';
 import 'presentation/widgets/my_app.dart';
 import 'services/auth_service.dart';
 

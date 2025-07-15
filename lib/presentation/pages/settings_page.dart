@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../l10n/app_localizations.dart';
-import '../providers/user_provider.dart';
+import '../providers/auth_provider.dart';
 import 'auth/auth_page_switcher.dart';
 import 'fab_page.dart';
 
