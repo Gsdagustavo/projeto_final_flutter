@@ -115,6 +115,18 @@ abstract class AppLocalizations {
   /// **'Forgot your password?'**
   String get forgot_your_password;
 
+  /// No description provided for @insert_your_email.
+  ///
+  /// In en, this message translates to:
+  /// **'Insert your email'**
+  String get insert_your_email;
+
+  /// No description provided for @send_recovery_code.
+  ///
+  /// In en, this message translates to:
+  /// **'Send recovery code'**
+  String get send_recovery_code;
+
   /// No description provided for @register.
   ///
   /// In en, this message translates to:
@@ -138,6 +150,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Would you want to login?'**
   String get register_login;
+
+  /// No description provided for @recovery_code_sent_to.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery code sent to'**
+  String get recovery_code_sent_to;
 
   /// No description provided for @warning.
   ///

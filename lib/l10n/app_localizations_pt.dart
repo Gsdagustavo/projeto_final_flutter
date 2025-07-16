@@ -18,6 +18,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get forgot_your_password => 'Esqueceu sua senha?';
 
   @override
+  String get insert_your_email => 'Insira seu email';
+
+  @override
+  String get send_recovery_code => 'Enviar código de recuperação';
+
+  @override
   String get register => 'Registrar';
 
   @override
@@ -28,6 +34,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get register_login => 'Deseja fazer login?';
+
+  @override
+  String get recovery_code_sent_to => 'Código de recuperação enviado para';
 
   @override
   String get warning => 'Aviso';

@@ -17,11 +17,15 @@ class CustomDialog extends StatelessWidget {
     final Icon icon;
 
     if (isError) {
-      icon = Icon(Icons.error, color: Colors.red);
+      icon = Icon(Icons.error, color: Colors.red  );
     } else {
       icon = Icon(Icons.check, color: Colors.green);
     }
 
-    return AlertDialog(title: Text(title), icon: icon, content: content);
+    return AlertDialog(
+      title: title.isNotEmpty ? Text(title) : null,
+      icon: icon,
+      content: content,
+    );
   }
 }

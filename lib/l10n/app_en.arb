@@ -6,6 +6,10 @@
   "password": "Password",
   "forgot_your_password": "Forgot your password?",
 
+  "@@forgot_your_password_page": {},
+  "insert_your_email": "Insert your email",
+  "send_recovery_code": "Send recovery code",
+
   "@@register": {},
   "register": "Register",
 
@@ -13,6 +17,7 @@
   "logged_in_successfully": "Logged in successfully!",
   "account_created_successfully": "Account created successfully!",
   "register_login": "Would you want to login?",
+  "recovery_code_sent_to": "Recovery code sent to",
   "warning": "Warning",
   "yes": "Yes",
   "no": "No",

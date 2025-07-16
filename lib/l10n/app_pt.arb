@@ -6,6 +6,10 @@
   "password": "Senha",
   "forgot_your_password": "Esqueceu sua senha?",
 
+  "@@forgot_your_password_page": {},
+  "insert_your_email": "Insira seu email",
+  "send_recovery_code": "Enviar código de recuperação",
+
   "@@register": {},
   "register": "Registrar",
 
@@ -13,6 +17,7 @@
   "logged_in_successfully": "Login realizado com sucesso!",
   "account_created_successfully": "Conta criada com sucesso!",
   "register_login": "Deseja fazer login?",
+  "recovery_code_sent_to": "Código de recuperação enviado para",
   "warning": "Aviso",
   "yes": "Sim",
   "no": "Não",
