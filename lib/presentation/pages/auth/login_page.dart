@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../providers/auth_provider.dart';
 import '../home_page.dart';
+import 'forgot_password_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -43,6 +44,8 @@ class _LoginPageState extends State<LoginPage> {
   void _login() async {
     if (!_formKey.currentState!.validate()) return;
 
+    final as = AppLocalizations.of(context)!;
+
     final email = _emailController.text;
     final password = _passwordController.text;
 
@@ -52,12 +55,14 @@ class _LoginPageState extends State<LoginPage> {
       password: password,
     );
 
+    if (!mounted) return;
+
     if (loginProvider.hasError) {
       unawaited(
         showDialog(
           context: context,
           builder: (_) => AlertDialog(
-            title: Text('Warning'),
+            title: Icon(Icons.warning, color: Colors.red),
             content: Text(loginProvider.errorMsg),
           ),
         ),
@@ -69,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
     await showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text('Login'),
+        title: Icon(Icons.check, color: Colors.green),
         content: Text(AppLocalizations.of(context)!.logged_in_successfully),
       ),
     );
@@ -85,6 +90,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(32.0),
@@ -122,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _passwordController,
                     onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
                     decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context)!.password,
+                      hintText: as.password,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -163,11 +170,12 @@ class _LoginPageState extends State<LoginPage> {
 
                 Padding(padding: EdgeInsetsGeometry.all(16)),
 
+                /// 'Forgot your password?' button
                 TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    AppLocalizations.of(context)!.forgot_your_password,
-                  ),
+                  child: Text(as.forgot_your_password),
+                  onPressed: () {
+                    Navigator.pushNamed(context, ForgotPasswordPage.routeName);
+                  },
                 ),
               ],
             ),

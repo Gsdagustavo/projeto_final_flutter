@@ -40,13 +40,12 @@ class AuthService {
 
   Future<void> resetPassword({required String newPassord}) async {}
 
-  Future<void> sendPasswordResetEmail() async {
-    final signedUser = await currentUser();
-
-    /// No user signed in
-    if (signedUser == null) return;
-
-    await _firebase.sendPasswordResetEmail(email: signedUser.email!);
+  Future<void> sendRecoveryCode({required String email}) async {
+    try {
+      await _firebase.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException {
+      rethrow;
+    }
   }
 
   Future<void> confirmPasswordReset({

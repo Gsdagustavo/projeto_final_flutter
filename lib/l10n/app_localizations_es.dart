@@ -24,6 +24,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get logged_in_successfully => '¡Inicio de sesión exitoso!';
 
   @override
+  String get account_created_successfully => '¡Cuenta creada con éxito!';
+
+  @override
+  String get register_login => '¿Deseas iniciar sesión?';
+
+  @override
   String get warning => 'Advertencia';
 
   @override

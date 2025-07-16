@@ -127,6 +127,18 @@ abstract class AppLocalizations {
   /// **'Logged in successfully!'**
   String get logged_in_successfully;
 
+  /// No description provided for @account_created_successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Account created successfully!'**
+  String get account_created_successfully;
+
+  /// No description provided for @register_login.
+  ///
+  /// In en, this message translates to:
+  /// **'Would you want to login?'**
+  String get register_login;
+
   /// No description provided for @warning.
   ///
   /// In en, this message translates to:

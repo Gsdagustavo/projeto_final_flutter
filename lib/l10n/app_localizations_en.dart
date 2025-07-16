@@ -24,6 +24,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logged_in_successfully => 'Logged in successfully!';
 
   @override
+  String get account_created_successfully => 'Account created successfully!';
+
+  @override
+  String get register_login => 'Would you want to login?';
+
+  @override
   String get warning => 'Warning';
 
   @override

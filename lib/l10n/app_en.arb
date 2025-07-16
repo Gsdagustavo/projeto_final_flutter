@@ -11,6 +11,8 @@
 
   "@@auth_messages": {},
   "logged_in_successfully": "Logged in successfully!",
+  "account_created_successfully": "Account created successfully!",
+  "register_login": "Would you want to login?",
   "warning": "Warning",
   "yes": "Yes",
   "no": "No",

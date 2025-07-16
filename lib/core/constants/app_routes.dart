@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../presentation/pages/auth/auth_page_switcher.dart';
+import '../../presentation/pages/auth/forgot_password_page.dart';
 import '../../presentation/pages/auth/login_page.dart';
 import '../../presentation/pages/auth/register_page.dart';
 import '../../presentation/pages/auth/splash_screen.dart';
@@ -18,9 +19,10 @@ abstract final class AppRoutes {
 
     /// Auth related pages
     SplashScreen.routeName: (_) => const SplashScreen(),
+    AuthPageSwitcher.routeName: (_) => const AuthPageSwitcher(),
     LoginPage.routeName: (_) => const LoginPage(),
     RegisterPage.routeName: (_) => const RegisterPage(),
-    AuthPageSwitcher.routeName: (_) => const AuthPageSwitcher(),
+    ForgotPasswordPage.routeName: (_) => const ForgotPasswordPage(),
   };
 
   static const String initialRoute = SplashScreen.routeName;

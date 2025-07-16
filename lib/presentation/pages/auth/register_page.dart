@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
 import '../../providers/auth_provider.dart';
+import '../../widgets/custom_dialog.dart';
 import '../home_page.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -47,22 +48,28 @@ class _RegisterPageState extends State<RegisterPage> {
   void _register() async {
     if (!_formKey.currentState!.validate()) return;
 
+    final as = AppLocalizations.of(context)!;
+
     final email = _emailController.text;
     final password = _passwordController.text;
 
     final loginProvider = Provider.of<LoginProvider>(context, listen: false);
+
+    /// Try to create user
     await loginProvider.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
 
+    /// Check if any error has occurred while trying to create the user
     if (loginProvider.hasError) {
       unawaited(
         showDialog(
           context: context,
-          builder: (_) => AlertDialog(
-            title: Text('Warning'),
+          builder: (_) => CustomDialog(
+            title: as.warning,
             content: Text(loginProvider.errorMsg),
+            isError: true,
           ),
         ),
       );
@@ -70,18 +77,21 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
+    /// Try to sign in
     await loginProvider.signinWithEmailAndPassword(
       email: email,
       password: password,
     );
 
+    /// Check if any error has occurred while trying to sign in
     if (loginProvider.hasError) {
       unawaited(
         showDialog(
           context: context,
-          builder: (_) => AlertDialog(
-            title: Text('Warning'),
+          builder: (_) => CustomDialog(
+            title: as.warning,
             content: Text(loginProvider.errorMsg),
+            isError: true,
           ),
         ),
       );
@@ -89,24 +99,29 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
+    /// Shows a successful feedback dialog
     await showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text('Register'),
-        content: Text(AppLocalizations.of(context)!.yes),
+      builder: (_) => CustomDialog(
+        title: as.register,
+        content: Text(as.account_created_successfully),
       ),
     );
 
+    /// Shows a dialog for the user to continue to login
     await showDialog(
       context: context,
       barrierDismissible: false,
       builder: (_) => AlertDialog(
+        title: Text('Login'),
+        content: Text(as.register_login),
+        actionsAlignment: MainAxisAlignment.spaceBetween,
         actions: [
           TextButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text('No'),
+            child: Text(as.no),
           ),
 
           ElevatedButton(
@@ -118,11 +133,6 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Text(AppLocalizations.of(context)!.yes),
           ),
         ],
-
-        actionsAlignment: MainAxisAlignment.spaceBetween,
-
-        title: Text('Login'),
-        content: Text('Would you want to login?'),
       ),
     );
   }
@@ -135,6 +145,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(32.0),
@@ -142,7 +154,7 @@ class _RegisterPageState extends State<RegisterPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              AppLocalizations.of(context)!.register,
+              as.register,
               style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
             ),
 
@@ -172,7 +184,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: _passwordController,
                     onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
                     decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context)!.password,
+                      hintText: as.password,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -201,9 +213,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: _register,
-                    child: Text(
-                      AppLocalizations.of(context)!.register,
-                    ),
+                    child: Text(as.register),
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.all(16),
                       shape: RoundedRectangleBorder(

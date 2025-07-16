@@ -24,6 +24,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get logged_in_successfully => 'Login realizado com sucesso!';
 
   @override
+  String get account_created_successfully => 'Conta criada com sucesso!';
+
+  @override
+  String get register_login => 'Deseja fazer login?';
+
+  @override
   String get warning => 'Aviso';
 
   @override
