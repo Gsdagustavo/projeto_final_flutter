@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
-import '../../providers/auth_provider.dart';
+import '../../providers/login_provider.dart';
 import '../../widgets/custom_dialog.dart';
 import '../../widgets/toggle_dark_mode_icon_button.dart';
 
@@ -64,6 +64,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               child: TextFormField(
                 validator: _emailValidator,
                 controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
                 onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
                 decoration: InputDecoration(
                   hintText: 'Email',
@@ -85,7 +86,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   context,
                   listen: false,
                 );
-                await loginProvider.sendRecoveryCode(
+                await loginProvider.sendPasswordResetEmail(
                   email: _emailController.text,
                 );
 

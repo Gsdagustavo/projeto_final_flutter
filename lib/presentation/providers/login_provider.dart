@@ -77,9 +77,9 @@ class LoginProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> sendRecoveryCode({required String email}) async {
+  Future<void> sendPasswordResetEmail({required String email}) async {
     try {
-      await _authService.sendRecoveryCode(email: email);
+      await _authService.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
       _errorMsg = e.message;
       debugPrint(_errorMsg);

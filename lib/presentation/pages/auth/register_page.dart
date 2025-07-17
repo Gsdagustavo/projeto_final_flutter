@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
-import '../../providers/auth_provider.dart';
+import '../../providers/login_provider.dart';
 import '../../widgets/custom_dialog.dart';
 import '../home_page.dart';
 

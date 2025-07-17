@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/auth_provider.dart';
+import '../../providers/login_provider.dart';
 import '../home_page.dart';
 import 'auth_page_switcher.dart';
 

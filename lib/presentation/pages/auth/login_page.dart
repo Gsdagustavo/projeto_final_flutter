@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
-import '../../providers/auth_provider.dart';
+import '../../providers/login_provider.dart';
+import '../../widgets/custom_dialog.dart';
 import '../home_page.dart';
 import 'forgot_password_page.dart';
 
@@ -73,9 +74,9 @@ class _LoginPageState extends State<LoginPage> {
 
     await showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Icon(Icons.check, color: Colors.green),
-        content: Text(AppLocalizations.of(context)!.logged_in_successfully),
+      builder: (_) => CustomDialog(
+        title: 'Login',
+        content: Text(as.logged_in_successfully),
       ),
     );
 
@@ -109,9 +110,11 @@ class _LoginPageState extends State<LoginPage> {
               key: _formKey,
               child: Column(
                 children: [
+                  /// Email text field
                   TextFormField(
                     validator: _emailValidator,
                     controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
                     onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
                     decoration: InputDecoration(
                       hintText: 'Email',
@@ -124,6 +127,7 @@ class _LoginPageState extends State<LoginPage> {
 
                   Padding(padding: EdgeInsets.all(18)),
 
+                  /// Password text field
                   TextFormField(
                     validator: _passwordValidator,
                     controller: _passwordController,
