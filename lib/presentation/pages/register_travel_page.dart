@@ -240,7 +240,7 @@ class _TransportTypesDropdownButton extends StatelessWidget {
 //   }
 // }
 
-String formatDate(DateTime date) {
+String _formatDate(DateTime date) {
   var stringDate = '';
   stringDate += '${date.day}/';
   stringDate += '${date.month}/';
@@ -288,7 +288,7 @@ class _DateTextButtons extends StatelessWidget {
                   ),
 
                   if (travelState.selectedStartDate != null)
-                    Text(formatDate(travelState.selectedStartDate!)),
+                    Text(_formatDate(travelState.selectedStartDate!)),
                 ],
               ),
               Column(
@@ -325,7 +325,7 @@ class _DateTextButtons extends StatelessWidget {
                   ),
 
                   if (travelState.selectedEndDate != null)
-                    Text(formatDate(travelState.selectedEndDate!)),
+                    Text(_formatDate(travelState.selectedEndDate!)),
                 ],
               ),
             ],

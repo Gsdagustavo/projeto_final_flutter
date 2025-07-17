@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
 import 'modules/travel/travel_repository.dart';
-import 'modules/travel/travel_usecases.dart';
+import 'modules/travel/travel_use_cases.dart';
 import 'presentation/providers/language_code_provider.dart';
 import 'presentation/providers/login_provider.dart';
 import 'presentation/providers/register_travel_provider.dart';
@@ -16,13 +16,13 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   final travelRepository = TravelRepositoryImpl();
-  final travelUsecases = TravelUseCasesImpl(travelRepository);
+  final travelUseCases = TravelUseCasesImpl(travelRepository);
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => RegisterTravelProvider(travelUsecases),
+          create: (context) => RegisterTravelProvider(travelUseCases),
         ),
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ChangeNotifierProvider(create: (context) => LanguageCodeProvider()),

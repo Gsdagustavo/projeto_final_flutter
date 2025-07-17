@@ -4,7 +4,7 @@ import '../../domain/entities/enums.dart';
 import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';
 import '../../domain/entities/travel_stop.dart';
-import '../../modules/travel/travel_usecases.dart';
+import '../../modules/travel/travel_use_cases.dart';
 
 /// A [ChangeNotifier] responsible for managing and the app's Travel Register
 /// system

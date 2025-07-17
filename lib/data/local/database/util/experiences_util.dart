@@ -6,7 +6,8 @@ import '../tables/transport_types_table.dart';
 
 /// Contains an util method to manipulate the experiences table in the database
 class DatabaseEnumUtils {
-  /// Queries the database and returns the [experience id] of the given [Experience]
+  /// Queries the database and returns the [experienceId] of the given
+  /// [Experience]
   Future<int?> getIdByExperience(
     Experience exp,
     DatabaseExecutor executor,
@@ -22,7 +23,8 @@ class DatabaseEnumUtils {
     return res.first[ExperiencesTable.experienceId] as int;
   }
 
-  /// Queries the database and returns the [experience id] of the given [Experience]
+  /// Queries the database and returns the [experienceId] of the given
+  /// [Experience]
   Future<int?> getIdByTransportType(
     TransportType tt,
     DatabaseExecutor executor,

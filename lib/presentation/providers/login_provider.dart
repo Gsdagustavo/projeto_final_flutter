@@ -56,7 +56,7 @@ class LoginProvider with ChangeNotifier {
     required String password,
   }) async {
     try {
-      _loggedUser = await _authService.signinWithEmailAndPassword(
+      _loggedUser = await _authService.signInWithEmailAndPassword(
         email: email,
         password: password,
       );

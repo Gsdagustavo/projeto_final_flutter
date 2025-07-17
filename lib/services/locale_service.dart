@@ -34,6 +34,11 @@ class LocaleService {
     await prefs.setString(_languageCodeKey, languageCode);
   }
 
+  /// Returns the current saved [language code] from [SharedPreferences]
+  ///
+  /// If there is no saved [language code] (user has not changed it previously),
+  /// the device's language code will be be saved to [SharedPreferences] and be
+  /// returned
   Future<String> loadLanguageCode() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -42,7 +47,7 @@ class LocaleService {
       return languageCode;
     }
 
-    /// TODO: implement a better way of retrieving the device language code, since [window] is deprecated
+    /// TODO: implement a better way of retrieving the device's language code, since [window] is deprecated
     final deviceLanguageCode = window.locale.languageCode;
     final finalLanguageCode = languageCodes.contains(deviceLanguageCode)
         ? deviceLanguageCode

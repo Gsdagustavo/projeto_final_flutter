@@ -7,10 +7,16 @@ import '../../widgets/theme_toggle_button.dart';
 import 'login_page.dart';
 import 'register_page.dart';
 
+/// This page controls the switch system between [LoginPage] and [RegisterPage]
+/// using a [PageController]
+///
+/// It contains a visual selector (switch) that allows the user to switch
+/// between the pages, and also a button to switch the app's theme mode
 class AuthPageSwitcher extends StatefulWidget {
+  /// Constant constructor
   const AuthPageSwitcher({super.key});
 
-  ///
+  /// The route of the page
   static const String routeName = '/authPageSwitcher';
 
   @override
@@ -39,7 +45,7 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
   Widget _buildSwitcherBar() {
     return Stack(
       children: [
-        Positioned(child: ThemeToggleButton(), right: 22),
+        Positioned(right: 22, child: ThemeToggleButton()),
 
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

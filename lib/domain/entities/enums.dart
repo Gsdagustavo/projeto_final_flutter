@@ -1,11 +1,36 @@
-/// This enum represents the [TransportType] of a [Travel]
-enum TransportType { car, bike, bus, plane, cruise }
+/// Enum representing the types of transport available for a [Travel].
+enum TransportType {
+  /// Travel by car
+  car,
 
-/// This enums represents all [Experiences] that a [Travel] can contain
+  /// Travel by bike
+  bike,
+
+  /// Travel by bus
+  bus,
+
+  /// Travel by plane
+  plane,
+
+  /// Travel by cruise ship
+  cruise,
+}
+
+/// Enum representing the different experiences that a [Travel]
+/// can include.
 enum Experience {
+  /// Cultural immersion
   cultureImmersion,
+
+  /// Alternative cuisines
   alternativeCuisines,
+
+  /// Visiting historical places
   visitHistoricalPlaces,
+
+  /// Visiting local establishments
   visitLocalEstablishments,
+
+  /// Contact with nature
   contactWithNature,
 }

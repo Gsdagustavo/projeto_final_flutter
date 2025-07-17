@@ -30,8 +30,9 @@ abstract class ParticipantRepository {
 /// Concrete implementation of [ParticipantRepository], using local SQLite
 /// database
 ///
-/// This class contains all necessary implementations to interact with participants
-/// consulting the [ParticipantsTable] and [TravelParticipantsTable] tables
+/// This class contains all necessary implementations to interact with
+/// participants consulting the [ParticipantsTable] and
+/// [TravelParticipantsTable] tables
 class ParticipantRepositoryImpl implements ParticipantRepository {
   /// Future instance of the database
   late final Future<Database> _db = DBConnection().getDatabase();

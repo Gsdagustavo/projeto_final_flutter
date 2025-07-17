@@ -12,7 +12,7 @@ class AuthService {
   ///
   /// Throws a [FirebaseAuthException] if any error occurs while trying to
   /// sign in
-  Future<User?> signinWithEmailAndPassword({
+  Future<User?> signInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {

@@ -39,5 +39,5 @@ class LanguageCodeProvider with ChangeNotifier {
   }
 
   /// Returns the current [LanguageCode]
-  get languageCode => _languageCode;
+  String get languageCode => _languageCode;
 }

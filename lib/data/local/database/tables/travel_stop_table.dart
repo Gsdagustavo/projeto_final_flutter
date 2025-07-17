@@ -1,35 +1,61 @@
 import 'travel_table.dart';
 
-/// This is a model class to be used when manipulating the TravelStop Table
-/// in the database
+/// SQLite table schema and constants for the `travelStops` table
+///
+/// This class defines the column names and the SQL statement to create
+/// the table. It is used to store information about specific stops
+/// made during a travel, including location and timing data
 abstract final class TravelStopTable {
-  /// The name of the table
+  /// Name of the travelStops table in the database.
   static const String tableName = 'travelStops';
 
+  /// Column name for the travel stop ID
+  ///
+  /// `INTEGER PRIMARY KEY AUTOINCREMENT`
   static const String travelStopId = 'travelStopId';
-  static const String travelId = 'travelId';
+
+  /// Column name for the city name of the travel stop
+  ///
+  /// `TEXT NOT NULL`
   static const String cityName = 'cityName';
+
+  /// Column name for the latitude of the travel stop
+  ///
+  /// `REAL NOT NULL`
   static const String latitude = 'latitude';
+
+  /// Column name for the longitude of the travel stop
+  ///
+  /// `REAL NOT NULL`
   static const String longitude = 'longitude';
 
-  /// All dates are represented by millisecondsSinceEpoch
-  /// and stored in INTEGER data type
+  /// Column name for the arrival date (in milliseconds since epoch)
+  ///
+  /// `INTEGER NOT NULL`
   static const String arriveDate = 'arriveDate';
+
+  /// Column name for the leave date (in milliseconds since epoch)
+  ///
+  /// `INTEGER NOT NULL`
   static const String leaveDate = 'leaveDate';
 
-  /// SQLite command for creating the table
+  /// Column name for the travel ID (foreign key)
+  ///
+  /// `INTEGER NOT NULL`
+  static const String travelId = 'travelId';
+
+  /// SQL command to create the travelStops table
   static const String createTable =
       '''
-      CREATE TABLE $tableName(
-        $travelStopId INTEGER PRIMARY KEY AUTOINCREMENT,
-        $cityName TEXT NOT NULL,
-        $latitude REAL NOT NULL,   
-        $longitude REAL NOT NULL,
-        $arriveDate INTEGER NOT NULL,
-        $leaveDate INTEGER NOT NULL,
-        $travelId INTEGER NOT NULL,
-        
-        FOREIGN KEY ($travelId) REFERENCES ${TravelTable.tableName} (${TravelTable.travelId})
-      );
-      ''';
+    CREATE TABLE $tableName (
+      $travelStopId INTEGER PRIMARY KEY AUTOINCREMENT,
+      $cityName TEXT NOT NULL,
+      $latitude REAL NOT NULL,
+      $longitude REAL NOT NULL,
+      $arriveDate INTEGER NOT NULL,
+      $leaveDate INTEGER NOT NULL,
+      $travelId INTEGER NOT NULL,
+      FOREIGN KEY ($travelId) REFERENCES ${TravelTable.tableName} (${TravelTable.travelId})
+    );
+  ''';
 }

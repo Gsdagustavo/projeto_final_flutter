@@ -3,7 +3,7 @@ import 'enums.dart';
 import 'participant.dart';
 import 'travel_stop.dart';
 
-/// Represents a Travel
+/// Represents a Travel record in the application's database
 class Travel {
   /// Travel Id
   int? travelId;

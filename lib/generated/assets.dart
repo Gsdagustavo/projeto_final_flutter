@@ -23,7 +23,7 @@ class Assets {
   static const String pagesRegisterTravelPage = 'lib/presentation/pages/register_travel_page.dart';
   static const String pagesSettingsPage = 'lib/presentation/pages/settings_page.dart';
   static const String participantParticipantRepository = 'lib/data/local/modules/participant/participant_repository.dart';
-  static const String participantParticipantUsecases = 'lib/data/local/modules/participant/participant_usecases.dart';
+  static const String participantParticipantUsecases = 'lib/data/local/modules/participant/participant_use_cases.dart';
   static const String providersLanguageCodeProvider = 'lib/presentation/providers/language_code_provider.dart';
   static const String providersRegisterTravelProvider = 'lib/presentation/providers/register_travel_provider.dart';
   static const String providersThemeProvider = 'lib/presentation/providers/theme_provider.dart';
@@ -39,7 +39,7 @@ class Assets {
   static const String tablesTravelStopTable = 'lib/data/local/database/tables/travel_stop_table.dart';
   static const String tablesTravelTable = 'lib/data/local/database/tables/travel_table.dart';
   static const String travelTravelRepository = 'lib/data/local/modules/travel/travel_repository.dart';
-  static const String travelTravelUsecases = 'lib/data/local/modules/travel/travel_usecases.dart';
+  static const String travelTravelUsecases = 'lib/data/local/modules/travel/travel_use_cases.dart';
   static const String utilEnumsExtensions = 'lib/presentation/util/enums_extensions.dart';
   static const String utilExperiencesUtil = 'lib/data/local/database/util/experiences_util.dart';
   static const String widgetsBottomNavigationBar = 'lib/presentation/widgets/bottom_navigation_bar.dart';
