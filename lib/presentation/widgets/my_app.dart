@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/constants/app_routes.dart';
+import '../../core/constants/themes.dart';
 import '../../l10n/app_localizations.dart';
 import '../providers/language_code_provider.dart';
 import '../providers/theme_provider.dart';
@@ -25,12 +26,10 @@ class MyApp extends StatelessWidget {
 
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-
       locale: locale,
 
-      theme: ThemeData(brightness: Brightness.light),
-      darkTheme: ThemeData(brightness: Brightness.dark),
-
+      theme: Themes.lightTheme,
+      darkTheme: Themes.darkTheme,
       themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
 
       routes: AppRoutes.appRoutes,
