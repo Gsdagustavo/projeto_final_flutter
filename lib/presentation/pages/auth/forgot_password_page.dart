@@ -39,87 +39,91 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         actions: [ToggleDarkModeIconButton()],
       ),
 
-      body: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              as.forgot_your_password,
-              style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
-            ),
-
-            Padding(padding: EdgeInsets.all(70)),
-
-            Text(as.insert_your_email),
-
-            Padding(padding: EdgeInsets.all(12)),
-
-            /// Form
-            Form(
-              key: _formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-
-              /// Email text field
-              child: TextFormField(
-                validator: _emailValidator,
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
-                decoration: InputDecoration(
-                  hintText: 'Email',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  prefixIcon: Icon(Icons.email),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  as.forgot_your_password,
+                  style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
                 ),
-              ),
-            ),
-
-            Padding(padding: EdgeInsets.all(12)),
-
-            ElevatedButton(
-              onPressed: () async {
-                if (!_formKey.currentState!.validate()) return;
-
-                final loginProvider = Provider.of<LoginProvider>(
-                  context,
-                  listen: false,
-                );
-                await loginProvider.sendPasswordResetEmail(
-                  email: _emailController.text,
-                );
-
-                if (loginProvider.hasError) {
-                  unawaited(
-                    showDialog(
-                      context: context,
-                      builder: (context) => CustomDialog(
-                        title: AppLocalizations.of(context)!.warning,
-                        content: Text(loginProvider.errorMsg),
-                        isError: true,
+          
+                Padding(padding: EdgeInsets.all(70)),
+          
+                Text(as.insert_your_email),
+          
+                Padding(padding: EdgeInsets.all(12)),
+          
+                /// Form
+                Form(
+                  key: _formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+          
+                  /// Email text field
+                  child: TextFormField(
+                    validator: _emailValidator,
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
+                    decoration: InputDecoration(
+                      hintText: 'Email',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                    ),
-                  );
-
-                  return;
-                }
-
-                unawaited(
-                  showDialog(
-                    context: context,
-                    builder: (context) => CustomDialog(
-                      title: '',
-                      content: Text(
-                        '${as.recovery_code_sent_to} ${_emailController.text}',
-                      ),
+                      prefixIcon: Icon(Icons.email),
                     ),
                   ),
-                );
-              },
-              child: Text(as.send_recovery_code),
+                ),
+          
+                Padding(padding: EdgeInsets.all(12)),
+          
+                ElevatedButton(
+                  onPressed: () async {
+                    if (!_formKey.currentState!.validate()) return;
+          
+                    final loginProvider = Provider.of<LoginProvider>(
+                      context,
+                      listen: false,
+                    );
+                    await loginProvider.sendPasswordResetEmail(
+                      email: _emailController.text,
+                    );
+          
+                    if (loginProvider.hasError) {
+                      unawaited(
+                        showDialog(
+                          context: context,
+                          builder: (context) => CustomDialog(
+                            title: AppLocalizations.of(context)!.warning,
+                            content: Text(loginProvider.errorMsg),
+                            isError: true,
+                          ),
+                        ),
+                      );
+          
+                      return;
+                    }
+          
+                    unawaited(
+                      showDialog(
+                        context: context,
+                        builder: (context) => CustomDialog(
+                          title: '',
+                          content: Text(
+                            '${as.recovery_code_sent_to} ${_emailController.text}',
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  child: Text(as.send_recovery_code),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

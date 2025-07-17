@@ -148,83 +148,87 @@ class _RegisterPageState extends State<RegisterPage> {
     final as = AppLocalizations.of(context)!;
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              as.register,
-              style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
-            ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  as.register,
+                  style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+                ),
 
-            Padding(padding: EdgeInsets.all(86)),
+                Padding(padding: EdgeInsets.all(86)),
 
-            Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    validator: _emailValidator,
-                    controller: _emailController,
-                    onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
-                    decoration: InputDecoration(
-                      hintText: 'Email',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        validator: _emailValidator,
+                        controller: _emailController,
+                        onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
+                        decoration: InputDecoration(
+                          hintText: 'Email',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          prefixIcon: Icon(Icons.email),
+                        ),
                       ),
-                      prefixIcon: Icon(Icons.email),
-                    ),
+
+                      Padding(padding: EdgeInsets.all(18)),
+
+                      TextFormField(
+                        validator: _passwordValidator,
+                        controller: _passwordController,
+                        onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
+                        decoration: InputDecoration(
+                          hintText: as.password,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          prefixIcon: Icon(Icons.lock),
+                          suffixIcon: IconButton(
+                            onPressed: _togglePasswordVisibility,
+                            icon: Icon(
+                              _obscurePassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                            ),
+                          ),
+                        ),
+
+                        obscureText: _obscurePassword,
+                      ),
+                    ],
                   ),
+                ),
 
-                  Padding(padding: EdgeInsets.all(18)),
+                Padding(padding: EdgeInsets.all(16)),
 
-                  TextFormField(
-                    validator: _passwordValidator,
-                    controller: _passwordController,
-                    onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
-                    decoration: InputDecoration(
-                      hintText: as.password,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      prefixIcon: Icon(Icons.lock),
-                      suffixIcon: IconButton(
-                        onPressed: _togglePasswordVisibility,
-                        icon: Icon(
-                          _obscurePassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: _register,
+                        child: Text(as.register),
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.all(16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
                         ),
                       ),
                     ),
-
-                    obscureText: _obscurePassword,
-                  ),
-                ],
-              ),
-            ),
-
-            Padding(padding: EdgeInsets.all(16)),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: _register,
-                    child: Text(as.register),
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.all(16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                  ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
