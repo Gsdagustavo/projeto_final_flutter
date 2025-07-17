@@ -2,9 +2,16 @@ import '../../data/local/database/tables/participants_table.dart';
 
 /// Represents a  [Participant] of a [Travel]
 class Participant {
+  /// Participant ID
   int? id;
+
+  /// Participant Name
   final String name;
+
+  /// Participant Age
   final int age;
+
+  /// Participant profile picture (path to the file)
   final String? profilePicturePath;
 
   /// Named constructor for the participant
@@ -15,6 +22,7 @@ class Participant {
     this.id,
   });
 
+  /// Returns a Participant from the given Map
   factory Participant.fromMap(Map<String, dynamic> map) {
     return Participant(
       id: map[ParticipantsTable.participantId],
@@ -24,6 +32,7 @@ class Participant {
     );
   }
 
+  /// Returns a Map with Participant data
   Map<String, dynamic> toMap() {
     return {
       ParticipantsTable.participantId: id,

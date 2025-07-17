@@ -3,7 +3,12 @@ import 'package:provider/provider.dart';
 
 import '../providers/theme_provider.dart';
 
+/// A custom [IconButton] that toggles the current [ThemeMode] by calling the
+/// [ThemeProvider] provider
+///
+/// It is meant to be reused in many contexts
 class ThemeToggleButton extends StatelessWidget {
+  /// Constant constructor
   const ThemeToggleButton({super.key});
 
   @override

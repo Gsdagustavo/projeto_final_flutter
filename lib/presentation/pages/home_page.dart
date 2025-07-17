@@ -5,9 +5,12 @@ import '../../l10n/app_localizations.dart';
 import '../util/enums_extensions.dart';
 import 'fab_page.dart';
 
+/// The Home Page of the app
 class HomePage extends StatelessWidget {
+  /// Constant constructor
   const HomePage({super.key});
 
+  /// The route of the page
   static const String routeName = '/home';
 
   @override

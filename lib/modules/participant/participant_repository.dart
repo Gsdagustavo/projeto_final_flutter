@@ -1,20 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../domain/entities/participant.dart';
 import '../../data/local/database/database.dart';
 import '../../data/local/database/tables/participants_table.dart';
 import '../../data/local/database/tables/travel_participants_table.dart';
+import '../../domain/entities/participant.dart';
 
+/// This interface defines all necessary methods to register participants,
+/// get all participants and get participants by a travel id
 abstract class ParticipantRepository {
+  /// Register a new participant related to a travel
+  ///
+  /// [participant]: The participant to be added
+  /// [travelId]: The Travel ID which the participant will be added
   Future<void> registerParticipant(Participant participant, int travelId);
 
+  /// Returns all participants from the database
+  ///
+  /// Currently, this does not have a purpose in production, but is used
+  /// during development stage
   Future<List<Participant>> getAllParticipants();
 
+  /// Returns all participants related to a Travel
+  ///
+  /// [travelId]: The ID of the Travel which the participant belongs
   Future<List<Participant>> getParticipantsByTravelId(int travelId);
 }
 
+/// Concrete implementation of [ParticipantRepository], using local SQLite
+/// database
+///
+/// This class contains all necessary implementations to interact with participants
+/// consulting the [ParticipantsTable] and [TravelParticipantsTable] tables
 class ParticipantRepositoryImpl implements ParticipantRepository {
+  /// Future instance of the database
   late final Future<Database> _db = DBConnection().getDatabase();
 
   @override

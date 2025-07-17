@@ -5,12 +5,25 @@ import 'travel_stop.dart';
 
 /// Represents a Travel
 class Travel {
+  /// Travel Id
   int? travelId;
+
+  /// Travel Title
   final String travelTitle;
+
+  /// Travel start date
   final DateTime? startDate;
+
+  /// Travel end date
   final DateTime? endDate;
+
+  /// Travel transport type
   final TransportType transportType;
+
+  /// Travel participants
   final List<Participant> participants;
+
+  /// Travel stops
   final List<TravelStop> stops;
 
   /// Named constructor for the Travel
@@ -24,6 +37,7 @@ class Travel {
     required this.stops,
   });
 
+  /// Returns a Travel from the given Map
   factory Travel.fromMap(
     Map<String, dynamic> map, {
     required List<Participant> participants,
@@ -42,6 +56,7 @@ class Travel {
     );
   }
 
+  /// Returns a Map with Travel data
   Map<String, dynamic> toMap() {
     final map = {
       TravelTable.travelTitle: travelTitle,

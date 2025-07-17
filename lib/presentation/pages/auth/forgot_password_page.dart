@@ -8,9 +8,14 @@ import '../../providers/login_provider.dart';
 import '../../widgets/custom_dialog.dart';
 import '../../widgets/theme_toggle_button.dart';
 
+/// A password recovery page
+///
+/// Contains a text field for the [email] that will have the password recovered
 class ForgotPasswordPage extends StatefulWidget {
+  /// Constant constructor
   const ForgotPasswordPage({super.key});
 
+  /// The route of the page
   static const String routeName = '/forgotPassword';
 
   @override
@@ -50,18 +55,18 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   as.forgot_your_password,
                   style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
                 ),
-          
+
                 Padding(padding: EdgeInsets.all(70)),
-          
+
                 Text(as.insert_your_email),
-          
+
                 Padding(padding: EdgeInsets.all(12)),
-          
+
                 /// Form
                 Form(
                   key: _formKey,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-          
+
                   /// Email text field
                   child: TextFormField(
                     validator: _emailValidator,
@@ -77,13 +82,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ),
                   ),
                 ),
-          
+
                 Padding(padding: EdgeInsets.all(12)),
-          
+
                 ElevatedButton(
                   onPressed: () async {
                     if (!_formKey.currentState!.validate()) return;
-          
+
                     final loginProvider = Provider.of<LoginProvider>(
                       context,
                       listen: false,
@@ -91,7 +96,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     await loginProvider.sendPasswordResetEmail(
                       email: _emailController.text,
                     );
-          
+
                     if (loginProvider.hasError) {
                       unawaited(
                         showDialog(
@@ -103,17 +108,18 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           ),
                         ),
                       );
-          
+
                       return;
                     }
-          
+
                     unawaited(
                       showDialog(
                         context: context,
                         builder: (context) => CustomDialog(
                           title: '',
                           content: Text(
-                            '${as.recovery_code_sent_to} ${_emailController.text}',
+                            '${as.recovery_code_sent_to} '
+                            '${_emailController.text}',
                           ),
                         ),
                       ),

@@ -1,7 +1,15 @@
 import '../../domain/entities/participant.dart';
 import 'participant_repository.dart';
 
+/// This interface defines all necessary methods to register participants,
+/// get all participants and get participants by a travel id
+///
+/// Note that this is a use case, which means that it will not manipulate the
+/// database directly, but will instead call a repository class that will
+/// have all database related methods
 abstract class ParticipantUseCases {
+
+  ///
   Future<void> registerParticipant(Participant participant, int travelId);
 
   Future<List<Participant>> getAllParticipants();

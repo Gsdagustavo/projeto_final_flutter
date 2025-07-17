@@ -10,6 +10,7 @@ import '../providers/theme_provider.dart';
 /// This widget is the [MaterialApp] of the application, which contains all
 /// important info about layout, theme, routes, localization, etc.
 class MyApp extends StatelessWidget {
+  /// Constant constructor
   const MyApp({super.key});
 
   @override

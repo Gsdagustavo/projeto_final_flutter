@@ -58,6 +58,8 @@ class DBConnection {
     }
   }
 
+  /// Cleanses the database
+  /// (WARNING: This was made to be used in debug mode only. DO NOT USE IN PRODUCTION)
   Future<void> clearDatabase(Database db) async {
     final tables = await db.rawQuery(
       "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';",

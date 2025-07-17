@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../domain/entities/travel_stop.dart';
 import 'my_app_bar.dart';
 
+/// This is a map widget that will be used to register a [TravelStop] and to
+/// view a [Travel] route
+///
+/// Currently, it is not used in nowhere, since there are some limitations
+/// due to not having a Google Maps API Key
 class CustomMap extends StatefulWidget {
+  /// Constant constructor
   const CustomMap({super.key});
 
   @override

@@ -9,9 +9,18 @@ import '../../widgets/custom_dialog.dart';
 import '../home_page.dart';
 import 'forgot_password_page.dart';
 
+/// A [Login] page
+///
+/// Contains text fields for [email] and [password]
+///
+/// Contains also a button to realize the [Login] and a
+/// '[Forgot Your Password?]' button, that redirects the user to the
+/// [ForgotPasswordPage]
 class LoginPage extends StatefulWidget {
+  /// Constant constructor
   const LoginPage({super.key});
 
+  /// The route of the page
   static const String routeName = '/login';
 
   @override
@@ -105,9 +114,9 @@ class _LoginPageState extends State<LoginPage> {
                   'Login',
                   style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
                 ),
-          
+
                 Padding(padding: EdgeInsets.all(86)),
-          
+
                 Form(
                   key: _formKey,
                   child: Column(
@@ -126,9 +135,9 @@ class _LoginPageState extends State<LoginPage> {
                           prefixIcon: Icon(Icons.email),
                         ),
                       ),
-          
+
                       Padding(padding: EdgeInsets.all(18)),
-          
+
                       /// Password text field
                       TextFormField(
                         validator: _passwordValidator,
@@ -149,38 +158,41 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-          
+
                         obscureText: _obscurePassword,
                       ),
                     ],
                   ),
                 ),
-          
+
                 Padding(padding: EdgeInsets.all(16)),
-          
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
                       child: ElevatedButton(
                         onPressed: _login,
-                        child: Text('Login'),
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.all(16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
                         ),
+                        child: Text('Login'),
                       ),
                     ),
-          
+
                     Padding(padding: EdgeInsetsGeometry.all(16)),
-          
+
                     /// 'Forgot your password?' button
                     TextButton(
                       child: Text(as.forgot_your_password),
                       onPressed: () {
-                        Navigator.pushNamed(context, ForgotPasswordPage.routeName);
+                        Navigator.pushNamed(
+                          context,
+                          ForgotPasswordPage.routeName,
+                        );
                       },
                     ),
                   ],

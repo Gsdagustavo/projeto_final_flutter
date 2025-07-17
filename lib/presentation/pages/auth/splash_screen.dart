@@ -5,9 +5,16 @@ import '../../providers/login_provider.dart';
 import '../home_page.dart';
 import 'auth_page_switcher.dart';
 
+/// A default Splash Screen that will be shown very briefly when the app is
+/// initialized
+///
+/// This page will redirect the user to the [HomePage], if the user has logged
+/// in previously, or the [AuthPageSwitcher] page if not
 class SplashScreen extends StatefulWidget {
+  /// Constant constructor
   const SplashScreen({super.key});
 
+  /// The route of the page
   static const String routeName = '/splashScreen';
 
   @override

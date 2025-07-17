@@ -4,13 +4,14 @@ import 'theme_toggle_button.dart';
 
 /// This widget is a custom [AppBar] that is used in [FabPage]
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const MyAppBar({
-    super.key,
-    required this.title,
-    this.actions,
-  });
+  /// Constant constructor
+  const MyAppBar({super.key, required this.title, this.actions});
 
+  /// The title of the page that will be shown in the
+  /// App Bar
   final String title;
+
+  /// A list of widgets of all actions of the App Bar
   final List<Widget>? actions;
 
   @override

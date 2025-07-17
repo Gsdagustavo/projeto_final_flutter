@@ -10,6 +10,7 @@ import 'register_page.dart';
 class AuthPageSwitcher extends StatefulWidget {
   const AuthPageSwitcher({super.key});
 
+  ///
   static const String routeName = '/authPageSwitcher';
 
   @override
@@ -45,10 +46,7 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
           children: [
             _buildSwitcherOption('Login', 0),
             Padding(padding: EdgeInsetsGeometry.all(12)),
-            _buildSwitcherOption(
-              AppLocalizations.of(context)!.register,
-              1,
-            ),
+            _buildSwitcherOption(AppLocalizations.of(context)!.register, 1),
           ],
         ),
       ],

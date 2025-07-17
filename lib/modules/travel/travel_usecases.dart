@@ -4,15 +4,30 @@ import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';
 import 'travel_repository.dart';
 
+/// Interface that defines all use cases related to the travels
 abstract class TravelUseCases {
+  /// Register a new travel
+  ///
+  /// [travel]: The travel which will be registered
+  ///
+  /// Throws a [TravelRegisterException] if any travel data is invalid
   Future<void> registerTravel(Travel travel);
 
+  /// Returns a [List] of [Travel] containing all registered travels
   Future<List<Travel>> getAllTravels();
 }
 
+/// Concrete implementation of [TravelUseCases]
+///
+/// Contains a [TravelRepository] instance, which will be used to realize
+/// queries with the database
 class TravelUseCasesImpl implements TravelUseCases {
+  /// Instance of [TravelRepository]
+  ///
+  /// Used to interact with the database
   final TravelRepository travelRepository;
 
+  /// Default constructor
   TravelUseCasesImpl(this.travelRepository);
 
   @override
@@ -83,8 +98,11 @@ class TravelUseCasesImpl implements TravelUseCases {
   }
 }
 
+/// A custom exception that will be thrown if any travel data is invalid
 class TravelRegisterException implements Exception {
+  /// The error message
   final String message;
 
+  /// Default constructor
   TravelRegisterException(this.message);
 }

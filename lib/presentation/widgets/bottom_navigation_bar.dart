@@ -6,6 +6,7 @@ import '../pages/fab_page.dart';
 
 /// This widget is a custom [BottomNavigationBar] that is used in [FabPage]
 class MyBottomNavigationBar extends StatelessWidget {
+  /// Constant constructor
   const MyBottomNavigationBar({super.key});
 
   void _onItemTapped(BuildContext context, String routeName) {

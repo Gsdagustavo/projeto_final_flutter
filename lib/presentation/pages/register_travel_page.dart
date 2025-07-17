@@ -12,6 +12,7 @@ import 'fab_page.dart';
 
 /// This is a page for registering a travel
 class RegisterTravelPage extends StatelessWidget {
+  /// Constant constructor
   const RegisterTravelPage({super.key});
 
   /// The route of the page
@@ -383,7 +384,7 @@ class _ParticipantsWidget extends StatelessWidget {
                             TextField(
                               onTapOutside: (_) =>
                                   FocusScope.of(context).unfocus(),
-                              controller: travelState.nameController,
+                              controller: travelState.participantNameController,
                               decoration: InputDecoration(
                                 hintText: 'Name',
                                 prefixIcon: Icon(Icons.person),
@@ -396,7 +397,7 @@ class _ParticipantsWidget extends StatelessWidget {
                             TextField(
                               onTapOutside: (_) =>
                                   FocusScope.of(context).unfocus(),
-                              controller: travelState.ageController,
+                              controller: travelState.participantAgeController,
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 hintText: 'Age',

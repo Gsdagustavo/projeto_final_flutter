@@ -25,5 +25,6 @@ abstract final class AppRoutes {
     ForgotPasswordPage.routeName: (_) => const ForgotPasswordPage(),
   };
 
+  /// Defines the app's initial route
   static const String initialRoute = SplashScreen.routeName;
 }

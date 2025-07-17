@@ -8,9 +8,17 @@ import '../../providers/login_provider.dart';
 import '../../widgets/custom_dialog.dart';
 import '../home_page.dart';
 
+/// A [Register] page
+///
+/// Contains text fields for [email] and [password]
+///
+/// Contains also a button to [Register] the user
+/// [ForgotPasswordPage]
 class RegisterPage extends StatefulWidget {
+  /// Constant constructor
   const RegisterPage({super.key});
 
+  /// The route of the page
   static const String routeName = '/register';
 
   @override
@@ -215,13 +223,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: _register,
-                        child: Text(as.register),
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.all(16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
                         ),
+                        child: Text(as.register),
                       ),
                     ),
                   ],

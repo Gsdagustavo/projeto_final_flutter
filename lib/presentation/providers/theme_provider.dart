@@ -8,11 +8,12 @@ class ThemeProvider with ChangeNotifier {
 
   bool _isDarkMode = false;
 
-  /// Initializes the provider
+  /// Calls the [_init] method to initialize the provider's internal state
   ThemeProvider() {
     _init();
   }
 
+  /// Internal method to initialize the [isDarkMode] state
   void _init() async {
     _isDarkMode = await _themeService.getMode();
     notifyListeners();

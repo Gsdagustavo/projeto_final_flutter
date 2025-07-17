@@ -1,9 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+/// Service class to handle Authentication services using Firebase Auth
 class AuthService {
+  /// Instance of [FirebaseAuth]
   final _firebase = FirebaseAuth.instance;
 
+  /// Tries to sign in to Firebase Auth with the given [email] and [password]
+  ///
+  /// Returns the user with the given credentials
+  ///
+  /// Throws a [FirebaseAuthException] if any error occurs while trying to
+  /// sign in
   Future<User?> signinWithEmailAndPassword({
     required String email,
     required String password,
@@ -20,25 +28,34 @@ class AuthService {
     }
   }
 
+  /// Tries to create a user using Firebase Auth with the given [email] and
+  /// [password]
+  ///
+  /// Returns the user with the given credentials if the user was created
+  /// successfully
+  ///
+  /// Throws a [FirebaseAuthException] if any error occurs while trying to
+  /// create the user
   Future<User?> createUserWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
-    final User? user;
     try {
       final credentials = await _firebase.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      user = credentials.user;
+      return credentials.user;
     } on FirebaseAuthException {
       rethrow;
     }
-
-    return user;
   }
 
+  /// Sends a password recovery email to the given [email]
+  ///
+  /// Throws a [FirebaseAuthException] if any error occurs while sending the
+  /// email
   Future<void> sendPasswordResetEmail({required String email}) async {
     debugPrint('Sending password reset email to $email');
 
@@ -51,11 +68,11 @@ class AuthService {
     }
   }
 
+  /// Signs out of Firebase Auth
   Future<void> signOut() async {
     await _firebase.signOut();
   }
 
-  User? currentUser() {
-    return _firebase.currentUser;
-  }
+  /// Returns the current logged [User]
+  User? currentUser() => _firebase.currentUser;
 }

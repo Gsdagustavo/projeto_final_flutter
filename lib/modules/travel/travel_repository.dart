@@ -14,12 +14,23 @@ import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';
 import '../../domain/entities/travel_stop.dart';
 
+/// This interface defines all necessary methods to register a [Travel]
+/// and get all [Travels]
 abstract class TravelRepository {
+  /// Register a new travel
+  ///
+  /// [travel]: The travel which will be registered
   Future<Travel?> registerTravel({required Travel travel});
 
+  /// Returns a [List] of [Travel] containing all registered travels
   Future<List<Travel>> getAllTravels();
 }
 
+/// Concrete implementation of [TravelRepository], using local SQLite database
+///
+/// This class realizes all necessary implementations to register a [Travel]
+/// and get all [Travels], consulting the [TravelTable], [TravelStopTable],
+/// [TravelStopExperiencesTable] and [ParticipantsTable] tables
 class TravelRepositoryImpl implements TravelRepository {
   late final Future<Database> _db = DBConnection().getDatabase();
 
@@ -64,7 +75,7 @@ class TravelRepositoryImpl implements TravelRepository {
 
         await txn.insert(
           TravelParticipantsTable.tableName,
-          toTravelParticipantsMap(participantId, travelId),
+          _toTravelParticipantsMap(participantId, travelId),
         );
       }
     });
@@ -165,7 +176,9 @@ class TravelRepositoryImpl implements TravelRepository {
     return travels;
   }
 
-  static Map<String, dynamic> toTravelParticipantsMap(
+  /// Auxiliary method that returns a Map from the given [participantId]
+  /// and [travelId]
+  static Map<String, dynamic> _toTravelParticipantsMap(
     int participantId,
     int travelId,
   ) {

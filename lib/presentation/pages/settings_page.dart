@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../l10n/app_localizations.dart';
-import '../providers/login_provider.dart';
 import '../providers/language_code_provider.dart';
+import '../providers/login_provider.dart';
 import 'auth/auth_page_switcher.dart';
 import 'fab_page.dart';
 
@@ -15,6 +15,7 @@ import 'fab_page.dart';
 /// Currently, it does not have any interaction nor action available, but in the
 /// future, more features will be added
 class SettingsPage extends StatelessWidget {
+  /// Constant constructor
   const SettingsPage({super.key});
 
   /// The route of the page
@@ -113,10 +114,12 @@ class SettingsPage extends StatelessWidget {
                             return;
                           }
 
-                          unawaited(Navigator.pushReplacementNamed(
-                            context,
-                            AuthPageSwitcher.routeName,
-                          ));
+                          unawaited(
+                            Navigator.pushReplacementNamed(
+                              context,
+                              AuthPageSwitcher.routeName,
+                            ),
+                          );
                         },
                         child: Row(
                           spacing: 10,
