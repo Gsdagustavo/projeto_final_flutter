@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';
 import 'travel_repository.dart';
@@ -60,16 +62,19 @@ class TravelUseCasesImpl implements TravelUseCases {
     return participants.every((p) {
       /// Invalid name
       if (p.name.isEmpty) {
+        debugPrint('${p.name} is an invalid name');
         return false;
       }
 
       /// Short name
       if (p.name.length < 3) {
+        debugPrint('${p.name} is an invalid name');
         return false;
       }
 
       /// Invalid age
-      if (p.age > 0 && p.age <= 120) {
+      if (p.age < 0 || p.age >= 120) {
+        debugPrint('${p.age} is an invalid age');
         return false;
       }
 
