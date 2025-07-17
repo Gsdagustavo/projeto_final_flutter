@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
 import '../../providers/theme_provider.dart';
-import '../../widgets/toggle_dark_mode_icon_button.dart';
+import '../../widgets/theme_toggle_button.dart';
 import 'login_page.dart';
 import 'register_page.dart';
 
@@ -38,7 +38,7 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
   Widget _buildSwitcherBar() {
     return Stack(
       children: [
-        Positioned(child: ToggleDarkModeIconButton(), right: 22),
+        Positioned(child: ThemeToggleButton(), right: 22),
 
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

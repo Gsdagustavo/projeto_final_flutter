@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'toggle_dark_mode_icon_button.dart';
+import 'theme_toggle_button.dart';
 
 /// This widget is a custom [AppBar] that is used in [FabPage]
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -25,7 +25,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
       centerTitle: true,
 
-      actions: [ToggleDarkModeIconButton(), ...?actions],
+      actions: [ThemeToggleButton(), ...?actions],
     );
   }
 

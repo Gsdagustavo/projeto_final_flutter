@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../providers/login_provider.dart';
 import '../../widgets/custom_dialog.dart';
-import '../../widgets/toggle_dark_mode_icon_button.dart';
+import '../../widgets/theme_toggle_button.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -36,7 +36,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     return Scaffold(
       appBar: AppBar(
         actionsPadding: EdgeInsets.only(right: 22),
-        actions: [ToggleDarkModeIconButton()],
+        actions: [ThemeToggleButton()],
       ),
 
       body: SafeArea(

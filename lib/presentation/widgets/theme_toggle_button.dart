@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../providers/theme_provider.dart';
 
-class ToggleDarkModeIconButton extends StatelessWidget {
-  const ToggleDarkModeIconButton({super.key});
+class ThemeToggleButton extends StatelessWidget {
+  const ThemeToggleButton({super.key});
 
   @override
   Widget build(BuildContext context) {
