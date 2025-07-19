@@ -142,7 +142,7 @@ class SettingsPage extends StatelessWidget {
 
                 Padding(padding: EdgeInsets.all(6)),
 
-                LanguagesRadio(),
+                _LanguagesRadio(),
               ],
             ),
           );
@@ -152,14 +152,19 @@ class SettingsPage extends StatelessWidget {
   }
 }
 
-class LanguagesRadio extends StatefulWidget {
-  const LanguagesRadio({super.key});
+/// This is a custom [Widget] that is used in the [SettingsPage]
+///
+/// It is a RadioButton that contains values for language codes, allowing
+/// the user to dynamically change the current language of the app
+class _LanguagesRadio extends StatefulWidget {
+  /// Constant constructor
+  const _LanguagesRadio();
 
   @override
-  State<LanguagesRadio> createState() => _LanguagesRadioState();
+  State<_LanguagesRadio> createState() => _LanguagesRadioState();
 }
 
-class _LanguagesRadioState extends State<LanguagesRadio> {
+class _LanguagesRadioState extends State<_LanguagesRadio> {
   final locales = AppLocalizations.supportedLocales;
   late String selectedOption;
 
