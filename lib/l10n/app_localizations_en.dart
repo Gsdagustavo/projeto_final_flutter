@@ -39,15 +39,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recovery_code_sent_to => 'Recovery code sent to';
 
   @override
-  String get warning => 'Warning';
-
-  @override
-  String get yes => 'Yes';
-
-  @override
-  String get no => 'No';
-
-  @override
   String get account => 'Account';
 
   @override
@@ -121,4 +112,52 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get err_invalid_date_snackbar => 'You must select a start date first!';
+
+  @override
+  String get participants => 'Participants';
+
+  @override
+  String get no_participants_on_the_list => 'No participants on the list';
+
+  @override
+  String get register_participant => 'Register participant';
+
+  @override
+  String get name => 'Name';
+
+  @override
+  String get age => 'Age';
+
+  @override
+  String get participant_registered => 'Participant registered';
+
+  @override
+  String get remove_participant_confirmation => 'Would you really want to remove the participant';
+
+  @override
+  String get remove_participant => 'Remove participant';
+
+  @override
+  String get participant_removed => 'Participant removed';
+
+  @override
+  String get travel_registered_successfully => 'Travel registered successfully';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
+
+  @override
+  String get warning => 'Warning';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get remove => 'Remove';
+
+  @override
+  String get unknown_error => 'Unknown error';
 }

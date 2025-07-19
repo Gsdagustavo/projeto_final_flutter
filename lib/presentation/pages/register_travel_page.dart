@@ -25,6 +25,7 @@ class RegisterTravelPage extends StatelessWidget {
         builder: (context) {
           return Consumer<RegisterTravelProvider>(
             builder: (context, state, child) {
+              final as = AppLocalizations.of(context)!;
               final Widget icon;
               Widget content;
 
@@ -39,13 +40,13 @@ class RegisterTravelPage extends StatelessWidget {
               /// Determine which icon and text to show
               if (state.hasError) {
                 content = Text(
-                  state.error ?? 'Unknown error',
+                  state.error ?? as.unknown_error,
                   textAlign: TextAlign.center,
                 );
                 icon = Icon(Icons.error, color: Colors.red);
               } else {
-                content = const Text(
-                  'Travel registered successfully!',
+                content = Text(
+                  as.travel_registered_successfully,
                   textAlign: TextAlign.center,
                 );
                 icon = const Icon(Icons.check_circle, color: Colors.green);
@@ -314,18 +315,20 @@ class _ParticipantsWidget extends StatelessWidget {
       listen: false,
     );
 
+    final as = AppLocalizations.of(context)!;
+
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Participants',
+              as.participants,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
             ),
             TextButton(
               child: Text(
-                'Register Participant',
+                as.register_participant,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
@@ -347,7 +350,7 @@ class _ParticipantsWidget extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'Register Participant',
+                              as.register_participant,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 24,
@@ -359,7 +362,7 @@ class _ParticipantsWidget extends StatelessWidget {
                                   FocusScope.of(context).unfocus(),
                               controller: travelState.participantNameController,
                               decoration: InputDecoration(
-                                hintText: 'Name',
+                                hintText: as.name,
                                 prefixIcon: const Icon(Icons.person),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
@@ -373,7 +376,7 @@ class _ParticipantsWidget extends StatelessWidget {
                               controller: travelState.participantAgeController,
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
-                                hintText: 'Age',
+                                hintText: as.age,
                                 prefixIcon: const Icon(Icons.timer),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
@@ -388,7 +391,7 @@ class _ParticipantsWidget extends StatelessWidget {
                               children: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(context),
-                                  child: Text('Cancel'),
+                                  child: Text(as.cancel),
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
@@ -396,12 +399,14 @@ class _ParticipantsWidget extends StatelessWidget {
                                     Navigator.pop(context);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text('Participant registered'),
+                                        content: Text(
+                                          as.participant_registered,
+                                        ),
                                       ),
                                     );
                                   },
 
-                                  child: Text('Register'),
+                                  child: Text(as.register),
                                 ),
                               ],
                             ),
@@ -431,7 +436,7 @@ class _ListParticipants extends StatelessWidget {
     final as = AppLocalizations.of(context)!;
 
     if (travelState.numParticipants <= 0) {
-      return Text('No participants in the list');
+      return Text(as.no_participants_on_the_list);
     }
 
     return ListView.builder(
@@ -448,8 +453,8 @@ class _ListParticipants extends StatelessWidget {
               CircleAvatar(child: Text(participant.name[0].toUpperCase())),
               const Padding(padding: EdgeInsets.all(8)),
               Text(
-                'Name: ${participant.name}\n'
-                'Age: ${participant.age}',
+                '${as.name}: ${participant.name}\n'
+                '${as.age}: ${participant.age}',
               ),
 
               const Spacer(),
@@ -461,9 +466,9 @@ class _ListParticipants extends StatelessWidget {
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                        title: const Text('Remove participant'),
+                        title: Text(as.remove),
                         content: Text(
-                          'Would you really want to remove participant '
+                          '${as.remove_participant_confirmation} '
                           '${participant.name}?',
                         ),
 
@@ -471,11 +476,11 @@ class _ListParticipants extends StatelessWidget {
 
                         actions: [
                           TextButton(
-                            child: const Text('Cancel'),
+                            child: Text(as.cancel),
                             onPressed: () => Navigator.pop(context, false),
                           ),
                           TextButton(
-                            child: const Text('Remove'),
+                            child: Text(as.remove),
                             onPressed: () => Navigator.pop(context, true),
                           ),
                         ],
@@ -486,7 +491,7 @@ class _ListParticipants extends StatelessWidget {
                   if (result) {
                     travelState.removeParticipant(index);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Participant removed')),
+                      SnackBar(content: Text(as.participant_removed)),
                     );
                   }
                 },

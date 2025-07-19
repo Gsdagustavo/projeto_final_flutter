@@ -39,15 +39,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get recovery_code_sent_to => 'Código de recuperação enviado para';
 
   @override
-  String get warning => 'Aviso';
-
-  @override
-  String get yes => 'Sim';
-
-  @override
-  String get no => 'Não';
-
-  @override
   String get account => 'Conta';
 
   @override
@@ -121,4 +112,52 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get err_invalid_date_snackbar => 'Você deve selecionar uma data de início primeiro!';
+
+  @override
+  String get participants => 'Participantes';
+
+  @override
+  String get no_participants_on_the_list => 'Nenhum participante na lista';
+
+  @override
+  String get register_participant => 'Registrar participante';
+
+  @override
+  String get name => 'Nome';
+
+  @override
+  String get age => 'Idade';
+
+  @override
+  String get participant_registered => 'Participante registrado';
+
+  @override
+  String get remove_participant_confirmation => 'Você realmente deseja remover o participante';
+
+  @override
+  String get remove_participant => 'Remover participante';
+
+  @override
+  String get participant_removed => 'Participante removido';
+
+  @override
+  String get travel_registered_successfully => 'Viagem registrada com sucesso';
+
+  @override
+  String get yes => 'Sim';
+
+  @override
+  String get no => 'Não';
+
+  @override
+  String get warning => 'Aviso';
+
+  @override
+  String get cancel => 'Cancelar';
+
+  @override
+  String get remove => 'Remover';
+
+  @override
+  String get unknown_error => 'Erro desconhecido';
 }

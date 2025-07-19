@@ -157,24 +157,6 @@ abstract class AppLocalizations {
   /// **'Recovery code sent to'**
   String get recovery_code_sent_to;
 
-  /// No description provided for @warning.
-  ///
-  /// In en, this message translates to:
-  /// **'Warning'**
-  String get warning;
-
-  /// No description provided for @yes.
-  ///
-  /// In en, this message translates to:
-  /// **'Yes'**
-  String get yes;
-
-  /// No description provided for @no.
-  ///
-  /// In en, this message translates to:
-  /// **'No'**
-  String get no;
-
   /// No description provided for @account.
   ///
   /// In en, this message translates to:
@@ -324,6 +306,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You must select a start date first!'**
   String get err_invalid_date_snackbar;
+
+  /// No description provided for @participants.
+  ///
+  /// In en, this message translates to:
+  /// **'Participants'**
+  String get participants;
+
+  /// No description provided for @no_participants_on_the_list.
+  ///
+  /// In en, this message translates to:
+  /// **'No participants on the list'**
+  String get no_participants_on_the_list;
+
+  /// No description provided for @register_participant.
+  ///
+  /// In en, this message translates to:
+  /// **'Register participant'**
+  String get register_participant;
+
+  /// No description provided for @name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get name;
+
+  /// No description provided for @age.
+  ///
+  /// In en, this message translates to:
+  /// **'Age'**
+  String get age;
+
+  /// No description provided for @participant_registered.
+  ///
+  /// In en, this message translates to:
+  /// **'Participant registered'**
+  String get participant_registered;
+
+  /// No description provided for @remove_participant_confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Would you really want to remove the participant'**
+  String get remove_participant_confirmation;
+
+  /// No description provided for @remove_participant.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove participant'**
+  String get remove_participant;
+
+  /// No description provided for @participant_removed.
+  ///
+  /// In en, this message translates to:
+  /// **'Participant removed'**
+  String get participant_removed;
+
+  /// No description provided for @travel_registered_successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel registered successfully'**
+  String get travel_registered_successfully;
+
+  /// No description provided for @yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
+
+  /// No description provided for @warning.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning'**
+  String get warning;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @remove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get remove;
+
+  /// No description provided for @unknown_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown error'**
+  String get unknown_error;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

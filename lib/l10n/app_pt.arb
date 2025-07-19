@@ -18,9 +18,6 @@
   "account_created_successfully": "Conta criada com sucesso!",
   "register_login": "Deseja fazer login?",
   "recovery_code_sent_to": "Código de recuperação enviado para",
-  "warning": "Aviso",
-  "yes": "Sim",
-  "no": "Não",
 
   "@@settings_page": {},
   "account": "Conta",
@@ -55,5 +52,24 @@
   "select_dates_label": "Selecionar datas",
   "travel_start_date_label": "Data de Início da Viagem",
   "travel_end_date_label": "Data de Término da Viagem",
-  "err_invalid_date_snackbar": "Você deve selecionar uma data de início primeiro!"
+  "err_invalid_date_snackbar": "Você deve selecionar uma data de início primeiro!",
+  "participants": "Participantes",
+  "no_participants_on_the_list": "Nenhum participante na lista",
+  "register_participant": "Registrar participante",
+  "name": "Nome",
+  "age": "Idade",
+  "participant_registered": "Participante registrado",
+  "remove_participant_confirmation": "Você realmente deseja remover o participante",
+  "remove_participant": "Remover participante",
+  "participant_removed": "Participante removido",
+  "travel_registered_successfully": "Viagem registrada com sucesso",
+
+  "@@util": {},
+  "yes": "Sim",
+  "no": "Não",
+  "warning": "Aviso",
+  "cancel": "Cancelar",
+  "remove": "Remover",
+
+  "unknown_error": "Erro desconhecido"
 }
