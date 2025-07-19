@@ -163,6 +163,8 @@ class _LanguagesRadioState extends State<LanguagesRadio> {
   final locales = AppLocalizations.supportedLocales;
   late String selectedOption;
 
+  bool _isLoading = true;
+
   @override
   void initState() {
     super.initState();
@@ -172,39 +174,50 @@ class _LanguagesRadioState extends State<LanguagesRadio> {
           context,
           listen: false,
         ).languageCode;
+
+        _isLoading = false;
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      direction: Axis.horizontal,
-      children: [
-        for (final locale in locales)
-          ListTile(
-            title: Text(locale.toString().toUpperCase()),
-            leading: Radio<String>(
-              value: locale.toString(),
-              groupValue: selectedOption,
-              onChanged: (value) async {
-                setState(() {
-                  debugPrint('Value: $value');
-                  selectedOption = value.toString();
-                });
+    return Builder(
+      builder: (context) {
+        if (_isLoading) {
+          return Center(child: CircularProgressIndicator());
+        }
 
-                final languageCodeProvider = Provider.of<LanguageCodeProvider>(
-                  context,
-                  listen: false,
-                );
+        return Wrap(
+          direction: Axis.horizontal,
+          children: [
+            for (final locale in locales)
+              ListTile(
+                title: Text(locale.toString().toUpperCase()),
+                leading: Radio<String>(
+                  value: locale.toString(),
+                  groupValue: selectedOption,
+                  onChanged: (value) async {
+                    setState(() {
+                      debugPrint('Value: $value');
+                      selectedOption = value.toString();
+                    });
 
-                await languageCodeProvider.changeLanguageCode(
-                  languageCode: locale.toString(),
-                );
-              },
-            ),
-          ),
-      ],
+                    final languageCodeProvider =
+                        Provider.of<LanguageCodeProvider>(
+                          context,
+                          listen: false,
+                        );
+
+                    await languageCodeProvider.changeLanguageCode(
+                      languageCode: locale.toString(),
+                    );
+                  },
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }
