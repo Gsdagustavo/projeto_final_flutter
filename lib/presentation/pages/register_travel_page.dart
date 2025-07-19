@@ -29,7 +29,7 @@ class RegisterTravelPage extends StatelessWidget {
               Widget content;
 
               if (state.isLoading) {
-                content = SizedBox(
+                content = const SizedBox(
                   width: 48,
                   height: 48,
                   child: CircularProgressIndicator(),
@@ -44,11 +44,11 @@ class RegisterTravelPage extends StatelessWidget {
                 );
                 icon = Icon(Icons.error, color: Colors.red);
               } else {
-                content = Text(
+                content = const Text(
                   'Travel registered successfully!',
                   textAlign: TextAlign.center,
                 );
-                icon = Icon(Icons.check_circle, color: Colors.green);
+                icon = const Icon(Icons.check_circle, color: Colors.green);
               }
 
               return AlertDialog(
@@ -77,20 +77,20 @@ class RegisterTravelPage extends StatelessWidget {
               /// Travel title text field
               _TravelTitleTextField(),
 
-              Padding(padding: EdgeInsets.all(16)),
+              const Padding(padding: EdgeInsets.all(16)),
 
               /// Transport types dropdown button
               _TransportTypesDropdownButton(),
 
-              Padding(padding: EdgeInsets.all(16)),
+              const Padding(padding: EdgeInsets.all(16)),
 
               _DateTextButtons(),
 
-              Padding(padding: EdgeInsets.all(16)),
+              const Padding(padding: EdgeInsets.all(16)),
 
               _ParticipantsWidget(),
 
-              Padding(padding: EdgeInsets.all(10)),
+              const Padding(padding: EdgeInsets.all(10)),
             ],
           ),
         ),
@@ -102,7 +102,7 @@ class RegisterTravelPage extends StatelessWidget {
         children: [
           FloatingActionButton(
             tooltip: 'Register travel',
-            child: Icon(Icons.app_registration),
+            child: const Icon(Icons.app_registration),
             onPressed: () async {
               final registerTravelState = Provider.of<RegisterTravelProvider>(
                 context,
@@ -111,17 +111,17 @@ class RegisterTravelPage extends StatelessWidget {
 
               _showCustomDialog(context);
               await registerTravelState.registerTravel();
-              await Future.delayed(Duration(seconds: 2));
+              await Future.delayed(const Duration(seconds: 2));
 
               Navigator.pop(context);
             },
           ),
 
-          Padding(padding: EdgeInsets.all(16)),
+          const Padding(padding: EdgeInsets.all(16)),
 
           FloatingActionButton(
             tooltip: 'List travels',
-            child: Icon(Icons.get_app),
+            child: const Icon(Icons.get_app),
             onPressed: () async {
               final registerTravelState = Provider.of<RegisterTravelProvider>(
                 context,
@@ -141,20 +141,21 @@ class _TravelTitleTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final travelState = Provider.of<RegisterTravelProvider>(context);
+    final as = AppLocalizations.of(context)!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          AppLocalizations.of(context)!.travel_title_label,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          as.travel_title_label,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
-        Padding(padding: EdgeInsets.all(12)),
+        const Padding(padding: EdgeInsets.all(12)),
         TextField(
           controller: travelState.travelTitleController,
           onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
           decoration: InputDecoration(
-            label: Text(AppLocalizations.of(context)!.travel_title_label),
+            label: Text(as.travel_title_label),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
@@ -167,15 +168,16 @@ class _TransportTypesDropdownButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final travelState = Provider.of<RegisterTravelProvider>(context);
+    final as = AppLocalizations.of(context)!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           AppLocalizations.of(context)!.transport_type_label,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
-        Padding(padding: EdgeInsets.all(12)),
+        const Padding(padding: EdgeInsets.all(12)),
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
@@ -184,7 +186,7 @@ class _TransportTypesDropdownButton extends StatelessWidget {
 
           child: DropdownButton<TransportType>(
             value: travelState.selectedTransportType,
-            icon: Icon(Icons.arrow_downward),
+            icon: const Icon(Icons.arrow_downward),
             underline: Container(color: Colors.transparent),
             borderRadius: BorderRadius.circular(12),
             isExpanded: true,
@@ -212,33 +214,6 @@ class _TransportTypesDropdownButton extends StatelessWidget {
   }
 }
 
-// class _ExperiencesCheckboxes extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     final travelState = Provider.of<RegisterTravelProvider>(context);
-//
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//
-//       children: [
-//         Text(
-//           AppLocalizations.of(context)!.experiences_label,
-//           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-//         ),
-//
-//         Padding(padding: EdgeInsets.all(12)),
-//
-//         for (final item in Experience.values)
-//           CheckboxListTile(
-//             value: travelState.checkIfExperienceIsSelected(item),
-//             onChanged: (_) => travelState.toggleExperience(item),
-//             title: Text(item.getIntlExperience(context)),
-//           ),
-//       ],
-//     );
-//   }
-// }
-
 String _formatDate(DateTime date) {
   var stringDate = '';
   stringDate += '${date.day}/';
@@ -251,6 +226,7 @@ class _DateTextButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final travelState = Provider.of<RegisterTravelProvider>(context);
+    final as = AppLocalizations.of(context)!;
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -258,10 +234,10 @@ class _DateTextButtons extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppLocalizations.of(context)!.select_dates_label,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            as.select_dates_label,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
           ),
-          Padding(padding: EdgeInsets.all(10)),
+          const Padding(padding: EdgeInsets.all(10)),
           Row(
             children: [
               Column(
@@ -277,13 +253,11 @@ class _DateTextButtons extends StatelessWidget {
                         context: context,
                         initialDate: travelState.selectedStartDate ?? now,
                         firstDate: now,
-                        lastDate: now.add(Duration(days: 365)),
+                        lastDate: now.add(const Duration(days: 365)),
                       );
                       travelState.selectStartDate(date);
                     },
-                    child: Text(
-                      AppLocalizations.of(context)!.travel_start_date_label,
-                    ),
+                    child: Text(as.travel_start_date_label),
                   ),
 
                   if (travelState.selectedStartDate != null)
@@ -296,9 +270,7 @@ class _DateTextButtons extends StatelessWidget {
                   TextButton(
                     onPressed: () async {
                       if (!travelState.isStartDateSelected) {
-                        final message = AppLocalizations.of(
-                          context,
-                        )!.err_invalid_date_snackbar;
+                        final message = as.err_invalid_date_snackbar;
 
                         ScaffoldMessenger.of(
                           context,
@@ -306,6 +278,7 @@ class _DateTextButtons extends StatelessWidget {
 
                         return;
                       }
+
                       var date = await showDatePicker(
                         context: context,
                         initialDate:
@@ -313,14 +286,12 @@ class _DateTextButtons extends StatelessWidget {
                             travelState.selectedStartDate,
                         firstDate: travelState.selectedStartDate!,
                         lastDate: travelState.selectedStartDate!.add(
-                          Duration(days: 365),
+                          const Duration(days: 365),
                         ),
                       );
                       travelState.selectEndDate(date);
                     },
-                    child: Text(
-                      AppLocalizations.of(context)!.travel_end_date_label,
-                    ),
+                    child: Text(as.travel_end_date_label),
                   ),
 
                   if (travelState.selectedEndDate != null)
@@ -350,12 +321,15 @@ class _ParticipantsWidget extends StatelessWidget {
           children: [
             Text(
               'Participants',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
             ),
             TextButton(
               child: Text(
                 'Register Participant',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
               ),
               onPressed: () {
                 showModalBottomSheet(
@@ -374,25 +348,25 @@ class _ParticipantsWidget extends StatelessWidget {
                           children: [
                             Text(
                               'Register Participant',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 24,
                               ),
                             ),
-                            Padding(padding: EdgeInsets.all(16)),
+                            const Padding(padding: EdgeInsets.all(16)),
                             TextField(
                               onTapOutside: (_) =>
                                   FocusScope.of(context).unfocus(),
                               controller: travelState.participantNameController,
                               decoration: InputDecoration(
                                 hintText: 'Name',
-                                prefixIcon: Icon(Icons.person),
+                                prefixIcon: const Icon(Icons.person),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
                             ),
-                            Padding(padding: EdgeInsets.all(12)),
+                            const Padding(padding: EdgeInsets.all(12)),
                             TextField(
                               onTapOutside: (_) =>
                                   FocusScope.of(context).unfocus(),
@@ -400,13 +374,14 @@ class _ParticipantsWidget extends StatelessWidget {
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 hintText: 'Age',
-                                prefixIcon: Icon(Icons.timer),
+                                prefixIcon: const Icon(Icons.timer),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
                             ),
-                            Padding(padding: EdgeInsets.all(8)),
+
+                            const Padding(padding: EdgeInsets.all(8)),
 
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -441,7 +416,8 @@ class _ParticipantsWidget extends StatelessWidget {
           ],
         ),
 
-        Padding(padding: EdgeInsets.all(8)),
+        const Padding(padding: EdgeInsets.all(8)),
+
         _ListParticipants(),
       ],
     );
@@ -452,6 +428,7 @@ class _ListParticipants extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final travelState = Provider.of<RegisterTravelProvider>(context);
+    final as = AppLocalizations.of(context)!;
 
     if (travelState.numParticipants <= 0) {
       return Text('No participants in the list');
@@ -469,13 +446,13 @@ class _ListParticipants extends StatelessWidget {
           child: Row(
             children: [
               CircleAvatar(child: Text(participant.name[0].toUpperCase())),
-              Padding(padding: EdgeInsets.all(8)),
+              const Padding(padding: EdgeInsets.all(8)),
               Text(
                 'Name: ${participant.name}\n'
                 'Age: ${participant.age}',
               ),
 
-              Spacer(),
+              const Spacer(),
 
               IconButton(
                 icon: Icon(Icons.delete),
@@ -484,21 +461,21 @@ class _ListParticipants extends StatelessWidget {
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                        title: Text('Remove participant'),
+                        title: const Text('Remove participant'),
                         content: Text(
                           'Would you really want to remove participant '
                           '${participant.name}?',
                         ),
 
-                        icon: Icon(Icons.warning, color: Colors.red),
+                        icon: const Icon(Icons.warning, color: Colors.red),
 
                         actions: [
                           TextButton(
-                            child: Text('Cancel'),
+                            child: const Text('Cancel'),
                             onPressed: () => Navigator.pop(context, false),
                           ),
                           TextButton(
-                            child: Text('Remove'),
+                            child: const Text('Remove'),
                             onPressed: () => Navigator.pop(context, true),
                           ),
                         ],
@@ -509,7 +486,7 @@ class _ListParticipants extends StatelessWidget {
                   if (result) {
                     travelState.removeParticipant(index);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Participant removed')),
+                      const SnackBar(content: Text('Participant removed')),
                     );
                   }
                 },

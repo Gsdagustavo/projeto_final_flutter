@@ -121,7 +121,7 @@ class _RegisterPageState extends State<RegisterPage> {
       context: context,
       barrierDismissible: false,
       builder: (_) => AlertDialog(
-        title: Text('Login'),
+        title: const Text('Login'),
         content: Text(as.register_login),
         actionsAlignment: MainAxisAlignment.spaceBetween,
         actions: [
@@ -138,7 +138,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Navigator.pushReplacementNamed(context, HomePage.routeName),
               );
             },
-            child: Text(AppLocalizations.of(context)!.yes),
+            child: Text(as.yes),
           ),
         ],
       ),
@@ -165,10 +165,13 @@ class _RegisterPageState extends State<RegisterPage> {
               children: [
                 Text(
                   as.register,
-                  style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    fontSize: 48,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
 
-                Padding(padding: EdgeInsets.all(86)),
+                const Padding(padding: EdgeInsets.all(86)),
 
                 Form(
                   key: _formKey,
@@ -183,11 +186,11 @@ class _RegisterPageState extends State<RegisterPage> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          prefixIcon: Icon(Icons.email),
+                          prefixIcon: const Icon(Icons.email),
                         ),
                       ),
 
-                      Padding(padding: EdgeInsets.all(18)),
+                      const Padding(padding: EdgeInsets.all(18)),
 
                       TextFormField(
                         validator: _passwordValidator,
@@ -198,7 +201,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          prefixIcon: Icon(Icons.lock),
+                          prefixIcon: const Icon(Icons.lock),
                           suffixIcon: IconButton(
                             onPressed: _togglePasswordVisibility,
                             icon: Icon(
@@ -215,7 +218,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
 
-                Padding(padding: EdgeInsets.all(16)),
+                const Padding(padding: EdgeInsets.all(16)),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -224,7 +227,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       child: ElevatedButton(
                         onPressed: _register,
                         style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),

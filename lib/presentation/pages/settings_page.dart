@@ -59,7 +59,7 @@ class SettingsPage extends StatelessWidget {
                     radius: 50,
                     child: Text(
                       emailInitial,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 50,
                       ),
@@ -67,11 +67,14 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
 
-                Padding(padding: EdgeInsets.all(12)),
+                const Padding(padding: EdgeInsets.all(12)),
 
                 Text(
                   as.account,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
                 ),
 
                 Padding(padding: EdgeInsets.all(6)),
@@ -83,15 +86,15 @@ class SettingsPage extends StatelessWidget {
                     children: [
                       Text(
                         'Email: ${user?.email ?? 'N/A'}',
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
                       Text(
                         '${as.account_creation}: $formattedCreationTime',
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
                       Text(
                         '${as.last_sign_in}: $formattedSignInTime',
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
 
                       Padding(padding: EdgeInsets.all(6)),
@@ -124,8 +127,15 @@ class SettingsPage extends StatelessWidget {
                         child: Row(
                           spacing: 10,
                           children: [
-                            Text(as.exit, style: TextStyle(color: Colors.red)),
-                            Icon(Icons.logout, color: Colors.red, size: 18),
+                            Text(
+                              as.exit,
+                              style: const TextStyle(color: Colors.red),
+                            ),
+                            const Icon(
+                              Icons.logout,
+                              color: Colors.red,
+                              size: 18,
+                            ),
                           ],
                         ),
                       ),
@@ -133,16 +143,19 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
 
-                Padding(padding: EdgeInsets.all(12)),
+                const Padding(padding: EdgeInsets.all(12)),
 
                 Text(
                   as.language,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
                 ),
 
-                Padding(padding: EdgeInsets.all(6)),
+                const Padding(padding: EdgeInsets.all(6)),
 
-                _LanguagesRadio(),
+                const _LanguagesRadio(),
               ],
             ),
           );
@@ -190,7 +203,7 @@ class _LanguagesRadioState extends State<_LanguagesRadio> {
     return Builder(
       builder: (context) {
         if (_isLoading) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
 
         return Wrap(

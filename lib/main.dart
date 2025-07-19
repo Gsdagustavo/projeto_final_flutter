@@ -8,6 +8,7 @@ import 'presentation/providers/language_code_provider.dart';
 import 'presentation/providers/login_provider.dart';
 import 'presentation/providers/register_travel_provider.dart';
 import 'presentation/providers/theme_provider.dart';
+import 'presentation/providers/travel_list_provider.dart';
 import 'presentation/widgets/my_app.dart';
 
 Future<void> main() async {
@@ -21,6 +22,9 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(
+          create: (context) => TravelListProvider(travelUseCases),
+        ),
         ChangeNotifierProvider(
           create: (context) => RegisterTravelProvider(travelUseCases),
         ),

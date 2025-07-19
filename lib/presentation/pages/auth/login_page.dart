@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
         showDialog(
           context: context,
           builder: (_) => AlertDialog(
-            title: Icon(Icons.warning, color: Colors.red),
+            title: const Icon(Icons.warning, color: Colors.red),
             content: Text(loginProvider.errorMsg),
           ),
         ),
@@ -110,12 +110,12 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Login',
                   style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
                 ),
 
-                Padding(padding: EdgeInsets.all(86)),
+                const Padding(padding: EdgeInsets.all(86)),
 
                 Form(
                   key: _formKey,
@@ -132,11 +132,11 @@ class _LoginPageState extends State<LoginPage> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          prefixIcon: Icon(Icons.email),
+                          prefixIcon: const Icon(Icons.email),
                         ),
                       ),
 
-                      Padding(padding: EdgeInsets.all(18)),
+                      const Padding(padding: EdgeInsets.all(18)),
 
                       /// Password text field
                       TextFormField(
@@ -148,7 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          prefixIcon: Icon(Icons.lock),
+                          prefixIcon: const Icon(Icons.lock),
                           suffixIcon: IconButton(
                             onPressed: _togglePasswordVisibility,
                             icon: Icon(
@@ -165,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
 
-                Padding(padding: EdgeInsets.all(16)),
+                const Padding(padding: EdgeInsets.all(16)),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -174,16 +174,16 @@ class _LoginPageState extends State<LoginPage> {
                       child: ElevatedButton(
                         onPressed: _login,
                         style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
                         ),
-                        child: Text('Login'),
+                        child: const Text('Login'),
                       ),
                     ),
 
-                    Padding(padding: EdgeInsetsGeometry.all(16)),
+                    const Padding(padding: EdgeInsetsGeometry.all(16)),
 
                     /// 'Forgot your password?' button
                     TextButton(

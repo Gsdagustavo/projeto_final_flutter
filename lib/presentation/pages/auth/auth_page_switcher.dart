@@ -37,7 +37,7 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
 
     _pageController.animateToPage(
       _selectedIndex,
-      duration: Duration(milliseconds: _animationDuration),
+      duration: const Duration(milliseconds: _animationDuration),
       curve: Curves.easeInOut,
     );
   }
@@ -79,10 +79,10 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
         children: [
           Text(text, style: textStyle),
 
-          Padding(padding: EdgeInsets.all(4)),
+          const Padding(padding: EdgeInsets.all(4)),
           AnimatedContainer(
             curve: Curves.easeInOut,
-            duration: Duration(milliseconds: _animationDuration),
+            duration: const Duration(milliseconds: _animationDuration),
             height: 2,
             width: isSelected ? 75 : 16,
             color: isDarkMode
@@ -99,9 +99,9 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
     return Scaffold(
       body: Column(
         children: [
-          Padding(padding: EdgeInsetsGeometry.all(30)),
+          Padding(padding: const EdgeInsets.all(30)),
           _buildSwitcherBar(),
-          Padding(padding: EdgeInsets.all(22)),
+          Padding(padding: const EdgeInsets.all(22)),
           Expanded(
             child: PageView(
               controller: _pageController,

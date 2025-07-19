@@ -40,8 +40,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
     return Scaffold(
       appBar: AppBar(
-        actionsPadding: EdgeInsets.only(right: 22),
-        actions: [ThemeToggleButton()],
+        actionsPadding: const EdgeInsets.only(right: 22),
+        actions: [const ThemeToggleButton()],
       ),
 
       body: SafeArea(
@@ -53,14 +53,17 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               children: [
                 Text(
                   as.forgot_your_password,
-                  style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    fontSize: 48,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
 
-                Padding(padding: EdgeInsets.all(70)),
+                const Padding(padding: EdgeInsets.all(70)),
 
                 Text(as.insert_your_email),
 
-                Padding(padding: EdgeInsets.all(12)),
+                const Padding(padding: EdgeInsets.all(12)),
 
                 /// Form
                 Form(
@@ -78,12 +81,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      prefixIcon: Icon(Icons.email),
+                      prefixIcon: const Icon(Icons.email),
                     ),
                   ),
                 ),
 
-                Padding(padding: EdgeInsets.all(12)),
+                const Padding(padding: EdgeInsets.all(12)),
 
                 ElevatedButton(
                   onPressed: () async {
@@ -102,7 +105,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         showDialog(
                           context: context,
                           builder: (context) => CustomDialog(
-                            title: AppLocalizations.of(context)!.warning,
+                            title: as.warning,
                             content: Text(loginProvider.errorMsg),
                             isError: true,
                           ),
