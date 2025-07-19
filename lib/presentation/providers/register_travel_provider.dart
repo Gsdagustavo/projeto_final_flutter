@@ -177,6 +177,11 @@ class RegisterTravelProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void removeParticipant(int index) {
+    _participants.removeAt(index);
+    notifyListeners();
+  }
+
   /// Returns the [TextEditingController] for the travel title
   TextEditingController get travelTitleController => _travelTitleController;
 

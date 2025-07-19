@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../domain/entities/enums.dart';
-import '../../domain/entities/participant.dart';
 import '../../l10n/app_localizations.dart';
 import '../providers/register_travel_provider.dart';
 import '../util/enums_extensions.dart';
@@ -463,33 +462,62 @@ class _ListParticipants extends StatelessWidget {
       shrinkWrap: true,
       itemCount: travelState.numParticipants,
       itemBuilder: (context, index) {
+        final participant = travelState.participants[index];
+
         return Padding(
           padding: const EdgeInsets.only(bottom: 12),
-          child: _ParticipantListItem(
-            participant: travelState.participants[index],
+          child: Row(
+            children: [
+              CircleAvatar(child: Text(participant.name[0].toUpperCase())),
+              Padding(padding: EdgeInsets.all(8)),
+              Text(
+                'Name: ${participant.name}\n'
+                'Age: ${participant.age}',
+              ),
+
+              Spacer(),
+
+              IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () async {
+                  final bool result = await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('Remove participant'),
+                        content: Text(
+                          'Would you really want to remove participant '
+                          '${participant.name}?',
+                        ),
+
+                        icon: Icon(Icons.warning, color: Colors.red),
+
+                        actions: [
+                          TextButton(
+                            child: Text('Cancel'),
+                            onPressed: () => Navigator.pop(context, false),
+                          ),
+                          TextButton(
+                            child: Text('Remove'),
+                            onPressed: () => Navigator.pop(context, true),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+
+                  if (result) {
+                    travelState.removeParticipant(index);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Participant removed')),
+                    );
+                  }
+                },
+              ),
+            ],
           ),
         );
       },
-    );
-  }
-}
-
-class _ParticipantListItem extends StatelessWidget {
-  const _ParticipantListItem({required this.participant});
-
-  final Participant participant;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CircleAvatar(
-          // child: Image.network('https://i.redd.it/oqhs74f166511.png'),
-        ),
-        Padding(padding: EdgeInsets.all(8)),
-        Text('Name: ${participant.name}\nAge: ${participant.age}'),
-      ],
     );
   }
 }
