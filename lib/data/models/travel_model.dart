@@ -1,7 +1,8 @@
 import '../../domain/entities/enums.dart';
-import '../../domain/entities/participant.dart';
-import '../../domain/entities/travel_stop.dart';
+import '../../domain/entities/travel.dart';
 import '../local/database/tables/travel_table.dart';
+import 'participant_model.dart';
+import 'travel_stop_model.dart';
 
 class TravelModel {
   int? travelId;
@@ -9,8 +10,8 @@ class TravelModel {
   final DateTime? startDate;
   final DateTime? endDate;
   final TransportType transportType;
-  final List<Participant> participants;
-  final List<TravelStop> stops;
+  final List<ParticipantModel> participants;
+  final List<TravelStopModel> stops;
 
   TravelModel({
     this.travelId,
@@ -25,8 +26,8 @@ class TravelModel {
   /// Factory to create a model from a Map (e.g. from database)
   factory TravelModel.fromMap(
     Map<String, dynamic> map, {
-    required List<Participant> participants,
-    required List<TravelStop> stops,
+    required List<ParticipantModel> participants,
+    required List<TravelStopModel> stops,
   }) {
     return TravelModel(
       travelId: map[TravelTable.travelId],
@@ -57,5 +58,36 @@ class TravelModel {
     }
 
     return map;
+  }
+
+  factory TravelModel.fromEntity(Travel travel) {
+    return TravelModel(
+      travelId: travel.travelId,
+      travelTitle: travel.travelTitle,
+      startDate: travel.startDate,
+      endDate: travel.endDate,
+      transportType: travel.transportType,
+      participants: travel.participants
+          .map((e) => ParticipantModel.fromEntity(e))
+          .toList(),
+      stops: travel.stops.map((e) => TravelStopModel.fromEntity(e)).toList(),
+    );
+  }
+
+  Travel toEntity() {
+    return Travel(
+      travelId: travelId,
+      travelTitle: travelTitle,
+      startDate: startDate,
+      endDate: endDate,
+      transportType: transportType,
+      participants: participants.map((p) => p.toEntity()).toList(),
+      stops: stops.map((s) => s.toEntity()).toList(),
+    );
+  }
+
+  @override
+  String toString() {
+    return 'TravelModel{travelId: $travelId, travelTitle: $travelTitle, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: $stops}';
   }
 }

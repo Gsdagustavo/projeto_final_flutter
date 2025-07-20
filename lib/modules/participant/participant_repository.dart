@@ -4,6 +4,7 @@ import 'package:sqflite/sqflite.dart';
 import '../../data/local/database/database.dart';
 import '../../data/local/database/tables/participants_table.dart';
 import '../../data/local/database/tables/travel_participants_table.dart';
+import '../../data/models/participant_model.dart';
 import '../../domain/entities/participant.dart';
 
 /// This interface defines all necessary methods to register participants,
@@ -13,7 +14,7 @@ abstract class ParticipantRepository {
   ///
   /// [participant]: The participant to be added
   /// [travelId]: The Travel ID which the participant will be added
-  Future<void> registerParticipant(Participant participant, int travelId);
+  Future<void> registerParticipant(Participant participantModel, int travelId);
 
   /// Returns all participants from the database
   ///
@@ -44,11 +45,17 @@ class ParticipantRepositoryImpl implements ParticipantRepository {
   ) async {
     final db = await _db;
 
-    await db.insert(ParticipantsTable.tableName, participant.toMap());
+    final participantModel = ParticipantModel(
+      name: participant.name,
+      age: participant.age,
+      profilePicturePath: participant.profilePicturePath,
+    );
+
+    await db.insert(ParticipantsTable.tableName, participantModel.toMap());
 
     await db.insert(TravelParticipantsTable.tableName, {
       TravelParticipantsTable.travelId: travelId,
-      TravelParticipantsTable.participantId: participant.id,
+      TravelParticipantsTable.participantId: participantModel.id,
     });
   }
 
@@ -61,7 +68,13 @@ class ParticipantRepositoryImpl implements ParticipantRepository {
       orderBy: ParticipantsTable.name,
     );
 
-    return participants.map(Participant.fromMap).toList();
+    return participants.map((e) {
+      final participantModel = ParticipantModel.fromMap(e);
+      return Participant(
+        name: participantModel.name,
+        age: participantModel.age,
+      );
+    }).toList();
   }
 
   @override
@@ -77,10 +90,18 @@ class ParticipantRepositoryImpl implements ParticipantRepository {
     );
 
     final participantsList = travelParticipants
-        .map(Participant.fromMap)
+        .map(ParticipantModel.fromMap)
         .toList();
     debugPrint(participantsList.join('\n'));
 
-    return participantsList;
+    return participantsList
+        .map(
+          (e) => Participant(
+            name: e.name,
+            age: e.age,
+            profilePicturePath: e.profilePicturePath,
+          ),
+        )
+        .toList();
   }
 }

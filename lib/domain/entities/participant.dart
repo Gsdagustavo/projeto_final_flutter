@@ -1,5 +1,3 @@
-import '../../data/local/database/tables/participants_table.dart';
-
 /// Represents a  [Participant] of a [Travel]
 class Participant {
   /// Participant ID
@@ -20,27 +18,8 @@ class Participant {
     required this.age,
     this.profilePicturePath,
     this.id,
+    tra,
   });
-
-  /// Returns a Participant from the given Map
-  factory Participant.fromMap(Map<String, dynamic> map) {
-    return Participant(
-      id: map[ParticipantsTable.participantId],
-      name: map[ParticipantsTable.name],
-      age: map[ParticipantsTable.age],
-      profilePicturePath: map[ParticipantsTable.profilePicturePath],
-    );
-  }
-
-  /// Returns a Map with Participant data
-  Map<String, dynamic> toMap() {
-    return {
-      ParticipantsTable.participantId: id,
-      ParticipantsTable.name: name,
-      ParticipantsTable.age: age,
-      ParticipantsTable.profilePicturePath: profilePicturePath,
-    };
-  }
 
   @override
   String toString() {

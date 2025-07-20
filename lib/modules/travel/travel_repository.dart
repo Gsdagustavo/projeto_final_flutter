@@ -8,11 +8,11 @@ import '../../data/local/database/tables/travel_participants_table.dart';
 import '../../data/local/database/tables/travel_stop_experiences_table.dart';
 import '../../data/local/database/tables/travel_stop_table.dart';
 import '../../data/local/database/tables/travel_table.dart';
+import '../../data/models/participant_model.dart';
 import '../../data/models/travel_model.dart';
+import '../../data/models/travel_stop_model.dart';
 import '../../domain/entities/enums.dart';
-import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';
-import '../../domain/entities/travel_stop.dart';
 
 /// This interface defines all necessary methods to register a [Travel]
 /// and get all [Travels]
@@ -43,9 +43,13 @@ class TravelRepositoryImpl implements TravelRepository {
       startDate: travel.startDate,
       endDate: travel.endDate,
       transportType: travel.transportType,
-      participants: travel.participants,
-      stops: travel.stops,
+      participants: travel.participants
+          .map((p) => ParticipantModel.fromEntity(p))
+          .toList(),
+      stops: travel.stops.map((e) => TravelStopModel.fromEntity(e)).toList(),
     );
+
+    debugPrint('Inserting Travel ${travelModel.toString()}');
 
     await db.transaction((txn) async {
       final travelId = await txn.insert(
@@ -94,7 +98,7 @@ class TravelRepositoryImpl implements TravelRepository {
   Future<List<Travel>> getAllTravels() async {
     final db = await _db;
 
-    final travels = <Travel>[];
+    final travels = <TravelModel>[];
 
     await db.transaction((txn) async {
       final travelsResult = await txn.query(TravelTable.tableName);
@@ -103,7 +107,7 @@ class TravelRepositoryImpl implements TravelRepository {
         final travelId = travelResult[TravelTable.travelId] as int;
 
         /// Participants
-        final participants = <Participant>[];
+        final participants = <ParticipantModel>[];
 
         final travelParticipants = await txn.query(
           TravelParticipantsTable.tableName,
@@ -121,12 +125,12 @@ class TravelRepositoryImpl implements TravelRepository {
           );
 
           if (participantData.isNotEmpty) {
-            participants.add(Participant.fromMap(participantData.first));
+            participants.add(ParticipantModel.fromMap(participantData.first));
           }
         }
 
         /// Stops
-        final stops = <TravelStop>[];
+        final stops = <TravelStopModel>[];
 
         final stopData = await txn.query(
           TravelStopTable.tableName,
@@ -165,23 +169,14 @@ class TravelRepositoryImpl implements TravelRepository {
             }
           }
 
-          final travelStop = TravelStop.fromMap(stop, experiences);
+          final travelStop = TravelStopModel.fromMap(stop, experiences);
           stops.add(travelStop);
         }
 
-        final travel = TravelModel.fromMap(
-          travelResult,
-          participants: participants,
-          stops: stops,
-        );
-
         travels.add(
-          Travel(
-            travelTitle: travel.travelTitle,
+          TravelModel.fromMap(
+            travelResult,
             participants: participants,
-            startDate: travel.startDate,
-            endDate: travel.endDate,
-            transportType: travel.transportType,
             stops: stops,
           ),
         );
@@ -189,7 +184,7 @@ class TravelRepositoryImpl implements TravelRepository {
     });
 
     debugPrint('Travels:\n${travels.join('\n')}');
-    return travels;
+    return travels.map((e) => e.toEntity()).toList();
   }
 
   /// Auxiliary method that returns a Map from the given [participantId]
