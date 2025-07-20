@@ -6,21 +6,16 @@ abstract final class TransportTypesTable {
   /// Name of the transportTypes table in the database
   static const String tableName = 'transportTypes';
 
-  /// Column name for the transport type ID
+  /// Column name for the transport type index
   ///
-  /// `INTEGER PRIMARY KEY AUTOINCREMENT`
-  static const String id = 'id';
-
-  /// Column name for the transport type name
-  ///
-  /// `TEXT NOT NULL UNIQUE`
-  static const String name = 'name';
+  /// `INTEGER PRIMARY KEY`
+  static const String transportTypeIndex = 'transportTypeIndex';
 
   /// SQL command to create the transportTypes table
-  static const String createTable = '''
+  static const String createTable =
+      '''
     CREATE TABLE $tableName (
-      $id INTEGER PRIMARY KEY AUTOINCREMENT,
-      $name TEXT NOT NULL UNIQUE
+      $transportTypeIndex INTEGER PRIMARY KEY
     );
   ''';
 }

@@ -9,20 +9,14 @@ abstract final class ExperiencesTable {
 
   /// Column name for the experience ID
   ///
-  /// `INTEGER PRIMARY KEY AUTOINCREMENT`
-  static const String experienceId = 'experienceId';
-
-  /// Column name for the experience name
-  ///
-  /// `TEXT NOT NULL UNIQUE`
-  static const String name = 'name';
+  /// `INTEGER PRIMARY KEY`
+  static const String experienceIndex = 'experienceIndex';
 
   /// SQL command to create the experiences table
   static const String createTable =
       '''
     CREATE TABLE $tableName (
-      $experienceId INTEGER PRIMARY KEY AUTOINCREMENT,
-      $name TEXT NOT NULL UNIQUE
+      $experienceIndex INTEGER PRIMARY KEY
     );
   ''';
 }

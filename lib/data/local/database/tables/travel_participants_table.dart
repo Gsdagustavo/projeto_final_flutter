@@ -21,7 +21,8 @@ abstract final class TravelParticipantsTable {
   static const String travelId = 'travelId';
 
   /// SQL command to create the participantTravel table
-  static const String createTable = '''
+  static const String createTable =
+      '''
     CREATE TABLE $tableName (
       $participantId INTEGER NOT NULL,
       $travelId INTEGER NOT NULL,

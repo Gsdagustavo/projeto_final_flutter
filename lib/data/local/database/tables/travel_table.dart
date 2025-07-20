@@ -42,7 +42,7 @@ abstract final class TravelTable {
       $startDate INTEGER NOT NULL,
       $endDate INTEGER NOT NULL,
       $transportType INTEGER NOT NULL,
-      FOREIGN KEY ($transportType) REFERENCES ${TransportTypesTable.tableName} (${TransportTypesTable.id})
+      FOREIGN KEY ($transportType) REFERENCES ${TransportTypesTable.tableName} (${TransportTypesTable.transportTypeIndex})
     );
   ''';
 }

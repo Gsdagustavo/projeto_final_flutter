@@ -46,19 +46,19 @@ class DBConnection {
     /// Insert values into transport types table
     for (final value in transportTypes) {
       await db.insert(TransportTypesTable.tableName, {
-        TransportTypesTable.name: value.name,
+        TransportTypesTable.transportTypeIndex: value.index,
       });
     }
 
     /// Insert values into experiences table
     for (final value in experiences) {
       await db.insert(ExperiencesTable.tableName, {
-        ExperiencesTable.name: value.name,
+        ExperiencesTable.experienceIndex: value.index,
       });
     }
   }
 
-  /// Cleanses the database
+  /// Cleans the database
   /// (WARNING: This was made to be used in debug mode only. DO NOT USE IN PRODUCTION)
   Future<void> clearDatabase(Database db) async {
     final tables = await db.rawQuery(
@@ -67,7 +67,7 @@ class DBConnection {
 
     for (var table in tables) {
       final tableName = table['name'] as String;
-      await db.delete(tableName);
+      await db.execute('DROP TABLE IF EXISTS $tableName');
     }
   }
 }

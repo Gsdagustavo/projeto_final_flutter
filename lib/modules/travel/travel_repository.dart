@@ -8,7 +8,7 @@ import '../../data/local/database/tables/travel_participants_table.dart';
 import '../../data/local/database/tables/travel_stop_experiences_table.dart';
 import '../../data/local/database/tables/travel_stop_table.dart';
 import '../../data/local/database/tables/travel_table.dart';
-import '../../data/local/database/util/experiences_util.dart';
+import '../../data/models/travel_model.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';
@@ -20,7 +20,7 @@ abstract class TravelRepository {
   /// Register a new travel
   ///
   /// [travel]: The travel which will be registered
-  Future<Travel?> registerTravel({required Travel travel});
+  Future<void> registerTravel({required Travel travel});
 
   /// Returns a [List] of [Travel] containing all registered travels
   Future<List<Travel>> getAllTravels();
@@ -35,14 +35,28 @@ class TravelRepositoryImpl implements TravelRepository {
   late final Future<Database> _db = DBConnection().getDatabase();
 
   @override
-  Future<Travel> registerTravel({required Travel travel}) async {
+  Future<void> registerTravel({required Travel travel}) async {
     final db = await _db;
+
+    final travelModel = TravelModel(
+      travelTitle: travel.travelTitle,
+      startDate: travel.startDate,
+      endDate: travel.endDate,
+      transportType: travel.transportType,
+      participants: travel.participants,
+      stops: travel.stops,
+    );
+
     await db.transaction((txn) async {
-      final travelId = await txn.insert(TravelTable.tableName, travel.toMap());
-      travel.travelId = travelId;
+      final travelId = await txn.insert(
+        TravelTable.tableName,
+        travelModel.toMap(),
+      );
+
+      travelModel.travelId = travelId;
 
       /// Insert stops into [TravelStop] and [TravelStopExperiences] table
-      for (final stop in travel.stops) {
+      for (final stop in travelModel.stops) {
         final stopMap = <String, dynamic>{};
         stopMap.addAll(stop.toMap());
         stopMap[TravelStopTable.travelId] = travelId;
@@ -52,20 +66,15 @@ class TravelRepositoryImpl implements TravelRepository {
 
         /// Insert experiences into [TravelStopExperiencesTable]
         for (final experience in stop.experiences!) {
-          final experienceId = await DatabaseEnumUtils().getIdByExperience(
-            experience,
-            txn,
-          );
-
           await txn.insert(TravelStopExperiencesTable.tableName, {
             TravelStopExperiencesTable.travelStopId: stopId,
-            TravelStopExperiencesTable.experienceId: experienceId,
+            TravelStopExperiencesTable.experienceIndex: experience.index,
           });
         }
       }
 
       /// Insert participants into [ParticipantsTable] and [TravelParticipantsTable]
-      for (final participant in travel.participants) {
+      for (final participant in travelModel.participants) {
         final participantId = await txn.insert(
           ParticipantsTable.tableName,
           participant.toMap(),
@@ -79,8 +88,6 @@ class TravelRepositoryImpl implements TravelRepository {
         );
       }
     });
-
-    return travel;
   }
 
   @override
@@ -140,17 +147,17 @@ class TravelRepositoryImpl implements TravelRepository {
           );
 
           for (final se in stopExperiences) {
-            final experienceId = se[TravelStopExperiencesTable.experienceId];
+            final experienceId = se[TravelStopExperiencesTable.experienceIndex];
 
             final experiencesMap = await txn.query(
               ExperiencesTable.tableName,
-              where: '${ExperiencesTable.experienceId} = ?',
+              where: '${ExperiencesTable.experienceIndex} = ?',
               whereArgs: [experienceId],
             );
 
             if (experiencesMap.isNotEmpty) {
               final expIndex =
-                  experiencesMap[0][ExperiencesTable.experienceId] as int;
+                  experiencesMap[0][ExperiencesTable.experienceIndex] as int;
 
               if (expIndex >= 0 && expIndex < Experience.values.length) {
                 experiences.add(Experience.values[expIndex]);
@@ -162,17 +169,26 @@ class TravelRepositoryImpl implements TravelRepository {
           stops.add(travelStop);
         }
 
-        final travel = Travel.fromMap(
+        final travel = TravelModel.fromMap(
           travelResult,
           participants: participants,
           stops: stops,
         );
 
-        travels.add(travel);
+        travels.add(
+          Travel(
+            travelTitle: travel.travelTitle,
+            participants: participants,
+            startDate: travel.startDate,
+            endDate: travel.endDate,
+            transportType: travel.transportType,
+            stops: stops,
+          ),
+        );
       }
     });
 
-    debugPrint('Travels::\n${travels.join('\n\n')}');
+    debugPrint('Travels:\n${travels.join('\n')}');
     return travels;
   }
 
