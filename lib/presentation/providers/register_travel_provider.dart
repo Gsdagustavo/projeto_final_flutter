@@ -19,25 +19,26 @@ class RegisterTravelProvider with ChangeNotifier {
   RegisterTravelProvider(this._travelUseCases);
 
   /// A [TextEditingController] to be assigned to the travel title
-  final _travelTitleController = TextEditingController();
+  final _travelTitleController = TextEditingController(text: 'Test Name');
 
   /// The selected travel [TransportType]
   var _selectedTransportType = TransportType.values.first;
 
   /// The list of [Participants] assigned to the travel
-  final _participants = <Participant>[];
+  ///
+  final _participants = <Participant>[Participant(name: 'Test', age: 1)];
 
   /// The start date of the [Travel]
-  DateTime? _selectedStartDate;
+  DateTime? _selectedStartDate = DateTime.now();
 
   /// The end date of the [Travel]
-  DateTime? _selectedEndDate;
+  DateTime? _selectedEndDate = DateTime.now();
 
   /// A [TextEditingController] to be assigned to a participant name
-  final _participantNameController = TextEditingController();
+  final _participantNameController = TextEditingController(text: 'Test Name');
 
   /// A [TextEditingController] to be assigned to a participant age
-  final _participantAgeController = TextEditingController();
+  final _participantAgeController = TextEditingController(text: '15');
 
   /// The error message (obtained via exception.message on try-catch structures)
   String? _errorMsg;
