@@ -19,9 +19,20 @@ class DBConnection {
   static const int _dbVersion = 1;
 
   /// Returns an instance of a Database
-  Future<Database> getDatabase() async {
+  Future<Database> getDatabase({bool reset = false}) async {
     final dbPath = join(await getDatabasesPath(), _dbName);
-    return openDatabase(dbPath, version: _dbVersion, onCreate: _onCreate);
+    return openDatabase(
+      dbPath,
+      version: _dbVersion,
+      onCreate: _onCreate,
+      onOpen: (db) async {
+        if (reset) {
+          await clearDatabase(db);
+        }
+
+        await _onCreate(db, _dbVersion);
+      },
+    );
   }
 
   /// Defines what to do when the database is created
