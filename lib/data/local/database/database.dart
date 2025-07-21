@@ -50,22 +50,19 @@ class DBConnection {
   /// Insert default enums ([TransportType] and [Experience]) values
   /// into [TransportTypesTable] and [ExperiencesTable]
   Future<void> _insertDefaultValuesIntoTables(Database db) async {
-    final transportTypes = TransportType.values;
-    final experiences = Experience.values;
-
     /// Insert values into transport types table
-    for (final value in transportTypes) {
-      await db.insert(TransportTypesTable.tableName, {
-        TransportTypesTable.transportTypeIndex: value.index,
-      });
-    }
+    TransportType.values.map(
+      (e) async => await db.insert(TransportTypesTable.tableName, {
+        TransportTypesTable.tableName: e.index,
+      }),
+    );
 
     /// Insert values into experiences table
-    for (final value in experiences) {
-      await db.insert(ExperiencesTable.tableName, {
-        ExperiencesTable.experienceIndex: value.index,
-      });
-    }
+    Experience.values.map(
+      (e) async => await db.insert(ExperiencesTable.tableName, {
+        ExperiencesTable.experience: e.name,
+      }),
+    );
   }
 
   /// Cleans the database

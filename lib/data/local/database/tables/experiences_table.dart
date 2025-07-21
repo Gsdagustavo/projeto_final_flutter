@@ -7,16 +7,16 @@ abstract final class ExperiencesTable {
   /// Name of the experiences table in the database.
   static const String tableName = 'experiences';
 
-  /// Column name for the experience ID
+  /// Column name for the experience name
   ///
-  /// `INTEGER PRIMARY KEY`
-  static const String experienceIndex = 'experienceIndex';
+  /// `TEXT PRIMARY KEY`
+  static const String experience = 'experience';
 
   /// SQL command to create the experiences table
   static const String createTable =
       '''
     CREATE TABLE $tableName (
-      $experienceIndex INTEGER PRIMARY KEY
+      $experience TEXT PRIMARY KEY
     );
   ''';
 }

@@ -15,20 +15,20 @@ abstract final class TravelStopExperiencesTable {
   /// `INTEGER NOT NULL`
   static const String travelStopId = 'travelStopId';
 
-  /// Column name for the experience index (foreign key)
+  /// Column name for the experience (foreign key)
   ///
-  /// `INTEGER NOT NULL`
-  static const String experienceIndex = 'experienceIndex';
+  /// `TEXT NOT NULL`
+  static const String experience = 'experience';
 
   /// SQL command to create the travelStopExperiences table
   static const String createTable =
       '''
     CREATE TABLE $tableName (
       $travelStopId INTEGER NOT NULL,
-      $experienceIndex INTEGER NOT NULL,
+      $experience TEXT NOT NULL,
       FOREIGN KEY ($travelStopId) REFERENCES ${TravelStopTable.tableName} (${TravelStopTable.travelStopId}),
-      FOREIGN KEY ($experienceIndex) REFERENCES ${ExperiencesTable.tableName} (${ExperiencesTable.experienceIndex}),
-      PRIMARY KEY ($travelStopId, $experienceIndex)
+      FOREIGN KEY ($experience) REFERENCES ${ExperiencesTable.tableName} (${ExperiencesTable.experience}),
+      PRIMARY KEY ($travelStopId, $experience)
     );
   ''';
 }

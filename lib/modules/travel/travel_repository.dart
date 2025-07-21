@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../data/local/database/database.dart';
-import '../../data/local/database/tables/experiences_table.dart';
 import '../../data/local/database/tables/participants_table.dart';
 import '../../data/local/database/tables/travel_participants_table.dart';
 import '../../data/local/database/tables/travel_stop_experiences_table.dart';
@@ -37,7 +36,6 @@ class TravelRepositoryImpl implements TravelRepository {
   @override
   Future<void> registerTravel({required Travel travel}) async {
     final db = await _db;
-
 
     for (final (index, stop) in travel.stops.indexed) {
       debugPrint('$index: $stop');
@@ -82,7 +80,7 @@ class TravelRepositoryImpl implements TravelRepository {
           for (final experience in stop.experiences!) {
             await txn.insert(TravelStopExperiencesTable.tableName, {
               TravelStopExperiencesTable.travelStopId: stopId,
-              TravelStopExperiencesTable.experienceIndex: experience.index,
+              TravelStopExperiencesTable.experience: experience.name,
             });
           }
         }
@@ -162,22 +160,11 @@ class TravelRepositoryImpl implements TravelRepository {
           );
 
           for (final se in stopExperiences) {
-            final experienceId = se[TravelStopExperiencesTable.experienceIndex];
-
-            final experiencesMap = await txn.query(
-              ExperiencesTable.tableName,
-              where: '${ExperiencesTable.experienceIndex} = ?',
-              whereArgs: [experienceId],
-            );
-
-            if (experiencesMap.isNotEmpty) {
-              final expIndex =
-                  experiencesMap[0][ExperiencesTable.experienceIndex] as int;
-
-              if (expIndex >= 0 && expIndex < Experience.values.length) {
-                experiences.add(Experience.values[expIndex]);
-              }
-            }
+            debugPrint(se.toString());
+            final experienceName =
+                se[TravelStopExperiencesTable.experience] as String;
+            final experience = Experience.values.byName(experienceName);
+            experiences.add(experience);
           }
 
           final travelStop = TravelStopModel.fromMap(stop, experiences);
@@ -194,7 +181,13 @@ class TravelRepositoryImpl implements TravelRepository {
       }
     });
 
-    debugPrint('Travels:\n${travels.join('\n')}');
+    for (final travel in travels) {
+      debugPrint('Travel: $travel');
+
+      for (final travelStop in travel.stops) {
+        debugPrint('Stop: ${travelStop.toString()}');
+      }
+    }
     return travels.map((e) => e.toEntity()).toList();
   }
 
