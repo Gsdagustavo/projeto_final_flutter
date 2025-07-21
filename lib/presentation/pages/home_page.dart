@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';
 import '../../l10n/app_localizations.dart';
 import '../providers/travel_list_provider.dart';
+import '../util/date_extensions.dart';
 import '../util/string_extensions.dart';
 import 'fab_page.dart';
 
@@ -80,25 +80,18 @@ class _TravelWidget extends StatelessWidget {
 
   final Travel travel;
 
-  String _formatDate({required DateTime date, required String locale}) {
-    final dateFormat = DateFormat('EEE, dd MMMM', locale);
-    return dateFormat.format(date);
-  }
-
   @override
   Widget build(BuildContext context) {
     final locale = Localizations.localeOf(context).toString();
-    final formattedStartDate = _formatDate(
-      date: travel.startDate!,
-      locale: locale,
-    );
-
     final participants = travel.participants;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(formattedStartDate, style: TextStyle(fontSize: 24)),
+        Text(
+          travel.startDate!.getFormattedDate(locale),
+          style: TextStyle(fontSize: 24),
+        ),
 
         Padding(padding: EdgeInsets.all(12)),
 

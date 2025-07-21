@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../providers/language_code_provider.dart';
 import '../providers/login_provider.dart';
+import '../util/date_extensions.dart';
 import '../util/string_extensions.dart';
 import 'auth/auth_page_switcher.dart';
 import 'fab_page.dart';
@@ -42,11 +42,11 @@ class SettingsPage extends StatelessWidget {
           final lastSignInTime = user?.metadata.lastSignInTime;
 
           final formattedCreationTime = creationTime != null
-              ? DateFormat.yMd(locale).format(creationTime)
+              ? creationTime.getFormattedDateWithYear(locale)
               : 'N/A';
 
           final formattedSignInTime = lastSignInTime != null
-              ? DateFormat.yMd(locale).format(lastSignInTime)
+              ? lastSignInTime.getFormattedDateWithYear(locale)
               : 'N/A';
 
           return Padding(
