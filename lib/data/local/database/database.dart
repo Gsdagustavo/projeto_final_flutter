@@ -28,9 +28,8 @@ class DBConnection {
       onOpen: (db) async {
         if (reset) {
           await clearDatabase(db);
+          await _onCreate(db, _dbVersion);
         }
-
-        await _onCreate(db, _dbVersion);
       },
     );
   }
