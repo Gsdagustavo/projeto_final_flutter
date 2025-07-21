@@ -70,11 +70,35 @@ class RegisterTravelProvider with ChangeNotifier {
       stops: [
         TravelStop(
           cityName: 'Goiaba',
+          type: TravelStopType.start,
           latitude: 10,
           longitude: 10,
           arriveDate: DateTime.now(),
           leaveDate: DateTime.now().add(Duration(days: 1)),
           experiences: [Experience.visitHistoricalPlaces],
+        ),
+
+        TravelStop(
+          cityName: 'Aracaju',
+          type: TravelStopType.stop,
+          latitude: 15,
+          longitude: 15,
+          arriveDate: DateTime.now().add(Duration(days: 1)),
+          leaveDate: DateTime.now().add(Duration(days: 2)),
+          experiences: [
+            Experience.visitHistoricalPlaces,
+            Experience.visitLocalEstablishments,
+          ],
+        ),
+
+        TravelStop(
+          cityName: 'Sapucaiba',
+          type: TravelStopType.end,
+          latitude: 20,
+          longitude: 20,
+
+          /// same as the first lol
+          experiences: [],
         ),
       ],
     );

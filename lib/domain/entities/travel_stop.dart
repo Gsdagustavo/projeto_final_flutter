@@ -14,10 +14,12 @@ class TravelStop {
   final double longitude;
 
   /// Travel Stop arrive date
-  final DateTime arriveDate;
+  final DateTime? arriveDate;
 
   /// Travel Stop leave date
-  final DateTime leaveDate;
+  final DateTime? leaveDate;
+
+  final TravelStopType type;
 
   /// Travel Stop experiences
   final List<Experience>? experiences;
@@ -25,16 +27,17 @@ class TravelStop {
   /// Named constructor for the Travel Stop
   TravelStop({
     this.travelStopId,
+    required this.type,
     required this.cityName,
     required this.latitude,
     required this.longitude,
-    required this.arriveDate,
-    required this.leaveDate,
+    this.arriveDate,
+    this.leaveDate,
     this.experiences,
   });
 
   @override
   String toString() {
-    return 'TravelStop{travelStopId: $travelStopId, cityName: $cityName, latitude: $latitude, longitude: $longitude, arriveDate: $arriveDate, leaveDate: $leaveDate, experiences: $experiences}';
+    return 'TravelStop{travelStopId: $travelStopId, cityName: $cityName, latitude: $latitude, longitude: $longitude, arriveDate: $arriveDate, leaveDate: $leaveDate, type: $type, experiences: $experiences}';
   }
 }

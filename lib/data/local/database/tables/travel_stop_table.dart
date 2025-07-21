@@ -39,6 +39,8 @@ abstract final class TravelStopTable {
   /// `INTEGER NOT NULL`
   static const String leaveDate = 'leaveDate';
 
+  static const String type = 'type';
+
   /// Column name for the travel ID (foreign key)
   ///
   /// `INTEGER NOT NULL`
@@ -49,11 +51,12 @@ abstract final class TravelStopTable {
       '''
     CREATE TABLE $tableName (
       $travelStopId INTEGER PRIMARY KEY AUTOINCREMENT,
+      $type TEXT NOT NULL,
       $cityName TEXT NOT NULL,
       $latitude REAL NOT NULL,
       $longitude REAL NOT NULL,
-      $arriveDate INTEGER NOT NULL,
-      $leaveDate INTEGER NOT NULL,
+      $arriveDate INTEGER,
+      $leaveDate INTEGER,
       $travelId INTEGER NOT NULL,
       FOREIGN KEY ($travelId) REFERENCES ${TravelTable.tableName} (${TravelTable.travelId})
     );

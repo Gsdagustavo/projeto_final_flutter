@@ -38,6 +38,11 @@ class TravelRepositoryImpl implements TravelRepository {
   Future<void> registerTravel({required Travel travel}) async {
     final db = await _db;
 
+
+    for (final (index, stop) in travel.stops.indexed) {
+      debugPrint('$index: $stop');
+    }
+
     final travelModel = TravelModel(
       travelTitle: travel.travelTitle,
       startDate: travel.startDate,
@@ -48,6 +53,10 @@ class TravelRepositoryImpl implements TravelRepository {
           .toList(),
       stops: travel.stops.map((e) => TravelStopModel.fromEntity(e)).toList(),
     );
+
+    for (final (index, stop) in travelModel.stops.indexed) {
+      debugPrint('$index: $stop');
+    }
 
     debugPrint('Inserting Travel ${travelModel.toString()}');
 
@@ -68,12 +77,14 @@ class TravelRepositoryImpl implements TravelRepository {
         final stopId = await txn.insert(TravelStopTable.tableName, stopMap);
         stop.travelStopId = stopId;
 
-        /// Insert experiences into [TravelStopExperiencesTable]
-        for (final experience in stop.experiences!) {
-          await txn.insert(TravelStopExperiencesTable.tableName, {
-            TravelStopExperiencesTable.travelStopId: stopId,
-            TravelStopExperiencesTable.experienceIndex: experience.index,
-          });
+        if (stop.experiences != null && stop.experiences!.isNotEmpty) {
+          /// Insert experiences into [TravelStopExperiencesTable]
+          for (final experience in stop.experiences!) {
+            await txn.insert(TravelStopExperiencesTable.tableName, {
+              TravelStopExperiencesTable.travelStopId: stopId,
+              TravelStopExperiencesTable.experienceIndex: experience.index,
+            });
+          }
         }
       }
 
