@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../domain/entities/enums.dart';
 import '../../l10n/app_localizations.dart';
 import '../providers/register_travel_provider.dart';
+import '../providers/travel_list_provider.dart';
 import '../util/enums_extensions.dart';
 import 'fab_page.dart';
 
@@ -112,6 +113,8 @@ class RegisterTravelPage extends StatelessWidget {
 
               _showCustomDialog(context);
               await registerTravelState.registerTravel();
+              await context.read<TravelListProvider>().update();
+
               await Future.delayed(const Duration(seconds: 2));
 
               Navigator.pop(context);
