@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../providers/language_code_provider.dart';
 import '../providers/login_provider.dart';
-import '../util/string_format_utils.dart';
+import '../util/string_extensions.dart';
 import 'auth/auth_page_switcher.dart';
 import 'fab_page.dart';
 
@@ -35,7 +35,7 @@ class SettingsPage extends StatelessWidget {
 
           final user = authProvider.loggedUser;
           final emailInitial = user != null && user.email != null
-              ? StringFormatUtils.getStringInitial(user.email!)
+              ? user.email!.getUppercaseInitial()
               : 'N/A';
 
           final creationTime = user?.metadata.creationTime;

@@ -6,7 +6,7 @@ import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';
 import '../../l10n/app_localizations.dart';
 import '../providers/travel_list_provider.dart';
-import '../util/string_format_utils.dart';
+import '../util/string_extensions.dart';
 import 'fab_page.dart';
 
 /// The Home Page of the app
@@ -81,7 +81,8 @@ class _TravelWidget extends StatelessWidget {
   final Travel travel;
 
   String _formatDate({required DateTime date, required String locale}) {
-    return DateFormat.yMd(locale).format(date);
+    final dateFormat = DateFormat('EEE, dd MMMM', locale);
+    return dateFormat.format(date);
   }
 
   @override
@@ -95,34 +96,17 @@ class _TravelWidget extends StatelessWidget {
     final participants = travel.participants;
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: Theme.of(context).disabledColor,
-          ),
+        Text(formattedStartDate, style: TextStyle(fontSize: 24)),
 
-          padding: EdgeInsets.all(16),
+        Padding(padding: EdgeInsets.all(12)),
 
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                formattedStartDate,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-
-              Text(travel.travelTitle),
-
-              const Padding(padding: EdgeInsets.all(12)),
-
-              Stack(
-                children: List.generate(participants.length, (index) {
-                  return ParticipantPfp(participant: participants[index]);
-                }),
-              ),
-            ],
-          ),
+        Row(
+          children: [
+            Text('${travel.startDate!.hour}:${travel.startDate!.minute}'),
+            // Text('${travel.}')
+          ],
         ),
       ],
     );
@@ -136,8 +120,6 @@ class ParticipantPfp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      child: Text(StringFormatUtils.getStringInitial(participant.name)),
-    );
+    return CircleAvatar(child: Text(participant.name.getUppercaseInitial()));
   }
 }
