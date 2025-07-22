@@ -29,7 +29,7 @@ class Assets {
   static const String providersThemeProvider = 'lib/presentation/providers/theme_provider.dart';
   static const String servicesAuthService = 'lib/services/auth_service.dart';
   static const String servicesLocaleService = 'lib/services/locale_service.dart';
-  static const String servicesLocalizationService = 'lib/services/localization_service.dart';
+  static const String servicesLocalizationService = 'lib/services/location_service.dart';
   static const String servicesThemeService = 'lib/services/theme_service.dart';
   static const String tablesExperiencesTable = 'lib/data/local/database/tables/experiences_table.dart';
   static const String tablesParticipantsTable = 'lib/data/local/database/tables/participants_table.dart';

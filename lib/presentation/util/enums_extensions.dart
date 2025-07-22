@@ -3,42 +3,6 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/enums.dart';
 import '../../l10n/app_localizations.dart';
 
-/// Contains util methods to format the program's enums
-/// (currently [Experience] and [TransportType]
-class EnumFormatUtils {
-  /// Returns a capitalized and spaced version the given text
-  String getFormattedString(String text) {
-    var result = '';
-    var idx = 0;
-
-    for (final letter in text.split('')) {
-      // means it is the first letter
-      if (idx == 0) {
-        result += letter.toUpperCase();
-        idx++;
-        continue;
-      }
-
-      // means it is another word
-      if (letter.toUpperCase() == letter) {
-        result += ' ';
-        result += letter;
-        idx += 2;
-        continue;
-      }
-
-      if (result.isNotEmpty) {
-        // the letter is in the middle of the word
-        result += letter;
-        idx++;
-        continue;
-      }
-    }
-
-    return result;
-  }
-}
-
 /// This extension is a simple way to return the localized version of
 /// the [TransportType] enum
 extension TransportTypeIntlString on TransportType {

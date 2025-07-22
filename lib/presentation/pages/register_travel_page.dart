@@ -8,6 +8,7 @@ import '../../l10n/app_localizations.dart';
 import '../providers/register_travel_provider.dart';
 import '../providers/travel_list_provider.dart';
 import '../util/enums_extensions.dart';
+import '../util/string_extensions.dart';
 import 'fab_page.dart';
 
 /// This is a page for registering a travel
@@ -202,9 +203,7 @@ class _TransportTypesDropdownButton extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8),
                     child: Text(
-                      EnumFormatUtils().getFormattedString(
-                        item.getIntlTransportType(context),
-                      ),
+                      item.getIntlTransportType(context).getFormattedString(),
                     ),
                   ),
                 ),
