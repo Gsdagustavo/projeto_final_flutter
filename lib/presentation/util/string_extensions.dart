@@ -1,8 +1,8 @@
-extension StringInitialExension on String {
+/// This extension contains some util methods on [String] class
+extension StringFormatExtension on String {
+  /// Returns the uppercase first letter of a string
   String getUppercaseInitial() => this[0].toUpperCase();
-}
 
-extension StringCapitalizationExtension on String {
   /// Returns a capitalized and spaced version the given text
   String getFormattedString() {
     var result = '';
