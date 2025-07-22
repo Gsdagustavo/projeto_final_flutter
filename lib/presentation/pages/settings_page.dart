@@ -35,7 +35,7 @@ class SettingsPage extends StatelessWidget {
 
           final user = authProvider.loggedUser;
           final emailInitial = user != null && user.email != null
-              ? user.email!.getUppercaseInitial()
+              ? user.email!.uppercaseInitial
               : 'N/A';
 
           final creationTime = user?.metadata.creationTime;

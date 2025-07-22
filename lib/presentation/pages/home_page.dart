@@ -113,6 +113,6 @@ class ParticipantPfp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(child: Text(participant.name.getUppercaseInitial()));
+    return CircleAvatar(child: Text(participant.name.uppercaseInitial));
   }
 }

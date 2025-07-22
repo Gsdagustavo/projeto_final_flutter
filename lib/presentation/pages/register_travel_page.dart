@@ -203,7 +203,7 @@ class _TransportTypesDropdownButton extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8),
                     child: Text(
-                      item.getIntlTransportType(context).getFormattedString(),
+                      item.getIntlTransportType(context).capitalizedAndSpaced,
                     ),
                   ),
                 ),
