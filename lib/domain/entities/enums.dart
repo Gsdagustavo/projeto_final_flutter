@@ -35,4 +35,4 @@ enum Experience {
   contactWithNature,
 }
 
-enum TravelStopType { start, end, stop }
+enum TravelStopType { start, stop, end }
