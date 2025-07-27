@@ -74,5 +74,5 @@ class AuthService {
   }
 
   /// Returns the current logged [User]
-  User? currentUser() => _firebase.currentUser;
+  User? get currentUser => _firebase.currentUser;
 }

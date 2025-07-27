@@ -25,7 +25,7 @@ class LoginProvider with ChangeNotifier {
   /// Initializes the provider state, assigning [currentUser] to the current
   /// logged user in [FirebaseAuth]
   void _init() {
-    _loggedUser = _authService.currentUser();
+    _loggedUser = _authService.currentUser;
     notifyListeners();
   }
 
