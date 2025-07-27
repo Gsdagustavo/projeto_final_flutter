@@ -8,19 +8,37 @@ import '../../l10n/app_localizations.dart';
 extension TransportTypeIntlString on TransportType {
   /// Returns the localized [TransportType]
   String getIntlTransportType(BuildContext context) {
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
 
     switch (this) {
       case TransportType.car:
-        return loc!.transport_type_car;
+        return loc.transport_type_car;
       case TransportType.bike:
-        return loc!.transport_type_bike;
+        return loc.transport_type_bike;
       case TransportType.bus:
-        return loc!.transport_type_bus;
+        return loc.transport_type_bus;
       case TransportType.plane:
-        return loc!.transport_type_plane;
+        return loc.transport_type_plane;
       case TransportType.cruise:
-        return loc!.transport_type_cruise;
+        return loc.transport_type_cruise;
+    }
+  }
+}
+
+/// This extension is a simple way to return the localized version of
+/// the [TravelStopType] enum
+extension TravelStopTypeIntlString on TravelStopType {
+  /// Returns the localized [TravelStopType]
+  String getIntlTravelStopType(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
+    switch (this) {
+      case TravelStopType.start:
+        return loc.travel_stop_type_start;
+      case TravelStopType.stop:
+        return loc.travel_stop_type_stop;
+      case TravelStopType.end:
+        return loc.travel_stop_type_end;
     }
   }
 }
@@ -30,19 +48,19 @@ extension TransportTypeIntlString on TransportType {
 extension ExperiencesIntlString on Experience {
   /// Returns the localized [Experience]
   String getIntlExperience(BuildContext context) {
-    final loc = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
 
     switch (this) {
       case Experience.alternativeCuisines:
-        return loc!.experience_alternative_cuisines;
+        return loc.experience_alternative_cuisines;
       case Experience.contactWithNature:
-        return loc!.experience_contact_with_nature;
+        return loc.experience_contact_with_nature;
       case Experience.cultureImmersion:
-        return loc!.experience_cultural_immersion;
+        return loc.experience_cultural_immersion;
       case Experience.visitHistoricalPlaces:
-        return loc!.experience_historical_places;
+        return loc.experience_historical_places;
       case Experience.visitLocalEstablishments:
-        return loc!.experience_visit_local_establishments;
+        return loc.experience_visit_local_establishments;
     }
   }
 }
