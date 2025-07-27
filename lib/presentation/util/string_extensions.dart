@@ -1,12 +1,20 @@
 /// This extension contains some util methods on [String] class
 extension StringFormatExtension on String {
   /// Returns the uppercase first letter of a string
-  String get uppercaseInitial => this[0].toUpperCase();
+  String get uppercaseInitial {
+    if (isEmpty) {
+      return this;
+    }
+
+    return this[0].toUpperCase();
+  }
 
   /// Returns a capitalized and spaced version the given text
   String get capitalizedAndSpaced {
     var result = '';
     var idx = 0;
+
+    replaceAll('_', ' ');
 
     for (final letter in split('')) {
       // means it is the first letter
