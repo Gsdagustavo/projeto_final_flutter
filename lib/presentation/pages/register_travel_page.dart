@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/extensions/string_extensions.dart';
 import '../../domain/entities/enums.dart';
 import '../../l10n/app_localizations.dart';
+import '../extensions/enums_extensions.dart';
 import '../providers/register_travel_provider.dart';
 import '../providers/travel_list_provider.dart';
-import '../util/enums_extensions.dart';
-import '../util/string_extensions.dart';
 import 'fab_page.dart';
 
 /// This is a page for registering a travel
@@ -190,7 +190,7 @@ class _TransportTypesDropdownButton extends StatelessWidget {
           ),
 
           child: DropdownButton<TransportType>(
-            value: travelState.selectedTransportType,
+            value: travelState.transportType,
             icon: const Icon(Icons.arrow_downward),
             underline: Container(color: Colors.transparent),
             borderRadius: BorderRadius.circular(12),
@@ -254,7 +254,7 @@ class _DateTextButtons extends StatelessWidget {
                       final now = DateTime.now();
                       var date = await showDatePicker(
                         context: context,
-                        initialDate: travelState.selectedStartDate ?? now,
+                        initialDate: travelState.startDate ?? now,
                         firstDate: now,
                         lastDate: now.add(const Duration(days: 365)),
                       );
@@ -263,8 +263,8 @@ class _DateTextButtons extends StatelessWidget {
                     child: Text(as.travel_start_date_label),
                   ),
 
-                  if (travelState.selectedStartDate != null)
-                    Text(_formatDate(travelState.selectedStartDate!)),
+                  if (travelState.startDate != null)
+                    Text(_formatDate(travelState.startDate!)),
                 ],
               ),
               Column(
@@ -285,10 +285,9 @@ class _DateTextButtons extends StatelessWidget {
                       var date = await showDatePicker(
                         context: context,
                         initialDate:
-                            travelState.selectedEndDate ??
-                            travelState.selectedStartDate,
-                        firstDate: travelState.selectedStartDate!,
-                        lastDate: travelState.selectedStartDate!.add(
+                            travelState.endDate ?? travelState.startDate,
+                        firstDate: travelState.startDate!,
+                        lastDate: travelState.startDate!.add(
                           const Duration(days: 365),
                         ),
                       );
@@ -297,8 +296,8 @@ class _DateTextButtons extends StatelessWidget {
                     child: Text(as.travel_end_date_label),
                   ),
 
-                  if (travelState.selectedEndDate != null)
-                    Text(_formatDate(travelState.selectedEndDate!)),
+                  if (travelState.endDate != null)
+                    Text(_formatDate(travelState.endDate!)),
                 ],
               ),
             ],

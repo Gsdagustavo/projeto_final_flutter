@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/extensions/date_extensions.dart';
+import '../../core/extensions/string_extensions.dart';
 import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';
 import '../../l10n/app_localizations.dart';
 import '../providers/travel_list_provider.dart';
-import '../util/date_extensions.dart';
-import '../util/string_extensions.dart';
 import 'fab_page.dart';
 
 /// The Home Page of the app
