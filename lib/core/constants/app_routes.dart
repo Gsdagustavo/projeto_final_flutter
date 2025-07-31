@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 import '../../presentation/pages/auth/auth_page_switcher.dart';
 import '../../presentation/pages/auth/forgot_password_page.dart';
@@ -8,20 +9,31 @@ import '../../presentation/pages/auth/splash_screen.dart';
 import '../../presentation/pages/home_page.dart';
 import '../../presentation/pages/register_travel_page.dart';
 import '../../presentation/pages/settings_page.dart';
+import '../../presentation/providers/login_provider.dart';
 import '../../presentation/widgets/map.dart';
 
-abstract final class AppRoutes {
-  /// Defines the routes of the app and its pages
-  static Map<String, Widget Function(BuildContext context)> get appRoutes => {
+/// Defines the routes of the app and its pages
+final class AppRoutes {
+  /// Returns the application's pages routes
+  Map<String, Widget Function(BuildContext context)> get appRoutes => {
     /// Main pages
     HomePage.routeName: (_) => const HomePage(),
     RegisterTravelPage.routeName: (_) => const RegisterTravelPage(),
-    SettingsPage.routeName: (_) => const SettingsPage(),
+    SettingsPage.routeName: (_) => ChangeNotifierProvider(
+      create: (context) => LoginProvider(),
+      child: const SettingsPage(),
+    ),
     TravelMap.routeName: (_) => const TravelMap(),
 
     /// Auth related pages
-    SplashScreen.routeName: (_) => const SplashScreen(),
-    AuthPageSwitcher.routeName: (_) => const AuthPageSwitcher(),
+    SplashScreen.routeName: (_) => ChangeNotifierProvider(
+      create: (context) => LoginProvider(),
+      child: const SplashScreen(),
+    ),
+    AuthPageSwitcher.routeName: (_) => ChangeNotifierProvider(
+      create: (context) => LoginProvider(),
+      child: const AuthPageSwitcher(),
+    ),
     LoginPage.routeName: (_) => const LoginPage(),
     RegisterPage.routeName: (_) => const RegisterPage(),
     ForgotPasswordPage.routeName: (_) => const ForgotPasswordPage(),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +15,7 @@ import '../../domain/entities/travel_stop.dart';
 import '../../services/locale_service.dart';
 import '../../services/location_service.dart';
 import '../extensions/enums_extensions.dart';
+import '../pages/register_travel_page.dart';
 import '../providers/register_travel_provider.dart';
 import 'error_dialog.dart';
 import 'my_app_bar.dart';
@@ -40,7 +43,8 @@ class _TravelMapState extends State<TravelMap> {
 
   bool _isCreatingMap = true;
   bool _isLoading = false;
-  bool _isLoadingDialogVisible = false;
+
+  // bool _isLoadingDialogVisible = false;
 
   @override
   void initState() {
@@ -211,25 +215,24 @@ class _TravelMapState extends State<TravelMap> {
         builder: (context) {
           if (_isCreatingMap) return Center(child: CircularProgressIndicator());
 
-          debugPrint('Is loading dialog visible: $_isLoadingDialogVisible');
-
-          /// TODO: implement a better way of showing the loading dialog,
-          /// since it can be popped unwantedly
-          if (_isLoading && !_isLoadingDialogVisible) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (mounted && (ModalRoute.of(context)?.isCurrent ?? true)) {
-                _isLoadingDialogVisible = true;
-                debugPrint('Showing loading dialog...');
-                _showLoadingDialog(context);
-              }
-            });
-          } else if (!_isLoading && _isLoadingDialogVisible) {
-            if (Navigator.canPop(context)) {
-              debugPrint('Closing loading dialog...');
-              Navigator.of(context).pop();
-            }
-            _isLoadingDialogVisible = false;
-          }
+          // debugPrint('Is loading dialog visible: $_isLoadingDialogVisible');
+          // /// TODO: implement a better way of showing the loading dialog,
+          // /// since it can be popped unwantedly
+          // if (_isLoading && !_isLoadingDialogVisible) {
+          //   WidgetsBinding.instance.addPostFrameCallback((_) {
+          //     if (mounted && (ModalRoute.of(context)?.isCurrent ?? true)) {
+          //       _isLoadingDialogVisible = true;
+          //       debugPrint('Showing loading dialog...');
+          //       _showLoadingDialog(context);
+          //     }
+          //   });
+          // } else if (!_isLoading && _isLoadingDialogVisible) {
+          //   if (Navigator.canPop(context)) {
+          //     debugPrint('Closing loading dialog...');
+          //     Navigator.of(context).pop();
+          //   }
+          //   _isLoadingDialogVisible = false;
+          // }
 
           return Stack(
             alignment: Alignment.center,
@@ -288,7 +291,12 @@ class _TravelMapState extends State<TravelMap> {
                       return;
                     }
 
-                    /// todo: register stops
+                    unawaited(
+                      Navigator.pushReplacementNamed(
+                        context,
+                        RegisterTravelPage.routeName,
+                      ),
+                    );
                   },
                   child: Text('Finish', style: TextStyle(fontSize: 22)),
                 ),
