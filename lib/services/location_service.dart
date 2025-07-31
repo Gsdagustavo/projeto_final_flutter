@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
+import '../data/models/place_model.dart';
 import '../domain/entities/place.dart';
 import 'auth_service.dart';
 
@@ -91,9 +92,8 @@ class LocationService {
 
     if (response.statusCode == 200) {
       final body = jsonDecode(response.body);
-      final place = Place.fromJson(body);
-      debugPrint(place.toString());
-      return place;
+      final placeModel = PlaceModel.fromJson(body);
+      return placeModel.toEntity();
     } else {
       final msg =
           'An exception has occurred while trying to get the position. '

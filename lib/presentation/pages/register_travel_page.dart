@@ -9,6 +9,7 @@ import '../../l10n/app_localizations.dart';
 import '../extensions/enums_extensions.dart';
 import '../providers/register_travel_provider.dart';
 import '../providers/travel_list_provider.dart';
+import '../widgets/map.dart';
 import 'fab_page.dart';
 
 /// This is a page for registering a travel
@@ -92,6 +93,10 @@ class RegisterTravelPage extends StatelessWidget {
               const Padding(padding: EdgeInsets.all(16)),
 
               _ParticipantsWidget(),
+
+              const Padding(padding: EdgeInsets.all(16)),
+
+              const _TravelMapWidget(),
             ],
           ),
         ),
@@ -497,6 +502,29 @@ class _ListParticipants extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _TravelMapWidget extends StatelessWidget {
+  const _TravelMapWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          'Travel Map | Register Travel Stops',
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        ),
+
+        IconButton(
+          onPressed: () {
+            Navigator.pushNamed(context, TravelMap.routeName);
+          },
+          icon: Icon(Icons.map),
+        ),
+      ],
     );
   }
 }

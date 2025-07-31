@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../data/local/database/database.dart';
+import '../../data/local/database/tables/addresses_table.dart';
+import '../../data/local/database/tables/experiences_table.dart';
 import '../../data/local/database/tables/participants_table.dart';
+import '../../data/local/database/tables/places_table.dart';
 import '../../data/local/database/tables/travel_participants_table.dart';
 import '../../data/local/database/tables/travel_stop_experiences_table.dart';
 import '../../data/local/database/tables/travel_stop_table.dart';
 import '../../data/local/database/tables/travel_table.dart';
+import '../../data/models/address_model.dart';
 import '../../data/models/participant_model.dart';
+import '../../data/models/place_model.dart';
 import '../../data/models/travel_model.dart';
 import '../../data/models/travel_stop_model.dart';
 import '../../domain/entities/enums.dart';
@@ -47,14 +52,10 @@ class TravelRepositoryImpl implements TravelRepository {
       endDate: travel.endDate,
       transportType: travel.transportType,
       participants: travel.participants
-          .map((p) => ParticipantModel.fromEntity(p))
+          .map(ParticipantModel.fromEntity)
           .toList(),
-      stops: travel.stops.map((e) => TravelStopModel.fromEntity(e)).toList(),
+      stops: travel.stops.map(TravelStopModel.fromEntity).toList(),
     );
-
-    for (final (index, stop) in travelModel.stops.indexed) {
-      debugPrint('$index: $stop');
-    }
 
     debugPrint('Inserting Travel ${travelModel.toString()}');
 
@@ -66,24 +67,11 @@ class TravelRepositoryImpl implements TravelRepository {
 
       travelModel.travelId = travelId;
 
+      final stops = travelModel.stops;
+
       /// Insert stops into [TravelStop] and [TravelStopExperiences] table
-      for (final stop in travelModel.stops) {
-        final stopMap = <String, dynamic>{};
-        stopMap.addAll(stop.toMap());
-        stopMap[TravelStopTable.travelId] = travelId;
-
-        final stopId = await txn.insert(TravelStopTable.tableName, stopMap);
-        stop.travelStopId = stopId;
-
-        if (stop.experiences != null && stop.experiences!.isNotEmpty) {
-          /// Insert experiences into [TravelStopExperiencesTable]
-          for (final experience in stop.experiences!) {
-            await txn.insert(TravelStopExperiencesTable.tableName, {
-              TravelStopExperiencesTable.travelStopId: stopId,
-              TravelStopExperiencesTable.experience: experience.name,
-            });
-          }
-        }
+      for (final stop in stops) {
+        await _insertStop(txn, stop, travelId);
       }
 
       /// Insert participants into [ParticipantsTable] and [TravelParticipantsTable]
@@ -101,6 +89,43 @@ class TravelRepositoryImpl implements TravelRepository {
         );
       }
     });
+  }
+
+  Future<void> _insertStop(
+    DatabaseExecutor txn,
+    TravelStopModel stop,
+    int travelId,
+  ) async {
+    /// Insert into [AddressesTable]
+    final addressMap = stop.place.address.toMap();
+    final addressId = await txn.insert(AddressesTable.tableName, addressMap);
+
+    final placeMap = stop.place.fromMap(addressId);
+
+    /// Insert into [PlacesTable]
+    await txn.insert(PlacesTable.tableName, placeMap);
+
+    final stopMap = stop.toMap();
+    stopMap[TravelStopTable.travelId] = travelId;
+    stopMap[TravelStopTable.placeId] = stop.place.placeId;
+
+    /// Insert stop into [TravelStopsTable]
+    final stopId = await txn.insert(TravelStopTable.tableName, stopMap);
+    stop.travelStopId = stopId;
+
+    debugPrint('Stop ID: $stopId');
+
+    /// Insert experiences into [TravelStopExperiencesTable]
+    if (stop.experiences != null && stop.experiences!.isNotEmpty) {
+      for (final experience in stop.experiences!) {
+        await txn.insert(TravelStopExperiencesTable.tableName, {
+          TravelStopExperiencesTable.travelStopId: stopId,
+          TravelStopExperiencesTable.experience: experience.name,
+        });
+      }
+    }
+
+    debugPrint('Travel stop $stop added to database');
   }
 
   @override
@@ -149,26 +174,51 @@ class TravelRepositoryImpl implements TravelRepository {
 
         for (final stop in stopData) {
           final stopId = stop[TravelStopTable.travelStopId];
+          final placeId = stop[TravelStopTable.placeId];
 
-          /// Experiences
+          if (stopId == null || placeId == null) return;
+
           final experiences = <Experience>[];
-
-          final stopExperiences = await txn.query(
+          final experiencesMap = await txn.query(
             TravelStopExperiencesTable.tableName,
             where: '${TravelStopExperiencesTable.travelStopId} = ?',
             whereArgs: [stopId],
           );
 
-          for (final se in stopExperiences) {
-            debugPrint(se.toString());
-            final experienceName =
-                se[TravelStopExperiencesTable.experience] as String;
-            final experience = Experience.values.byName(experienceName);
-            experiences.add(experience);
+          for (final experienceMap in experiencesMap) {
+            final name = experienceMap[ExperiencesTable.experience] as String;
+            experiences.add(Experience.values.byName(name));
           }
 
-          final travelStop = TravelStopModel.fromMap(stop, experiences);
-          stops.add(travelStop);
+          final placeMap = await txn.query(
+            PlacesTable.tableName,
+            where: '${PlacesTable.placeId} = ?',
+            whereArgs: [placeId],
+          );
+
+          if (placeMap.isEmpty) continue;
+
+          final placeData = placeMap.first;
+          final addressId = placeData[PlacesTable.addressId];
+
+          final addressMap = await txn.query(
+            AddressesTable.tableName,
+            where: '${AddressesTable.addressId} = ?',
+            whereArgs: [addressId],
+          );
+
+          if (addressMap.isEmpty) continue;
+
+          final addressModel = AddressModel.fromMap(addressMap.first);
+          final placeModel = PlaceModel.toMap(placeData, addressModel);
+
+          final travelStopModel = TravelStopModel.fromMap(
+            stop,
+            experiences,
+            placeModel,
+          );
+
+          stops.add(travelStopModel);
         }
 
         travels.add(

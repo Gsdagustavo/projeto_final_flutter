@@ -68,9 +68,9 @@ class TravelModel {
       endDate: travel.endDate,
       transportType: travel.transportType,
       participants: travel.participants
-          .map((e) => ParticipantModel.fromEntity(e))
+          .map(ParticipantModel.fromEntity)
           .toList(),
-      stops: travel.stops.map((e) => TravelStopModel.fromEntity(e)).toList(),
+      stops: travel.stops.map(TravelStopModel.fromEntity).toList(),
     );
   }
 

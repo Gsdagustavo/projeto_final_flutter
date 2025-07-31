@@ -1,43 +1,48 @@
 import 'enums.dart';
+import 'place.dart';
 
 class TravelStop {
   /// Travel Stop ID
   int? travelStopId;
 
-  /// Travel Stop city name
-  final String cityName;
-
-  /// Travel Stop latitude
-  final double latitude;
-
-  /// Travel Stop longitude
-  final double longitude;
-
   /// Travel Stop arrive date
-  final DateTime? arriveDate;
+  DateTime? arriveDate;
 
   /// Travel Stop leave date
-  final DateTime? leaveDate;
+  DateTime? leaveDate;
 
-  final TravelStopType type;
+  TravelStopType type;
 
   /// Travel Stop experiences
   final List<Experience>? experiences;
 
+  final Place place;
+
   /// Named constructor for the Travel Stop
   TravelStop({
+    required this.place,
     this.travelStopId,
-    required this.type,
-    required this.cityName,
-    required this.latitude,
-    required this.longitude,
+    this.type = TravelStopType.start,
     this.arriveDate,
     this.leaveDate,
     this.experiences,
   });
 
-  @override
-  String toString() {
-    return 'TravelStop{travelStopId: $travelStopId, cityName: $cityName, latitude: $latitude, longitude: $longitude, arriveDate: $arriveDate, leaveDate: $leaveDate, type: $type, experiences: $experiences}';
+  TravelStop copyWith({
+    Place? place,
+    int? travelStopId,
+    DateTime? arriveDate,
+    DateTime? leaveDate,
+    TravelStopType? type,
+    List<Experience>? experiences,
+  }) {
+    return TravelStop(
+      place: place ?? this.place,
+      travelStopId: travelStopId ?? this.travelStopId,
+      arriveDate: arriveDate ?? this.arriveDate,
+      leaveDate: leaveDate ?? this.leaveDate,
+      type: type ?? this.type,
+      experiences: experiences ?? this.experiences,
+    );
   }
 }
