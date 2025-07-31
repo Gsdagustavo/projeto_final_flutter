@@ -92,8 +92,6 @@ class RegisterTravelPage extends StatelessWidget {
               const Padding(padding: EdgeInsets.all(16)),
 
               _ParticipantsWidget(),
-
-              const Padding(padding: EdgeInsets.all(10)),
             ],
           ),
         ),
@@ -179,7 +177,7 @@ class _TransportTypesDropdownButton extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          AppLocalizations.of(context)!.transport_type_label,
+          as.transport_type_label,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
         const Padding(padding: EdgeInsets.all(12)),
@@ -231,79 +229,77 @@ class _DateTextButtons extends StatelessWidget {
     final travelState = Provider.of<RegisterTravelProvider>(context);
     final as = AppLocalizations.of(context)!;
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            as.select_dates_label,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-          ),
-          const Padding(padding: EdgeInsets.all(10)),
-          Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  TextButton(
-                    style: ButtonStyle(
-                      padding: WidgetStateProperty.all(EdgeInsets.zero),
-                    ),
-                    onPressed: () async {
-                      final now = DateTime.now();
-                      var date = await showDatePicker(
-                        context: context,
-                        initialDate: travelState.startDate ?? now,
-                        firstDate: now,
-                        lastDate: now.add(const Duration(days: 365)),
-                      );
-                      travelState.selectStartDate(date);
-                    },
-                    child: Text(as.travel_start_date_label),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          as.select_dates_label,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        ),
+        const Padding(padding: EdgeInsets.all(10)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TextButton(
+                  style: ButtonStyle(
+                    padding: WidgetStateProperty.all(EdgeInsets.zero),
                   ),
 
-                  if (travelState.startDate != null)
-                    Text(_formatDate(travelState.startDate!)),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: () async {
-                      if (!travelState.isStartDateSelected) {
-                        final message = as.err_invalid_date_snackbar;
+                  onPressed: () async {
+                    final now = DateTime.now();
+                    var date = await showDatePicker(
+                      context: context,
+                      initialDate: travelState.startDate ?? now,
+                      firstDate: now,
+                      lastDate: now.add(const Duration(days: 365)),
+                    );
+                    travelState.selectStartDate(date);
+                  },
+                  child: Text(as.travel_start_date_label),
+                ),
 
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(SnackBar(content: Text(message)));
+                if (travelState.startDate != null)
+                  Text(_formatDate(travelState.startDate!)),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () async {
+                    if (!travelState.isStartDateSelected) {
+                      final message = as.err_invalid_date_snackbar;
 
-                        return;
-                      }
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(message)));
 
-                      var date = await showDatePicker(
-                        context: context,
-                        initialDate:
-                            travelState.endDate ?? travelState.startDate,
-                        firstDate: travelState.startDate!,
-                        lastDate: travelState.startDate!.add(
-                          const Duration(days: 365),
-                        ),
-                      );
-                      travelState.selectEndDate(date);
-                    },
-                    child: Text(as.travel_end_date_label),
-                  ),
+                      return;
+                    }
 
-                  if (travelState.endDate != null)
-                    Text(_formatDate(travelState.endDate!)),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
+                    var date = await showDatePicker(
+                      context: context,
+                      initialDate: travelState.endDate ?? travelState.startDate,
+                      firstDate: travelState.startDate!,
+                      lastDate: travelState.startDate!.add(
+                        const Duration(days: 365),
+                      ),
+                    );
+                    travelState.selectEndDate(date);
+                  },
+                  child: Text(as.travel_end_date_label),
+                ),
+
+                if (travelState.endDate != null)
+                  Text(_formatDate(travelState.endDate!)),
+              ],
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -463,7 +459,7 @@ class _ListParticipants extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () async {
-                  final bool result = await showDialog(
+                  final result = await showDialog<bool>(
                     context: context,
                     builder: (context) {
                       return AlertDialog(
@@ -489,7 +485,7 @@ class _ListParticipants extends StatelessWidget {
                     },
                   );
 
-                  if (result) {
+                  if (result != null && result == true) {
                     travelState.removeParticipant(index);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(as.participant_removed)),
