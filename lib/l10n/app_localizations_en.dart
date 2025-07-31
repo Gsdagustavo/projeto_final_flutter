@@ -132,7 +132,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get participant_registered => 'Participant registered';
 
   @override
-  String get remove_participant_confirmation => 'Would you really want to remove the participant';
+  String get remove_participant_confirmation => 'Would you really want to remove the participant?';
 
   @override
   String get remove_participant => 'Remove participant';
@@ -141,7 +141,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get participant_removed => 'Participant removed';
 
   @override
-  String get travel_registered_successfully => 'Travel registered successfully';
+  String get travel_registered_successfully => 'Your Travel was successfully registered!';
+
+  @override
+  String get travel_stop_type_start => 'Start';
+
+  @override
+  String get travel_stop_type_stop => 'Stop';
+
+  @override
+  String get travel_stop_type_end => 'End';
+
+  @override
+  String get stop_registered_successfully => 'Stop registered successfully!';
+
+  @override
+  String get err_register_stop => 'An error occurred while trying to register the stop';
+
+  @override
+  String get register_stop => 'Register Stop';
+
+  @override
+  String get travel_stop => 'Travel Stop';
+
+  @override
+  String get travel_start_location => 'Travel Start Location';
+
+  @override
+  String get travel_end_location => 'Travel End Location';
 
   @override
   String get yes => 'Yes';

@@ -64,6 +64,17 @@
   "participant_removed": "Participante eliminado",
   "travel_registered_successfully": "Viaje registrado con éxito",
 
+  "@@google_map": {},
+  "travel_stop_type_start": "Inicio",
+  "travel_stop_type_stop": "Parada",
+  "travel_stop_type_end": "Fin",
+  "stop_registered_successfully": "¡Parada registrada con éxito!",
+  "err_register_stop": "Ocurrió un error al intentar registrar la parada",
+  "register_stop": "Registrar Parada",
+  "travel_stop": "Parada del Viaje",
+  "travel_start_location": "Ubicación de Inicio del Viaje",
+  "travel_end_location": "Ubicación de Fin del Viaje",
+
   "@@util": {},
   "yes": "Sí",
   "no": "No",

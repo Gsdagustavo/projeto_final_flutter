@@ -144,6 +144,33 @@ class AppLocalizationsPt extends AppLocalizations {
   String get travel_registered_successfully => 'Viagem registrada com sucesso';
 
   @override
+  String get travel_stop_type_start => 'Início';
+
+  @override
+  String get travel_stop_type_stop => 'Parada';
+
+  @override
+  String get travel_stop_type_end => 'Fim';
+
+  @override
+  String get stop_registered_successfully => 'Parada registrada com sucesso!';
+
+  @override
+  String get err_register_stop => 'Ocorreu um erro ao tentar registrar a parada';
+
+  @override
+  String get register_stop => 'Registrar Parada';
+
+  @override
+  String get travel_stop => 'Parada da Viagem';
+
+  @override
+  String get travel_start_location => 'Local de Início da Viagem';
+
+  @override
+  String get travel_end_location => 'Local de Término da Viagem';
+
+  @override
   String get yes => 'Sim';
 
   @override

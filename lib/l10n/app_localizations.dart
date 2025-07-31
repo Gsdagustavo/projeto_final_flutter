@@ -346,7 +346,7 @@ abstract class AppLocalizations {
   /// No description provided for @remove_participant_confirmation.
   ///
   /// In en, this message translates to:
-  /// **'Would you really want to remove the participant'**
+  /// **'Would you really want to remove the participant?'**
   String get remove_participant_confirmation;
 
   /// No description provided for @remove_participant.
@@ -364,8 +364,62 @@ abstract class AppLocalizations {
   /// No description provided for @travel_registered_successfully.
   ///
   /// In en, this message translates to:
-  /// **'Travel registered successfully'**
+  /// **'Your Travel was successfully registered!'**
   String get travel_registered_successfully;
+
+  /// No description provided for @travel_stop_type_start.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get travel_stop_type_start;
+
+  /// No description provided for @travel_stop_type_stop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get travel_stop_type_stop;
+
+  /// No description provided for @travel_stop_type_end.
+  ///
+  /// In en, this message translates to:
+  /// **'End'**
+  String get travel_stop_type_end;
+
+  /// No description provided for @stop_registered_successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop registered successfully!'**
+  String get stop_registered_successfully;
+
+  /// No description provided for @err_register_stop.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while trying to register the stop'**
+  String get err_register_stop;
+
+  /// No description provided for @register_stop.
+  ///
+  /// In en, this message translates to:
+  /// **'Register Stop'**
+  String get register_stop;
+
+  /// No description provided for @travel_stop.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel Stop'**
+  String get travel_stop;
+
+  /// No description provided for @travel_start_location.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel Start Location'**
+  String get travel_start_location;
+
+  /// No description provided for @travel_end_location.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel End Location'**
+  String get travel_end_location;
 
   /// No description provided for @yes.
   ///

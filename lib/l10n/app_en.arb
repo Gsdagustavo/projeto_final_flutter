@@ -64,6 +64,17 @@
   "participant_removed": "Participant removed",
   "travel_registered_successfully": "Your Travel was successfully registered!",
 
+  "@@google_map": {},
+  "travel_stop_type_start": "Start",
+  "travel_stop_type_stop": "Stop",
+  "travel_stop_type_end": "End",
+  "stop_registered_successfully": "Stop registered successfully!",
+  "err_register_stop": "An error occurred while trying to register the stop",
+  "register_stop": "Register Stop",
+  "travel_stop": "Travel Stop",
+  "travel_start_location": "Travel Start Location",
+  "travel_end_location": "Travel End Location",
+
   "@@util": {},
   "yes": "Yes",
   "no": "No",
