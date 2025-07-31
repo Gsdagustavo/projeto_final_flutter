@@ -69,12 +69,16 @@ class TravelRepositoryImpl implements TravelRepository {
 
       final stops = travelModel.stops;
 
-      /// Insert stops into [TravelStop] and [TravelStopExperiences] table
+      /// Stops related inserts
+      ///
+      /// Inserts values into [TravelStopTable], [TravelStopExperiencesTable],
+      /// [PlacesTable] and[AddressesTable]
       for (final stop in stops) {
         await _insertStop(txn, stop, travelId);
       }
 
-      /// Insert participants into [ParticipantsTable] and [TravelParticipantsTable]
+      /// Insert participants into [ParticipantsTable] and
+      /// [TravelParticipantsTable]
       for (final participant in travelModel.participants) {
         final participantId = await txn.insert(
           ParticipantsTable.tableName,

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 
 import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';
-import '../travel_stop/travel_stop_use_cases.dart';
 import 'travel_repository.dart';
 
 /// Interface that defines all use cases related to the travels
@@ -27,6 +26,7 @@ class TravelUseCasesImpl implements TravelUseCases {
   ///
   /// Used to interact with the database
   final TravelRepository travelRepository;
+
   /// Default constructor
   TravelUseCasesImpl(this.travelRepository);
 
