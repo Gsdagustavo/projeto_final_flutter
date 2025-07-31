@@ -1,3 +1,4 @@
+import 'places_table.dart';
 import 'travel_table.dart';
 
 /// SQLite table schema and constants for the `travelStops` table
@@ -14,21 +15,6 @@ abstract final class TravelStopTable {
   /// `INTEGER PRIMARY KEY AUTOINCREMENT`
   static const String travelStopId = 'travelStopId';
 
-  /// Column name for the city name of the travel stop
-  ///
-  /// `TEXT NOT NULL`
-  static const String cityName = 'cityName';
-
-  /// Column name for the latitude of the travel stop
-  ///
-  /// `REAL NOT NULL`
-  static const String latitude = 'latitude';
-
-  /// Column name for the longitude of the travel stop
-  ///
-  /// `REAL NOT NULL`
-  static const String longitude = 'longitude';
-
   /// Column name for the arrival date (in milliseconds since epoch)
   ///
   /// `INTEGER NOT NULL`
@@ -41,6 +27,8 @@ abstract final class TravelStopTable {
 
   static const String type = 'type';
 
+  static const String placeId = 'placeId';
+
   /// Column name for the travel ID (foreign key)
   ///
   /// `INTEGER NOT NULL`
@@ -52,13 +40,13 @@ abstract final class TravelStopTable {
     CREATE TABLE $tableName (
       $travelStopId INTEGER PRIMARY KEY AUTOINCREMENT,
       $type TEXT NOT NULL,
-      $cityName TEXT NOT NULL,
-      $latitude REAL NOT NULL,
-      $longitude REAL NOT NULL,
       $arriveDate INTEGER,
       $leaveDate INTEGER,
       $travelId INTEGER NOT NULL,
-      FOREIGN KEY ($travelId) REFERENCES ${TravelTable.tableName} (${TravelTable.travelId})
+      $placeId INTEGER NOT NULL,
+      
+      FOREIGN KEY ($travelId) REFERENCES ${TravelTable.tableName} (${TravelTable.travelId}),
+      FOREIGN KEY ($placeId) REFERENCES ${PlacesTable.tableName} (${PlacesTable.placeId})
     );
   ''';
 }
