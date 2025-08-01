@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/extensions/date_extensions.dart';
 import '../../core/extensions/string_extensions.dart';
 import '../../domain/entities/enums.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/locale_service.dart';
 import '../extensions/enums_extensions.dart';
 import '../providers/register_travel_provider.dart';
 import '../providers/travel_list_provider.dart';
@@ -222,16 +224,21 @@ class _TransportTypesDropdownButton extends StatelessWidget {
   }
 }
 
-String _formatDate(DateTime date) {
-  var stringDate = '';
-  stringDate += '${date.day}/';
-  stringDate += '${date.month}/';
-  stringDate += date.year.toString();
-  return stringDate;
+class _DateTextButtons extends StatefulWidget {
+  const _DateTextButtons();
+
+  @override
+  State<_DateTextButtons> createState() => _DateTextButtonsState();
 }
 
-class _DateTextButtons extends StatelessWidget {
-  const _DateTextButtons();
+class _DateTextButtonsState extends State<_DateTextButtons> {
+  late Future<String> _localeFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _localeFuture = LocaleService().loadLanguageCode();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -246,67 +253,88 @@ class _DateTextButtons extends StatelessWidget {
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
         const Padding(padding: EdgeInsets.all(10)),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+
+        FutureBuilder(
+          future: _localeFuture,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasError) {
+              /// TODO: show error dialog
+            }
+
+            final locale = snapshot.data!;
+
+            if (locale == null || locale.isEmpty) {
+              /// TODO: show error dialog
+            }
+
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                TextButton(
-                  style: ButtonStyle(
-                    padding: WidgetStateProperty.all(EdgeInsets.zero),
-                  ),
-
-                  onPressed: () async {
-                    final now = DateTime.now();
-                    var date = await showDatePicker(
-                      context: context,
-                      initialDate: travelState.startDate ?? now,
-                      firstDate: now,
-                      lastDate: now.add(const Duration(days: 365)),
-                    );
-                    travelState.selectStartDate(date);
-                  },
-                  child: Text(as.travel_start_date_label),
-                ),
-
-                if (travelState.startDate != null)
-                  Text(_formatDate(travelState.startDate!)),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                TextButton(
-                  onPressed: () async {
-                    if (!travelState.isStartDateSelected) {
-                      final message = as.err_invalid_date_snackbar;
-
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(SnackBar(content: Text(message)));
-
-                      return;
-                    }
-
-                    var date = await showDatePicker(
-                      context: context,
-                      initialDate: travelState.endDate ?? travelState.startDate,
-                      firstDate: travelState.startDate!,
-                      lastDate: travelState.startDate!.add(
-                        const Duration(days: 365),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      style: ButtonStyle(
+                        padding: WidgetStateProperty.all(EdgeInsets.zero),
                       ),
-                    );
-                    travelState.selectEndDate(date);
-                  },
-                  child: Text(as.travel_end_date_label),
-                ),
 
-                if (travelState.endDate != null)
-                  Text(_formatDate(travelState.endDate!)),
+                      onPressed: () async {
+                        final now = DateTime.now();
+                        var date = await showDatePicker(
+                          context: context,
+                          initialDate: travelState.startDate ?? now,
+                          firstDate: now,
+                          lastDate: now.add(const Duration(days: 365)),
+                        );
+                        travelState.selectStartDate(date);
+                      },
+                      child: Text(as.travel_start_date_label),
+                    ),
+
+                    if (travelState.startDate != null)
+                      Text(travelState.startDate!.getFormattedDate(locale)),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () async {
+                        if (!travelState.isStartDateSelected) {
+                          final message = as.err_invalid_date_snackbar;
+
+                          ScaffoldMessenger.of(
+                            context,
+                          ).showSnackBar(SnackBar(content: Text(message)));
+
+                          return;
+                        }
+
+                        var date = await showDatePicker(
+                          context: context,
+                          initialDate:
+                              travelState.endDate ?? travelState.startDate,
+                          firstDate: travelState.startDate!,
+                          lastDate: travelState.startDate!.add(
+                            const Duration(days: 365),
+                          ),
+                        );
+                        travelState.selectEndDate(date);
+                      },
+                      child: Text(as.travel_end_date_label),
+                    ),
+
+                    if (travelState.endDate != null)
+                      Text(travelState.endDate!.getFormattedDate(locale)),
+                  ],
+                ),
               ],
-            ),
-          ],
+            );
+          },
         ),
       ],
     );
