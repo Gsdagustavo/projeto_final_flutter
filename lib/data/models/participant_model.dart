@@ -14,13 +14,13 @@ class ParticipantModel {
   final int age;
 
   /// Participant profile picture (path to the file)
-  final File? profilePicture;
+  final File profilePicture;
 
   /// Named constructor for the participant
   ParticipantModel({
     required this.name,
     required this.age,
-    this.profilePicture,
+    required this.profilePicture,
     this.id,
   });
 

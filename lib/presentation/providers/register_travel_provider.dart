@@ -349,7 +349,7 @@ class RegisterTravelProvider with ChangeNotifier {
     final participant = Participant(
       name: _participantNameController.text,
       age: intAge,
-      profilePicture: _profilePictureFile,
+      profilePicture: _profilePictureFile!,
     );
 
     _participantNameController.clear();

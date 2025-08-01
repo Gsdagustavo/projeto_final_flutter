@@ -541,7 +541,10 @@ class _ListParticipants extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 12),
           child: Row(
             children: [
-              CircleAvatar(child: Text(participant.name[0].toUpperCase())),
+              CircleAvatar(
+                radius: 25,
+                child: Image.file(participant.profilePicture),
+              ),
               const Padding(padding: EdgeInsets.all(8)),
               Text(
                 '${as.name}: ${participant.name}\n'

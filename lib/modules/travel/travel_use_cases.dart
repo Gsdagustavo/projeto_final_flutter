@@ -106,7 +106,7 @@ class TravelUseCasesImpl implements TravelUseCases {
 
   List<Participant> _validateParticipants(List<Participant> participants) {
     return participants.map((p) {
-      return Participant(name: p.name.capitalizedAndSpaced, age: p.age);
+      return p.copyWith(name: p.name.capitalizedAndSpaced);
     }).toList();
   }
 }

@@ -12,16 +12,30 @@ class Participant {
   final int age;
 
   /// Participant profile picture (path to the file)
-  final File? profilePicture;
+  final File profilePicture;
 
   /// Named constructor for the participant
   Participant({
     required this.name,
     required this.age,
-    this.profilePicture,
+    required this.profilePicture,
     this.id,
     tra,
   });
+
+  Participant copyWith({
+    int? id,
+    String? name,
+    int? age,
+    File? profilePicture,
+  }) {
+    return Participant(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      age: age ?? this.age,
+      profilePicture: profilePicture ?? this.profilePicture,
+    );
+  }
 
   @override
   String toString() {
