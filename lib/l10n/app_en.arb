@@ -34,6 +34,8 @@
   "transport_type_cruise": "Cruise",
 
   "@@experiences": {},
+  "experience": "Experience",
+  "experiences": "Experiences",
   "experience_cultural_immersion": "Cultural Immersion",
   "experience_alternative_cuisines": "Alternative Cuisines",
   "experience_historical_places": "Visit Historical Places",
@@ -44,6 +46,7 @@
   "title_home": "Home",
   "title_register_travel": "Register Travel",
   "title_settings": "Settings",
+  "my_travels": "My Travels",
 
   "@@register_travel_page": {},
   "travel_title_label": "Travel Title",
@@ -62,6 +65,8 @@
   "remove_participant_confirmation": "Would you really want to remove the participant?",
   "remove_participant": "Remove participant",
   "participant_removed": "Participant removed",
+  "travel_map": "Travel Map",
+  "add_stops_for_your_travel": "Add Stops for Your Travel",
   "travel_registered_successfully": "Your Travel was successfully registered!",
 
   "@@google_map": {},
@@ -74,6 +79,7 @@
   "travel_stop": "Travel Stop",
   "travel_start_location": "Travel Start Location",
   "travel_end_location": "Travel End Location",
+  "finish": "Finish",
 
   "@@util": {},
   "yes": "Yes",

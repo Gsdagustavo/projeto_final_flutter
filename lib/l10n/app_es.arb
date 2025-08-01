@@ -34,6 +34,8 @@
   "transport_type_cruise": "Crucero",
 
   "@@experiences": {},
+  "experience": "Experiencia",
+  "experiences": "Experiencias",
   "experience_cultural_immersion": "Inmersión Cultural",
   "experience_alternative_cuisines": "Cocinas Alternativas",
   "experience_historical_places": "Visitar Lugares Históricos",
@@ -44,6 +46,7 @@
   "title_home": "Inicio",
   "title_register_travel": "Registrar Viaje",
   "title_settings": "Configuración",
+  "my_travels": "Mis Viajes",
 
   "@@register_travel_page": {},
   "travel_title_label": "Título del Viaje",
@@ -62,6 +65,8 @@
   "remove_participant_confirmation": "¿Realmente deseas eliminar al participante",
   "remove_participant": "Eliminar participante",
   "participant_removed": "Participante eliminado",
+  "travel_map": "Mapa del Viaje",
+  "add_stops_for_your_travel": "Agregar Paradas para Tu Viaje",
   "travel_registered_successfully": "Viaje registrado con éxito",
 
   "@@google_map": {},
@@ -74,6 +79,7 @@
   "travel_stop": "Parada del Viaje",
   "travel_start_location": "Ubicación de Inicio del Viaje",
   "travel_end_location": "Ubicación de Fin del Viaje",
+  "finish": "Finalizar",
 
   "@@util": {},
   "yes": "Sí",

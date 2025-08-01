@@ -34,6 +34,8 @@
   "transport_type_cruise": "Navio de cruzeiro",
 
   "@@experiences": {},
+  "experience": "Experiência",
+  "experiences": "Experiências",
   "experience_cultural_immersion": "Imersão Cultural",
   "experience_alternative_cuisines": "Culinárias Alternativas",
   "experience_historical_places": "Visitar Lugares Históricos",
@@ -44,6 +46,7 @@
   "title_home": "Início",
   "title_register_travel": "Registrar Viagem",
   "title_settings": "Configurações",
+  "my_travels": "Minhas Viagens",
 
   "@@register_travel_page": {},
   "travel_title_label": "Título da Viagem",
@@ -62,6 +65,8 @@
   "remove_participant_confirmation": "Você realmente deseja remover o participante",
   "remove_participant": "Remover participante",
   "participant_removed": "Participante removido",
+  "travel_map": "Mapa da Viagem",
+  "add_stops_for_your_travel":  "Adicionar Paradas para a Sua Viagem",
   "travel_registered_successfully": "Viagem registrada com sucesso",
 
   "@@google_map": {},
@@ -74,6 +79,7 @@
   "travel_stop": "Parada da Viagem",
   "travel_start_location": "Local de Início da Viagem",
   "travel_end_location": "Local de Término da Viagem",
+  "finish": "Finalizar",
 
   "@@util": {},
   "yes": "Sim",
@@ -81,6 +87,5 @@
   "warning": "Aviso",
   "cancel": "Cancelar",
   "remove": "Remover",
-
   "unknown_error": "Erro desconhecido"
 }
