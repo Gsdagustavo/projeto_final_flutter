@@ -36,6 +36,26 @@ class Travel {
     required this.stops,
   });
 
+  Travel copyWith({
+    int? travelId,
+    String? travelTitle,
+    DateTime? startDate,
+    DateTime? endDate,
+    TransportType? transportType,
+    List<Participant>? participants,
+    List<TravelStop>? stops,
+  }) {
+    return Travel(
+      travelId: travelId ?? this.travelId,
+      travelTitle: travelTitle ?? this.travelTitle,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      transportType: transportType ?? this.transportType,
+      participants: participants ?? this.participants,
+      stops: stops ?? this.stops,
+    );
+  }
+
   /// Returns a [Duration] that represents the total duration of the travel
   Duration get totalDuration => endDate!.difference(startDate!);
 
