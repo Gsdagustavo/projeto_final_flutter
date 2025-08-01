@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/enums.dart';
@@ -301,14 +303,18 @@ class RegisterTravelProvider with ChangeNotifier {
   ///
   /// [profilePictureUrl]: An optional argument that represents the path of the
   /// profile picture of the participant
-  void addParticipant([String? profilePictureUrl]) {
+  void addParticipant([File? profilePicture]) {
     var intAge = int.tryParse(_participantAgeController.text);
     if (intAge == null) return;
+
+    if (profilePicture == null) {
+      profilePicture = File.;
+    }
 
     var participant = Participant(
       name: _participantNameController.text,
       age: intAge,
-      profilePicturePath: profilePictureUrl,
+      profilePicture: profilePicture,
     );
 
     _participantNameController.clear();
@@ -316,6 +322,10 @@ class RegisterTravelProvider with ChangeNotifier {
 
     _participants.add(participant);
     notifyListeners();
+  }
+
+  Future<File> getDefaultProfilePictureFile() async {
+
   }
 
   void removeParticipant(int index) {

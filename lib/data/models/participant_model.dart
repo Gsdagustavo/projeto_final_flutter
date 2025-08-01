@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../../domain/entities/participant.dart';
 import '../local/database/tables/participants_table.dart';
 
@@ -12,13 +14,13 @@ class ParticipantModel {
   final int age;
 
   /// Participant profile picture (path to the file)
-  final String? profilePicturePath;
+  final File? profilePicture;
 
   /// Named constructor for the participant
   ParticipantModel({
     required this.name,
     required this.age,
-    this.profilePicturePath,
+    this.profilePicture,
     this.id,
   });
 
@@ -28,7 +30,7 @@ class ParticipantModel {
       id: map[ParticipantsTable.participantId],
       name: map[ParticipantsTable.name],
       age: map[ParticipantsTable.age],
-      profilePicturePath: map[ParticipantsTable.profilePicturePath],
+      profilePicture: map[ParticipantsTable.profilePicturePath],
     );
   }
 
@@ -38,7 +40,7 @@ class ParticipantModel {
       ParticipantsTable.participantId: id,
       ParticipantsTable.name: name,
       ParticipantsTable.age: age,
-      ParticipantsTable.profilePicturePath: profilePicturePath,
+      ParticipantsTable.profilePicturePath: profilePicture,
     };
   }
 
@@ -47,7 +49,7 @@ class ParticipantModel {
       id: participant.id,
       name: participant.name,
       age: participant.age,
-      profilePicturePath: participant.profilePicturePath,
+      profilePicture: participant.profilePicture,
     );
   }
 
@@ -56,12 +58,12 @@ class ParticipantModel {
       id: id,
       name: name,
       age: age,
-      profilePicturePath: profilePicturePath,
+      profilePicture: profilePicture,
     );
   }
 
   @override
   String toString() {
-    return 'ParticipantModel{id: $id, name: $name, age: $age, profilePicturePath: $profilePicturePath}';
+    return 'ParticipantModel{id: $id, name: $name, age: $age, profilePicturePath: $profilePicture}';
   }
 }

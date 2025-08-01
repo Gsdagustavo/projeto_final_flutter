@@ -1,3 +1,5 @@
+import 'dart:io';
+
 /// Represents a  [Participant] of a [Travel]
 class Participant {
   /// Participant ID
@@ -10,19 +12,19 @@ class Participant {
   final int age;
 
   /// Participant profile picture (path to the file)
-  final String? profilePicturePath;
+  final File? profilePicture;
 
   /// Named constructor for the participant
   Participant({
     required this.name,
     required this.age,
-    this.profilePicturePath,
+    this.profilePicture,
     this.id,
     tra,
   });
 
   @override
   String toString() {
-    return 'Participant{name: $name, age: $age, profilePictureUrl: $profilePicturePath}';
+    return 'Participant{name: $name, age: $age, profilePictureUrl: $profilePicture}';
   }
 }
