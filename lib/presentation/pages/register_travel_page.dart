@@ -46,7 +46,7 @@ class RegisterTravelPage extends StatelessWidget {
                   state.error ?? as.unknown_error,
                   textAlign: TextAlign.center,
                 );
-                icon = Icon(Icons.error, color: Colors.red);
+                icon = const Icon(Icons.error, color: Colors.red);
               } else {
                 content = Text(
                   as.travel_registered_successfully,
@@ -462,7 +462,7 @@ class _ListParticipants extends StatelessWidget {
               const Spacer(),
 
               IconButton(
-                icon: Icon(Icons.delete),
+                icon: const Icon(Icons.delete),
                 onPressed: () async {
                   final result = await showDialog<bool>(
                     context: context,
@@ -512,17 +512,21 @@ class _TravelMapWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Travel Map | Register Travel Stops',
+          'Travel Map',
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
+        const Padding(padding: EdgeInsets.all(10)),
+
+        Text('Add stops for your travel'),
 
         IconButton(
           onPressed: () {
             Navigator.pushNamed(context, TravelMap.routeName);
           },
-          icon: Icon(Icons.map),
+          icon: const Icon(Icons.map),
         ),
       ],
     );
