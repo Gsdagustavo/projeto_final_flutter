@@ -12,11 +12,11 @@ import 'domain/entities/travel_stop.dart';
 import 'modules/travel/travel_repository.dart';
 import 'modules/travel/travel_use_cases.dart';
 import 'presentation/providers/language_code_provider.dart';
+import 'presentation/providers/login_provider.dart';
 import 'presentation/providers/register_travel_provider.dart';
 import 'presentation/providers/theme_provider.dart';
 import 'presentation/providers/travel_list_provider.dart';
 import 'presentation/widgets/my_app.dart';
-import 'services/auth_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,6 +49,7 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ChangeNotifierProvider(create: (context) => LanguageCodeProvider()),
+        ChangeNotifierProvider(create: (context) => LoginProvider()),
       ],
       child: const MyApp(),
     ),
