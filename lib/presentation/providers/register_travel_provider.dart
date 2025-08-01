@@ -48,6 +48,20 @@ class RegisterTravelProvider with ChangeNotifier {
     for (var e in Experience.values) e: false,
   };
 
+  /// A [TextEditingController] to be assigned to a participant name
+  final _participantNameController = TextEditingController();
+
+  /// A [TextEditingController] to be assigned to a participant age
+  final _participantAgeController = TextEditingController();
+
+  File? _profilePictureFile;
+
+  /// The error message (obtained via exception.message on try-catch structures)
+  String? _errorMsg;
+
+  /// Whether there are any asynchronous methods being processed
+  bool _isLoading = false;
+
   /// If a [TravelStop] was given, populates [_selectedExperiences] with the
   /// [values] being whether or not the experience is in the [experiences] list
   ///
@@ -70,18 +84,6 @@ class RegisterTravelProvider with ChangeNotifier {
     debugPrint('Selected experiences after reset: $_selectedExperiences');
     notifyListeners();
   }
-
-  /// A [TextEditingController] to be assigned to a participant name
-  final _participantNameController = TextEditingController();
-
-  /// A [TextEditingController] to be assigned to a participant age
-  final _participantAgeController = TextEditingController();
-
-  /// The error message (obtained via exception.message on try-catch structures)
-  String? _errorMsg;
-
-  /// Whether there are any asynchronous methods being processed
-  bool _isLoading = false;
 
   /// Tries to register a new [Travel] with the given inputs using
   /// [_travelUseCases]
@@ -123,6 +125,12 @@ class RegisterTravelProvider with ChangeNotifier {
     _isLoading = false;
 
     _resetForms();
+  }
+
+  bool get isTravelValid {
+    return areStopsValid &&
+        numParticipants >= 1 &&
+        travelTitleController.text.isNotEmpty;
   }
 
   void addTravelStop(TravelStop stop) {
@@ -303,18 +311,16 @@ class RegisterTravelProvider with ChangeNotifier {
   ///
   /// [profilePictureUrl]: An optional argument that represents the path of the
   /// profile picture of the participant
-  void addParticipant([File? profilePicture]) {
-    var intAge = int.tryParse(_participantAgeController.text);
+  void addParticipant() {
+    final intAge = int.tryParse(_participantAgeController.text);
     if (intAge == null) return;
 
-    if (profilePicture == null) {
-      profilePicture = File.;
-    }
+    _profilePictureFile ??= getDefaultProfilePictureFile();
 
-    var participant = Participant(
+    final participant = Participant(
       name: _participantNameController.text,
       age: intAge,
-      profilePicture: profilePicture,
+      profilePicture: _profilePictureFile,
     );
 
     _participantNameController.clear();
@@ -324,8 +330,8 @@ class RegisterTravelProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<File> getDefaultProfilePictureFile() async {
-
+  File getDefaultProfilePictureFile() {
+    return File('assets/images/default_profile_picture.png');
   }
 
   void removeParticipant(int index) {
