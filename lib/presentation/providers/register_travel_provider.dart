@@ -19,25 +19,29 @@ class RegisterTravelProvider with ChangeNotifier {
   RegisterTravelProvider(this._travelUseCases);
 
   /// A [TextEditingController] to be assigned to the travel title
-  final _travelTitleController = TextEditingController(text: 'Test Name');
+  final _travelTitleController = TextEditingController();
 
   /// The selected travel [TransportType]
   var _transportType = TransportType.values.first;
 
   /// The list of [Participants] assigned to the travel
-  final _participants = <Participant>[Participant(name: 'Test', age: 1)];
+  final _participants = <Participant>[];
 
   var _stops = <TravelStop>[];
 
-  DateTime? _arriveDate;
-  DateTime? _leaveDate;
-
   /// The start date of the [Travel]
-  DateTime? _startDate = DateTime.now();
+  DateTime? _startDate;
 
   /// The end date of the [Travel]
-  DateTime? _endDate = DateTime.now().add(Duration(days: 7));
+  DateTime? _endDate;
 
+  /// The arrive date of the travel stop that will be registered
+  DateTime? _arriveDate;
+
+  /// The leave date of the travel stop that will be registered
+  DateTime? _leaveDate;
+
+  /// The selected experiences for the current travel stop
   Map<Experience, bool> _selectedExperiences = {
     for (var e in Experience.values) e: false,
   };
@@ -66,10 +70,10 @@ class RegisterTravelProvider with ChangeNotifier {
   }
 
   /// A [TextEditingController] to be assigned to a participant name
-  final _participantNameController = TextEditingController(text: 'Test Name');
+  final _participantNameController = TextEditingController();
 
   /// A [TextEditingController] to be assigned to a participant age
-  final _participantAgeController = TextEditingController(text: '15');
+  final _participantAgeController = TextEditingController();
 
   /// The error message (obtained via exception.message on try-catch structures)
   String? _errorMsg;
@@ -231,13 +235,6 @@ class RegisterTravelProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  /// This is a debug method used to get all travels registered in the database
-  ///
-  /// This is intended to be removed in the future
-  Future<void> select() async {
-    await _travelUseCases.getAllTravels();
-  }
-
   /// Sets the given [value] to [selectedTransportType]
   void selectTransportType(TransportType? value) {
     if (_transportType == value) return;
@@ -324,6 +321,11 @@ class RegisterTravelProvider with ChangeNotifier {
   void removeParticipant(int index) {
     _participants.removeAt(index);
     notifyListeners();
+  }
+
+  Future<void> select() async {
+    final travels = await _travelUseCases.getAllTravels();
+    debugPrint('Listing all travels:\n$travels');
   }
 
   /// Returns the [TextEditingController] for the travel title
