@@ -69,6 +69,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get transport_type_cruise => 'Cruise';
 
   @override
+  String get travel_stop_type_start => 'Start';
+
+  @override
+  String get travel_stop_type_stop => 'Stop';
+
+  @override
+  String get travel_stop_type_end => 'End';
+
+  @override
   String get experience => 'Experience';
 
   @override
@@ -90,6 +99,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get experience_contact_with_nature => 'Contact With Nature';
 
   @override
+  String get my_travels => 'My Travels';
+
+  @override
   String get title_home => 'Home';
 
   @override
@@ -99,7 +111,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get title_settings => 'Settings';
 
   @override
-  String get my_travels => 'My Travels';
+  String get title_map_select_travel_stops => 'Select Travel Stops';
 
   @override
   String get travel_title_label => 'Travel Title';
@@ -159,13 +171,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get travel_registered_successfully => 'Your Travel was successfully registered!';
 
   @override
-  String get travel_stop_type_start => 'Start';
+  String get travel_stop => 'Travel Stop';
 
   @override
-  String get travel_stop_type_stop => 'Stop';
+  String get travel_start_location => 'Travel Start Location';
 
   @override
-  String get travel_stop_type_end => 'End';
+  String get travel_end_location => 'Travel End Location';
+
+  @override
+  String get register_stop => 'Register Stop';
 
   @override
   String get stop_registered_successfully => 'Stop registered successfully!';
@@ -174,16 +189,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get err_register_stop => 'An error occurred while trying to register the stop';
 
   @override
-  String get register_stop => 'Register Stop';
+  String get update_stop => 'Update Stop';
 
   @override
-  String get travel_stop => 'Travel Stop';
+  String get stop_updated_successfully => 'Stop updated successfully!';
 
   @override
-  String get travel_start_location => 'Travel Start Location';
+  String get arrive_date => 'ArriveDate';
 
   @override
-  String get travel_end_location => 'Travel End Location';
+  String get leave_date => 'Leave Date';
+
+  @override
+  String get err_you_must_select_arrive_date_first => 'You must select the Arrive Date first!';
 
   @override
   String get finish => 'Finish';

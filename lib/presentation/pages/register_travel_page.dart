@@ -190,6 +190,7 @@ class _TransportTypesDropdownButton extends StatelessWidget {
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
         const Padding(padding: EdgeInsets.all(12)),
+
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
@@ -543,20 +544,22 @@ class _ListParticipants extends StatelessWidget {
 }
 
 class _TravelMapWidget extends StatelessWidget {
-  const _TravelMapWidget({super.key});
+  const _TravelMapWidget();
 
   @override
   Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Travel Map',
+          as.travel_map,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
         const Padding(padding: EdgeInsets.all(10)),
 
-        Text('Add stops for your travel'),
+        Text(as.add_stops_for_your_travel),
 
         IconButton(
           onPressed: () {

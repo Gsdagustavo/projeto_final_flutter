@@ -33,6 +33,11 @@
   "transport_type_plane": "Plane",
   "transport_type_cruise": "Cruise",
 
+  "@travel_stop_types": {},
+  "travel_stop_type_start": "Start",
+  "travel_stop_type_stop": "Stop",
+  "travel_stop_type_end": "End",
+
   "@@experiences": {},
   "experience": "Experience",
   "experiences": "Experiences",
@@ -43,10 +48,13 @@
   "experience_contact_with_nature": "Contact With Nature",
 
   "@@home_page": {},
+  "my_travels": "My Travels",
+
+  "@@pages_titles": {},
   "title_home": "Home",
   "title_register_travel": "Register Travel",
   "title_settings": "Settings",
-  "my_travels": "My Travels",
+  "title_map_select_travel_stops": "Select Travel Stops",
 
   "@@register_travel_page": {},
   "travel_title_label": "Travel Title",
@@ -70,15 +78,17 @@
   "travel_registered_successfully": "Your Travel was successfully registered!",
 
   "@@google_map": {},
-  "travel_stop_type_start": "Start",
-  "travel_stop_type_stop": "Stop",
-  "travel_stop_type_end": "End",
-  "stop_registered_successfully": "Stop registered successfully!",
-  "err_register_stop": "An error occurred while trying to register the stop",
-  "register_stop": "Register Stop",
   "travel_stop": "Travel Stop",
   "travel_start_location": "Travel Start Location",
   "travel_end_location": "Travel End Location",
+  "register_stop": "Register Stop",
+  "stop_registered_successfully": "Stop registered successfully!",
+  "err_register_stop": "An error occurred while trying to register the stop",
+  "update_stop": "Update Stop",
+  "stop_updated_successfully": "Stop updated successfully!",
+  "arrive_date": "ArriveDate",
+  "leave_date": "Leave Date",
+  "err_you_must_select_arrive_date_first": "You must select the Arrive Date first!",
   "finish": "Finish",
 
   "@@util": {},

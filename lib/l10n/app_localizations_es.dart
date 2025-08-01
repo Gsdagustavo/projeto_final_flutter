@@ -69,6 +69,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get transport_type_cruise => 'Crucero';
 
   @override
+  String get travel_stop_type_start => 'Inicio';
+
+  @override
+  String get travel_stop_type_stop => 'Parada';
+
+  @override
+  String get travel_stop_type_end => 'Fin';
+
+  @override
   String get experience => 'Experiencia';
 
   @override
@@ -90,6 +99,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get experience_contact_with_nature => 'Contacto con la Naturaleza';
 
   @override
+  String get my_travels => 'Mis Viajes';
+
+  @override
   String get title_home => 'Inicio';
 
   @override
@@ -99,7 +111,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get title_settings => 'Configuración';
 
   @override
-  String get my_travels => 'Mis Viajes';
+  String get title_map_select_travel_stops => 'Seleccionar Paradas';
 
   @override
   String get travel_title_label => 'Título del Viaje';
@@ -159,13 +171,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get travel_registered_successfully => 'Viaje registrado con éxito';
 
   @override
-  String get travel_stop_type_start => 'Inicio';
+  String get travel_stop => 'Parada del viaje';
 
   @override
-  String get travel_stop_type_stop => 'Parada';
+  String get travel_start_location => 'Ubicación de inicio del viaje';
 
   @override
-  String get travel_stop_type_end => 'Fin';
+  String get travel_end_location => 'Ubicación final del viaje';
+
+  @override
+  String get register_stop => 'Registrar parada';
 
   @override
   String get stop_registered_successfully => '¡Parada registrada con éxito!';
@@ -174,16 +189,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get err_register_stop => 'Ocurrió un error al intentar registrar la parada';
 
   @override
-  String get register_stop => 'Registrar Parada';
+  String get update_stop => 'Actualizar parada';
 
   @override
-  String get travel_stop => 'Parada del Viaje';
+  String get stop_updated_successfully => '¡Parada actualizada con éxito!';
 
   @override
-  String get travel_start_location => 'Ubicación de Inicio del Viaje';
+  String get arrive_date => 'Fecha de llegada';
 
   @override
-  String get travel_end_location => 'Ubicación de Fin del Viaje';
+  String get leave_date => 'Fecha de salida';
+
+  @override
+  String get err_you_must_select_arrive_date_first => '¡Debes seleccionar primero la fecha de llegada!';
 
   @override
   String get finish => 'Finalizar';

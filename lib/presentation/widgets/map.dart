@@ -12,6 +12,7 @@ import '../../domain/entities/enums.dart';
 import '../../domain/entities/place.dart';
 import '../../domain/entities/travel.dart';
 import '../../domain/entities/travel_stop.dart';
+import '../../l10n/app_localizations.dart';
 import '../../services/locale_service.dart';
 import '../../services/location_service.dart';
 import '../extensions/enums_extensions.dart';
@@ -206,11 +207,14 @@ class _TravelMapState extends State<TravelMap> {
 
   @override
   Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: MyAppBar(
-        title: 'Select Travel Stops',
+        title: as.title_map_select_travel_stops,
         automaticallyImplyLeading: true,
       ),
+
       body: Builder(
         builder: (context) {
           if (_isCreatingMap) return Center(child: CircularProgressIndicator());
@@ -233,6 +237,8 @@ class _TravelMapState extends State<TravelMap> {
           //   }
           //   _isLoadingDialogVisible = false;
           // }
+
+          final travelState = Provider.of<RegisterTravelProvider>(context);
 
           return Stack(
             alignment: Alignment.center,
@@ -266,46 +272,38 @@ class _TravelMapState extends State<TravelMap> {
               ),
 
               /// 'Finish' button
-              Positioned(
-                bottom: 30,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 16, horizontal: 64),
-                  ),
-                  onPressed: () async {
-                    final travelState = Provider.of<RegisterTravelProvider>(
-                      context,
-                      listen: false,
-                    );
-
-                    if (!travelState.areStopsValid) {
-                      await showDialog(
-                        context: context,
-                        builder: (context) {
-                          return ErrorDialog(
-                            errorMsg: 'At least 2 stops must be registered',
-                          );
-                        },
+              if (travelState.areStopsValid)
+                Positioned(
+                  bottom: 30,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 16,
+                        horizontal: 64,
+                      ),
+                    ),
+                    onPressed: () async {
+                      final travelState = Provider.of<RegisterTravelProvider>(
+                        context,
+                        listen: false,
                       );
 
-                      return;
-                    }
-
-                    unawaited(
-                      Navigator.pushReplacementNamed(
-                        context,
-                        RegisterTravelPage.routeName,
-                      ),
-                    );
-                  },
-                  child: Text('Finish', style: TextStyle(fontSize: 22)),
+                      unawaited(
+                        Navigator.pushReplacementNamed(
+                          context,
+                          RegisterTravelPage.routeName,
+                        ),
+                      );
+                    },
+                    child: Text(as.finish, style: TextStyle(fontSize: 22)),
+                  ),
                 ),
-              ),
             ],
           );
         },
       ),
 
+      /// TODO: remove this
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 100),
         child: Column(
@@ -349,6 +347,8 @@ class _RegisterStopButton extends StatelessWidget {
       listen: false,
     );
 
+    final as = AppLocalizations.of(context)!;
+
     return ElevatedButton(
       onPressed: () async {
         final stop = TravelStop(place: place, experiences: experiences);
@@ -359,8 +359,8 @@ class _RegisterStopButton extends StatelessWidget {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text('Travel Stop'),
-              content: Text('Travel Stop registered successfully!'),
+              title: Text(as.travel_stop),
+              content: Text(as.stop_registered_successfully),
               icon: Icon(Icons.check, color: Colors.green),
             );
           },
@@ -368,7 +368,7 @@ class _RegisterStopButton extends StatelessWidget {
 
         Navigator.pop(context, stop);
       },
-      child: Text('Register Stop'),
+      child: Text(as.register_stop),
     );
   }
 }
@@ -385,6 +385,8 @@ class _UpdateStopButton extends StatelessWidget {
       context,
       listen: false,
     );
+
+    final as = AppLocalizations.of(context)!;
 
     return ElevatedButton(
       onPressed: () {
@@ -406,10 +408,10 @@ class _UpdateStopButton extends StatelessWidget {
 
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Travel Updated Successfully!')));
+        ).showSnackBar(SnackBar(content: Text(as.stop_updated_successfully)));
         Navigator.pop(context, newStop);
       },
-      child: Text('Update Stop'),
+      child: Text(as.update_stop),
     );
   }
 }
@@ -452,6 +454,8 @@ class _DatesPickersState extends State<_DatesPickers> {
       context,
       listen: false,
     );
+
+    final as = AppLocalizations.of(context)!;
 
     final initialArriveDate = widget.stop?.arriveDate ?? travelState.arriveDate;
     final initialLeaveDate = widget.stop?.leaveDate ?? travelState.leaveDate;
@@ -499,7 +503,7 @@ class _DatesPickersState extends State<_DatesPickers> {
                 travelState.selectArriveDate(dateTime);
                 widget.setModalState(() {});
               },
-              child: Text('Arrive Date', style: TextStyle(fontSize: 16)),
+              child: Text(as.arrive_date, style: TextStyle(fontSize: 16)),
             ),
 
             if (_arriveDate != null)
@@ -523,8 +527,8 @@ class _DatesPickersState extends State<_DatesPickers> {
                 if (arriveDate == null) {
                   await showDialog(
                     context: context,
-                    builder: (context) => const ErrorDialog(
-                      errorMsg: 'You must select the arrive date first!',
+                    builder: (context) => ErrorDialog(
+                      errorMsg: as.err_you_must_select_arrive_date_first,
                     ),
                   );
                   return;
@@ -565,7 +569,7 @@ class _DatesPickersState extends State<_DatesPickers> {
                 travelState.selectLeaveDate(dateTime);
                 widget.setModalState(() {});
               },
-              child: Text('Leave Date', style: const TextStyle(fontSize: 16)),
+              child: Text(as.leave_date, style: const TextStyle(fontSize: 16)),
             ),
             if (_leaveDate != null)
               if (_locale != null && _locale!.isNotEmpty)
@@ -596,6 +600,8 @@ Future<TravelStop?> _showTravelStopModal(
     context,
     listen: false,
   );
+
+  final as = AppLocalizations.of(context)!;
 
   final display = place.display;
 
@@ -631,7 +637,7 @@ Future<TravelStop?> _showTravelStopModal(
                 if (stop?.type == TravelStopType.start ||
                     travelState.stops.isEmpty)
                   Text(
-                    'Travel Start Location',
+                    as.travel_start_location,
                     style: const TextStyle(fontSize: 22),
                   ),
 
@@ -650,7 +656,7 @@ Future<TravelStop?> _showTravelStopModal(
 
                 /// Text to show the "Experiences" label
                 Text(
-                  'Experiences',
+                  as.experiences,
                   style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
@@ -671,11 +677,11 @@ Future<TravelStop?> _showTravelStopModal(
                   ),
                 const Padding(padding: EdgeInsets.all(6)),
 
-                TextField(
-                  decoration: InputDecoration(hintText: 'Other'),
-                  onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
-                ),
-                const Padding(padding: EdgeInsets.all(12)),
+                // TextField(
+                //   decoration: InputDecoration(hintText: as.other),
+                //   onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
+                // ),
+                // const Padding(padding: EdgeInsets.all(12)),
 
                 /// Date pickers to select the [arriveDate] and [leaveDate]
                 _DatesPickers(setModalState: setModalState, stop: stop),

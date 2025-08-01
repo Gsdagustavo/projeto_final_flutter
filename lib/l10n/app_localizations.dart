@@ -217,6 +217,24 @@ abstract class AppLocalizations {
   /// **'Cruise'**
   String get transport_type_cruise;
 
+  /// No description provided for @travel_stop_type_start.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get travel_stop_type_start;
+
+  /// No description provided for @travel_stop_type_stop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get travel_stop_type_stop;
+
+  /// No description provided for @travel_stop_type_end.
+  ///
+  /// In en, this message translates to:
+  /// **'End'**
+  String get travel_stop_type_end;
+
   /// No description provided for @experience.
   ///
   /// In en, this message translates to:
@@ -259,6 +277,12 @@ abstract class AppLocalizations {
   /// **'Contact With Nature'**
   String get experience_contact_with_nature;
 
+  /// No description provided for @my_travels.
+  ///
+  /// In en, this message translates to:
+  /// **'My Travels'**
+  String get my_travels;
+
   /// No description provided for @title_home.
   ///
   /// In en, this message translates to:
@@ -277,11 +301,11 @@ abstract class AppLocalizations {
   /// **'Settings'**
   String get title_settings;
 
-  /// No description provided for @my_travels.
+  /// No description provided for @title_map_select_travel_stops.
   ///
   /// In en, this message translates to:
-  /// **'My Travels'**
-  String get my_travels;
+  /// **'Select Travel Stops'**
+  String get title_map_select_travel_stops;
 
   /// No description provided for @travel_title_label.
   ///
@@ -397,42 +421,6 @@ abstract class AppLocalizations {
   /// **'Your Travel was successfully registered!'**
   String get travel_registered_successfully;
 
-  /// No description provided for @travel_stop_type_start.
-  ///
-  /// In en, this message translates to:
-  /// **'Start'**
-  String get travel_stop_type_start;
-
-  /// No description provided for @travel_stop_type_stop.
-  ///
-  /// In en, this message translates to:
-  /// **'Stop'**
-  String get travel_stop_type_stop;
-
-  /// No description provided for @travel_stop_type_end.
-  ///
-  /// In en, this message translates to:
-  /// **'End'**
-  String get travel_stop_type_end;
-
-  /// No description provided for @stop_registered_successfully.
-  ///
-  /// In en, this message translates to:
-  /// **'Stop registered successfully!'**
-  String get stop_registered_successfully;
-
-  /// No description provided for @err_register_stop.
-  ///
-  /// In en, this message translates to:
-  /// **'An error occurred while trying to register the stop'**
-  String get err_register_stop;
-
-  /// No description provided for @register_stop.
-  ///
-  /// In en, this message translates to:
-  /// **'Register Stop'**
-  String get register_stop;
-
   /// No description provided for @travel_stop.
   ///
   /// In en, this message translates to:
@@ -450,6 +438,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Travel End Location'**
   String get travel_end_location;
+
+  /// No description provided for @register_stop.
+  ///
+  /// In en, this message translates to:
+  /// **'Register Stop'**
+  String get register_stop;
+
+  /// No description provided for @stop_registered_successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop registered successfully!'**
+  String get stop_registered_successfully;
+
+  /// No description provided for @err_register_stop.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while trying to register the stop'**
+  String get err_register_stop;
+
+  /// No description provided for @update_stop.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Stop'**
+  String get update_stop;
+
+  /// No description provided for @stop_updated_successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop updated successfully!'**
+  String get stop_updated_successfully;
+
+  /// No description provided for @arrive_date.
+  ///
+  /// In en, this message translates to:
+  /// **'ArriveDate'**
+  String get arrive_date;
+
+  /// No description provided for @leave_date.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Date'**
+  String get leave_date;
+
+  /// No description provided for @err_you_must_select_arrive_date_first.
+  ///
+  /// In en, this message translates to:
+  /// **'You must select the Arrive Date first!'**
+  String get err_you_must_select_arrive_date_first;
 
   /// No description provided for @finish.
   ///

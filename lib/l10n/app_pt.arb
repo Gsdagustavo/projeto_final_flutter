@@ -33,6 +33,11 @@
   "transport_type_plane": "Avião",
   "transport_type_cruise": "Navio de cruzeiro",
 
+  "@travel_stop_types": {},
+  "travel_stop_type_start": "Início",
+  "travel_stop_type_stop": "Parada",
+  "travel_stop_type_end": "Fim",
+
   "@@experiences": {},
   "experience": "Experiência",
   "experiences": "Experiências",
@@ -43,10 +48,13 @@
   "experience_contact_with_nature": "Contato com a Natureza",
 
   "@@home_page": {},
+  "my_travels": "Minhas Viagens",
+
+  "@@pages_titles": {},
   "title_home": "Início",
   "title_register_travel": "Registrar Viagem",
   "title_settings": "Configurações",
-  "my_travels": "Minhas Viagens",
+  "title_map_select_travel_stops": "Selecionar Paradas",
 
   "@@register_travel_page": {},
   "travel_title_label": "Título da Viagem",
@@ -70,15 +78,17 @@
   "travel_registered_successfully": "Viagem registrada com sucesso",
 
   "@@google_map": {},
-  "travel_stop_type_start": "Início",
-  "travel_stop_type_stop": "Parada",
-  "travel_stop_type_end": "Fim",
-  "stop_registered_successfully": "Parada registrada com sucesso!",
-  "err_register_stop": "Ocorreu um erro ao tentar registrar a parada",
-  "register_stop": "Registrar Parada",
   "travel_stop": "Parada da Viagem",
   "travel_start_location": "Local de Início da Viagem",
   "travel_end_location": "Local de Término da Viagem",
+  "register_stop": "Registrar Parada",
+  "stop_registered_successfully": "Parada registrada com sucesso!",
+  "err_register_stop": "Ocorreu um erro ao tentar registrar a parada",
+  "update_stop": "Atualizar Parada",
+  "stop_updated_successfully": "Parada atualizada com sucesso!",
+  "arrive_date": "Data de Chegada",
+  "leave_date": "Data de Saída",
+  "err_you_must_select_arrive_date_first": "Você deve selecionar a data de chegada primeiro!",
   "finish": "Finalizar",
 
   "@@util": {},
