@@ -76,7 +76,7 @@ class HomePage extends StatelessWidget {
 }
 
 class _TravelWidget extends StatelessWidget {
-  const _TravelWidget({super.key, required this.travel});
+  const _TravelWidget({required this.travel});
 
   final Travel travel;
 

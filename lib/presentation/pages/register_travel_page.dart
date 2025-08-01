@@ -79,21 +79,19 @@ class RegisterTravelPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               /// Travel title text field
-              _TravelTitleTextField(),
-
+              const _TravelTitleTextField(),
               const Padding(padding: EdgeInsets.all(16)),
 
               /// Transport types dropdown button
-              _TransportTypesDropdownButton(),
-
+              const _TransportTypesDropdownButton(),
               const Padding(padding: EdgeInsets.all(16)),
 
-              _DateTextButtons(),
-
+              /// Text buttons to choose the Travel Start and End dates
+              const _DateTextButtons(),
               const Padding(padding: EdgeInsets.all(16)),
 
-              _ParticipantsWidget(),
-
+              /// List all participants and add new participants
+              const _ParticipantsWidget(),
               const Padding(padding: EdgeInsets.all(16)),
 
               const _TravelMapWidget(),
@@ -146,6 +144,8 @@ class RegisterTravelPage extends StatelessWidget {
 }
 
 class _TravelTitleTextField extends StatelessWidget {
+  const _TravelTitleTextField();
+
   @override
   Widget build(BuildContext context) {
     final travelState = Provider.of<RegisterTravelProvider>(context);
@@ -173,6 +173,8 @@ class _TravelTitleTextField extends StatelessWidget {
 }
 
 class _TransportTypesDropdownButton extends StatelessWidget {
+  const _TransportTypesDropdownButton();
+
   @override
   Widget build(BuildContext context) {
     final travelState = Provider.of<RegisterTravelProvider>(context);
@@ -229,6 +231,8 @@ String _formatDate(DateTime date) {
 }
 
 class _DateTextButtons extends StatelessWidget {
+  const _DateTextButtons();
+
   @override
   Widget build(BuildContext context) {
     final travelState = Provider.of<RegisterTravelProvider>(context);
@@ -310,6 +314,8 @@ class _DateTextButtons extends StatelessWidget {
 }
 
 class _ParticipantsWidget extends StatelessWidget {
+  const _ParticipantsWidget();
+
   @override
   Widget build(BuildContext context) {
     final travelState = Provider.of<RegisterTravelProvider>(
@@ -432,6 +438,8 @@ class _ParticipantsWidget extends StatelessWidget {
 }
 
 class _ListParticipants extends StatelessWidget {
+  const _ListParticipants();
+
   @override
   Widget build(BuildContext context) {
     final travelState = Provider.of<RegisterTravelProvider>(context);
