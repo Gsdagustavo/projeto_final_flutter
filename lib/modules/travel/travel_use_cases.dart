@@ -1,5 +1,8 @@
+import 'dart:core';
+
 import 'package:flutter/cupertino.dart';
 
+import '../../core/extensions/string_extensions.dart';
 import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';
 import 'travel_repository.dart';
@@ -47,6 +50,11 @@ class TravelUseCasesImpl implements TravelUseCases {
       throw TravelRegisterException('Invalid travel end date');
     }
 
+    /// No stops
+    if (travel.stops.isEmpty) {
+      throw TravelRegisterException('Travel must contain at least 2 stops');
+    }
+
     /// No participants
     if (travel.participants.isEmpty) {
       throw TravelRegisterException(
@@ -55,17 +63,16 @@ class TravelUseCasesImpl implements TravelUseCases {
     }
 
     /// A(some) participant(s) has invalid data
-    if (!_validateParticipants(travel.participants)) {
+    if (!_isParticipantInfoValid(travel.participants)) {
       throw TravelRegisterException('Invalid participant data');
     }
 
-    /// No stops
-    if (travel.stops.isEmpty) {
-      throw TravelRegisterException('Travel must contain at least 1 stop');
-    }
+    final finalTravel = travel.copyWith(
+      participants: _validateParticipants(travel.participants),
+    );
 
     /// Register travel
-    await travelRepository.registerTravel(travel: travel);
+    await travelRepository.registerTravel(travel: finalTravel);
   }
 
   @override
@@ -73,7 +80,7 @@ class TravelUseCasesImpl implements TravelUseCases {
     return await travelRepository.getAllTravels();
   }
 
-  bool _validateParticipants(List<Participant> participants) {
+  bool _isParticipantInfoValid(List<Participant> participants) {
     return participants.every((p) {
       /// Invalid name
       if (p.name.isEmpty) {
@@ -95,6 +102,12 @@ class TravelUseCasesImpl implements TravelUseCases {
 
       return true;
     });
+  }
+
+  List<Participant> _validateParticipants(List<Participant> participants) {
+    return participants.map((p) {
+      return Participant(name: p.name.capitalizedAndSpaced, age: p.age);
+    }).toList();
   }
 }
 
