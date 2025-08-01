@@ -69,6 +69,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get transport_type_cruise => 'Crucero';
 
   @override
+  String get experience => 'Experiencia';
+
+  @override
+  String get experiences => 'Experiencias';
+
+  @override
   String get experience_cultural_immersion => 'Inmersión Cultural';
 
   @override
@@ -91,6 +97,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get title_settings => 'Configuración';
+
+  @override
+  String get my_travels => 'Mis Viajes';
 
   @override
   String get travel_title_label => 'Título del Viaje';
@@ -141,6 +150,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get participant_removed => 'Participante eliminado';
 
   @override
+  String get travel_map => 'Mapa del Viaje';
+
+  @override
+  String get add_stops_for_your_travel => 'Agregar Paradas para Tu Viaje';
+
+  @override
   String get travel_registered_successfully => 'Viaje registrado con éxito';
 
   @override
@@ -169,6 +184,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get travel_end_location => 'Ubicación de Fin del Viaje';
+
+  @override
+  String get finish => 'Finalizar';
 
   @override
   String get yes => 'Sí';

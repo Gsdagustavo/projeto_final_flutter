@@ -217,6 +217,18 @@ abstract class AppLocalizations {
   /// **'Cruise'**
   String get transport_type_cruise;
 
+  /// No description provided for @experience.
+  ///
+  /// In en, this message translates to:
+  /// **'Experience'**
+  String get experience;
+
+  /// No description provided for @experiences.
+  ///
+  /// In en, this message translates to:
+  /// **'Experiences'**
+  String get experiences;
+
   /// No description provided for @experience_cultural_immersion.
   ///
   /// In en, this message translates to:
@@ -264,6 +276,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Settings'**
   String get title_settings;
+
+  /// No description provided for @my_travels.
+  ///
+  /// In en, this message translates to:
+  /// **'My Travels'**
+  String get my_travels;
 
   /// No description provided for @travel_title_label.
   ///
@@ -361,6 +379,18 @@ abstract class AppLocalizations {
   /// **'Participant removed'**
   String get participant_removed;
 
+  /// No description provided for @travel_map.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel Map'**
+  String get travel_map;
+
+  /// No description provided for @add_stops_for_your_travel.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Stops for Your Travel'**
+  String get add_stops_for_your_travel;
+
   /// No description provided for @travel_registered_successfully.
   ///
   /// In en, this message translates to:
@@ -420,6 +450,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Travel End Location'**
   String get travel_end_location;
+
+  /// No description provided for @finish.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish'**
+  String get finish;
 
   /// No description provided for @yes.
   ///
