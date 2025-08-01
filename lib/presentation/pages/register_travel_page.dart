@@ -347,10 +347,7 @@ class _ParticipantsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final travelState = Provider.of<RegisterTravelProvider>(
-      context,
-      listen: false,
-    );
+    final travelState = Provider.of<RegisterTravelProvider>(context);
 
     final as = AppLocalizations.of(context)!;
 
@@ -371,88 +368,8 @@ class _ParticipantsWidget extends StatelessWidget {
                   fontSize: 14,
                 ),
               ),
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (context) {
-                    return SingleChildScrollView(
-                      padding: EdgeInsets.only(
-                        bottom: MediaQuery.viewInsetsOf(context).bottom,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(32.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              as.register_participant,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24,
-                              ),
-                            ),
-                            const Padding(padding: EdgeInsets.all(16)),
-                            TextField(
-                              onTapOutside: (_) =>
-                                  FocusScope.of(context).unfocus(),
-                              controller: travelState.participantNameController,
-                              decoration: InputDecoration(
-                                hintText: as.name,
-                                prefixIcon: const Icon(Icons.person),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                            ),
-                            const Padding(padding: EdgeInsets.all(12)),
-                            TextField(
-                              onTapOutside: (_) =>
-                                  FocusScope.of(context).unfocus(),
-                              controller: travelState.participantAgeController,
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                hintText: as.age,
-                                prefixIcon: const Icon(Icons.timer),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                            ),
-
-                            const Padding(padding: EdgeInsets.all(8)),
-
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: Text(as.cancel),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    travelState.addParticipant();
-                                    Navigator.pop(context);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          as.participant_registered,
-                                        ),
-                                      ),
-                                    );
-                                  },
-
-                                  child: Text(as.register),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                );
+              onPressed: () async {
+                await _showParticipantRegisterModal(context, travelState);
               },
             ),
           ],
@@ -462,6 +379,89 @@ class _ParticipantsWidget extends StatelessWidget {
 
         _ListParticipants(),
       ],
+    );
+  }
+
+  Future<void> _showParticipantRegisterModal(
+    BuildContext context,
+    RegisterTravelProvider travelState,
+  ) async {
+    final as = AppLocalizations.of(context)!;
+
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.viewInsetsOf(context).bottom,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  as.register_participant,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.all(16)),
+                TextField(
+                  onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                  controller: travelState.participantNameController,
+                  decoration: InputDecoration(
+                    hintText: as.name,
+                    prefixIcon: const Icon(Icons.person),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.all(12)),
+                TextField(
+                  onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                  controller: travelState.participantAgeController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    hintText: as.age,
+                    prefixIcon: const Icon(Icons.timer),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+
+                const Padding(padding: EdgeInsets.all(8)),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text(as.cancel),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        travelState.addParticipant();
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(as.participant_registered)),
+                        );
+                      },
+
+                      child: Text(as.register),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
