@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/participant.dart';
@@ -18,7 +21,19 @@ class RegisterTravelProvider with ChangeNotifier {
   final TravelUseCasesImpl _travelUseCases;
 
   /// Default constructor
-  RegisterTravelProvider(this._travelUseCases);
+  RegisterTravelProvider(this._travelUseCases) {
+    _init();
+  }
+
+  _init() async {
+    _isLoading = true;
+    notifyListeners();
+
+    _profilePictureFile = await getDefaultProfilePictureFile();
+
+    _isLoading = false;
+    notifyListeners();
+  }
 
   /// A [TextEditingController] to be assigned to the travel title
   final _travelTitleController = TextEditingController();
@@ -82,6 +97,19 @@ class RegisterTravelProvider with ChangeNotifier {
 
     _selectedExperiences = selectedExperiences;
     debugPrint('Selected experiences after reset: $_selectedExperiences');
+    notifyListeners();
+  }
+
+  Future<void> pickProfilePictureImage() async {
+    final picker = ImagePicker();
+    final imageXFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (imageXFile == null) {
+      debugPrint('Image XFile is null');
+      return;
+    }
+
+    _profilePictureFile = File(imageXFile.path);
     notifyListeners();
   }
 
@@ -236,6 +264,7 @@ class RegisterTravelProvider with ChangeNotifier {
     _participantAgeController.clear();
 
     _participants.clear();
+    _profilePictureFile = null;
 
     _errorMsg = null;
     _isLoading = false;
@@ -311,11 +340,11 @@ class RegisterTravelProvider with ChangeNotifier {
   ///
   /// [profilePictureUrl]: An optional argument that represents the path of the
   /// profile picture of the participant
-  void addParticipant() {
+  void addParticipant() async {
     final intAge = int.tryParse(_participantAgeController.text);
     if (intAge == null) return;
 
-    _profilePictureFile ??= getDefaultProfilePictureFile();
+    _profilePictureFile ??= await getDefaultProfilePictureFile();
 
     final participant = Participant(
       name: _participantNameController.text,
@@ -330,8 +359,18 @@ class RegisterTravelProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  File getDefaultProfilePictureFile() {
-    return File('assets/images/default_profile_picture.png');
+  Future<File> getDefaultProfilePictureFile() async {
+    final dir = await getApplicationDocumentsDirectory();
+    final file = File('${dir.path}/default_profile_picture.png');
+    if (await file.exists()) return file;
+
+    final data = await rootBundle.load(
+      'assets/images/default_profile_picture.png',
+    );
+    final bytes = data.buffer.asUint8List();
+    await file.writeAsBytes(bytes);
+
+    return file;
   }
 
   void removeParticipant(int index) {
@@ -427,4 +466,6 @@ class RegisterTravelProvider with ChangeNotifier {
 
     return _stops.length >= 2;
   }
+
+  File? get profilePictureFile => _profilePictureFile;
 }

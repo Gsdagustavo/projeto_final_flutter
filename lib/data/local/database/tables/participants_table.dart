@@ -21,10 +21,10 @@ abstract final class ParticipantsTable {
   /// `INTEGER NOT NULL`
   static const String age = 'age';
 
-  /// Column name for the participant's profile picture path
+  /// Column name for the participant's profile picture
   ///
-  /// `TEXT`
-  static const String profilePicturePath = 'profilePicturePath';
+  /// `BLOB`
+  static const String profilePicturePath = 'profilePicture';
 
   /// SQL command to create the participants table
   static const String createTable =
@@ -33,7 +33,7 @@ abstract final class ParticipantsTable {
       $participantId INTEGER PRIMARY KEY AUTOINCREMENT,
       $name TEXT NOT NULL,
       $age INTEGER NOT NULL,
-      $profilePicturePath TEXT
+      $profilePicturePath BLOB
     );
   ''';
 }

@@ -392,74 +392,126 @@ class _ParticipantsWidget extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return SingleChildScrollView(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.viewInsetsOf(context).bottom,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(32.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Stack(
+              clipBehavior: Clip.none,
               children: [
-                Text(
-                  as.register_participant,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
+                Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.only(
+                      top: 72,
+                      bottom: MediaQuery.viewInsetsOf(context).bottom,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Text(
+                        //   as.register_participant,
+                        //   style: const TextStyle(
+                        //     fontWeight: FontWeight.bold,
+                        //     fontSize: 24,
+                        //   ),
+                        // ),
+                        // const Padding(padding: EdgeInsets.all(16)),
+                        TextField(
+                          onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                          controller: travelState.participantNameController,
+                          decoration: InputDecoration(
+                            hintText: as.name,
+                            prefixIcon: const Icon(Icons.person),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+                        const Padding(padding: EdgeInsets.all(16)),
+
+                        TextField(
+                          onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                          controller: travelState.participantAgeController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            hintText: as.age,
+                            prefixIcon: const Icon(Icons.timer),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+                        const Padding(padding: EdgeInsets.all(16)),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text(as.cancel),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                travelState.addParticipant();
+                                Navigator.pop(context);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(as.participant_registered),
+                                  ),
+                                );
+                              },
+
+                              child: Text(as.register),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                Positioned(
+                  top: -64,
+                  left: MediaQuery.sizeOf(context).width / 2 - 64,
+                  child: Stack(
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: travelState.profilePictureFile != null
+                            ? FileImage(travelState.profilePictureFile!)
+                            : const AssetImage(
+                                    'assets/images/default_profile_picture.png',
+                                  )
+                                  as ImageProvider,
+                        // backgroundColor: Colors.yellow,
+                        // foregroundColor: Colors.blue,
+                        radius: 64,
+                      ),
+
+                      Positioned(
+                        bottom: 0,
+                        right: 2,
+                        child: InkWell(
+                          onTap: () async {
+                            /// TODO: show a modal to choose where the image is going to be picked from (camera, gallery, etc.)
+                            await travelState.pickProfilePictureImage();
+
+                            setModalState(() {});
+                          },
+                          radius: 20,
+                          child: CircleAvatar(
+                            radius: 20,
+                            backgroundColor: Colors.white,
+                            child: Center(child: Icon(Icons.edit, size: 32)),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const Padding(padding: EdgeInsets.all(16)),
-                TextField(
-                  onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                  controller: travelState.participantNameController,
-                  decoration: InputDecoration(
-                    hintText: as.name,
-                    prefixIcon: const Icon(Icons.person),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-                const Padding(padding: EdgeInsets.all(12)),
-                TextField(
-                  onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                  controller: travelState.participantAgeController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    hintText: as.age,
-                    prefixIcon: const Icon(Icons.timer),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-
-                const Padding(padding: EdgeInsets.all(8)),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text(as.cancel),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        travelState.addParticipant();
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(as.participant_registered)),
-                        );
-                      },
-
-                      child: Text(as.register),
-                    ),
-                  ],
-                ),
               ],
-            ),
-          ),
+            );
+          },
         );
       },
     );
