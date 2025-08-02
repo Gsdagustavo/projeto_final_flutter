@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../core/extensions/string_extensions.dart';
@@ -31,16 +32,11 @@ class Place {
   });
 
   String get display {
-    final String display;
-    final latLng = LatLng(lat, lon);
-
     if (name.isEmpty) {
-      display = latLng.formatted;
-    } else {
-      display = name;
+      return '${address.city}, ${address.county}, ${address.country}';
     }
 
-    return display;
+    return name;
   }
 
   String get latLng {
