@@ -4,10 +4,8 @@ abstract final class AddressesTable {
   static const String tourism = 'tourism';
   static const String houseNumber = 'houseNumber';
   static const String road = 'road';
-  static const String city = 'city';
-  static const String county = 'county';
+  static const String town = 'town';
   static const String state = 'state';
-  static const String ISO3166 = 'ISO3166';
   static const String postcode = 'postcode';
   static const String country = 'country';
   static const String countryCode = 'countryCode';
@@ -16,13 +14,11 @@ abstract final class AddressesTable {
       '''
       CREATE TABLE $tableName(
         $addressId INTEGER NOT NULL PRIMARY KEY,
-        $tourism TEXT NOT NULL,
+        $tourism TEXT,
         $houseNumber INTEGER,
         $road TEXT,
-        $city TEXT NOT NULL,
-        $county TEXT,
+        $town TEXT NOT NULL,
         $state TEXT NOT NULL,
-        $ISO3166 TEXT,
         $postcode TEXT,
         $country TEXT NOT NULL,
         $countryCode TEXT NOT NULL

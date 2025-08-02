@@ -33,7 +33,7 @@ class Place {
 
   String get display {
     if (name.isEmpty) {
-      return '${address.city}, ${address.county}, ${address.country}';
+      return '${address.town}, ${address.state}, ${address.country}';
     }
 
     return name;
