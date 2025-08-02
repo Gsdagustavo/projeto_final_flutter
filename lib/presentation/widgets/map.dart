@@ -18,7 +18,7 @@ import '../../services/location_service.dart';
 import '../extensions/enums_extensions.dart';
 import '../pages/register_travel_page.dart';
 import '../providers/register_travel_provider.dart';
-import 'error_dialog.dart';
+import 'custom_dialog.dart';
 import 'my_app_bar.dart';
 
 /// This is a map widget that will be used to register a [TravelStop] and to
@@ -64,6 +64,8 @@ class _TravelMapState extends State<TravelMap> {
   }
 
   Future<void> _onMarkerTap(TravelStop stop) async {
+    final as = AppLocalizations.of(context)!;
+
     setState(() {
       _isLoading = true;
     });
@@ -79,7 +81,11 @@ class _TravelMapState extends State<TravelMap> {
       await showDialog(
         context: context,
         builder: (context) {
-          return ErrorDialog(errorMsg: e.toString());
+          return CustomDialog(
+            title: as.warning,
+            content: Text(e.toString()),
+            isError: true,
+          );
         },
       );
       return;
@@ -117,6 +123,8 @@ class _TravelMapState extends State<TravelMap> {
   ///
   /// [position]: the position where the user pressed
   void _onLongPress(LatLng position) async {
+    final as = AppLocalizations.of(context)!;
+
     /// Instantiates a marker with the given  position
     var marker = Marker(
       markerId: MarkerId(position.toString()),
@@ -149,7 +157,11 @@ class _TravelMapState extends State<TravelMap> {
       await showDialog(
         context: context,
         builder: (context) {
-          return ErrorDialog(errorMsg: e.toString());
+          return CustomDialog(
+            title: as.warning,
+            content: Text(e.toString()),
+            isError: true,
+          );
         },
       );
       return;
@@ -196,7 +208,7 @@ class _TravelMapState extends State<TravelMap> {
             mainAxisSize: MainAxisSize.min,
             children: [
               CircularProgressIndicator(),
-              Padding(padding: EdgeInsetsGeometry.all(20)),
+              Padding(padding: EdgeInsets.all(20)),
               Text('Loading...'),
             ],
           ),
@@ -358,10 +370,9 @@ class _RegisterStopButton extends StatelessWidget {
         await showDialog(
           context: context,
           builder: (context) {
-            return AlertDialog(
-              title: Text(as.travel_stop),
+            return CustomDialog(
+              title: as.travel_stop,
               content: Text(as.stop_registered_successfully),
-              icon: Icon(Icons.check, color: Colors.green),
             );
           },
         );
@@ -399,17 +410,27 @@ class _UpdateStopButton extends StatelessWidget {
           showDialog(
             context: context,
             builder: (context) {
-              return ErrorDialog(errorMsg: travelState.error!);
+              return CustomDialog(
+                title: as.travel_stop,
+                content: Text(travelState.error!),
+                isError: true,
+              );
             },
           );
 
           return;
         }
 
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(as.stop_updated_successfully)));
-        Navigator.pop(context, newStop);
+        showDialog(
+          context: context,
+          builder: (context) {
+            return CustomDialog(
+              title: as.travel_stop,
+              content: Text(as.stop_updated_successfully),
+              isError: true,
+            );
+          },
+        );
       },
       child: Text(as.update_stop),
     );
@@ -527,8 +548,10 @@ class _DatesPickersState extends State<_DatesPickers> {
                 if (arriveDate == null) {
                   await showDialog(
                     context: context,
-                    builder: (context) => ErrorDialog(
-                      errorMsg: as.err_you_must_select_arrive_date_first,
+                    builder: (context) => CustomDialog(
+                      title: as.warning,
+                      content: Text(as.err_you_must_select_arrive_date_first),
+                      isError: true,
                     ),
                   );
                   return;

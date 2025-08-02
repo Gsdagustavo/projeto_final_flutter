@@ -83,7 +83,6 @@ class _TravelWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = Localizations.localeOf(context).toString();
-    final participants = travel.participants;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,7 +97,6 @@ class _TravelWidget extends StatelessWidget {
         Row(
           children: [
             Text('${travel.startDate!.hour}:${travel.startDate!.minute}'),
-            // Text('${travel.}')
           ],
         ),
       ],

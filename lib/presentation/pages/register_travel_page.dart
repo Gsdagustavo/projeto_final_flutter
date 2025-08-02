@@ -23,46 +23,49 @@ class RegisterTravelPage extends StatelessWidget {
   static const String routeName = '/registerTravel';
 
   void _showCustomDialog(BuildContext context) async {
+    final travelState = Provider.of<RegisterTravelProvider>(
+      context,
+      listen: false,
+    );
+
+    final as = AppLocalizations.of(context)!;
+
     unawaited(
       showDialog(
         barrierDismissible: false,
         context: context,
         builder: (context) {
-          return Consumer<RegisterTravelProvider>(
-            builder: (context, state, child) {
-              final as = AppLocalizations.of(context)!;
-              final Widget icon;
-              Widget content;
+          final as = AppLocalizations.of(context)!;
+          final Widget icon;
+          Widget content;
 
-              if (state.isLoading) {
-                content = const SizedBox(
-                  width: 48,
-                  height: 48,
-                  child: CircularProgressIndicator(),
-                );
-              }
+          if (travelState.isLoading) {
+            content = const SizedBox(
+              width: 48,
+              height: 48,
+              child: CircularProgressIndicator(),
+            );
+          }
 
-              /// Determine which icon and text to show
-              if (state.hasError) {
-                content = Text(
-                  state.error ?? as.unknown_error,
-                  textAlign: TextAlign.center,
-                );
-                icon = const Icon(Icons.error, color: Colors.red);
-              } else {
-                content = Text(
-                  as.travel_registered_successfully,
-                  textAlign: TextAlign.center,
-                );
-                icon = const Icon(Icons.check_circle, color: Colors.green);
-              }
+          /// Determine which icon and text to show
+          if (travelState.hasError) {
+            content = Text(
+              travelState.error ?? as.unknown_error,
+              textAlign: TextAlign.center,
+            );
+            icon = const Icon(Icons.error, color: Colors.red);
+          } else {
+            content = Text(
+              as.travel_registered_successfully,
+              textAlign: TextAlign.center,
+            );
+            icon = const Icon(Icons.check_circle, color: Colors.green);
+          }
 
-              return AlertDialog(
-                icon: icon,
-                alignment: Alignment.center,
-                content: content,
-              );
-            },
+          return AlertDialog(
+            icon: icon,
+            alignment: Alignment.center,
+            content: content,
           );
         },
       ),

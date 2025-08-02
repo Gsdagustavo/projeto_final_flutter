@@ -71,9 +71,10 @@ class _LoginPageState extends State<LoginPage> {
       unawaited(
         showDialog(
           context: context,
-          builder: (_) => AlertDialog(
-            title: const Icon(Icons.warning, color: Colors.red),
+          builder: (_) => CustomDialog(
+            title: as.warning,
             content: Text(loginProvider.errorMsg),
+            isError: true,
           ),
         ),
       );

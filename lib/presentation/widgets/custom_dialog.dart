@@ -11,6 +11,7 @@ class CustomDialog extends StatelessWidget {
     required this.title,
     required this.content,
     this.isError = false,
+    this.actions,
   });
 
   /// The title of the dialog
@@ -30,20 +31,30 @@ class CustomDialog extends StatelessWidget {
   /// a green color, representing that there are no errors
   final bool isError;
 
+  final List<Widget>? actions;
+
   @override
   Widget build(BuildContext context) {
     final Icon icon;
 
     if (isError) {
-      icon = Icon(Icons.error, color: Colors.red);
+      icon = Icon(Icons.warning, color: Colors.orange, size: 40);
     } else {
-      icon = Icon(Icons.check, color: Colors.green);
+      icon = Icon(Icons.check, color: Colors.green, size: 30);
     }
 
+    final titleRow = Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title, style: TextStyle(fontSize: 26),),
+        Padding(padding: const EdgeInsets.only(right: 20), child: icon),
+      ],
+    );
+
     return AlertDialog(
-      title: title.isNotEmpty ? Text(title) : null,
-      icon: icon,
+      title: title.isNotEmpty ? titleRow : icon,
       content: content,
+      actions: actions,
     );
   }
 }

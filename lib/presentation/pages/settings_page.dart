@@ -8,6 +8,7 @@ import '../../core/extensions/string_extensions.dart';
 import '../../l10n/app_localizations.dart';
 import '../providers/language_code_provider.dart';
 import '../providers/login_provider.dart';
+import '../widgets/custom_dialog.dart';
 import 'auth/auth_page_switcher.dart';
 import 'fab_page.dart';
 
@@ -108,9 +109,10 @@ class SettingsPage extends StatelessWidget {
                             unawaited(
                               showDialog(
                                 context: context,
-                                builder: (_) => AlertDialog(
-                                  title: Text(as.warning),
+                                builder: (_) => CustomDialog(
+                                  title: as.warning,
                                   content: Text(loginProvider.errorMsg),
+                                  isError: true,
                                 ),
                               ),
                             );

@@ -4,7 +4,7 @@ class ErrorDialog extends StatelessWidget {
   const ErrorDialog({
     super.key,
     required this.errorMsg,
-    this.icon = const Icon(Icons.warning, color: Colors.red),
+    this.icon = const Icon(Icons.warning, color: Colors.orange),
     this.title = 'Error',
     this.actions = const [],
   });
@@ -17,7 +17,13 @@ class ErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(title),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Wrap(children: [Text(title)]),
+          icon,
+        ],
+      ),
       content: Text(errorMsg.toString()),
       icon: icon,
       actions: actions,
