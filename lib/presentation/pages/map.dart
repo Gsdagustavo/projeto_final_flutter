@@ -71,9 +71,12 @@ class _TravelMapState extends State<TravelMap> {
 
       _markers.clear();
       _markers.addAll(
-        travelState.stops
-            .map((e) => Marker(markerId: MarkerId(e.place.latLng)))
-            .toSet(),
+        travelState.stops.map((e) {
+          return Marker(
+            markerId: MarkerId(e.place.latLng),
+            position: LatLng(e.place.lat, e.place.lon),
+          );
+        }).toSet(),
       );
     });
 

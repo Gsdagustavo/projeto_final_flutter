@@ -148,10 +148,6 @@ class RegisterTravelProvider with ChangeNotifier {
 
   void addTravelStop(TravelStop stop) {
     final lastArriveDate = lastPossibleArriveDate;
-    // final lastLeaveDate = lastPossibleLeaveDate;
-
-    debugPrint('Arrive date: $_arriveDate');
-    debugPrint('Leave date: $_leaveDate');
 
     /// TODO: add intl for error messages
     if (_arriveDate == null || _leaveDate == null) {

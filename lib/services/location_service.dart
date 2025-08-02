@@ -59,8 +59,6 @@ class LocationService {
   /// Calls the Nominatim API (see [_apiUrl]) to convert a given [LatLng] into
   /// an address
   Future<Place> getPlaceByPosition(LatLng position) async {
-    debugPrint('getPlaceByPosition called');
-
     final currentUser = AuthService().currentUser;
 
     if (currentUser == null) {
@@ -77,6 +75,9 @@ class LocationService {
     final longitude = position.longitude;
 
     final url = '$_apiUrl&lat=$latitude&lon=$longitude';
+
+    debugPrint('getPlaceByPosition called. URL: $url');
+
     final response = await http.get(
       Uri.parse(url),
       headers: {
