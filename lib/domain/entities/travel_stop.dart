@@ -45,4 +45,9 @@ class TravelStop {
       experiences: experiences ?? this.experiences,
     );
   }
+
+  @override
+  String toString() {
+    return 'TravelStop{travelStopId: $travelStopId, arriveDate: $arriveDate, leaveDate: $leaveDate, type: $type, experiences: $experiences, place: $place}';
+  }
 }
