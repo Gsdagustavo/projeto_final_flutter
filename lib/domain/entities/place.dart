@@ -1,3 +1,6 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import '../../core/extensions/string_extensions.dart';
 import 'address.dart';
 
 class Place {
@@ -26,6 +29,23 @@ class Place {
     required this.name,
     required this.displayName,
   });
+
+  String get display {
+    final String display;
+    final latLng = LatLng(lat, lon);
+
+    if (name.isEmpty) {
+      display = latLng.formatted;
+    } else {
+      display = name;
+    }
+
+    return display;
+  }
+
+  String get latLng {
+    return '$lat,$lon';
+  }
 
   @override
   String toString() {

@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 
 import '../../core/extensions/date_extensions.dart';
 import '../../core/extensions/experience_map_extension.dart';
-import '../../core/extensions/place_extensions.dart';
 import '../../core/extensions/string_extensions.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/place.dart';
@@ -51,6 +50,15 @@ class _TravelMapState extends State<TravelMap> {
   void initState() {
     super.initState();
 
+    final travelState = Provider.of<RegisterTravelProvider>(
+      context,
+      listen: false,
+    );
+
+    debugPrint('Map Init State');
+    debugPrint('Stops: ${travelState.stops}');
+    debugPrint('Markers: $_markers');
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final pos = await LocationService().getCurrentPosition();
 
@@ -60,7 +68,16 @@ class _TravelMapState extends State<TravelMap> {
         _center = LatLng(pos.latitude, pos.longitude);
         _isCreatingMap = false;
       });
+
+      _markers.clear();
+      _markers.addAll(
+        travelState.stops
+            .map((e) => Marker(markerId: MarkerId(e.place.latLng)))
+            .toSet(),
+      );
     });
+
+    debugPrint('Markers after init state: $_markers');
   }
 
   Future<void> _onMarkerTap(TravelStop stop) async {
@@ -189,6 +206,11 @@ class _TravelMapState extends State<TravelMap> {
           ),
         );
       });
+
+      final travelState = Provider.of<RegisterTravelProvider>(
+        context,
+        listen: false,
+      ).addTravelStop(registeredStop);
     }
   }
 
@@ -631,6 +653,7 @@ Future<TravelStop?> _showTravelStopModal(
   final registeredStop = await showModalBottomSheet<TravelStop?>(
     context: context,
     showDragHandle: true,
+
     builder: (context) {
       return StatefulBuilder(
         builder: (context, setModalState) {

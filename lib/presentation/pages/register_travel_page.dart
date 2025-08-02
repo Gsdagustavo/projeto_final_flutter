@@ -7,14 +7,15 @@ import 'package:provider/provider.dart';
 import '../../core/extensions/date_extensions.dart';
 import '../../core/extensions/string_extensions.dart';
 import '../../domain/entities/enums.dart';
+import '../../domain/entities/travel_stop.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/locale_service.dart';
 import '../extensions/enums_extensions.dart';
 import '../providers/register_travel_provider.dart';
 import '../providers/travel_list_provider.dart';
 import '../widgets/custom_dialog.dart';
-import 'map.dart';
 import 'fab_page.dart';
+import 'map.dart';
 
 /// This is a page for registering a travel
 class RegisterTravelPage extends StatelessWidget {
@@ -150,6 +151,19 @@ class RegisterTravelPage extends StatelessWidget {
               );
 
               await registerTravelState.select();
+            },
+          ),
+
+          FloatingActionButton(
+            tooltip: 'List Stops',
+            child: const Icon(Icons.stop),
+            onPressed: () async {
+              final registerTravelState = Provider.of<RegisterTravelProvider>(
+                context,
+                listen: false,
+              );
+
+              debugPrint(registerTravelState.stops.toString());
             },
           ),
         ],
@@ -447,11 +461,16 @@ class _ParticipantsWidget extends StatelessWidget {
   }
 }
 
-class _Modal extends StatelessWidget {
+class _Modal extends StatefulWidget {
   const _Modal(this.travelState);
 
   final RegisterTravelProvider travelState;
 
+  @override
+  State<_Modal> createState() => _ModalState();
+}
+
+class _ModalState extends State<_Modal> {
   @override
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
@@ -509,7 +528,8 @@ class _Modal extends StatelessWidget {
                           TextField(
                             onTapOutside: (_) =>
                                 FocusScope.of(context).unfocus(),
-                            controller: travelState.participantNameController,
+                            controller:
+                                widget.travelState.participantNameController,
                             decoration: InputDecoration(
                               hintText: as.name,
                               prefixIcon: const Icon(Icons.person),
@@ -523,7 +543,8 @@ class _Modal extends StatelessWidget {
                           TextField(
                             onTapOutside: (_) =>
                                 FocusScope.of(context).unfocus(),
-                            controller: travelState.participantAgeController,
+                            controller:
+                                widget.travelState.participantAgeController,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               hintText: as.age,
@@ -543,8 +564,8 @@ class _Modal extends StatelessWidget {
                                 child: Text(as.cancel),
                               ),
                               ElevatedButton(
-                                onPressed: () {
-                                  travelState.addParticipant();
+                                onPressed: () async {
+                                  await widget.travelState.addParticipant();
                                   Navigator.pop(context);
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
@@ -574,8 +595,9 @@ class _Modal extends StatelessWidget {
                     width: 128,
                     height: 128,
                     child: CircleAvatar(
-                      backgroundImage: travelState.profilePictureFile != null
-                          ? FileImage(travelState.profilePictureFile!)
+                      backgroundImage:
+                          widget.travelState.profilePictureFile != null
+                          ? FileImage(widget.travelState.profilePictureFile!)
                           : const AssetImage(
                                   'assets/images/default_profile_picture.png',
                                 )
@@ -590,7 +612,7 @@ class _Modal extends StatelessWidget {
                     child: InkWell(
                       onTap: () async {
                         /// TODO: show a modal to choose where the image is going to be picked from (camera, gallery, etc.)
-                        await travelState.pickImage();
+                        await widget.travelState.pickImage();
 
                         setModalState(() {});
                       },
@@ -781,6 +803,26 @@ class _RegisterTravelButton extends StatelessWidget {
           child: Text(as.title_register_travel),
         );
       },
+    );
+  }
+}
+
+class _TravelStopWidget extends StatelessWidget {
+  const _TravelStopWidget({super.key, required this.travelStop});
+
+  final TravelStop travelStop;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Icon(Icons.pin_drop, color: Colors.red),
+            Container(height: 50, child: Text(travelStop.place.display)),
+          ],
+        ),
+      ],
     );
   }
 }

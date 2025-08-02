@@ -84,7 +84,7 @@ class _TravelWidget extends StatelessWidget {
     final locale = Localizations.localeOf(context).toString();
 
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      // mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -115,6 +115,7 @@ class _ParticipantsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Stack(
+        clipBehavior: Clip.none,
         children: [
           Positioned(
             right: -15,
@@ -128,6 +129,20 @@ class _ParticipantsWidget extends StatelessWidget {
               backgroundImage: FileImage(participants.last.profilePicture),
             ),
           ),
+
+          // Container(
+          //   width: 100,
+          //   height: 100,
+          //   color: Colors.red,
+          // )
+
+          // for (final (idx, participant) in participants.indexed)
+          //   Positioned(
+          //     right: (20 * idx) + 40,
+          //     child: CircleAvatar(
+          //       backgroundImage: FileImage(participants[i].profilePicture),
+          //     ),
+          //   ),
 
           // for (int i = 0; i < participants.length && i < 3; i++)
           //   Positioned(

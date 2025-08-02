@@ -326,7 +326,7 @@ class RegisterTravelProvider with ChangeNotifier {
   ///
   /// [profilePictureUrl]: An optional argument that represents the path of the
   /// profile picture of the participant
-  void addParticipant() async {
+  Future<void> addParticipant() async {
     final intAge = int.tryParse(_participantAgeController.text);
     if (intAge == null) return;
 
@@ -343,6 +343,8 @@ class RegisterTravelProvider with ChangeNotifier {
     _profilePictureFile = null;
 
     _participants.add(participant);
+
+    debugPrint('Participant $participant added');
     notifyListeners();
   }
 
