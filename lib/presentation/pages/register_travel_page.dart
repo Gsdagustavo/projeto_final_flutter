@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -302,68 +303,73 @@ class _DateTextButtonsState extends State<_DateTextButtons> {
               );
             }
 
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    TextButton(
-                      style: ButtonStyle(
-                        padding: WidgetStateProperty.all(EdgeInsets.zero),
-                      ),
-
-                      onPressed: () async {
-                        final now = DateTime.now();
-                        var date = await showDatePicker(
-                          context: context,
-                          initialDate: travelState.startDate ?? now,
-                          firstDate: now,
-                          lastDate: now.add(const Duration(days: 365)),
-                        );
-                        travelState.selectStartDate(date);
-                      },
-                      child: Text(as.travel_start_date_label),
-                    ),
-
-                    if (travelState.startDate != null)
-                      Text(travelState.startDate!.getFormattedDate(locale)),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    TextButton(
-                      onPressed: () async {
-                        if (!travelState.isStartDateSelected) {
-                          final message = as.err_invalid_date_snackbar;
-
-                          ScaffoldMessenger.of(
-                            context,
-                          ).showSnackBar(SnackBar(content: Text(message)));
-
-                          return;
-                        }
-
-                        var date = await showDatePicker(
-                          context: context,
-                          initialDate:
-                              travelState.endDate ?? travelState.startDate,
-                          firstDate: travelState.startDate!,
-                          lastDate: travelState.startDate!.add(
-                            const Duration(days: 365),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          style: ButtonStyle(
+                            padding: WidgetStateProperty.all(EdgeInsets.zero),
                           ),
-                        );
-                        travelState.selectEndDate(date);
-                      },
-                      child: Text(as.travel_end_date_label),
-                    ),
 
-                    if (travelState.endDate != null)
-                      Text(travelState.endDate!.getFormattedDate(locale)),
+                          onPressed: () async {
+                            final now = DateTime.now();
+                            var date = await showDatePicker(
+                              context: context,
+                              initialDate: travelState.startDate ?? now,
+                              firstDate: now,
+                              lastDate: now.add(const Duration(days: 365)),
+                            );
+                            travelState.selectStartDate(date);
+                          },
+                          child: Text(as.travel_start_date_label),
+                        ),
+
+                        if (travelState.startDate != null)
+                          Text(travelState.startDate!.getFormattedDate(locale)),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          onPressed: () async {
+                            if (!travelState.isStartDateSelected) {
+                              final message = as.err_invalid_date_snackbar;
+
+                              ScaffoldMessenger.of(
+                                context,
+                              ).showSnackBar(SnackBar(content: Text(message)));
+
+                              return;
+                            }
+
+                            var date = await showDatePicker(
+                              context: context,
+                              initialDate:
+                                  travelState.endDate ?? travelState.startDate,
+                              firstDate: travelState.startDate!,
+                              lastDate: travelState.startDate!.add(
+                                const Duration(days: 365),
+                              ),
+                            );
+                            travelState.selectEndDate(date);
+                          },
+                          child: Text(as.travel_end_date_label),
+                        ),
+
+                        if (travelState.endDate != null)
+                          Text(travelState.endDate!.getFormattedDate(locale)),
+                      ],
+                    ),
                   ],
                 ),
-              ],
+              ),
             );
           },
         ),
@@ -438,14 +444,6 @@ class _ParticipantsWidget extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // Text(
-                        //   as.register_participant,
-                        //   style: const TextStyle(
-                        //     fontWeight: FontWeight.bold,
-                        //     fontSize: 24,
-                        //   ),
-                        // ),
-                        // const Padding(padding: EdgeInsets.all(16)),
                         TextField(
                           onTapOutside: (_) => FocusScope.of(context).unfocus(),
                           controller: travelState.participantNameController,
@@ -512,9 +510,8 @@ class _ParticipantsWidget extends StatelessWidget {
                                     'assets/images/default_profile_picture.png',
                                   )
                                   as ImageProvider,
-                        // backgroundColor: Colors.yellow,
-                        // foregroundColor: Colors.blue,
                         radius: 64,
+                        backgroundColor: Colors.transparent,
                       ),
 
                       Positioned(
@@ -523,7 +520,7 @@ class _ParticipantsWidget extends StatelessWidget {
                         child: InkWell(
                           onTap: () async {
                             /// TODO: show a modal to choose where the image is going to be picked from (camera, gallery, etc.)
-                            await travelState.pickProfilePictureImage();
+                            await travelState.pickImage();
 
                             setModalState(() {});
                           },
@@ -571,11 +568,9 @@ class _ListParticipants extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 12),
           child: Row(
             children: [
-              CircleAvatar(
-                radius: 25,
-                child: Image.file(participant.profilePicture),
-              ),
+              _ParticipantProfilePicture(image: participant.profilePicture),
               const Padding(padding: EdgeInsets.all(8)),
+
               Text(
                 '${as.name}: ${participant.name}\n'
                 '${as.age}: ${participant.age}',
@@ -696,6 +691,32 @@ class _RegisterTravelButton extends StatelessWidget {
           child: Text(as.title_register_travel),
         );
       },
+    );
+  }
+}
+
+class _ParticipantProfilePicture extends StatelessWidget {
+  const _ParticipantProfilePicture({
+    super.key,
+    required this.image,
+    this.width = 36,
+    this.height = 36,
+  });
+
+  final File image;
+  final double width;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.transparent,
+      ),
+      child: Image.file(image, fit: BoxFit.cover),
     );
   }
 }

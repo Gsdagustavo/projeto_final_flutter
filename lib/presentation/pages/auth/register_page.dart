@@ -86,7 +86,7 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     /// Try to sign in
-    await loginProvider.signinWithEmailAndPassword(
+    await loginProvider.signInWithEmailAndPassword(
       email: email,
       password: password,
     );

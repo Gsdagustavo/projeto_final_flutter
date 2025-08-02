@@ -10,6 +10,7 @@ import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';
 import '../../domain/entities/travel_stop.dart';
 import '../../modules/travel/travel_use_cases.dart';
+import '../../services/file_service.dart';
 
 /// A [ChangeNotifier] responsible for managing and the app's Travel Register
 /// system
@@ -20,6 +21,9 @@ class RegisterTravelProvider with ChangeNotifier {
   /// Instance of [TravelUseCasesImpl]
   final TravelUseCasesImpl _travelUseCases;
 
+  /// Instance of [FileService]
+  final fileService = FileService();
+
   /// Default constructor
   RegisterTravelProvider(this._travelUseCases) {
     _init();
@@ -29,7 +33,7 @@ class RegisterTravelProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    _profilePictureFile = await getDefaultProfilePictureFile();
+    _profilePictureFile = await fileService.getDefaultProfilePictureFile();
 
     _isLoading = false;
     notifyListeners();
@@ -98,19 +102,6 @@ class RegisterTravelProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> pickProfilePictureImage() async {
-    final picker = ImagePicker();
-    final imageXFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (imageXFile == null) {
-      debugPrint('Image XFile is null');
-      return;
-    }
-
-    _profilePictureFile = File(imageXFile.path);
-    notifyListeners();
-  }
-
   /// Tries to register a new [Travel] with the given inputs using
   /// [_travelUseCases]
   ///
@@ -153,19 +144,14 @@ class RegisterTravelProvider with ChangeNotifier {
     _resetForms();
   }
 
-  bool get isTravelValid {
-    return areStopsValid &&
-        numParticipants >= 1 &&
-        travelTitleController.text.isNotEmpty;
-  }
-
   void addTravelStop(TravelStop stop) {
     final lastArriveDate = lastPossibleArriveDate;
-    final lastLeaveDate = lastPossibleLeaveDate;
+    // final lastLeaveDate = lastPossibleLeaveDate;
 
     debugPrint('Arrive date: $_arriveDate');
     debugPrint('Leave date: $_leaveDate');
 
+    /// TODO: add intl for error messages
     if (_arriveDate == null || _leaveDate == null) {
       _errorMsg = 'Você precisa selecionar as datas de chegada e saída';
       notifyListeners();
@@ -342,7 +328,7 @@ class RegisterTravelProvider with ChangeNotifier {
     final intAge = int.tryParse(_participantAgeController.text);
     if (intAge == null) return;
 
-    _profilePictureFile ??= await getDefaultProfilePictureFile();
+    _profilePictureFile ??= await fileService.getDefaultProfilePictureFile();
 
     final participant = Participant(
       name: _participantNameController.text,
@@ -352,27 +338,19 @@ class RegisterTravelProvider with ChangeNotifier {
 
     _participantNameController.clear();
     _participantAgeController.clear();
+    _profilePictureFile = null;
 
     _participants.add(participant);
     notifyListeners();
   }
 
-  Future<File> getDefaultProfilePictureFile() async {
-    final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/default_profile_picture.png');
-    if (await file.exists()) return file;
-
-    final data = await rootBundle.load(
-      'assets/images/default_profile_picture.png',
-    );
-    final bytes = data.buffer.asUint8List();
-    await file.writeAsBytes(bytes);
-
-    return file;
-  }
-
   void removeParticipant(int index) {
     _participants.removeAt(index);
+    notifyListeners();
+  }
+
+  Future<void> pickImage() async {
+    _profilePictureFile = await fileService.pickImage();
     notifyListeners();
   }
 
@@ -466,4 +444,10 @@ class RegisterTravelProvider with ChangeNotifier {
   }
 
   File? get profilePictureFile => _profilePictureFile;
+
+  bool get isTravelValid {
+    return areStopsValid &&
+        numParticipants >= 1 &&
+        travelTitleController.text.isNotEmpty;
+  }
 }

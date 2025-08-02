@@ -51,7 +51,7 @@ class LoginProvider with ChangeNotifier {
   /// of the exception is assigned to [_errorMsg]
   ///
   /// Otherwise, [_errorMsg] is set to [Null]
-  Future<void> signinWithEmailAndPassword({
+  Future<void> signInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {

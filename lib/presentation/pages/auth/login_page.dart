@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
 
   final _emailController = TextEditingController(text: 'test@gmail.com');
-  final _passwordController = TextEditingController(text: 'test123');
+  final _passwordController = TextEditingController(text: '123456');
 
   bool _obscurePassword = true;
 
@@ -60,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
     final password = _passwordController.text;
 
     final loginProvider = Provider.of<LoginProvider>(context, listen: false);
-    await loginProvider.signinWithEmailAndPassword(
+    await loginProvider.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
