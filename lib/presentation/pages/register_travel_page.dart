@@ -11,6 +11,7 @@ import '../../services/locale_service.dart';
 import '../extensions/enums_extensions.dart';
 import '../providers/register_travel_provider.dart';
 import '../providers/travel_list_provider.dart';
+import '../widgets/custom_dialog.dart';
 import '../widgets/map.dart';
 import 'fab_page.dart';
 
@@ -27,8 +28,6 @@ class RegisterTravelPage extends StatelessWidget {
       context,
       listen: false,
     );
-
-    final as = AppLocalizations.of(context)!;
 
     unawaited(
       showDialog(
@@ -74,6 +73,8 @@ class RegisterTravelPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final travelState = Provider.of<RegisterTravelProvider>(context);
+
     return FabPage(
       title: AppLocalizations.of(context)!.title_register_travel,
 
@@ -100,6 +101,14 @@ class RegisterTravelPage extends StatelessWidget {
               const Padding(padding: EdgeInsets.all(16)),
 
               const _TravelMapWidget(),
+              const Padding(padding: EdgeInsets.all(16)),
+
+              if (travelState.isTravelValid)
+                SizedBox(
+                  height: 64,
+                  width: double.infinity,
+                  child: const _RegisterTravelButton(),
+                ),
             ],
           ),
         ),
@@ -266,13 +275,31 @@ class _DateTextButtonsState extends State<_DateTextButtons> {
             }
 
             if (snapshot.hasError) {
-              /// TODO: show error dialog
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return CustomDialog(
+                    title: as.unknown_error,
+                    content: Text(snapshot.error!.toString()),
+                    isError: true,
+                  );
+                },
+              );
             }
 
             final locale = snapshot.data!;
 
-            if (locale == null || locale.isEmpty) {
-              /// TODO: show error dialog
+            if (locale.isEmpty) {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return CustomDialog(
+                    title: as.warning,
+                    content: Text(as.unknown_error),
+                    isError: true,
+                  );
+                },
+              );
             }
 
             return Row(
@@ -626,6 +653,49 @@ class _TravelMapWidget extends StatelessWidget {
           icon: const Icon(Icons.map),
         ),
       ],
+    );
+  }
+}
+
+class _RegisterTravelButton extends StatelessWidget {
+  const _RegisterTravelButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+
+    return Consumer<RegisterTravelProvider>(
+      builder: (_, travelState, __) {
+        return ElevatedButton(
+          onPressed: () async {
+            await travelState.registerTravel();
+
+            if (travelState.hasError) {
+              await showDialog(
+                context: context,
+                builder: (context) {
+                  return CustomDialog(
+                    title: as.warning,
+                    content: Text(travelState.error!),
+                    isError: true,
+                  );
+                },
+              );
+            }
+
+            await showDialog(
+              context: context,
+              builder: (context) {
+                return CustomDialog(
+                  title: '',
+                  content: Text(as.travel_registered_successfully),
+                );
+              },
+            );
+          },
+          child: Text(as.title_register_travel),
+        );
+      },
     );
   }
 }

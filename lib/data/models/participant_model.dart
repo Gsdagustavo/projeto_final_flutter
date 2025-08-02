@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+
 import '../../domain/entities/participant.dart';
 import '../local/database/tables/participants_table.dart';
 
@@ -26,21 +28,27 @@ class ParticipantModel {
 
   /// Returns a Participant from the given Map
   factory ParticipantModel.fromMap(Map<String, dynamic> map) {
+    Uint8List bytes = map[ParticipantsTable.profilePicture];
+
+    final filename = '${map[ParticipantsTable.participantId]}.png';
+    final file = File('${Directory.systemTemp.path}/$filename');
+    file.writeAsBytesSync(bytes);
+
     return ParticipantModel(
       id: map[ParticipantsTable.participantId],
       name: map[ParticipantsTable.name],
       age: map[ParticipantsTable.age],
-      profilePicture: map[ParticipantsTable.profilePicturePath],
+      profilePicture: file,
     );
   }
 
   /// Returns a Map with Participant data
-  Map<String, dynamic> toMap() {
+  Future<Map<String, dynamic>> toMap() async {
     return {
       ParticipantsTable.participantId: id,
       ParticipantsTable.name: name,
       ParticipantsTable.age: age,
-      ParticipantsTable.profilePicturePath: profilePicture,
+      ParticipantsTable.profilePicture: await profilePicture.readAsBytes(),
     };
   }
 
@@ -64,6 +72,6 @@ class ParticipantModel {
 
   @override
   String toString() {
-    return 'ParticipantModel{id: $id, name: $name, age: $age, profilePicturePath: $profilePicture}';
+    return 'ParticipantModel{id: $id, name: $name, age: $age, profilePicture: $profilePicture}';
   }
 }

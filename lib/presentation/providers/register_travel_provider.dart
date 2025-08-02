@@ -82,7 +82,6 @@ class RegisterTravelProvider with ChangeNotifier {
   ///
   /// Otherwise, set all [values] to [false] (no experience selected)
   void _resetExperiences([TravelStop? stop]) {
-    debugPrint('Reset experiences called');
     var selectedExperiences = <Experience, bool>{};
 
     if (stop != null &&
@@ -96,7 +95,6 @@ class RegisterTravelProvider with ChangeNotifier {
     }
 
     _selectedExperiences = selectedExperiences;
-    debugPrint('Selected experiences after reset: $_selectedExperiences');
     notifyListeners();
   }
 

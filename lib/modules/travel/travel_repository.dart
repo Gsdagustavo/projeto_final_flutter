@@ -82,7 +82,7 @@ class TravelRepositoryImpl implements TravelRepository {
       for (final participant in travelModel.participants) {
         final participantId = await txn.insert(
           ParticipantsTable.tableName,
-          participant.toMap(),
+          await participant.toMap(),
         );
 
         participant.id = participantId;

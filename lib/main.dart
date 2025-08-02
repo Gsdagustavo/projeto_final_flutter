@@ -19,9 +19,6 @@ Future<void> main() async {
   final travelRepository = TravelRepositoryImpl();
   final travelUseCases = TravelUseCasesImpl(travelRepository);
 
-  final travels = await travelUseCases.getAllTravels();
-  debugPrint('Travels:\n$travels');
-
   runApp(
     MultiProvider(
       providers: [

@@ -39,6 +39,6 @@ class Participant {
 
   @override
   String toString() {
-    return 'Participant{name: $name, age: $age, profilePictureUrl: $profilePicture}';
+    return 'Participant{name: $name, age: $age, profilePicture: $profilePicture}';
   }
 }

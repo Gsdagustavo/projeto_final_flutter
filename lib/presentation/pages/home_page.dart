@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/extensions/date_extensions.dart';
-import '../../core/extensions/string_extensions.dart';
 import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';
 import '../../l10n/app_localizations.dart';
@@ -85,6 +84,7 @@ class _TravelWidget extends StatelessWidget {
     final locale = Localizations.localeOf(context).toString();
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -99,18 +99,48 @@ class _TravelWidget extends StatelessWidget {
             Text('${travel.startDate!.hour}:${travel.startDate!.minute}'),
           ],
         ),
+
+        _ParticipantsWidget(participants: travel.participants),
       ],
     );
   }
 }
 
-class ParticipantPfp extends StatelessWidget {
-  const ParticipantPfp({super.key, required this.participant});
+class _ParticipantsWidget extends StatelessWidget {
+  const _ParticipantsWidget({super.key, required this.participants});
 
-  final Participant participant;
+  final List<Participant> participants;
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(child: Text(participant.name.uppercaseInitial));
+    return Expanded(
+      child: Stack(
+        children: [
+          Positioned(
+            right: -15,
+            child: CircleAvatar(
+              backgroundImage: FileImage(participants.first.profilePicture),
+            ),
+          ),
+
+          Positioned(
+            child: CircleAvatar(
+              backgroundImage: FileImage(participants.last.profilePicture),
+            ),
+          ),
+
+          // for (int i = 0; i < participants.length && i < 3; i++)
+          //   Positioned(
+          //     right: (20 * i) + 40,
+          //     child: CircleAvatar(
+          //       backgroundImage: FileImage(participants[i].profilePicture),
+          //     ),
+          //   ),
+          //
+          // if (participants.length > 3)
+          //   CircleAvatar(radius: 20, child: Text('...')),
+        ],
+      ),
+    );
   }
 }

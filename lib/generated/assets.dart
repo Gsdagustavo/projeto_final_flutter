@@ -3,48 +3,76 @@ class Assets {
   Assets._();
 
   static const String constantsAppRoutes = 'lib/core/constants/app_routes.dart';
-  static const String databaseDatabase = 'lib/data/local/database/database.dart';
+  static const String databaseDatabase =
+      'lib/data/local/database/database.dart';
   static const String entitiesEnums = 'lib/domain/entities/enums.dart';
-  static const String entitiesParticipant = 'lib/domain/entities/participant.dart';
+  static const String entitiesParticipant =
+      'lib/domain/entities/participant.dart';
   static const String entitiesTravel = 'lib/domain/entities/travel.dart';
-  static const String entitiesTravelStop = 'lib/domain/entities/travel_stop.dart';
+  static const String entitiesTravelStop =
+      'lib/domain/entities/travel_stop.dart';
   static const String generatedAssets = 'lib/generated/assets.dart';
   static const String l10nAppEn = 'lib/l10n/app_en.arb';
   static const String l10nAppEs = 'lib/l10n/app_es.arb';
   static const String l10nAppLocalizations = 'lib/l10n/app_localizations.dart';
-  static const String l10nAppLocalizationsEn = 'lib/l10n/app_localizations_en.dart';
-  static const String l10nAppLocalizationsEs = 'lib/l10n/app_localizations_es.dart';
-  static const String l10nAppLocalizationsPt = 'lib/l10n/app_localizations_pt.dart';
+  static const String l10nAppLocalizationsEn =
+      'lib/l10n/app_localizations_en.dart';
+  static const String l10nAppLocalizationsEs =
+      'lib/l10n/app_localizations_es.dart';
+  static const String l10nAppLocalizationsPt =
+      'lib/l10n/app_localizations_pt.dart';
   static const String l10nAppPt = 'lib/l10n/app_pt.arb';
-  static const String libDesafioFinalAcademyFlutter2025 = 'lib/desafio_final_academy_flutter_2025.pdf';
+  static const String libDesafioFinalAcademyFlutter2025 =
+      'lib/desafio_final_academy_flutter_2025.pdf';
   static const String libMain = 'lib/main.dart';
   static const String pagesFabPage = 'lib/presentation/pages/fab_page.dart';
   static const String pagesHomePage = 'lib/presentation/pages/home_page.dart';
-  static const String pagesRegisterTravelPage = 'lib/presentation/pages/register_travel_page.dart';
-  static const String pagesSettingsPage = 'lib/presentation/pages/settings_page.dart';
-  static const String participantParticipantRepository = 'lib/data/local/modules/participant/participant_repository.dart';
-  static const String participantParticipantUsecases = 'lib/data/local/modules/participant/participant_use_cases.dart';
-  static const String providersLanguageCodeProvider = 'lib/presentation/providers/language_code_provider.dart';
-  static const String providersRegisterTravelProvider = 'lib/presentation/providers/register_travel_provider.dart';
-  static const String providersThemeProvider = 'lib/presentation/providers/theme_provider.dart';
+  static const String pagesRegisterTravelPage =
+      'lib/presentation/pages/register_travel_page.dart';
+  static const String pagesSettingsPage =
+      'lib/presentation/pages/settings_page.dart';
+  static const String participantParticipantRepository =
+      'lib/data/local/modules/participant/participant_repository.dart';
+  static const String participantParticipantUsecases =
+      'lib/data/local/modules/participant/participant_use_cases.dart';
+  static const String providersLanguageCodeProvider =
+      'lib/presentation/providers/language_code_provider.dart';
+  static const String providersRegisterTravelProvider =
+      'lib/presentation/providers/register_travel_provider.dart';
+  static const String providersThemeProvider =
+      'lib/presentation/providers/theme_provider.dart';
   static const String servicesAuthService = 'lib/services/auth_service.dart';
-  static const String servicesLocaleService = 'lib/services/locale_service.dart';
-  static const String servicesLocalizationService = 'lib/services/location_service.dart';
+  static const String servicesLocaleService =
+      'lib/services/locale_service.dart';
+  static const String servicesLocalizationService =
+      'lib/services/location_service.dart';
   static const String servicesThemeService = 'lib/services/theme_service.dart';
-  static const String tablesExperiencesTable = 'lib/data/local/database/tables/experiences_table.dart';
-  static const String tablesParticipantsTable = 'lib/data/local/database/tables/participants_table.dart';
-  static const String tablesTransportTypesTable = 'lib/data/local/database/tables/transport_types_table.dart';
-  static const String tablesTravelParticipantsTable = 'lib/data/local/database/tables/travel_participants_table.dart';
-  static const String tablesTravelStopExperiencesTable = 'lib/data/local/database/tables/travel_stop_experiences_table.dart';
-  static const String tablesTravelStopTable = 'lib/data/local/database/tables/travel_stop_table.dart';
-  static const String tablesTravelTable = 'lib/data/local/database/tables/travel_table.dart';
-  static const String travelTravelRepository = 'lib/data/local/modules/travel/travel_repository.dart';
-  static const String travelTravelUsecases = 'lib/data/local/modules/travel/travel_use_cases.dart';
-  static const String utilEnumsExtensions = 'lib/presentation/util/enums_extensions.dart';
-  static const String utilExperiencesUtil = 'lib/data/local/database/util/experiences_util.dart';
-  static const String widgetsBottomNavigationBar = 'lib/presentation/widgets/bottom_navigation_bar.dart';
+  static const String tablesExperiencesTable =
+      'lib/data/local/database/tables/experiences_table.dart';
+  static const String tablesParticipantsTable =
+      'lib/data/local/database/tables/participants_table.dart';
+  static const String tablesTransportTypesTable =
+      'lib/data/local/database/tables/transport_types_table.dart';
+  static const String tablesTravelParticipantsTable =
+      'lib/data/local/database/tables/travel_participants_table.dart';
+  static const String tablesTravelStopExperiencesTable =
+      'lib/data/local/database/tables/travel_stop_experiences_table.dart';
+  static const String tablesTravelStopTable =
+      'lib/data/local/database/tables/travel_stop_table.dart';
+  static const String tablesTravelTable =
+      'lib/data/local/database/tables/travel_table.dart';
+  static const String travelTravelRepository =
+      'lib/data/local/modules/travel/travel_repository.dart';
+  static const String travelTravelUsecases =
+      'lib/data/local/modules/travel/travel_use_cases.dart';
+  static const String utilEnumsExtensions =
+      'lib/presentation/util/enums_extensions.dart';
+  static const String utilExperiencesUtil =
+      'lib/data/local/database/util/experiences_util.dart';
+  static const String widgetsBottomNavigationBar =
+      'lib/presentation/widgets/bottom_navigation_bar.dart';
   static const String widgetsMap = 'lib/presentation/widgets/map.dart';
   static const String widgetsMyApp = 'lib/presentation/widgets/my_app.dart';
-  static const String widgetsMyAppBar = 'lib/presentation/widgets/my_app_bar.dart';
-
+  static const String widgetsMyAppBar =
+      'lib/presentation/widgets/my_app_bar.dart';
 }
