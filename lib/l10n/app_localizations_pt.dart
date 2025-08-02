@@ -168,6 +168,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get add_stops_for_your_travel => 'Adicionar Paradas para a Sua Viagem';
 
   @override
+  String get invalid_travel_data => 'A viagem contém dados inválidos';
+
+  @override
   String get travel_registered_successfully => 'Viagem registrada com sucesso';
 
   @override

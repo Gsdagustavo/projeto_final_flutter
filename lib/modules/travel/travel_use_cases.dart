@@ -63,7 +63,7 @@ class TravelUseCasesImpl implements TravelUseCases {
     }
 
     /// A(some) participant(s) has invalid data
-    if (!_isParticipantInfoValid(travel.participants)) {
+    if (!isParticipantInfoValid(travel.participants)) {
       throw TravelRegisterException('Invalid participant data');
     }
 
@@ -80,7 +80,7 @@ class TravelUseCasesImpl implements TravelUseCases {
     return await travelRepository.getAllTravels();
   }
 
-  bool _isParticipantInfoValid(List<Participant> participants) {
+  bool isParticipantInfoValid(List<Participant> participants) {
     return participants.every((p) {
       /// Invalid name
       if (p.name.isEmpty) {

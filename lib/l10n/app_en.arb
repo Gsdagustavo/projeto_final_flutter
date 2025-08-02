@@ -75,6 +75,7 @@
   "participant_removed": "Participant removed",
   "travel_map": "Travel Map",
   "add_stops_for_your_travel": "Add Stops for Your Travel",
+  "invalid_travel_data": "Invalid Travel Data",
   "travel_registered_successfully": "Your Travel was successfully registered!",
 
   "@@google_map": {},

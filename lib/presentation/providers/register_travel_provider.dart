@@ -24,6 +24,8 @@ class RegisterTravelProvider with ChangeNotifier {
   /// Instance of [FileService]
   final fileService = FileService();
 
+  final formKey = GlobalKey<FormState>();
+
   /// Default constructor
   RegisterTravelProvider(this._travelUseCases) {
     _init();
@@ -447,7 +449,7 @@ class RegisterTravelProvider with ChangeNotifier {
 
   bool get isTravelValid {
     return areStopsValid &&
-        numParticipants >= 1 &&
-        travelTitleController.text.isNotEmpty;
+        _travelUseCases.isParticipantInfoValid(participants) &&
+        formKey.currentState!.validate();
   }
 }

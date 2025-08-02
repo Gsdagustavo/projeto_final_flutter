@@ -8,7 +8,7 @@ import '../../presentation/pages/auth/splash_screen.dart';
 import '../../presentation/pages/home_page.dart';
 import '../../presentation/pages/register_travel_page.dart';
 import '../../presentation/pages/settings_page.dart';
-import '../../presentation/widgets/map.dart';
+import '../../presentation/pages/map.dart';
 
 /// Defines the routes of the app and its pages
 final class AppRoutes {

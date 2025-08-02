@@ -75,6 +75,7 @@
   "participant_removed": "Participante eliminado",
   "travel_map": "Mapa del Viaje",
   "add_stops_for_your_travel": "Agregar Paradas para Tu Viaje",
+  "invalid_travel_data": "¡Datos de viaje no válidos!",
   "travel_registered_successfully": "Viaje registrado con éxito",
 
   "@@google_map": {},

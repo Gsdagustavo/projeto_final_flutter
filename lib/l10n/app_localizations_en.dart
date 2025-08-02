@@ -168,6 +168,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get add_stops_for_your_travel => 'Add Stops for Your Travel';
 
   @override
+  String get invalid_travel_data => 'Invalid Travel Data';
+
+  @override
   String get travel_registered_successfully => 'Your Travel was successfully registered!';
 
   @override

@@ -16,10 +16,10 @@ import '../../l10n/app_localizations.dart';
 import '../../services/locale_service.dart';
 import '../../services/location_service.dart';
 import '../extensions/enums_extensions.dart';
-import '../pages/register_travel_page.dart';
+import 'register_travel_page.dart';
 import '../providers/register_travel_provider.dart';
-import 'custom_dialog.dart';
-import 'my_app_bar.dart';
+import '../widgets/custom_dialog.dart';
+import '../widgets/my_app_bar.dart';
 
 /// This is a map widget that will be used to register a [TravelStop] and to
 /// view a [Travel] route
@@ -630,6 +630,7 @@ Future<TravelStop?> _showTravelStopModal(
 
   final registeredStop = await showModalBottomSheet<TravelStop?>(
     context: context,
+    showDragHandle: true,
     builder: (context) {
       return StatefulBuilder(
         builder: (context, setModalState) {
@@ -645,7 +646,12 @@ Future<TravelStop?> _showTravelStopModal(
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(display, style: const TextStyle(fontSize: 28)),
+                    Expanded(
+                      child: Text(
+                        display,
+                        style: const TextStyle(fontSize: 28),
+                      ),
+                    ),
 
                     if (stop != null)
                       IconButton(

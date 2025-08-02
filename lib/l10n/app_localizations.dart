@@ -415,6 +415,12 @@ abstract class AppLocalizations {
   /// **'Add Stops for Your Travel'**
   String get add_stops_for_your_travel;
 
+  /// No description provided for @invalid_travel_data.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid Travel Data'**
+  String get invalid_travel_data;
+
   /// No description provided for @travel_registered_successfully.
   ///
   /// In en, this message translates to:
