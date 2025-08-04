@@ -18,7 +18,7 @@ abstract final class PlacesTable {
   static const String createTable =
       '''
       CREATE TABLE $tableName(
-        $placeId INTEGER NOT NULL PRIMARY KEY,
+        $placeId INTEGER NOT NULL,
         $osmType TEXT NOT NULL,
         $lat DECIMAL NOT NULL,
         $lon DECIMAL NOT NULL,
