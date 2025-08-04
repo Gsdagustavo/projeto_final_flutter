@@ -12,7 +12,6 @@ import '../../l10n/app_localizations.dart';
 import '../../services/locale_service.dart';
 import '../extensions/enums_extensions.dart';
 import '../providers/register_travel_provider.dart';
-import '../providers/travel_list_provider.dart';
 import '../widgets/custom_dialog.dart';
 import 'fab_page.dart';
 import 'map.dart';
@@ -87,22 +86,22 @@ class RegisterTravelPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               /// Travel title text field
-              const _TravelTitleTextField(),
+              _TravelTitleTextField(),
               const Padding(padding: EdgeInsets.all(16)),
 
               /// Transport types dropdown button
-              const _TransportTypesDropdownButton(),
+              _TransportTypesDropdownButton(),
               const Padding(padding: EdgeInsets.all(16)),
 
               /// Text buttons to choose the Travel Start and End dates
-              const _DateTextButtons(),
+              _DateTextButtons(),
               const Padding(padding: EdgeInsets.all(16)),
 
               /// List all participants and add new participants
-              const _ParticipantsWidget(),
+              _ParticipantsWidget(),
               const Padding(padding: EdgeInsets.all(16)),
 
-              const _TravelMapWidget(),
+              _TravelMapWidget(),
               const Padding(padding: EdgeInsets.all(16)),
 
               if (travelState.isTravelValid)
@@ -120,27 +119,6 @@ class RegisterTravelPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          FloatingActionButton(
-            tooltip: 'Register travel',
-            child: const Icon(Icons.app_registration),
-            onPressed: () async {
-              final registerTravelState = Provider.of<RegisterTravelProvider>(
-                context,
-                listen: false,
-              );
-
-              _showCustomDialog(context);
-              await registerTravelState.registerTravel();
-              await context.read<TravelListProvider>().update();
-
-              await Future.delayed(const Duration(seconds: 2));
-
-              Navigator.pop(context);
-            },
-          ),
-
-          const Padding(padding: EdgeInsets.all(16)),
-
           FloatingActionButton(
             tooltip: 'List travels',
             child: const Icon(Icons.get_app),
@@ -475,167 +453,159 @@ class _ModalState extends State<_Modal> {
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
 
-    return StatefulBuilder(
-      builder: (context, setModalState) {
-        return Stack(
-          clipBehavior: Clip.none,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(32),
-                topRight: Radius.circular(32),
-              ),
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    top: -64,
-                    child: ColorFiltered(
-                      colorFilter: ColorFilter.mode(
-                        Theme.of(context).canvasColor,
-                        BlendMode.srcOut,
-                      ),
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            left: MediaQuery.sizeOf(context).width / 2 - 66,
-                            child: Container(
-                              width: 132,
-                              height: 132,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(32),
+            topRight: Radius.circular(32),
+          ),
+          child: Stack(
+            children: [
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                top: -64,
+                child: ColorFiltered(
+                  colorFilter: ColorFilter.mode(
+                    Theme.of(context).canvasColor,
+                    BlendMode.srcOut,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(32.0),
-                    child: SingleChildScrollView(
-                      padding: EdgeInsets.only(
-                        top: 72,
-                        bottom: MediaQuery.viewInsetsOf(context).bottom,
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextField(
-                            onTapOutside: (_) =>
-                                FocusScope.of(context).unfocus(),
-                            controller:
-                                widget.travelState.participantNameController,
-                            decoration: InputDecoration(
-                              hintText: as.name,
-                              prefixIcon: const Icon(Icons.person),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                          ),
-                          const Padding(padding: EdgeInsets.all(16)),
-
-                          TextField(
-                            onTapOutside: (_) =>
-                                FocusScope.of(context).unfocus(),
-                            controller:
-                                widget.travelState.participantAgeController,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              hintText: as.age,
-                              prefixIcon: const Icon(Icons.timer),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                          ),
-                          const Padding(padding: EdgeInsets.all(16)),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text(as.cancel),
-                              ),
-                              ElevatedButton(
-                                onPressed: () async {
-                                  await widget.travelState.addParticipant();
-                                  Navigator.pop(context);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(as.participant_registered),
-                                    ),
-                                  );
-                                },
-
-                                child: Text(as.register),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const Padding(padding: EdgeInsets.all(16)),
-                ],
-              ),
-            ),
-            Positioned(
-              top: -64,
-              left: MediaQuery.sizeOf(context).width / 2 - 64,
-              child: Stack(
-                children: [
-                  SizedBox(
-                    width: 128,
-                    height: 128,
-                    child: CircleAvatar(
-                      backgroundImage:
-                          widget.travelState.profilePictureFile != null
-                          ? FileImage(widget.travelState.profilePictureFile!)
-                          : const AssetImage(
-                                  'assets/images/default_profile_picture.png',
-                                )
-                                as ImageProvider,
-                      backgroundColor: Colors.transparent,
-                    ),
-                  ),
-
-                  Positioned(
-                    bottom: 0,
-                    right: 2,
-                    child: InkWell(
-                      onTap: () async {
-                        /// TODO: show a modal to choose where the image is going to be picked from (camera, gallery, etc.)
-                        await widget.travelState.pickImage();
-
-                        setModalState(() {});
-                      },
-                      radius: 20,
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: Colors.white,
-                        child: Center(
-                          child: Icon(
-                            Icons.edit,
-                            size: 32,
-                            color: Theme.of(context).primaryColor,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: MediaQuery.sizeOf(context).width / 2 - 66,
+                        child: Container(
+                          width: 132,
+                          height: 132,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.black,
                           ),
                         ),
                       ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.only(
+                    top: 72,
+                    bottom: MediaQuery.viewInsetsOf(context).bottom,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextField(
+                        onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                        controller:
+                            widget.travelState.participantNameController,
+                        decoration: InputDecoration(
+                          hintText: as.name,
+                          prefixIcon: const Icon(Icons.person),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                      const Padding(padding: EdgeInsets.all(16)),
+
+                      TextField(
+                        onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                        controller: widget.travelState.participantAgeController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          hintText: as.age,
+                          prefixIcon: const Icon(Icons.timer),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                      const Padding(padding: EdgeInsets.all(16)),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text(as.cancel),
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              await widget.travelState.addParticipant();
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(as.participant_registered),
+                                ),
+                              );
+                            },
+
+                            child: Text(as.register),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const Padding(padding: EdgeInsets.all(16)),
+            ],
+          ),
+        ),
+        Positioned(
+          top: -64,
+          left: MediaQuery.sizeOf(context).width / 2 - 64,
+          child: Stack(
+            children: [
+              SizedBox(
+                width: 128,
+                height: 128,
+                child: CircleAvatar(
+                  backgroundImage: widget.travelState.profilePictureFile != null
+                      ? FileImage(widget.travelState.profilePictureFile!)
+                      : const AssetImage(
+                              'assets/images/default_profile_picture.png',
+                            )
+                            as ImageProvider,
+                  backgroundColor: Colors.transparent,
+                ),
+              ),
+
+              Positioned(
+                bottom: 0,
+                right: 2,
+                child: InkWell(
+                  onTap: () async {
+                    /// TODO: show a modal to choose where the image is going to be picked from (camera, gallery, etc.)
+                    await widget.travelState.pickImage();
+
+                    setState(() {});
+                  },
+                  radius: 20,
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.white,
+                    child: Center(
+                      child: Icon(
+                        Icons.edit,
+                        size: 32,
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
-          ],
-        );
-      },
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -775,7 +745,7 @@ class _RegisterTravelButton extends StatelessWidget {
               return;
             }
 
-            if (!travelState.isTravelValid) {
+            if (!travelState.validateForm()) {
               await showDialog(
                 context: context,
                 builder: (context) {

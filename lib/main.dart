@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'data/local/database/database.dart';
 import 'modules/travel/travel_repository.dart';
 import 'modules/travel/travel_use_cases.dart';
 import 'presentation/providers/language_code_provider.dart';
@@ -18,6 +19,8 @@ Future<void> main() async {
 
   final travelRepository = TravelRepositoryImpl();
   final travelUseCases = TravelUseCasesImpl(travelRepository);
+
+  await DBConnection().getDatabase(reset: true);
 
   runApp(
     MultiProvider(

@@ -15,7 +15,6 @@ import '../../l10n/app_localizations.dart';
 import '../../services/locale_service.dart';
 import '../../services/location_service.dart';
 import '../extensions/enums_extensions.dart';
-import 'register_travel_page.dart';
 import '../providers/register_travel_provider.dart';
 import '../widgets/custom_dialog.dart';
 import '../widgets/my_app_bar.dart';
@@ -319,18 +318,8 @@ class _TravelMapState extends State<TravelMap> {
                         horizontal: 64,
                       ),
                     ),
-                    onPressed: () async {
-                      final travelState = Provider.of<RegisterTravelProvider>(
-                        context,
-                        listen: false,
-                      );
-
-                      unawaited(
-                        Navigator.pushReplacementNamed(
-                          context,
-                          RegisterTravelPage.routeName,
-                        ),
-                      );
+                    onPressed: () {
+                      Navigator.pop(context);
                     },
                     child: Text(as.finish, style: TextStyle(fontSize: 22)),
                   ),

@@ -1,9 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/participant.dart';
@@ -118,8 +115,21 @@ class RegisterTravelProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
+    if (!isTravelValid) {
+      _errorMsg = 'Invalid Travel Info. Verify the data and try again';
+      notifyListeners();
+      return;
+    }
+
+    if (_stops.length < 2) {
+      _errorMsg = 'At least 2 stops must be registered';
+      _isLoading = false;
+      notifyListeners();
+      return;
+    }
+
     final lastStop = stops.last;
-    _stops.last = lastStop.copyWith(type: TravelStopType.end);
+    _stops[stops.length - 1] = lastStop.copyWith(type: TravelStopType.end);
 
     /// Instantiates a new travel with the given inputs
     final travel = Travel(
@@ -213,22 +223,8 @@ class RegisterTravelProvider with ChangeNotifier {
       leaveDate: _leaveDate,
     );
 
-    final idx = _stops.indexOf(stop);
-
-    if (stop != _stops.last) {
-      _stops = _stops.map((s) {
-        debugPrint('Stop: $s, idx: ${_stops.indexOf(s)}');
-
-        if (_stops.indexOf(s) > idx) {
-          return s.copyWith(arriveDate: null, leaveDate: null);
-        }
-
-        return s;
-      }).toList();
-    }
-
-    _stops.removeAt(idx);
-    _stops.insert(idx, newStop);
+    _stops[_stops.length - 1] = newStop;
+    notifyListeners();
 
     notifyListeners();
     return newStop;
@@ -446,8 +442,15 @@ class RegisterTravelProvider with ChangeNotifier {
   File? get profilePictureFile => _profilePictureFile;
 
   bool get isTravelValid {
-    return areStopsValid &&
-        _travelUseCases.isParticipantInfoValid(participants) &&
-        formKey.currentState!.validate();
+    final isValid = areStopsValid &&
+        _travelUseCases.isParticipantInfoValid(participants);
+
+    debugPrint('Is travel valid: $isValid');
+
+    return isValid;
+  }
+
+  bool validateForm() {
+    return formKey.currentState?.validate() ?? false;
   }
 }
