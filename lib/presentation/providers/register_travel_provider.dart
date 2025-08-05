@@ -442,8 +442,8 @@ class RegisterTravelProvider with ChangeNotifier {
   File? get profilePictureFile => _profilePictureFile;
 
   bool get isTravelValid {
-    final isValid = areStopsValid &&
-        _travelUseCases.isParticipantInfoValid(participants);
+    final isValid =
+        areStopsValid && _travelUseCases.isParticipantInfoValid(participants);
 
     debugPrint('Is travel valid: $isValid');
 

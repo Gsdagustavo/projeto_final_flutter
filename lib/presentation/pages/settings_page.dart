@@ -1,11 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/extensions/date_extensions.dart';
-import '../../core/extensions/string_extensions.dart';
 import '../../l10n/app_localizations.dart';
+import '../../services/file_service.dart';
+import '../../services/user_profile_picture_service.dart';
 import '../providers/language_code_provider.dart';
 import '../providers/login_provider.dart';
 import '../widgets/custom_dialog.dart';
@@ -16,12 +18,36 @@ import 'fab_page.dart';
 ///
 /// Currently, it does not have any interaction nor action available, but in the
 /// future, more features will be added
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   /// Constant constructor
   const SettingsPage({super.key});
 
   /// The route of the page
   static const String routeName = '/settings';
+
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  File? _profilePicture;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      final image = await UserProfilePictureService()
+          .getCurrentProfilePicture();
+
+      if (mounted) {
+        setState(() {
+          _profilePicture = image;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +61,6 @@ class SettingsPage extends StatelessWidget {
           final locale = Localizations.localeOf(context).toString();
 
           final user = authProvider.loggedUser;
-          final emailInitial = user != null && user.email != null
-              ? user.email!.uppercaseInitial
-              : 'N/A';
 
           final creationTime = user?.metadata.creationTime;
           final lastSignInTime = user?.metadata.lastSignInTime;
@@ -50,23 +73,59 @@ class SettingsPage extends StatelessWidget {
               ? lastSignInTime.getFormattedDateWithYear(locale)
               : 'N/A';
 
+          final backgroundImage = _profilePicture != null
+              ? FileImage(_profilePicture!)
+              : const AssetImage('assets/images/default_profile_picture.png')
+                    as ImageProvider;
+
+          final profilePictureService = UserProfilePictureService();
+
+          const double radius = 72;
+
           return Padding(
             padding: const EdgeInsets.all(32.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Align(
+                Stack(
                   alignment: Alignment.center,
-                  child: CircleAvatar(
-                    radius: 50,
-                    child: Text(
-                      emailInitial,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 50,
+                  children: [
+                    Center(
+                      child: CircleAvatar(
+                        backgroundImage: backgroundImage,
+                        radius: radius,
                       ),
                     ),
-                  ),
+
+                    Positioned(
+                      bottom: 0,
+                      right:
+                          MediaQuery.of(context).size.width / 2 - radius - 22,
+                      child: InkWell(
+                        onTap: () async {
+                          /// TODO: show a modal to choose where the image is going to be picked from (camera, gallery, etc.)
+                          final image = await FileService().pickImage();
+                          await profilePictureService.saveProfilePicture(image);
+
+                          setState(() {
+                            _profilePicture = image;
+                          });
+                        },
+                        radius: 20,
+                        child: CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.white,
+                          child: Center(
+                            child: Icon(
+                              Icons.edit,
+                              size: 32,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
 
                 const Padding(padding: EdgeInsets.all(12)),
