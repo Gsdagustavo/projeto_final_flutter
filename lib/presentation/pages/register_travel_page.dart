@@ -745,20 +745,20 @@ class _RegisterTravelButton extends StatelessWidget {
               return;
             }
 
-            if (!travelState.validateForm()) {
-              await showDialog(
-                context: context,
-                builder: (context) {
-                  return CustomDialog(
-                    title: as.warning,
-                    content: Text(as.invalid_travel_data),
-                    isError: true,
-                  );
-                },
-              );
-
-              return;
-            }
+            // if (!travelState.validateForm()) {
+            //   await showDialog(
+            //     context: context,
+            //     builder: (context) {
+            //       return CustomDialog(
+            //         title: as.warning,
+            //         content: Text(as.invalid_travel_data),
+            //         isError: true,
+            //       );
+            //     },
+            //   );
+            //
+            //   return;
+            // }
 
             await showDialog(
               context: context,
