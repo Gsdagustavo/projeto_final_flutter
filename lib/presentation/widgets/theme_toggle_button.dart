@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/theme_provider.dart';
+import '../providers/user_preferences_provider.dart';
 
 /// A custom [IconButton] that toggles the current [ThemeMode] by calling the
 /// [ThemeProvider] provider
@@ -13,7 +13,7 @@ class ThemeToggleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeProvider>(
+    return Consumer<UserPreferencesProvider>(
       builder: (_, themeState, __) {
         return IconButton(
           onPressed: themeState.toggleTheme,

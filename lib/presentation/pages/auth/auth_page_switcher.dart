@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
-import '../../providers/theme_provider.dart';
+import '../../providers/user_preferences_provider.dart';
 import '../../widgets/theme_toggle_button.dart';
 import 'login_page.dart';
 import 'register_page.dart';
@@ -61,7 +61,7 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
 
   Widget _buildSwitcherOption(String text, int index) {
     final isSelected = index == _selectedIndex;
-    final isDarkMode = Provider.of<ThemeProvider>(
+    final isDarkMode = Provider.of<UserPreferencesProvider>(
       context,
       listen: false,
     ).isDarkMode;

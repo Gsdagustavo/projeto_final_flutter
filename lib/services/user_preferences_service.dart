@@ -1,21 +1,53 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// Service class to handle language code persistence using [SharedPreferences]
-///
-/// [languageCodes]: A list of available language codes
-/// [defaultLanguageCode]: The default language code of the app
-class LocaleService {
+import '../core/exceptions/invalid_language_code_exception.dart';
+
+class UserPreferencesService {
+  static const String _profilePictureKey = 'profilePicture';
+  static const String _darkModeKey = 'is_dark_mode';
+
+  Future<File?> getCurrentProfilePicture() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final filePath = prefs.getString(_profilePictureKey);
+
+    if (!prefs.containsKey(_profilePictureKey) || filePath == null) {
+      return null;
+    }
+
+    return File(filePath);
+  }
+
+  Future<void> saveProfilePicture(File? profilePicture) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    if (profilePicture == null) return;
+
+    await prefs.setString(_profilePictureKey, profilePicture.path);
+  }
+
+  /// Saves [isDarkMode] into the [_darkModeKey]
+  Future<void> saveMode({required bool isDarkMode}) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_darkModeKey, isDarkMode);
+  }
+
+  /// Returns a [Future] that corresponds to the current state of the app's
+  /// theme (whether is in dark mode or not)
+  Future<bool> getMode() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_darkModeKey) ?? false;
+  }
+
   /// A list of available language codes
   static const languageCodes = ['en', 'es', 'pt'];
 
   /// The key used to load and save the current language code in
   /// [SharedPreferences]
   static const _languageCodeKey = 'languageCode';
-
-  /// The default language code of the app
-  static final defaultLanguageCode = languageCodes.first;
 
   /// Saves the given [languageCode] to [SharedPreferences]
   ///
@@ -56,13 +88,9 @@ class LocaleService {
     await prefs.setString(_languageCodeKey, finalLanguageCode);
     return finalLanguageCode;
   }
-}
 
-/// A custom exception that will be thrown if a language code is invalid
-class InvalidLanguageCodeException implements Exception {
-  /// The error message
-  final String message;
-
-  /// Default constructor
-  InvalidLanguageCodeException(this.message);
+  /// The default language code of the app
+  String get defaultLanguageCode {
+    return languageCodes.first;
+  }
 }

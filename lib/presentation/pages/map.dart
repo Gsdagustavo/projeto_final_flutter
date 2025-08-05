@@ -12,8 +12,8 @@ import '../../domain/entities/place.dart';
 import '../../domain/entities/travel.dart';
 import '../../domain/entities/travel_stop.dart';
 import '../../l10n/app_localizations.dart';
-import '../../services/locale_service.dart';
 import '../../services/location_service.dart';
+import '../../services/user_preferences_service.dart';
 import '../extensions/enums_extensions.dart';
 import '../providers/register_travel_provider.dart';
 import '../widgets/custom_dialog.dart';
@@ -473,7 +473,7 @@ class _DatesPickersState extends State<_DatesPickers> {
     _leaveDate = widget.stop?.leaveDate;
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final locale = await LocaleService().loadLanguageCode();
+      final locale = await UserPreferencesService().loadLanguageCode();
 
       if (mounted) {
         setState(() {

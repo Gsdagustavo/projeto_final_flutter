@@ -4,8 +4,7 @@ import 'package:provider/provider.dart';
 import '../../core/constants/app_routes.dart';
 import '../../core/constants/themes.dart';
 import '../../l10n/app_localizations.dart';
-import '../providers/language_code_provider.dart';
-import '../providers/theme_provider.dart';
+import '../providers/user_preferences_provider.dart';
 
 /// This widget is the [MaterialApp] of the application, which contains all
 /// important info about layout, theme, routes, localization, etc.
@@ -15,8 +14,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
-    final languageCode = Provider.of<LanguageCodeProvider>(
+    final isDarkMode = Provider.of<UserPreferencesProvider>(context).isDarkMode;
+    final languageCode = Provider.of<UserPreferencesProvider>(
       context,
     ).languageCode;
     final locale = Locale(languageCode);

@@ -9,7 +9,7 @@ import '../../core/extensions/string_extensions.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/travel_stop.dart';
 import '../../l10n/app_localizations.dart';
-import '../../services/locale_service.dart';
+import '../../services/user_preferences_service.dart';
 import '../extensions/enums_extensions.dart';
 import '../providers/register_travel_provider.dart';
 import '../widgets/custom_dialog.dart';
@@ -257,7 +257,7 @@ class _DateTextButtonsState extends State<_DateTextButtons> {
   @override
   void initState() {
     super.initState();
-    _localeFuture = LocaleService().loadLanguageCode();
+    _localeFuture = UserPreferencesService().loadLanguageCode();
   }
 
   @override

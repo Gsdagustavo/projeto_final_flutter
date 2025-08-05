@@ -7,9 +7,10 @@ import 'package:provider/provider.dart';
 import '../../core/extensions/date_extensions.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/file_service.dart';
-import '../../services/user_profile_picture_service.dart';
-import '../providers/language_code_provider.dart';
+import '../../services/user_preferences_service.dart';
+
 import '../providers/login_provider.dart';
+import '../providers/user_preferences_provider.dart';
 import '../widgets/custom_dialog.dart';
 import 'auth/auth_page_switcher.dart';
 import 'fab_page.dart';
@@ -38,8 +39,7 @@ class _SettingsPageState extends State<SettingsPage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      final image = await UserProfilePictureService()
-          .getCurrentProfilePicture();
+      final image = await UserPreferencesService().getCurrentProfilePicture();
 
       if (mounted) {
         setState(() {
@@ -78,8 +78,6 @@ class _SettingsPageState extends State<SettingsPage> {
               : const AssetImage('assets/images/default_profile_picture.png')
                     as ImageProvider;
 
-          final profilePictureService = UserProfilePictureService();
-
           const double radius = 72;
 
           return Padding(
@@ -105,7 +103,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         onTap: () async {
                           /// TODO: show a modal to choose where the image is going to be picked from (camera, gallery, etc.)
                           final image = await FileService().pickImage();
-                          await profilePictureService.saveProfilePicture(image);
+                          await UserPreferencesService().saveProfilePicture(
+                            image,
+                          );
 
                           setState(() {
                             _profilePicture = image;
@@ -250,7 +250,7 @@ class _LanguagesRadioState extends State<_LanguagesRadio> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() {
-        selectedOption = Provider.of<LanguageCodeProvider>(
+        selectedOption = Provider.of<UserPreferencesProvider>(
           context,
           listen: false,
         ).languageCode;
@@ -284,7 +284,7 @@ class _LanguagesRadioState extends State<_LanguagesRadio> {
                     });
 
                     final languageCodeProvider =
-                        Provider.of<LanguageCodeProvider>(
+                        Provider.of<UserPreferencesProvider>(
                           context,
                           listen: false,
                         );
