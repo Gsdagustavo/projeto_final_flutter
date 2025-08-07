@@ -48,4 +48,4 @@ desktop.ini
 *.apk
 *.ipa
 *.orig
-.env
+*.env

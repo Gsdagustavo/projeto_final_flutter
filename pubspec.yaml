@@ -27,6 +27,7 @@ dependencies:
   collection: ^1.19.1
   image_picker: ^1.1.2
   path_provider: ^2.1.5
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -40,6 +41,7 @@ flutter:
 
   assets:
     - 'assets/images/default_profile_picture.png'
+    - .env
 
 
   generate: true

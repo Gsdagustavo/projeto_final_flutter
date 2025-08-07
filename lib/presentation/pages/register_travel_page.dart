@@ -789,7 +789,7 @@ class _TravelStopWidget extends StatelessWidget {
         Row(
           children: [
             Icon(Icons.pin_drop, color: Colors.red),
-            Container(height: 50, child: Text(travelStop.place.display)),
+            Container(height: 50, child: Text(travelStop.place.toString())),
           ],
         ),
       ],

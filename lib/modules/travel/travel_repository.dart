@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../data/local/database/database.dart';
-import '../../data/local/database/tables/addresses_table.dart';
 import '../../data/local/database/tables/experiences_table.dart';
 import '../../data/local/database/tables/participants_table.dart';
 import '../../data/local/database/tables/places_table.dart';
@@ -10,7 +9,6 @@ import '../../data/local/database/tables/travel_participants_table.dart';
 import '../../data/local/database/tables/travel_stop_experiences_table.dart';
 import '../../data/local/database/tables/travel_stop_table.dart';
 import '../../data/local/database/tables/travel_table.dart';
-import '../../data/models/address_model.dart';
 import '../../data/models/participant_model.dart';
 import '../../data/models/place_model.dart';
 import '../../data/models/travel_model.dart';
@@ -100,18 +98,19 @@ class TravelRepositoryImpl implements TravelRepository {
     TravelStopModel stop,
     int travelId,
   ) async {
-    /// Insert into [AddressesTable]
-    final addressMap = stop.place.address.toMap();
-    final addressId = await txn.insert(AddressesTable.tableName, addressMap);
+    final placeMap = stop.place.toMap();
 
-    final placeMap = stop.place.fromMap(addressId);
+    print('Place map: $placeMap');
 
     /// Insert into [PlacesTable]
-    await txn.insert(PlacesTable.tableName, placeMap);
+    final placeId = await txn.insert(PlacesTable.tableName, placeMap);
 
     final stopMap = stop.toMap();
+
+    print('Stop map: $stopMap');
+
     stopMap[TravelStopTable.travelId] = travelId;
-    stopMap[TravelStopTable.placeId] = stop.place.placeId;
+    stopMap[TravelStopTable.placeId] = placeId;
 
     /// Insert stop into [TravelStopsTable]
     final stopId = await txn.insert(TravelStopTable.tableName, stopMap);
@@ -202,19 +201,7 @@ class TravelRepositoryImpl implements TravelRepository {
 
           if (placeMap.isEmpty) continue;
 
-          final placeData = placeMap.first;
-          final addressId = placeData[PlacesTable.addressId];
-
-          final addressMap = await txn.query(
-            AddressesTable.tableName,
-            where: '${AddressesTable.addressId} = ?',
-            whereArgs: [addressId],
-          );
-
-          if (addressMap.isEmpty) continue;
-
-          final addressModel = AddressModel.fromMap(addressMap.first);
-          final placeModel = PlaceModel.toMap(placeData, addressModel);
+          final placeModel = PlaceModel.fromMap(placeMap.first);
 
           final travelStopModel = TravelStopModel.fromMap(
             stop,

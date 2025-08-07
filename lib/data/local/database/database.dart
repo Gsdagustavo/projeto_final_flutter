@@ -2,7 +2,6 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../../domain/entities/enums.dart';
-import 'tables/addresses_table.dart';
 import 'tables/experiences_table.dart';
 import 'tables/participants_table.dart';
 import 'tables/places_table.dart';
@@ -43,7 +42,6 @@ class DBConnection {
     await _insertDefaultValuesIntoTables(db);
 
     await db.execute(PlacesTable.createTable);
-    await db.execute(AddressesTable.createTable);
     await db.execute(TravelTable.createTable);
     await db.execute(TravelParticipantsTable.createTable);
     await db.execute(TravelStopTable.createTable);

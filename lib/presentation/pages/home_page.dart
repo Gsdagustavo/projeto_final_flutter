@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/extensions/date_extensions.dart';
 import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';
 import '../../l10n/app_localizations.dart';
@@ -105,7 +103,7 @@ class _TravelWidget extends StatelessWidget {
                 ),
                 height: 50,
                 child: Text(
-                  travel.stops.first.place.display,
+                  travel.stops.first.place.toString(),
                   style: TextStyle(fontSize: 18),
                 ),
               ),
@@ -127,7 +125,7 @@ class _TravelWidget extends StatelessWidget {
                 ),
                 height: 50,
                 child: Text(
-                  travel.stops.last.place.display,
+                  travel.stops.last.place.toString(),
                   style: TextStyle(fontSize: 18),
                 ),
               ),

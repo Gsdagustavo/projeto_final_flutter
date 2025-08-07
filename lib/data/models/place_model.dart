@@ -1,135 +1,125 @@
 import '../../domain/entities/place.dart';
 import '../local/database/tables/places_table.dart';
-import 'address_model.dart';
 
 class PlaceModel {
-  final int placeId;
-  final String osmType;
-  final double lat;
-  final double lon;
-  final String category;
-  final String type;
-  final String placeRank;
-  final String addresstype;
-  final String name;
-  final String displayName;
-  final AddressModel address;
+  final int? id;
+  final String? city;
+  final String? state;
+  final String? country;
+  final String? countryCode;
+  final double latitude;
+  final double longitude;
 
-  PlaceModel({
-    required this.placeId,
-    required this.osmType,
-    required this.lat,
-    required this.lon,
-    required this.category,
-    required this.type,
-    required this.placeRank,
-    required this.addresstype,
-    required this.name,
-    required this.displayName,
-    required this.address,
+  const PlaceModel({
+    this.id,
+    this.city,
+    this.state,
+    this.country,
+    this.countryCode,
+    required this.latitude,
+    required this.longitude,
   });
 
   factory PlaceModel.fromJson(Map<String, dynamic> json) {
+    String? getComponent(List components, String type) {
+      try {
+        return components.firstWhere(
+          (c) => (c['types'] as List).contains(type),
+        )['long_name'];
+      } catch (_) {
+        return null;
+      }
+    }
+
+    final components = json['results'][0]['address_components'] as List;
+    final location = json['results'][0]['geometry']['location'];
+
     return PlaceModel(
-      placeId: json['place_id'] ?? 0,
-      osmType: json['osm_type'] ?? '',
-      lat: double.tryParse(json['lat'].toString()) ?? 0.0,
-      lon: double.tryParse(json['lon'].toString()) ?? 0.0,
-      category: json['category'] ?? '',
-      type: json['type'] ?? '',
-      placeRank: json['place_rank']?.toString() ?? '',
-      addresstype: json['addresstype'] ?? '',
-      name: json['name'] ?? '',
-      displayName: json['display_name'] ?? '',
-      address: AddressModel.fromJson(json['address'] ?? {}),
+      city:
+          getComponent(components, 'locality') ??
+          getComponent(components, 'administrative_area_level_2'),
+      state: getComponent(components, 'administrative_area_level_1'),
+      country: getComponent(components, 'country'),
+      countryCode: getComponent(components, 'country') != null
+          ? components.firstWhere(
+              (c) => (c['types'] as List).contains('country'),
+            )['short_name']
+          : null,
+      latitude: (location['lat'] as num?)!.toDouble(),
+      longitude: (location['lng'] as num?)!.toDouble(),
     );
   }
 
-  Map<String, dynamic> toJson() {
+  factory PlaceModel.fromMap(Map<String, dynamic> map) {
+    return PlaceModel(
+      id: map[PlacesTable.placeId] as int?,
+      city: map[PlacesTable.city] as String?,
+      state: map[PlacesTable.state] as String?,
+      country: map[PlacesTable.country] as String?,
+      countryCode: map[PlacesTable.countryCode] as String?,
+      latitude: map[PlacesTable.latitude] as double,
+      longitude: map[PlacesTable.longitude] as double,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
     return {
-      'place_id': placeId,
-      'osm_type': osmType,
-      'lat': lat,
-      'lon': lon,
-      'category': category,
-      'type': type,
-      'place_rank': placeRank,
-      'addresstype': addresstype,
-      'name': name,
-      'display_name': displayName,
-      'address': address.toJson(),
+      PlacesTable.placeId: id,
+      PlacesTable.city: city,
+      PlacesTable.state: state,
+      PlacesTable.country: country,
+      PlacesTable.countryCode: countryCode,
+      PlacesTable.latitude: latitude,
+      PlacesTable.longitude: longitude,
     };
+  }
+
+  PlaceModel copyWith({
+    int? id,
+    String? city,
+    String? state,
+    String? country,
+    String? countryCode,
+    double? latitude,
+    double? longitude,
+  }) {
+    return PlaceModel(
+      id: id ?? this.id,
+      city: city ?? this.city,
+      state: state ?? this.state,
+      country: country ?? this.country,
+      countryCode: countryCode ?? this.countryCode,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+    );
   }
 
   factory PlaceModel.fromEntity(Place place) {
     return PlaceModel(
-      placeId: place.placeId,
-      osmType: place.osmType,
-      lat: place.lat,
-      lon: place.lon,
-      category: place.category,
-      type: place.type,
-      placeRank: place.placeRank,
-      addresstype: place.addresstype,
-      name: place.name,
-      displayName: place.displayName,
-      address: AddressModel.fromEntity(place.address),
+      id: place.id,
+      city: place.city,
+      state: place.state,
+      country: place.country,
+      countryCode: place.countryCode,
+      latitude: place.latitude,
+      longitude: place.longitude,
     );
   }
 
   Place toEntity() {
     return Place(
-      placeId: placeId,
-      osmType: osmType,
-      lat: lat,
-      lon: lon,
-      category: category,
-      type: type,
-      placeRank: placeRank,
-      addresstype: addresstype,
-      name: name,
-      displayName: displayName,
-      address: address.toEntity(),
-    );
-  }
-
-  Map<String, dynamic> fromMap(int addressId) {
-    return {
-      PlacesTable.placeId: placeId,
-      PlacesTable.osmType: osmType,
-      PlacesTable.lat: lat,
-      PlacesTable.lon: lon,
-      PlacesTable.category: category,
-      PlacesTable.type: type,
-      PlacesTable.placeRank: placeRank,
-      PlacesTable.addresstype: addresstype,
-      PlacesTable.name: name,
-      PlacesTable.displayName: displayName,
-      PlacesTable.addressId: addressId,
-    };
-  }
-
-  factory PlaceModel.toMap(
-    Map<String, dynamic> map,
-    AddressModel addressModel,
-  ) {
-    return PlaceModel(
-      placeId: map[PlacesTable.placeId] ?? 0,
-      osmType: map[PlacesTable.osmType] ?? '',
-      lat: (map[PlacesTable.lat] as num?)?.toDouble() ?? 0.0,
-      lon: (map[PlacesTable.lon] as num?)?.toDouble() ?? 0.0,
-      category: map[PlacesTable.category] ?? '',
-      type: map[PlacesTable.type] ?? '',
-      placeRank: map[PlacesTable.placeRank]?.toString() ?? '',
-      addresstype: map[PlacesTable.addresstype] ?? '',
-      name: map[PlacesTable.name] ?? '',
-      displayName: map[PlacesTable.displayName] ?? '',
-      address: addressModel,
+      id: id,
+      city: city,
+      state: state,
+      country: country,
+      countryCode: countryCode,
+      latitude: latitude,
+      longitude: longitude,
     );
   }
 
   @override
   String toString() {
-    return 'PlaceModel{placeId: $placeId, osmType: $osmType, lat: $lat, lon: $lon, category: $category, type: $type, placeRank: $placeRank, addresstype: $addresstype, name: $name, displayName: $displayName, address: $address}';
+    return 'PlaceModel{id: $id, city: $city, state: $state, country: $country, countryCode: $countryCode, latitude: $latitude, longitude: $longitude}';
   }
 }

@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 
 import '../../core/extensions/date_extensions.dart';
 import '../../core/extensions/experience_map_extension.dart';
-import '../../core/extensions/string_extensions.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/place.dart';
 import '../../domain/entities/travel.dart';
@@ -72,8 +71,10 @@ class _TravelMapState extends State<TravelMap> {
       _markers.addAll(
         travelState.stops.map((e) {
           return Marker(
-            markerId: MarkerId(e.place.latLng),
-            position: LatLng(e.place.lat, e.place.lon),
+            markerId: MarkerId(
+              '${e.place.latitude.toString()},${e.place.latitude.toString()}',
+            ),
+            position: LatLng(e.place.latitude, e.place.longitude),
           );
         }).toSet(),
       );
@@ -94,7 +95,7 @@ class _TravelMapState extends State<TravelMap> {
     /// Get place
     try {
       place = await LocationService().getPlaceByPosition(
-        LatLng(stop.place.lat, stop.place.lon),
+        LatLng(stop.place.latitude, stop.place.longitude),
       );
     } on Exception catch (e) {
       await showDialog(
@@ -129,7 +130,7 @@ class _TravelMapState extends State<TravelMap> {
         setState(() {
           _markers.removeWhere((element) {
             return element.markerId.value ==
-                '${stop.place.lat},${stop.place.lon}';
+                '${stop.place.latitude},${stop.place.longitude}';
           });
         });
 
@@ -201,9 +202,9 @@ class _TravelMapState extends State<TravelMap> {
       setState(() {
         _markers.add(
           Marker(
-            markerId: MarkerId('${place.lat},${place.lon}'),
+            markerId: MarkerId('${place.latitude},${place.longitude}'),
             position: position,
-            infoWindow: InfoWindow(title: place.display),
+            infoWindow: InfoWindow(title: place.toString()),
             onTap: () => _onMarkerTap(registeredStop),
           ),
         );
@@ -640,7 +641,7 @@ Future<TravelStop?> _showTravelStopModal(
 
   final as = AppLocalizations.of(context)!;
 
-  final display = place.display;
+  final placeInfo = place.toString();
 
   final registeredStop = await showModalBottomSheet<TravelStop?>(
     context: context,
@@ -663,7 +664,7 @@ Future<TravelStop?> _showTravelStopModal(
                   children: [
                     Expanded(
                       child: Text(
-                        display,
+                        placeInfo,
                         style: const TextStyle(fontSize: 28),
                       ),
                     ),
@@ -687,16 +688,16 @@ Future<TravelStop?> _showTravelStopModal(
 
                 const Padding(padding: EdgeInsets.all(6)),
 
-                /// Text that shows the type of the place
-                Text(
-                  place.type.capitalizedAndSpaced,
-                  style: const TextStyle(fontSize: 20),
-                ),
-                const Padding(padding: EdgeInsets.all(4)),
-
-                /// Text that shows the display name of the place
-                Text(place.displayName),
-                const Padding(padding: EdgeInsets.all(12)),
+                // /// Text that shows the type of the place
+                // Text(
+                //   place.type.capitalizedAndSpaced,
+                //   style: const TextStyle(fontSize: 20),
+                // ),
+                // const Padding(padding: EdgeInsets.all(4)),
+                //
+                // /// Text that shows the display name of the place
+                // Text(place.displayName),
+                // const Padding(padding: EdgeInsets.all(12)),
 
                 /// Text to show the "Experiences" label
                 Text(
