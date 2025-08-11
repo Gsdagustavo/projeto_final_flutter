@@ -8,6 +8,7 @@ import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';
 import '../../l10n/app_localizations.dart';
 import '../providers/travel_list_provider.dart';
+import 'travel_route_page.dart';
 import 'fab_page.dart';
 
 /// The Home Page of the app
@@ -89,78 +90,96 @@ class _TravelWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Container(
-        padding: const EdgeInsets.all(32.0),
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return TravelRoutePage(
+                stops: travel.stops,
+                travelTitle: travel.travelTitle,
+              );
+            },
+          ),
+        );
+      },
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Container(
+          padding: const EdgeInsets.all(32.0),
 
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: Theme.of(context).focusColor,
-        ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: Theme.of(context).focusColor,
+          ),
 
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              travel.travelTitle.capitalizedAndSpaced,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-
-            const Padding(padding: EdgeInsets.all(12)),
-
-            Row(
-              children: [
-                const Icon(Icons.circle_outlined, color: Colors.blue),
-                Padding(padding: const EdgeInsets.all(6)),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  height: 50,
-                  child: Text(
-                    travel.stops.first.place.toString(),
-                    style: const TextStyle(fontSize: 18),
-                  ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                travel.travelTitle.capitalizedAndSpaced,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
+              ),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: const Icon(Icons.route),
-            ),
+              const Padding(padding: EdgeInsets.all(12)),
 
-            Row(
-              children: [
-                const Icon(Icons.pin_drop, color: Colors.red),
-                const Padding(padding: EdgeInsets.all(6)),
-
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    border: BoxBorder.all(color: Colors.black, width: 1),
-                    borderRadius: BorderRadius.circular(12),
+              Row(
+                children: [
+                  const Icon(Icons.circle_outlined, color: Colors.blue),
+                  Padding(padding: const EdgeInsets.all(6)),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black, width: 1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    height: 50,
+                    child: Text(
+                      travel.stops.first.place.toString(),
+                      style: const TextStyle(fontSize: 18),
+                    ),
                   ),
-                  height: 50,
-                  child: Text(
-                    travel.stops.last.place.toString(),
-                    style: const TextStyle(fontSize: 18),
+                ],
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: const Icon(Icons.route),
+              ),
+
+              Row(
+                children: [
+                  const Icon(Icons.pin_drop, color: Colors.red),
+                  const Padding(padding: EdgeInsets.all(6)),
+
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      border: BoxBorder.all(color: Colors.black, width: 1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    height: 50,
+                    child: Text(
+                      travel.stops.last.place.toString(),
+                      style: const TextStyle(fontSize: 18),
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
 
-            const Padding(padding: EdgeInsets.all(16)),
+              const Padding(padding: EdgeInsets.all(16)),
 
-            SizedBox(
-              height: 30,
-              width: 30,
-              child: _ParticipantsWidget(participants: travel.participants),
-            ),
-          ],
+              SizedBox(
+                height: 30,
+                width: 30,
+                child: _ParticipantsWidget(participants: travel.participants),
+              ),
+            ],
+          ),
         ),
       ),
     );
