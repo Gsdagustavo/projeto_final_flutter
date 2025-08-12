@@ -247,6 +247,8 @@ class RegisterTravelProvider with ChangeNotifier {
     _errorMsg = null;
     _isLoading = false;
 
+    _stops.clear();
+
     _resetExperiences();
 
     notifyListeners();
