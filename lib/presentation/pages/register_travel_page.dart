@@ -12,6 +12,7 @@ import '../../l10n/app_localizations.dart';
 import '../../services/user_preferences_service.dart';
 import '../extensions/enums_extensions.dart';
 import '../providers/register_travel_provider.dart';
+import '../providers/travel_list_provider.dart';
 import '../widgets/custom_dialog.dart';
 import 'fab_page.dart';
 import 'map.dart';
@@ -769,6 +770,8 @@ class _RegisterTravelButton extends StatelessWidget {
                 );
               },
             );
+
+            await Provider.of<TravelListProvider>(context).update();
           },
           child: Text(as.title_register_travel),
         );
