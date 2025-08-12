@@ -8,6 +8,7 @@ import 'modules/travel/travel_use_cases.dart';
 import 'presentation/providers/login_provider.dart';
 import 'presentation/providers/register_travel_provider.dart';
 import 'presentation/providers/travel_list_provider.dart';
+import 'presentation/providers/review_provider.dart';
 import 'presentation/providers/user_preferences_provider.dart';
 import 'presentation/widgets/my_app.dart';
 
@@ -33,6 +34,7 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider(create: (context) => UserPreferencesProvider()),
         ChangeNotifierProvider(create: (context) => LoginProvider()),
+        ChangeNotifierProvider(create: (context) => ReviewProvider()),
       ],
       child: const MyApp(),
     ),
