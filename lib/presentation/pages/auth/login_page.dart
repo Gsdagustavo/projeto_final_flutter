@@ -184,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
 
-                    const Padding(padding: EdgeInsetsGeometry.all(16)),
+                    const Padding(padding: EdgeInsets.all(16)),
 
                     /// 'Forgot your password?' button
                     TextButton(
