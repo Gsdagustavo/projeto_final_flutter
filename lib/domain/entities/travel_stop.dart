@@ -1,5 +1,6 @@
 import 'enums.dart';
 import 'place.dart';
+import 'review.dart';
 
 class TravelStop {
   /// Travel Stop ID
@@ -18,6 +19,8 @@ class TravelStop {
 
   final Place place;
 
+  final List<Review>? reviews;
+
   /// Named constructor for the Travel Stop
   TravelStop({
     required this.place,
@@ -26,6 +29,7 @@ class TravelStop {
     this.arriveDate,
     this.leaveDate,
     this.experiences,
+    this.reviews,
   });
 
   TravelStop copyWith({
@@ -35,6 +39,7 @@ class TravelStop {
     DateTime? leaveDate,
     TravelStopType? type,
     List<Experience>? experiences,
+    List<Review>? reviews,
   }) {
     return TravelStop(
       place: place ?? this.place,
@@ -43,6 +48,7 @@ class TravelStop {
       leaveDate: leaveDate ?? this.leaveDate,
       type: type ?? this.type,
       experiences: experiences ?? this.experiences,
+      reviews: reviews ?? this.reviews
     );
   }
 

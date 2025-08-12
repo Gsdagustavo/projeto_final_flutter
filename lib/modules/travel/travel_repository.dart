@@ -7,10 +7,12 @@ import '../../data/local/database/tables/participants_table.dart';
 import '../../data/local/database/tables/places_table.dart';
 import '../../data/local/database/tables/travel_participants_table.dart';
 import '../../data/local/database/tables/travel_stop_experiences_table.dart';
+import '../../data/local/database/tables/travel_stop_reviews_table.dart';
 import '../../data/local/database/tables/travel_stop_table.dart';
 import '../../data/local/database/tables/travel_table.dart';
 import '../../data/models/participant_model.dart';
 import '../../data/models/place_model.dart';
+import '../../data/models/review_model.dart';
 import '../../data/models/travel_model.dart';
 import '../../data/models/travel_stop_model.dart';
 import '../../domain/entities/enums.dart';
@@ -98,6 +100,7 @@ class TravelRepositoryImpl implements TravelRepository {
     TravelStopModel stop,
     int travelId,
   ) async {
+
     final placeMap = stop.place.toMap();
 
     print('Place map: $placeMap');
@@ -128,7 +131,26 @@ class TravelRepositoryImpl implements TravelRepository {
       }
     }
 
+    /// Insert reviews
+    if (stop.reviews != null && stop.reviews!.isNotEmpty) {
+      for (final review in stop.reviews!) {
+        await _insertReview(txn, review, stopId);
+      }
+    }
+
     debugPrint('Travel stop $stop added to database');
+  }
+
+  Future<void> _insertReview(
+    DatabaseExecutor txn,
+    ReviewModel review,
+    int travelStopId,
+  ) async {
+
+    final reviewMap = review.toMap();
+
+    await txn.insert(TravelStopReviewsTable.tableName, reviewMap);
+
   }
 
   @override
@@ -136,6 +158,14 @@ class TravelRepositoryImpl implements TravelRepository {
     final db = await _db;
 
     final travels = <TravelModel>[];
+
+    // final res = await db.rawQuery(
+    //   'SELECT T.${TravelTable.travelId} FROM ${TravelTable.tableName} as T '
+    //   'JOIN ${TravelParticipantsTable.tableName} on ${TravelTable.travelId} = ${TravelParticipantsTable.travelId} '
+    //   'GROUP BY ${TravelTable.travelId}',
+    // );
+    //
+    // debugPrint('RAW QUERY: $res');
 
     await db.transaction((txn) async {
       final travelsResult = await txn.query(TravelTable.tableName);
@@ -206,6 +236,7 @@ class TravelRepositoryImpl implements TravelRepository {
           final travelStopModel = TravelStopModel.fromMap(
             stop,
             experiences,
+            [],
             placeModel,
           );
 

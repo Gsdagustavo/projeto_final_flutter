@@ -771,7 +771,10 @@ class _RegisterTravelButton extends StatelessWidget {
               },
             );
 
-            await Provider.of<TravelListProvider>(context).update();
+            await Provider.of<TravelListProvider>(
+              context,
+              listen: false,
+            ).update();
           },
           child: Text(as.title_register_travel),
         );
