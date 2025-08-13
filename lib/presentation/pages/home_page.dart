@@ -10,6 +10,7 @@ import '../../domain/entities/participant.dart';
 import '../../domain/entities/review.dart';
 import '../../domain/entities/travel.dart';
 import '../../l10n/app_localizations.dart';
+import '../providers/register_travel_provider.dart';
 import '../providers/review_provider.dart';
 import '../providers/travel_list_provider.dart';
 import '../providers/user_preferences_provider.dart';
@@ -93,6 +94,17 @@ class _TravelWidget extends StatelessWidget {
 
   final Travel travel;
 
+  Future<Review?> showReviewModal(BuildContext context) async {
+    await showModalBottomSheet<Review>(
+      context: context,
+      builder: (context) {
+        return ReviewModal(travel: travel);
+      },
+    );
+
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -153,23 +165,88 @@ class _TravelWidget extends StatelessWidget {
 
               const Padding(padding: EdgeInsets.all(16)),
 
-              _ParticipantsWidget(participants: travel.participants),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _ParticipantsWidget(participants: travel.participants),
+                    _FinishTravelButton(travel: travel),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
   }
+}
 
-  Future<Review?> showReviewModal(BuildContext context) async {
-    await showModalBottomSheet<Review>(
-      context: context,
-      builder: (context) {
-        return ReviewModal(travel: travel);
+class _FinishTravelButton extends StatelessWidget {
+  const _FinishTravelButton({required this.travel});
+
+  final Travel travel;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () async {
+        final registerTravelState = Provider.of<RegisterTravelProvider>(
+          context,
+          listen: false,
+        );
+
+        await showDialog<bool>(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Finish Travel?'),
+                  Icon(Icons.warning, color: Colors.orange, size: 28),
+                ],
+              ),
+              actionsAlignment: MainAxisAlignment.spaceAround,
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: Text('No'),
+                ),
+
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(padding: EdgeInsets.all(12)),
+                  onPressed: () async {
+                    await registerTravelState.finishTravel(travel);
+                    Navigator.pop(context, false);
+                  },
+                  child: Text('Yes'),
+                ),
+              ],
+            );
+          },
+        );
       },
-    );
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.circular(16),
+        ),
 
-    return null;
+        child: Text(
+          'Finish Travel',
+          style: TextStyle(
+            color: Theme.of(context).cardColor,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -216,6 +293,34 @@ class _StopWidget extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+class _ParticipantsWidget extends StatelessWidget {
+  const _ParticipantsWidget({required this.participants});
+
+  final List<Participant> participants;
+  static const int _maxParticipants = 3;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 50,
+      width: 50,
+      child: Stack(
+        alignment: Alignment.center,
+        children: List.generate(min(participants.length, _maxParticipants), (
+          index,
+        ) {
+          return Positioned(
+            left: index * 22,
+            child: CircleAvatar(
+              backgroundImage: FileImage(participants[index].profilePicture),
+            ),
+          );
+        }),
+      ),
     );
   }
 }
@@ -363,64 +468,6 @@ class _ReviewModalState extends State<ReviewModal> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-// class _PhotosWidget extends StatelessWidget {
-//   const _PhotosWidget({super.key, required this.photos});
-//
-//   final List<File> photos;
-//   static const int _maxPhotosShown = 2;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final minPhotos = min(photos.length, _maxPhotosShown);
-//
-//     return SizedBox(
-//       height: 100,
-//       width: minPhotos * 44,
-//
-//       child: Stack(
-//         alignment: Alignment.center,
-//         children: List.generate(minPhotos, (index) {
-//           return Positioned(
-//             left: index * 22,
-//             child: ClipRRect(
-//               borderRadius: BorderRadius.circular(24),
-//               child: Image.file(photos.first, fit: BoxFit.cover),
-//             ),
-//           );
-//         }),
-//       ),
-//     );
-//   }
-// }
-
-class _ParticipantsWidget extends StatelessWidget {
-  const _ParticipantsWidget({required this.participants});
-
-  final List<Participant> participants;
-  static const int _maxParticipants = 3;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      width: min(participants.length, _maxParticipants) * 44,
-      child: Stack(
-        alignment: Alignment.center,
-        children: List.generate(min(participants.length, _maxParticipants), (
-          index,
-        ) {
-          return Positioned(
-            left: index * 22,
-            child: CircleAvatar(
-              backgroundImage: FileImage(participants[index].profilePicture),
-            ),
-          );
-        }),
       ),
     );
   }
