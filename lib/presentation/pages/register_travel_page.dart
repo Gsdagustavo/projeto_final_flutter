@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import '../../core/extensions/date_extensions.dart';
 import '../../core/extensions/string_extensions.dart';
 import '../../domain/entities/enums.dart';
-import '../../domain/entities/travel_stop.dart';
 import '../../l10n/app_localizations.dart';
 import '../extensions/enums_extensions.dart';
 import '../providers/register_travel_provider.dart';
@@ -47,11 +46,9 @@ class RegisterTravelPage extends StatelessWidget {
 
               /// Text buttons to choose the Travel Start and End dates
               _DateTextButtons(),
-              const Padding(padding: EdgeInsets.all(16)),
 
               /// List all participants and add new participants
               _ParticipantsWidget(),
-              const Padding(padding: EdgeInsets.all(16)),
 
               _TravelMapWidget(),
               const Padding(padding: EdgeInsets.all(16)),
@@ -67,37 +64,37 @@ class RegisterTravelPage extends StatelessWidget {
         ),
       ),
 
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            tooltip: 'List travels',
-            child: const Icon(Icons.get_app),
-            onPressed: () async {
-              final registerTravelState = Provider.of<RegisterTravelProvider>(
-                context,
-                listen: false,
-              );
-
-              await registerTravelState.select();
-            },
-          ),
-
-          FloatingActionButton(
-            tooltip: 'List Stops',
-            child: const Icon(Icons.stop),
-            onPressed: () async {
-              final registerTravelState = Provider.of<RegisterTravelProvider>(
-                context,
-                listen: false,
-              );
-
-              debugPrint(registerTravelState.stops.toString());
-            },
-          ),
-        ],
-      ),
+      // floatingActionButton: Column(
+      //   mainAxisAlignment: MainAxisAlignment.end,
+      //   crossAxisAlignment: CrossAxisAlignment.end,
+      //   children: [
+      //     FloatingActionButton(
+      //       tooltip: 'List travels',
+      //       child: const Icon(Icons.get_app),
+      //       onPressed: () async {
+      //         final registerTravelState = Provider.of<RegisterTravelProvider>(
+      //           context,
+      //           listen: false,
+      //         );
+      //
+      //         await registerTravelState.select();
+      //       },
+      //     ),
+      //
+      //     FloatingActionButton(
+      //       tooltip: 'List Stops',
+      //       child: const Icon(Icons.stop),
+      //       onPressed: () async {
+      //         final registerTravelState = Provider.of<RegisterTravelProvider>(
+      //           context,
+      //           listen: false,
+      //         );
+      //
+      //         debugPrint(registerTravelState.stops.toString());
+      //       },
+      //     ),
+      //   ],
+      // ),
     );
   }
 }
@@ -306,9 +303,10 @@ class _ParticipantsWidget extends StatelessWidget {
           ],
         ),
 
-        const Padding(padding: EdgeInsets.all(12)),
-
-        _ListParticipants(),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 32),
+          child: _ListParticipants(),
+        ),
       ],
     );
   }
@@ -581,6 +579,31 @@ class _ListParticipants extends StatelessWidget {
   }
 }
 
+class _ParticipantProfilePicture extends StatelessWidget {
+  const _ParticipantProfilePicture({
+    required this.image,
+    this.width = 36,
+    this.height = 36,
+  });
+
+  final File image;
+  final double width;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.transparent,
+      ),
+      child: Image.file(image, fit: BoxFit.cover),
+    );
+  }
+}
+
 class _TravelMapWidget extends StatelessWidget {
   const _TravelMapWidget();
 
@@ -591,41 +614,49 @@ class _TravelMapWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          as.travel_map,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-        ),
-        const Padding(padding: EdgeInsets.all(10)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              as.travel_map,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            ),
+            const Padding(padding: EdgeInsets.all(10)),
 
-        Text(as.add_stops_for_your_travel),
-
-        IconButton(
-          onPressed: () async {
-            final travelState = Provider.of<RegisterTravelProvider>(
-              context,
-              listen: false,
-            );
-
-            if (travelState.travelTimeRange == null) {
-              await showDialog(
-                context: context,
-                builder: (context) {
-                  return CustomDialog(
-                    title: 'Warning',
-                    content: Text(
-                      'You must select the Travel Date Range first!',
-                    ),
-                    isError: true,
+            Expanded(
+              child: TextButton(
+                onPressed: () async {
+                  final travelState = Provider.of<RegisterTravelProvider>(
+                    context,
+                    listen: false,
                   );
+
+                  if (travelState.travelTimeRange == null) {
+                    await showDialog(
+                      context: context,
+                      builder: (context) {
+                        return CustomDialog(
+                          title: 'Warning',
+                          content: Text(
+                            'You must select the Travel Date Range first!',
+                          ),
+                          isError: true,
+                        );
+                      },
+                    );
+
+                    return;
+                  }
+
+                  unawaited(Navigator.pushNamed(context, TravelMap.routeName));
                 },
-              );
-
-              return;
-            }
-
-            unawaited(Navigator.pushNamed(context, TravelMap.routeName));
-          },
-          icon: const Icon(Icons.map),
+                child: Text(
+                  as.add_stops_for_your_travel,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -660,21 +691,6 @@ class _RegisterTravelButton extends StatelessWidget {
               return;
             }
 
-            // if (!travelState.validateForm()) {
-            //   await showDialog(
-            //     context: context,
-            //     builder: (context) {
-            //       return CustomDialog(
-            //         title: as.warning,
-            //         content: Text(as.invalid_travel_data),
-            //         isError: true,
-            //       );
-            //     },
-            //   );
-            //
-            //   return;
-            // }
-
             await showDialog(
               context: context,
               builder: (context) {
@@ -697,47 +713,24 @@ class _RegisterTravelButton extends StatelessWidget {
   }
 }
 
-class _TravelStopWidget extends StatelessWidget {
-  const _TravelStopWidget({required this.travelStop});
-
-  final TravelStop travelStop;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Icon(Icons.pin_drop, color: Colors.red),
-            SizedBox(height: 50, child: Text(travelStop.place.toString())),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class _ParticipantProfilePicture extends StatelessWidget {
-  const _ParticipantProfilePicture({
-    required this.image,
-    this.width = 36,
-    this.height = 36,
-  });
-
-  final File image;
-  final double width;
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.transparent,
-      ),
-      child: Image.file(image, fit: BoxFit.cover),
-    );
-  }
-}
+//
+// class _TravelStopWidget extends StatelessWidget {
+//   const _TravelStopWidget({required this.travelStop});
+//
+//   final TravelStop travelStop;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         Row(
+//           children: [
+//             Icon(Icons.pin_drop, color: Colors.red),
+//             SizedBox(height: 50, child: Text(travelStop.place.toString())),
+//           ],
+//         ),
+//       ],
+//     );
+//   }
+// }
+//
