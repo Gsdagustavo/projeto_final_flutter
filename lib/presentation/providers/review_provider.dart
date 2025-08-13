@@ -16,7 +16,6 @@ class ReviewProvider with ChangeNotifier {
 
   final _images = <File>[];
   final _reviewController = TextEditingController();
-  final _authorController = TextEditingController();
   int _reviewRate = 5;
   Participant? _author;
 
@@ -39,7 +38,8 @@ class ReviewProvider with ChangeNotifier {
       travelStopId: travelStopId,
       stars: _reviewRate,
     );
-    await _reviewUseCases.addReview(review: review);
+
+    await _reviewUseCases.addReviews(reviews: [review]);
   }
 
   int get reviewRate => _reviewRate;
