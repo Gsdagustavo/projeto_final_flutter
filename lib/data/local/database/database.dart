@@ -5,6 +5,7 @@ import '../../../domain/entities/enums.dart';
 import 'tables/experiences_table.dart';
 import 'tables/participants_table.dart';
 import 'tables/places_table.dart';
+import 'tables/reviews_table.dart';
 import 'tables/transport_types_table.dart';
 import 'tables/travel_participants_table.dart';
 import 'tables/travel_stop_experiences_table.dart';
@@ -47,6 +48,7 @@ class DBConnection {
     await db.execute(TravelStopTable.createTable);
     await db.execute(TravelStopExperiencesTable.createTable);
     await db.execute(ParticipantsTable.createTable);
+    await db.execute(ReviewsTable.createTable);
   }
 
   /// Insert default enums ([TransportType] and [Experience]) values
