@@ -15,7 +15,7 @@ import '../providers/user_preferences_provider.dart';
 import '../widgets/custom_date_range_widget.dart';
 import '../widgets/custom_dialog.dart';
 import 'fab_page.dart';
-import 'map.dart';
+import 'map_page.dart';
 
 /// This is a page for registering a travel
 class RegisterTravelPage extends StatelessWidget {

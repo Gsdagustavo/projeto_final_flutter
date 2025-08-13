@@ -6,7 +6,7 @@ import '../../presentation/pages/auth/login_page.dart';
 import '../../presentation/pages/auth/register_page.dart';
 import '../../presentation/pages/auth/splash_screen.dart';
 import '../../presentation/pages/home_page.dart';
-import '../../presentation/pages/map.dart';
+import '../../presentation/pages/map_page.dart';
 import '../../presentation/pages/register_travel_page.dart';
 import '../../presentation/pages/settings_page.dart';
 
