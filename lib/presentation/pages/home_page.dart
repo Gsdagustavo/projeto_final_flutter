@@ -112,6 +112,7 @@ class _TravelWidget extends StatelessWidget {
       },
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
+        physics: BouncingScrollPhysics(),
         child: Container(
           padding: const EdgeInsets.all(32.0),
 
