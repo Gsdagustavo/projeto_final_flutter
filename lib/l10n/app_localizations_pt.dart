@@ -123,6 +123,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get experiences_label => 'Experiências';
 
   @override
+  String get dates_label => 'Datas';
+
+  @override
   String get select_dates_label => 'Selecionar datas';
 
   @override

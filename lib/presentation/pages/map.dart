@@ -344,176 +344,176 @@ class _TravelMapState extends State<TravelMap> {
   }
 }
 
-class _DatesPickers extends StatefulWidget {
-  const _DatesPickers({this.stop});
-
-  final TravelStop? stop;
-
-  @override
-  State<_DatesPickers> createState() => _DatesPickersState();
-}
-
-class _DatesPickersState extends State<_DatesPickers> {
-  DateTime? _arriveDate;
-  DateTime? _leaveDate;
-  String? _locale;
-
-  @override
-  void initState() {
-    super.initState();
-    _arriveDate = widget.stop?.arriveDate;
-    _leaveDate = widget.stop?.leaveDate;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final locale = await UserPreferencesService().loadLanguageCode();
-
-      if (mounted) {
-        setState(() {
-          _locale = locale;
-        });
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final travelState = Provider.of<RegisterTravelProvider>(
-      context,
-      listen: false,
-    );
-
-    final as = AppLocalizations.of(context)!;
-
-    final initialArriveDate = widget.stop?.arriveDate ?? travelState.arriveDate;
-    final initialLeaveDate = widget.stop?.leaveDate ?? travelState.leaveDate;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Column(
-          children: [
-            TextButton(
-              onPressed: () async {
-                final initialDate =
-                    initialArriveDate ?? travelState.lastPossibleArriveDate;
-                final firstDate = travelState.lastPossibleArriveDate!;
-                final lastDate = travelState.lastPossibleLeaveDate!;
-
-                var date = await showDatePicker(
-                  context: context,
-                  initialDate: initialDate,
-                  firstDate: firstDate,
-                  lastDate: lastDate,
-                );
-
-                if (date == null) return;
-
-                final time = await showTimePicker(
-                  context: context,
-                  initialTime: TimeOfDay.now(),
-                );
-
-                if (time == null) return;
-
-                final dateTime = DateTime(
-                  date.year,
-                  date.month,
-                  date.day,
-                  time.hour,
-                  time.minute,
-                );
-
-                setState(() {
-                  _arriveDate = dateTime;
-                });
-
-                travelState.selectArriveDate(dateTime);
-                // widget.setModalState(() {});
-              },
-              child: Text(as.arrive_date, style: TextStyle(fontSize: 16)),
-            ),
-
-            if (_arriveDate != null)
-              if (_locale != null && _locale!.isNotEmpty)
-                Text(
-                  _arriveDate!.getFormattedDate(_locale!),
-                  style: const TextStyle(fontSize: 14),
-                )
-              else
-                const Center(child: CircularProgressIndicator()),
-          ],
-        ),
-
-        Column(
-          children: [
-            TextButton(
-              onPressed: () async {
-                final arriveDate =
-                    travelState.arriveDate ?? widget.stop?.arriveDate;
-
-                if (arriveDate == null) {
-                  await showDialog(
-                    context: context,
-                    builder: (context) => CustomDialog(
-                      title: as.warning,
-                      content: Text(as.err_you_must_select_arrive_date_first),
-                      isError: true,
-                    ),
-                  );
-                  return;
-                }
-
-                final initialDate = initialLeaveDate ?? arriveDate;
-                final firstDate = arriveDate;
-                final lastDate = travelState.lastPossibleLeaveDate;
-
-                final date = await showDatePicker(
-                  context: context,
-                  initialDate: initialDate,
-                  firstDate: firstDate,
-                  lastDate: lastDate!,
-                );
-
-                if (date == null) return;
-
-                final time = await showTimePicker(
-                  context: context,
-                  initialTime: TimeOfDay.now(),
-                );
-
-                if (time == null) return;
-
-                final dateTime = DateTime(
-                  date.year,
-                  date.month,
-                  date.day,
-                  time.hour,
-                  time.minute,
-                );
-
-                setState(() {
-                  _leaveDate = dateTime;
-                });
-
-                travelState.selectLeaveDate(dateTime);
-                // widget.setModalState(() {});
-              },
-              child: Text(as.leave_date, style: const TextStyle(fontSize: 16)),
-            ),
-            if (_leaveDate != null)
-              if (_locale != null && _locale!.isNotEmpty)
-                Text(
-                  _leaveDate!.getFormattedDate(_locale!),
-                  style: const TextStyle(fontSize: 14),
-                )
-              else
-                const Center(child: CircularProgressIndicator()),
-          ],
-        ),
-      ],
-    );
-  }
-}
+// class _DatesPickers extends StatefulWidget {
+//   const _DatesPickers({this.stop});
+//
+//   final TravelStop? stop;
+//
+//   @override
+//   State<_DatesPickers> createState() => _DatesPickersState();
+// }
+//
+// class _DatesPickersState extends State<_DatesPickers> {
+//   DateTime? _arriveDate;
+//   DateTime? _leaveDate;
+//   String? _locale;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     _arriveDate = widget.stop?.arriveDate;
+//     _leaveDate = widget.stop?.leaveDate;
+//
+//     WidgetsBinding.instance.addPostFrameCallback((_) async {
+//       final locale = await UserPreferencesService().loadLanguageCode();
+//
+//       if (mounted) {
+//         setState(() {
+//           _locale = locale;
+//         });
+//       }
+//     });
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final travelState = Provider.of<RegisterTravelProvider>(
+//       context,
+//       listen: false,
+//     );
+//
+//     final as = AppLocalizations.of(context)!;
+//
+//     final initialArriveDate = widget.stop?.arriveDate ?? travelState.arriveDate;
+//     final initialLeaveDate = widget.stop?.leaveDate ?? travelState.leaveDate;
+//
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.spaceAround,
+//       children: [
+//         Column(
+//           children: [
+//             TextButton(
+//               onPressed: () async {
+//                 final initialDate =
+//                     initialArriveDate ?? travelState.lastPossibleArriveDate;
+//                 final firstDate = travelState.lastPossibleArriveDate!;
+//                 final lastDate = travelState.lastPossibleLeaveDate!;
+//
+//                 var date = await showDatePicker(
+//                   context: context,
+//                   initialDate: initialDate,
+//                   firstDate: firstDate,
+//                   lastDate: lastDate,
+//                 );
+//
+//                 if (date == null) return;
+//
+//                 final time = await showTimePicker(
+//                   context: context,
+//                   initialTime: TimeOfDay.now(),
+//                 );
+//
+//                 if (time == null) return;
+//
+//                 final dateTime = DateTime(
+//                   date.year,
+//                   date.month,
+//                   date.day,
+//                   time.hour,
+//                   time.minute,
+//                 );
+//
+//                 setState(() {
+//                   _arriveDate = dateTime;
+//                 });
+//
+//                 travelState.selectArriveDate(dateTime);
+//                 // widget.setModalState(() {});
+//               },
+//               child: Text(as.arrive_date, style: TextStyle(fontSize: 16)),
+//             ),
+//
+//             if (_arriveDate != null)
+//               if (_locale != null && _locale!.isNotEmpty)
+//                 Text(
+//                   _arriveDate!.getFormattedDate(_locale!),
+//                   style: const TextStyle(fontSize: 14),
+//                 )
+//               else
+//                 const Center(child: CircularProgressIndicator()),
+//           ],
+//         ),
+//
+//         // Column(
+//         //   children: [
+//         //     TextButton(
+//         //       onPressed: () async {
+//         //         final arriveDate =
+//         //             travelState.arriveDate ?? widget.stop?.arriveDate;
+//         //
+//         //         if (arriveDate == null) {
+//         //           await showDialog(
+//         //             context: context,
+//         //             builder: (context) => CustomDialog(
+//         //               title: as.warning,
+//         //               content: Text(as.err_you_must_select_arrive_date_first),
+//         //               isError: true,
+//         //             ),
+//         //           );
+//         //           return;
+//         //         }
+//         //
+//         //         final initialDate = initialLeaveDate ?? arriveDate;
+//         //         final firstDate = arriveDate;
+//         //         final lastDate = travelState.lastPossibleLeaveDate;
+//         //
+//         //         final date = await showDatePicker(
+//         //           context: context,
+//         //           initialDate: initialDate,
+//         //           firstDate: firstDate,
+//         //           lastDate: lastDate!,
+//         //         );
+//         //
+//         //         if (date == null) return;
+//         //
+//         //         final time = await showTimePicker(
+//         //           context: context,
+//         //           initialTime: TimeOfDay.now(),
+//         //         );
+//         //
+//         //         if (time == null) return;
+//         //
+//         //         final dateTime = DateTime(
+//         //           date.year,
+//         //           date.month,
+//         //           date.day,
+//         //           time.hour,
+//         //           time.minute,
+//         //         );
+//         //
+//         //         setState(() {
+//         //           _leaveDate = dateTime;
+//         //         });
+//         //
+//         //         travelState.selectLeaveDate(dateTime);
+//         //         // widget.setModalState(() {});
+//         //       },
+//         //       child: Text(as.leave_date, style: const TextStyle(fontSize: 16)),
+//         //     ),
+//         //     if (_leaveDate != null)
+//         //       if (_locale != null && _locale!.isNotEmpty)
+//         //         Text(
+//         //           _leaveDate!.getFormattedDate(_locale!),
+//         //           style: const TextStyle(fontSize: 14),
+//         //         )
+//         //       else
+//         //         const Center(child: CircularProgressIndicator()),
+//         //   ],
+//         // ),
+//       ],
+//     );
+//   }
+// }
 
 Future<TravelStop?> _showTravelStopModal(
   BuildContext context, {
@@ -638,7 +638,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
           const Padding(padding: EdgeInsets.all(6)),
 
           /// Date pickers to select the [arriveDate] and [leaveDate]
-          _DatesPickers(stop: widget.stop),
+          // _DatesPickers(stop: widget.stop),
           const Padding(padding: EdgeInsets.all(12)),
 
           if (widget.stop != null)

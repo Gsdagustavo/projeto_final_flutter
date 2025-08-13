@@ -60,6 +60,7 @@
   "travel_title_label": "Título da Viagem",
   "transport_type_label": "Tipo de Transporte",
   "experiences_label": "Experiências",
+  "dates_label": "Datas",
   "select_dates_label": "Selecionar datas",
   "travel_start_date_label": "Data de Início da Viagem",
   "travel_end_date_label": "Data de Término da Viagem",

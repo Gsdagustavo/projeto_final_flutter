@@ -123,6 +123,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get experiences_label => 'Experiencias';
 
   @override
+  String get dates_label => 'Fechas';
+
+  @override
   String get select_dates_label => 'Seleccionar fechas';
 
   @override

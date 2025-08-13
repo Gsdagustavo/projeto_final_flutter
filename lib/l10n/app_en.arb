@@ -60,6 +60,7 @@
   "travel_title_label": "Travel Title",
   "transport_type_label": "Transport Type",
   "experiences_label": "Experiences",
+  "dates_label": "Dates",
   "select_dates_label": "Select dates",
   "travel_start_date_label": "Travel Start Date",
   "travel_end_date_label": "Travel End Date",

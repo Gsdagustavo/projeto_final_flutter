@@ -9,10 +9,10 @@ import '../../core/extensions/string_extensions.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/travel_stop.dart';
 import '../../l10n/app_localizations.dart';
-import '../../services/user_preferences_service.dart';
 import '../extensions/enums_extensions.dart';
 import '../providers/register_travel_provider.dart';
 import '../providers/travel_list_provider.dart';
+import '../providers/user_preferences_provider.dart';
 import '../widgets/custom_dialog.dart';
 import 'fab_page.dart';
 import 'map.dart';
@@ -25,58 +25,8 @@ class RegisterTravelPage extends StatelessWidget {
   /// The route of the page
   static const String routeName = '/registerTravel';
 
-  void _showCustomDialog(BuildContext context) async {
-    final travelState = Provider.of<RegisterTravelProvider>(
-      context,
-      listen: false,
-    );
-
-    unawaited(
-      showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          final as = AppLocalizations.of(context)!;
-          final Widget icon;
-          Widget content;
-
-          if (travelState.isLoading) {
-            content = const SizedBox(
-              width: 48,
-              height: 48,
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          /// Determine which icon and text to show
-          if (travelState.hasError) {
-            content = Text(
-              travelState.error ?? as.unknown_error,
-              textAlign: TextAlign.center,
-            );
-            icon = const Icon(Icons.error, color: Colors.red);
-          } else {
-            content = Text(
-              as.travel_registered_successfully,
-              textAlign: TextAlign.center,
-            );
-            icon = const Icon(Icons.check_circle, color: Colors.green);
-          }
-
-          return AlertDialog(
-            icon: icon,
-            alignment: Alignment.center,
-            content: content,
-          );
-        },
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final travelState = Provider.of<RegisterTravelProvider>(context);
-
     return FabPage(
       title: AppLocalizations.of(context)!.title_register_travel,
 
@@ -105,7 +55,7 @@ class RegisterTravelPage extends StatelessWidget {
               _TravelMapWidget(),
               const Padding(padding: EdgeInsets.all(16)),
 
-              if (travelState.isTravelValid)
+              if (Provider.of<RegisterTravelProvider>(context).isTravelValid)
                 SizedBox(
                   height: 64,
                   width: double.infinity,
@@ -254,132 +204,89 @@ class _DateTextButtons extends StatefulWidget {
 }
 
 class _DateTextButtonsState extends State<_DateTextButtons> {
-  late Future<String> _localeFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _localeFuture = UserPreferencesService().loadLanguageCode();
-  }
+  final _startDateController = TextEditingController();
+  final _endDateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final travelState = Provider.of<RegisterTravelProvider>(context);
+    final travelState = Provider.of<RegisterTravelProvider>(
+      context,
+      listen: false,
+    );
+
     final as = AppLocalizations.of(context)!;
+
+    final locale = Provider.of<UserPreferencesProvider>(
+      context,
+      listen: false,
+    ).languageCode;
+
+    _startDateController.text =
+        travelState.travelTimeRange?.start.getFormattedDate(locale) ?? '';
+    _endDateController.text =
+        travelState.travelTimeRange?.end.getFormattedDate(locale) ?? '';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          as.select_dates_label,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              as.dates_label,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            ),
+
+            TextButton(
+              onPressed: () async {
+                final now = DateTime.now();
+
+                final range = await showDateRangePicker(
+                  context: context,
+                  firstDate: now,
+                  lastDate: now.add(Duration(days: 365)),
+                );
+
+                if (range != null) {
+                  travelState.selectTravelTimeRange(range);
+                }
+              },
+              child: Text(as.select_dates_label),
+            ),
+          ],
         ),
-        const Padding(padding: EdgeInsets.all(10)),
 
-        FutureBuilder(
-          future: _localeFuture,
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Center(child: CircularProgressIndicator());
-            }
-
-            if (snapshot.hasError) {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return CustomDialog(
-                    title: as.unknown_error,
-                    content: Text(snapshot.error!.toString()),
-                    isError: true,
-                  );
-                },
-              );
-            }
-
-            final locale = snapshot.data!;
-
-            if (locale.isEmpty) {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return CustomDialog(
-                    title: as.warning,
-                    content: Text(as.unknown_error),
-                    isError: true,
-                  );
-                },
-              );
-            }
-
-            return Center(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        TextButton(
-                          style: ButtonStyle(
-                            padding: WidgetStateProperty.all(EdgeInsets.zero),
-                          ),
-
-                          onPressed: () async {
-                            final now = DateTime.now();
-                            var date = await showDatePicker(
-                              context: context,
-                              initialDate: travelState.startDate ?? now,
-                              firstDate: now,
-                              lastDate: now.add(const Duration(days: 365)),
-                            );
-                            travelState.selectStartDate(date);
-                          },
-                          child: Text(as.travel_start_date_label),
-                        ),
-
-                        if (travelState.startDate != null)
-                          Text(travelState.startDate!.getFormattedDate(locale)),
-                      ],
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32),
+            child: Column(
+              children: [
+                TextField(
+                  canRequestFocus: false,
+                  controller: _startDateController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        TextButton(
-                          onPressed: () async {
-                            if (!travelState.isStartDateSelected) {
-                              final message = as.err_invalid_date_snackbar;
-
-                              ScaffoldMessenger.of(
-                                context,
-                              ).showSnackBar(SnackBar(content: Text(message)));
-
-                              return;
-                            }
-
-                            var date = await showDatePicker(
-                              context: context,
-                              initialDate:
-                                  travelState.endDate ?? travelState.startDate,
-                              firstDate: travelState.startDate!,
-                              lastDate: travelState.startDate!.add(
-                                const Duration(days: 365),
-                              ),
-                            );
-                            travelState.selectEndDate(date);
-                          },
-                          child: Text(as.travel_end_date_label),
-                        ),
-
-                        if (travelState.endDate != null)
-                          Text(travelState.endDate!.getFormattedDate(locale)),
-                      ],
-                    ),
-                  ],
+                    labelText: 'Start Date',
+                  ),
                 ),
-              ),
-            );
-          },
+
+                Padding(padding: EdgeInsets.all(16)),
+
+                TextField(
+                  canRequestFocus: false,
+                  controller: _endDateController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    labelText: 'End Date',
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ],
     );
@@ -622,7 +529,10 @@ class _ListParticipants extends StatelessWidget {
     final as = AppLocalizations.of(context)!;
 
     if (travelState.numParticipants <= 0) {
-      return Text(as.no_participants_on_the_list);
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: Text(as.no_participants_on_the_list),
+      );
     }
 
     return ListView.builder(
@@ -716,14 +626,14 @@ class _TravelMapWidget extends StatelessWidget {
               listen: false,
             );
 
-            if (travelState.startDate == null || travelState.endDate == null) {
+            if (travelState.travelTimeRange == null) {
               await showDialog(
                 context: context,
                 builder: (context) {
                   return CustomDialog(
                     title: 'Warning',
                     content: Text(
-                      'You must select the Travel Start and End Dates first!',
+                      'You must select the Travel Date Range first!',
                     ),
                     isError: true,
                   );

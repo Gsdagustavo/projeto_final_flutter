@@ -325,6 +325,12 @@ abstract class AppLocalizations {
   /// **'Experiences'**
   String get experiences_label;
 
+  /// No description provided for @dates_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Dates'**
+  String get dates_label;
+
   /// No description provided for @select_dates_label.
   ///
   /// In en, this message translates to:
