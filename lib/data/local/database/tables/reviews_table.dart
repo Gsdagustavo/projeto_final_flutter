@@ -5,7 +5,7 @@ abstract final class ReviewsTable {
   static const String description = 'description';
   static const String author = 'author';
   static const String reviewDate = 'reviewDate';
-  static const String travelId = 'travelId';
+  static const String travelStopId = 'travelStopId';
   static const String stars = 'stars';
 
   static const String createTable =
@@ -15,7 +15,7 @@ abstract final class ReviewsTable {
         $description TEXT NOT NULL,
         $author TEXT NOT NULL,
         $reviewDate TEXT NOT NULL,
-        $travelId TEXT NOT NULL,
+        $travelStopId TEXT NOT NULL,
         $stars TEXT NOT NULL
        )
       ''';

@@ -7,7 +7,7 @@ class ReviewModel {
   final String description;
   final Participant author;
   final DateTime reviewDate;
-  final int travelId;
+  final int travelStopId;
   final int stars;
 
   const ReviewModel({
@@ -15,7 +15,7 @@ class ReviewModel {
     required this.description,
     required this.author,
     required this.reviewDate,
-    required this.travelId,
+    required this.travelStopId,
     required this.stars,
   });
 
@@ -24,7 +24,7 @@ class ReviewModel {
     String? description,
     Participant? author,
     DateTime? reviewDate,
-    int? travelId,
+    int? travelStopId,
     int? stars,
   }) {
     return Review(
@@ -32,7 +32,7 @@ class ReviewModel {
       description: description ?? this.description,
       author: author ?? this.author,
       reviewDate: reviewDate ?? this.reviewDate,
-      travelId: travelId ?? this.travelId,
+      travelStopId: travelStopId ?? this.travelStopId,
       stars: stars ?? this.stars,
     );
   }
@@ -43,7 +43,7 @@ class ReviewModel {
       ReviewsTable.description: description,
       ReviewsTable.author: author,
       ReviewsTable.reviewDate: reviewDate,
-      ReviewsTable.travelId: travelId,
+      ReviewsTable.travelStopId: travelStopId,
       ReviewsTable.stars: stars,
     };
   }
@@ -54,7 +54,7 @@ class ReviewModel {
       description: map[ReviewsTable.description] as String,
       author: map[ReviewsTable.author] as Participant,
       reviewDate: map[ReviewsTable.reviewDate] as DateTime,
-      travelId: map[ReviewsTable.travelId] as int,
+      travelStopId: map[ReviewsTable.travelStopId] as int,
       stars: map[ReviewsTable.stars] as int,
     );
   }
@@ -64,7 +64,7 @@ class ReviewModel {
       description: description,
       author: author,
       reviewDate: reviewDate,
-      travelId: travelId,
+      travelStopId: travelStopId,
       stars: stars,
     );
   }
@@ -74,13 +74,13 @@ class ReviewModel {
       description: review.description,
       author: review.author,
       reviewDate: review.reviewDate,
-      travelId: review.travelId,
+      travelStopId: review.travelStopId,
       stars: review.stars,
     );
   }
 
   @override
   String toString() {
-    return 'Review{reviewId: $reviewId, description: $description, author: $author, reviewDate: $reviewDate, travelId: $travelId, stars: $stars}';
+    return 'Review{reviewId: $reviewId, description: $description, author: $author, reviewDate: $reviewDate, travelStopId: $travelStopId, stars: $stars}';
   }
 }

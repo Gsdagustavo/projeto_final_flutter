@@ -5,7 +5,7 @@ class Review {
   final String description;
   final Participant author;
   final DateTime reviewDate;
-  final int travelId;
+  final int travelStopId;
   final int stars;
 
   const Review({
@@ -13,7 +13,7 @@ class Review {
     required this.description,
     required this.author,
     required this.reviewDate,
-    required this.travelId,
+    required this.travelStopId,
     required this.stars,
   });
 
@@ -22,7 +22,7 @@ class Review {
     String? description,
     Participant? author,
     DateTime? reviewDate,
-    int? travelId,
+    int? travelStopId,
     int? stars,
   }) {
     return Review(
@@ -30,13 +30,13 @@ class Review {
       description: description ?? this.description,
       author: author ?? this.author,
       reviewDate: reviewDate ?? this.reviewDate,
-      travelId: travelId ?? this.travelId,
+      travelStopId: travelStopId ?? this.travelStopId,
       stars: stars ?? this.stars,
     );
   }
 
   @override
   String toString() {
-    return 'Review{reviewId: $reviewId, description: $description, author: $author, reviewDate: $reviewDate, travelId: $travelId, stars: $stars}';
+    return 'Review{reviewId: $reviewId, description: $description, author: $author, reviewDate: $reviewDate, travelStopId: $travelStopId, stars: $stars}';
   }
 }

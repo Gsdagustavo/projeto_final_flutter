@@ -2,14 +2,23 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 
+import '../../domain/entities/participant.dart';
+import '../../domain/entities/review.dart';
+import '../../modules/review/review_use_cases.dart';
 import '../../services/file_service.dart';
 
 class ReviewProvider with ChangeNotifier {
+  final ReviewUseCases _reviewUseCases;
+
+  ReviewProvider(this._reviewUseCases);
+
   final _fileService = FileService();
 
   final _images = <File>[];
   final _reviewController = TextEditingController();
-  double _reviewRate = 5;
+  final _authorController = TextEditingController();
+  int _reviewRate = 5;
+  Participant? _author;
 
   Future<void> pickReviewImage() async {
     final image = await _fileService.pickImage();
@@ -22,12 +31,22 @@ class ReviewProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addReview() async {}
+  Future<void> addReview({required int travelStopId}) async {
+    final review = Review(
+      description: _reviewController.text,
+      author: _author!,
+      reviewDate: DateTime.now(),
+      travelStopId: travelStopId,
+      stars: _reviewRate,
+    );
+    await _reviewUseCases.addReview(review: review);
+  }
 
-  double get reviewRate => _reviewRate;
+  int get reviewRate => _reviewRate;
 
-  set reviewRate(double value) {
+  set reviewRate(int value) {
     _reviewRate = value;
+    notifyListeners();
   }
 
   get reviewController => _reviewController;
