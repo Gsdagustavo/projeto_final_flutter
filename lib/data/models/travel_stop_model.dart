@@ -10,12 +10,12 @@ class TravelStopModel {
   int? travelStopId;
 
   /// Travel Stop arrive date
-  final DateTime? arriveDate;
+  DateTime? arriveDate;
 
   /// Travel Stop leave date
-  final DateTime? leaveDate;
+  DateTime? leaveDate;
 
-  final TravelStopType type;
+  TravelStopType type;
 
   final PlaceModel place;
 
