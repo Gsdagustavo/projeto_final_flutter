@@ -13,6 +13,7 @@ import '../extensions/enums_extensions.dart';
 import '../providers/register_travel_provider.dart';
 import '../providers/travel_list_provider.dart';
 import '../providers/user_preferences_provider.dart';
+import '../widgets/custom_date_range_widget.dart';
 import '../widgets/custom_dialog.dart';
 import 'fab_page.dart';
 import 'map.dart';
@@ -259,32 +260,11 @@ class _DateTextButtonsState extends State<_DateTextButtons> {
         Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 32),
-            child: Column(
-              children: [
-                TextField(
-                  canRequestFocus: false,
-                  controller: _startDateController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    labelText: 'Start Date',
-                  ),
-                ),
-
-                Padding(padding: EdgeInsets.all(16)),
-
-                TextField(
-                  canRequestFocus: false,
-                  controller: _endDateController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    labelText: 'End Date',
-                  ),
-                ),
-              ],
+            child: CustomDateRangeWidget(
+              firstDateController: _startDateController,
+              lastDateController: _endDateController,
+              firstDateLabelText: 'First Date',
+              lastDateLabelText: 'Last Date',
             ),
           ),
         ),
