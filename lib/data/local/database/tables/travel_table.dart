@@ -33,11 +33,14 @@ abstract final class TravelTable {
   /// `INTEGER NOT NULL`
   static const String transportType = 'transportType';
 
+  static const String isFinished = 'isFinished';
+
   /// SQL command to create the travels table
   static const String createTable =
       '''
     CREATE TABLE $tableName (
       $travelId INTEGER PRIMARY KEY AUTOINCREMENT,
+      $isFinished INTEGER NOT NULL,
       $travelTitle TEXT NOT NULL,
       $startDate INTEGER NOT NULL,
       $endDate INTEGER NOT NULL,

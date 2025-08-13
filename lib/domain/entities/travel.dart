@@ -25,8 +25,11 @@ class Travel {
   /// Travel stops
   final List<TravelStop> stops;
 
+  bool isFinished;
+
   /// Named constructor for the Travel
   Travel({
+    this.isFinished = false,
     this.travelId,
     required this.travelTitle,
     required this.participants,

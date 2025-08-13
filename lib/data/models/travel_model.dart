@@ -1,3 +1,4 @@
+import '../../core/util/binary_utils.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/travel.dart';
 import '../local/database/tables/travel_table.dart';
@@ -12,9 +13,11 @@ class TravelModel {
   final TransportType transportType;
   final List<ParticipantModel> participants;
   final List<TravelStopModel> stops;
+  bool isFinished;
 
   TravelModel({
     this.travelId,
+    this.isFinished = false,
     required this.travelTitle,
     required this.startDate,
     required this.endDate,
@@ -41,21 +44,20 @@ class TravelModel {
       transportType: TransportType.values[map[TravelTable.transportType]],
       participants: participants,
       stops: stops,
+      isFinished: intToBool((map[TravelTable.isFinished] as int)),
     );
   }
 
   /// Converts this model to a Map (e.g. for database storage)
   Map<String, dynamic> toMap() {
     final map = {
+      TravelTable.travelId: travelId,
       TravelTable.travelTitle: travelTitle,
       TravelTable.startDate: startDate?.millisecondsSinceEpoch,
       TravelTable.endDate: endDate?.millisecondsSinceEpoch,
       TravelTable.transportType: transportType.index,
+      TravelTable.isFinished: boolToInt(isFinished),
     };
-
-    if (travelId != null) {
-      map[TravelTable.travelId] = travelId!;
-    }
 
     return map;
   }
@@ -71,6 +73,7 @@ class TravelModel {
           .map(ParticipantModel.fromEntity)
           .toList(),
       stops: travel.stops.map(TravelStopModel.fromEntity).toList(),
+      isFinished: travel.isFinished,
     );
   }
 
@@ -83,6 +86,29 @@ class TravelModel {
       transportType: transportType,
       participants: participants.map((p) => p.toEntity()).toList(),
       stops: stops.map((s) => s.toEntity()).toList(),
+      isFinished: isFinished,
+    );
+  }
+
+  TravelModel copyWith({
+    int? travelId,
+    String? travelTitle,
+    DateTime? startDate,
+    DateTime? endDate,
+    TransportType? transportType,
+    List<ParticipantModel>? participants,
+    List<TravelStopModel>? stops,
+    bool? isFinished,
+  }) {
+    return TravelModel(
+      travelId: travelId ?? this.travelId,
+      travelTitle: travelTitle ?? this.travelTitle,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      transportType: transportType ?? this.transportType,
+      participants: participants ?? this.participants,
+      stops: stops ?? this.stops,
+      isFinished: isFinished ?? this.isFinished,
     );
   }
 
