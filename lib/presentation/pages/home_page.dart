@@ -1,21 +1,20 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating/flutter_rating.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/extensions/date_extensions.dart';
 import '../../core/extensions/string_extensions.dart';
 import '../../domain/entities/participant.dart';
 import '../../domain/entities/review.dart';
 import '../../domain/entities/travel.dart';
 import '../../l10n/app_localizations.dart';
-import '../providers/register_travel_provider.dart';
-import '../providers/travel_list_provider.dart';
 import '../providers/review_provider.dart';
-import 'register_travel_page.dart';
-import 'travel_route_page.dart';
+import '../providers/travel_list_provider.dart';
+import '../providers/user_preferences_provider.dart';
 import 'fab_page.dart';
+import 'travel_route_page.dart';
 
 /// The Home Page of the app
 class HomePage extends StatelessWidget {
@@ -134,23 +133,10 @@ class _TravelWidget extends StatelessWidget {
 
               const Padding(padding: EdgeInsets.all(12)),
 
-              Row(
-                children: [
-                  const Icon(Icons.circle_outlined, color: Colors.blue),
-                  Padding(padding: const EdgeInsets.all(6)),
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    height: 50,
-                    child: Text(
-                      travel.stops.first.place.toString(),
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                  ),
-                ],
+              _StopWidget(
+                label: travel.stops.first.place.toString(),
+                icon: const Icon(Icons.circle_outlined, color: Colors.blue),
+                date: travel.stops.first.arriveDate!,
               ),
 
               Padding(
@@ -158,50 +144,15 @@ class _TravelWidget extends StatelessWidget {
                 child: const Icon(Icons.route),
               ),
 
-              Row(
-                children: [
-                  const Icon(Icons.pin_drop, color: Colors.red),
-                  const Padding(padding: EdgeInsets.all(6)),
-
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      border: BoxBorder.all(color: Colors.black, width: 1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    height: 50,
-                    child: Text(
-                      travel.stops.last.place.toString(),
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                  ),
-                ],
+              _StopWidget(
+                label: travel.stops.last.place.toString(),
+                icon: const Icon(Icons.pin_drop, color: Colors.red),
+                date: travel.stops.last.leaveDate!,
               ),
 
               const Padding(padding: EdgeInsets.all(16)),
 
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _ParticipantsWidget(participants: travel.participants),
-                  Padding(padding: EdgeInsets.all(12)),
-                  InkWell(
-                    onTap: () async {
-                      print('Review button clicked');
-                      await showReviewModal(context);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-
-                      child: Text('Add Review'),
-                    ),
-                  ),
-                ],
-              ),
+              _ParticipantsWidget(participants: travel.participants),
             ],
           ),
         ),
@@ -218,6 +169,54 @@ class _TravelWidget extends StatelessWidget {
     );
 
     return null;
+  }
+}
+
+class _StopWidget extends StatelessWidget {
+  const _StopWidget({
+    super.key,
+    required this.label,
+    required this.icon,
+    required this.date,
+  });
+
+  final String label;
+  final Widget icon;
+  final DateTime date;
+
+  @override
+  Widget build(BuildContext context) {
+    final locale = Provider.of<UserPreferencesProvider>(
+      context,
+      listen: false,
+    ).languageCode;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        icon,
+        const Padding(padding: EdgeInsets.all(6)),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                border: BoxBorder.all(color: Colors.black, width: 1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              height: 50,
+              child: Text(label, style: const TextStyle(fontSize: 14)),
+            ),
+
+            Padding(padding: EdgeInsets.all(6)),
+
+            Text(date.getFormattedDate(locale)),
+          ],
+        ),
+      ],
+    );
   }
 }
 
@@ -262,9 +261,9 @@ class _ReviewModalState extends State<ReviewModal> {
             StarRating(
               size: 52,
               color: Colors.yellow.shade800,
-              rating: reviewState.reviewRate,
+              rating: reviewState.reviewRate.toDouble(),
               onRatingChanged: (r) {
-                reviewState.reviewRate = r;
+                reviewState.reviewRate = r.toInt();
               },
             ),
             Padding(padding: EdgeInsets.all(16)),
@@ -340,7 +339,7 @@ class _ReviewModalState extends State<ReviewModal> {
             Padding(padding: EdgeInsets.all(16)),
             InkWell(
               onTap: () async {
-                await reviewState.addReview();
+                // await reviewState.addReview();
               },
               child: Container(
                 width: MediaQuery.of(context).size.width,
