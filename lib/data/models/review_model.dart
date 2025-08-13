@@ -1,11 +1,11 @@
-import '../../domain/entities/participant.dart';
 import '../../domain/entities/review.dart';
 import '../local/database/tables/reviews_table.dart';
+import 'participant_model.dart';
 
 class ReviewModel {
   final int? reviewId;
   final String description;
-  final Participant author;
+  final ParticipantModel author;
   final DateTime reviewDate;
   final int travelStopId;
   final int stars;
@@ -19,15 +19,15 @@ class ReviewModel {
     required this.stars,
   });
 
-  Review copyWith({
+  ReviewModel copyWith({
     int? reviewId,
     String? description,
-    Participant? author,
+    ParticipantModel? author,
     DateTime? reviewDate,
     int? travelStopId,
     int? stars,
   }) {
-    return Review(
+    return ReviewModel(
       reviewId: reviewId ?? this.reviewId,
       description: description ?? this.description,
       author: author ?? this.author,
@@ -41,19 +41,24 @@ class ReviewModel {
     return {
       ReviewsTable.reviewId: reviewId,
       ReviewsTable.description: description,
-      ReviewsTable.author: author,
-      ReviewsTable.reviewDate: reviewDate,
+      ReviewsTable.reviewDate: reviewDate.millisecondsSinceEpoch,
       ReviewsTable.travelStopId: travelStopId,
       ReviewsTable.stars: stars,
+      ReviewsTable.participantId: author.id,
     };
   }
 
-  factory ReviewModel.fromMap(Map<String, dynamic> map) {
+  factory ReviewModel.fromMap(
+    Map<String, dynamic> map,
+    ParticipantModel participant,
+  ) {
     return ReviewModel(
       reviewId: map[ReviewsTable.reviewId] as int,
       description: map[ReviewsTable.description] as String,
-      author: map[ReviewsTable.author] as Participant,
-      reviewDate: map[ReviewsTable.reviewDate] as DateTime,
+      author: participant,
+      reviewDate: DateTime.fromMicrosecondsSinceEpoch(
+        map[ReviewsTable.reviewDate] as int,
+      ),
       travelStopId: map[ReviewsTable.travelStopId] as int,
       stars: map[ReviewsTable.stars] as int,
     );
@@ -62,7 +67,7 @@ class ReviewModel {
   Review toEntity() {
     return Review(
       description: description,
-      author: author,
+      author: author.toEntity(),
       reviewDate: reviewDate,
       travelStopId: travelStopId,
       stars: stars,
@@ -72,7 +77,7 @@ class ReviewModel {
   factory ReviewModel.fromEntity(Review review) {
     return ReviewModel(
       description: review.description,
-      author: review.author,
+      author: ParticipantModel.fromEntity(review.author),
       reviewDate: review.reviewDate,
       travelStopId: review.travelStopId,
       stars: review.stars,
