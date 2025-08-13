@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -94,8 +93,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get experience_historical_places => 'Visitar Lugares Históricos';
 
   @override
-  String get experience_visit_local_establishments =>
-      'Visitar Establecimientos Locales (Bares, Restaurantes, Parques, etc.)';
+  String get experience_visit_local_establishments => 'Visitar Establecimientos Locales (Bares, Restaurantes, Parques, etc.)';
 
   @override
   String get experience_contact_with_nature => 'Contacto con la Naturaleza';
@@ -134,8 +132,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get travel_end_date_label => 'Fecha de Fin del Viaje';
 
   @override
-  String get err_invalid_date_snackbar =>
-      '¡Debes seleccionar una fecha de inicio primero!';
+  String get err_invalid_date_snackbar => '¡Debes seleccionar una fecha de inicio primero!';
 
   @override
   String get participants => 'Participantes';
@@ -156,8 +153,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get participant_registered => 'Participante registrado';
 
   @override
-  String get remove_participant_confirmation =>
-      '¿Realmente deseas eliminar al participante';
+  String get remove_participant_confirmation => '¿Realmente deseas eliminar al participante';
 
   @override
   String get remove_participant => 'Eliminar participante';
@@ -193,8 +189,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get stop_registered_successfully => '¡Parada registrada con éxito!';
 
   @override
-  String get err_register_stop =>
-      'Ocurrió un error al intentar registrar la parada';
+  String get err_register_stop => 'Ocurrió un error al intentar registrar la parada';
 
   @override
   String get update_stop => 'Actualizar parada';
@@ -209,8 +204,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get leave_date => 'Fecha de salida';
 
   @override
-  String get err_you_must_select_arrive_date_first =>
-      '¡Debes seleccionar primero la fecha de llegada!';
+  String get err_you_must_select_arrive_date_first => '¡Debes seleccionar primero la fecha de llegada!';
 
   @override
   String get finish => 'Finalizar';

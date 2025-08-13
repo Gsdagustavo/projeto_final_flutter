@@ -18,6 +18,8 @@ abstract class TravelUseCases {
 
   /// Returns a [List] of [Travel] containing all registered travels
   Future<List<Travel>> getAllTravels();
+
+  Future<void> finishTravel(Travel travel);
 }
 
 /// Concrete implementation of [TravelUseCases]
@@ -108,6 +110,11 @@ class TravelUseCasesImpl implements TravelUseCases {
     return participants.map((p) {
       return p.copyWith(name: p.name.capitalizedAndSpaced);
     }).toList();
+  }
+
+  @override
+  Future<void> finishTravel(Travel travel) async {
+    await travelRepository.finishTravel(travel);
   }
 }
 

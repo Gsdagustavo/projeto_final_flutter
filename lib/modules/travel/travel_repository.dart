@@ -26,6 +26,8 @@ abstract class TravelRepository {
 
   /// Returns a [List] of [Travel] containing all registered travels
   Future<List<Travel>> getAllTravels();
+
+  Future<void> finishTravel(Travel travel);
 }
 
 /// Concrete implementation of [TravelRepository], using local SQLite database
@@ -90,6 +92,31 @@ class TravelRepositoryImpl implements TravelRepository {
           _toTravelParticipantsMap(participantId, travelId),
         );
       }
+    });
+  }
+
+  @override
+  Future<void> finishTravel(Travel travel) async {
+    final db = await _db;
+
+    await db.transaction((txn) async {
+      final now = DateTime.now();
+
+      final travelModel = TravelModel.fromEntity(travel);
+      final newStops = travelModel.stops;
+      newStops.last.leaveDate = now;
+
+      final newTravel = travelModel.copyWith(
+        endDate: now,
+        stops: travelModel.stops,
+      );
+
+      await txn.update(
+        TravelTable.tableName,
+        newTravel.toMap(),
+        where: '${TravelTable.travelId} = ?',
+        whereArgs: [travelModel.travelId],
+      );
     });
   }
 
