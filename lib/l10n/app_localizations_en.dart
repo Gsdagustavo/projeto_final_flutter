@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -93,7 +94,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get experience_historical_places => 'Visit Historical Places';
 
   @override
-  String get experience_visit_local_establishments => 'Visit Local Establishments (Bars, Restaurants, Parks, etc.)';
+  String get experience_visit_local_establishments =>
+      'Visit Local Establishments (Bars, Restaurants, Parks, etc.)';
 
   @override
   String get experience_contact_with_nature => 'Contact With Nature';
@@ -153,7 +155,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get participant_registered => 'Participant registered';
 
   @override
-  String get remove_participant_confirmation => 'Would you really want to remove the participant?';
+  String get remove_participant_confirmation =>
+      'Would you really want to remove the participant?';
 
   @override
   String get remove_participant => 'Remove participant';
@@ -171,7 +174,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invalid_travel_data => 'Invalid Travel Data';
 
   @override
-  String get travel_registered_successfully => 'Your Travel was successfully registered!';
+  String get travel_registered_successfully =>
+      'Your Travel was successfully registered!';
 
   @override
   String get travel_stop => 'Travel Stop';
@@ -189,7 +193,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get stop_registered_successfully => 'Stop registered successfully!';
 
   @override
-  String get err_register_stop => 'An error occurred while trying to register the stop';
+  String get err_register_stop =>
+      'An error occurred while trying to register the stop';
 
   @override
   String get update_stop => 'Update Stop';
@@ -204,7 +209,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get leave_date => 'Leave Date';
 
   @override
-  String get err_you_must_select_arrive_date_first => 'You must select the Arrive Date first!';
+  String get err_you_must_select_arrive_date_first =>
+      'You must select the Arrive Date first!';
 
   @override
   String get finish => 'Finish';
