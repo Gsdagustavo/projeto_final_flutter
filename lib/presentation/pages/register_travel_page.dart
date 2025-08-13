@@ -710,8 +710,30 @@ class _TravelMapWidget extends StatelessWidget {
         Text(as.add_stops_for_your_travel),
 
         IconButton(
-          onPressed: () {
-            Navigator.pushNamed(context, TravelMap.routeName);
+          onPressed: () async {
+            final travelState = Provider.of<RegisterTravelProvider>(
+              context,
+              listen: false,
+            );
+
+            if (travelState.startDate == null || travelState.endDate == null) {
+              await showDialog(
+                context: context,
+                builder: (context) {
+                  return CustomDialog(
+                    title: 'Warning',
+                    content: Text(
+                      'You must select the Travel Start and End Dates first!',
+                    ),
+                    isError: true,
+                  );
+                },
+              );
+
+              return;
+            }
+
+            unawaited(Navigator.pushNamed(context, TravelMap.routeName));
           },
           icon: const Icon(Icons.map),
         ),
