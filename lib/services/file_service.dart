@@ -14,9 +14,7 @@ class FileService {
     final file = File('${dir.path}/default_profile_picture.png');
     if (await file.exists()) return file;
 
-    final data = await rootBundle.load(
-      'assets/images/default_profile_picture.png',
-    );
+    final data = await rootBundle.load(_defaultProfilePicturePath);
 
     final bytes = data.buffer.asUint8List();
     await file.writeAsBytes(bytes);

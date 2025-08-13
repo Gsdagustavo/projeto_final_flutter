@@ -73,7 +73,7 @@ class LocationService {
 
     final response = await http.get(Uri.parse(url));
 
-    print('Status code: ${response.statusCode}');
+    debugPrint('Status code: ${response.statusCode}');
 
     if (response.statusCode == 200) {
       final body = jsonDecode(response.body);

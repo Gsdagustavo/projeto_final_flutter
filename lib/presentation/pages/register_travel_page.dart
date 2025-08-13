@@ -155,8 +155,9 @@ class _TravelTitleTextField extends StatelessWidget {
   const _TravelTitleTextField();
 
   String? validator(String? input) {
-    if (input == null || input.isEmpty || input.length < 3)
+    if (input == null || input.isEmpty || input.length < 3) {
       return 'Invalid Travel Title';
+    }
 
     return null;
   }
@@ -584,7 +585,8 @@ class _ModalState extends State<_Modal> {
                 right: 2,
                 child: InkWell(
                   onTap: () async {
-                    /// TODO: show a modal to choose where the image is going to be picked from (camera, gallery, etc.)
+                    /// TODO: show a modal to choose where the image is going
+                    /// to be picked from (camera, gallery, etc.)
                     await widget.travelState.pickImage();
 
                     setState(() {});
@@ -719,7 +721,7 @@ class _TravelMapWidget extends StatelessWidget {
 }
 
 class _RegisterTravelButton extends StatelessWidget {
-  const _RegisterTravelButton({super.key});
+  const _RegisterTravelButton();
 
   @override
   Widget build(BuildContext context) {
@@ -784,7 +786,7 @@ class _RegisterTravelButton extends StatelessWidget {
 }
 
 class _TravelStopWidget extends StatelessWidget {
-  const _TravelStopWidget({super.key, required this.travelStop});
+  const _TravelStopWidget({required this.travelStop});
 
   final TravelStop travelStop;
 
@@ -795,7 +797,7 @@ class _TravelStopWidget extends StatelessWidget {
         Row(
           children: [
             Icon(Icons.pin_drop, color: Colors.red),
-            Container(height: 50, child: Text(travelStop.place.toString())),
+            SizedBox(height: 50, child: Text(travelStop.place.toString())),
           ],
         ),
       ],
@@ -805,7 +807,6 @@ class _TravelStopWidget extends StatelessWidget {
 
 class _ParticipantProfilePicture extends StatelessWidget {
   const _ParticipantProfilePicture({
-    super.key,
     required this.image,
     this.width = 36,
     this.height = 36,

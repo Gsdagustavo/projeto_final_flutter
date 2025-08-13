@@ -48,12 +48,14 @@ class TravelStop {
       leaveDate: leaveDate ?? this.leaveDate,
       type: type ?? this.type,
       experiences: experiences ?? this.experiences,
-      reviews: reviews ?? this.reviews
+      reviews: reviews ?? this.reviews,
     );
   }
 
   @override
   String toString() {
-    return 'TravelStop{travelStopId: $travelStopId, arriveDate: $arriveDate, leaveDate: $leaveDate, type: $type, experiences: $experiences, place: $place}';
+    return 'TravelStop{travelStopId: $travelStopId, arriveDate: $arriveDate, '
+        'leaveDate: $leaveDate, type: $type, experiences: $experiences, '
+        'place: $place}';
   }
 }

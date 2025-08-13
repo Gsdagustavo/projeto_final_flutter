@@ -100,14 +100,14 @@ class TravelRepositoryImpl implements TravelRepository {
   ) async {
     final placeMap = stop.place.toMap();
 
-    print('Place map: $placeMap');
+    debugPrint('Place map: $placeMap');
 
     /// Insert into [PlacesTable]
     final placeId = await txn.insert(PlacesTable.tableName, placeMap);
 
     final stopMap = stop.toMap();
 
-    print('Stop map: $stopMap');
+    debugPrint('Stop map: $stopMap');
 
     stopMap[TravelStopTable.travelId] = travelId;
     stopMap[TravelStopTable.placeId] = placeId;
@@ -139,7 +139,8 @@ class TravelRepositoryImpl implements TravelRepository {
 
     // final res = await db.rawQuery(
     //   'SELECT T.${TravelTable.travelId} FROM ${TravelTable.tableName} as T '
-    //   'JOIN ${TravelParticipantsTable.tableName} on ${TravelTable.travelId} = ${TravelParticipantsTable.travelId} '
+    //   'JOIN ${TravelParticipantsTable.tableName}
+    //   on ${TravelTable.travelId} = ${TravelParticipantsTable.travelId} '
     //   'GROUP BY ${TravelTable.travelId}',
     // );
     //

@@ -86,6 +86,8 @@ class ReviewModel {
 
   @override
   String toString() {
-    return 'Review{reviewId: $reviewId, description: $description, author: $author, reviewDate: $reviewDate, travelStopId: $travelStopId, stars: $stars}';
+    return 'Review{reviewId: $reviewId, description: $description, '
+        'author: $author, reviewDate: $reviewDate, travelStopId: $travelStopId'
+        ', stars: $stars}';
   }
 }

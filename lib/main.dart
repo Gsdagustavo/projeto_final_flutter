@@ -53,7 +53,7 @@ Future<void> main() async {
   /// Initialize dotenv
   await dotenv.load(fileName: '.env');
 
-  /// Resets the database (only for testing, this shall be removed when in production)
+  /// Resets the database
   // await DBConnection().getDatabase(reset: true);
 
   /// DEBUG
@@ -64,7 +64,7 @@ Future<void> main() async {
 }
 
 Future<List<Review>> generateMockReviews() async {
-  final Participant mockAuthor1 = Participant(
+  final mockAuthor1 = Participant(
     id: 1,
     name: 'Alice',
     age: 15,

@@ -72,6 +72,7 @@ class ParticipantModel {
 
   @override
   String toString() {
-    return 'ParticipantModel{id: $id, name: $name, age: $age, profilePicture: $profilePicture}';
+    return 'ParticipantModel{id: $id, name: $name, age: $age, '
+        'profilePicture: $profilePicture}';
   }
 }

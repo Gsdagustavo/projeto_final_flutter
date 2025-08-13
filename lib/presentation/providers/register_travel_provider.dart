@@ -47,7 +47,7 @@ class RegisterTravelProvider with ChangeNotifier {
   /// The list of [Participants] assigned to the travel
   final _participants = <Participant>[];
 
-  var _stops = <TravelStop>[];
+  final _stops = <TravelStop>[];
 
   /// The start date of the [Travel]
   DateTime? _startDate;
@@ -181,7 +181,8 @@ class RegisterTravelProvider with ChangeNotifier {
 
     if (_arriveDate!.isBefore(_startDate!) || _leaveDate!.isAfter(_endDate!)) {
       _errorMsg =
-          'As datas da parada devem estar dentro do intervalo da viagem principal';
+          'As datas da parada devem estar dentro do intervalo da viagem '
+          'principal';
       notifyListeners();
       return;
     }

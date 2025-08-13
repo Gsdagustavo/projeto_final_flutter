@@ -88,6 +88,9 @@ class TravelModel {
 
   @override
   String toString() {
-    return 'TravelModel{travelId: $travelId, travelTitle: $travelTitle, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: ${stops.toString()}}';
+    return 'TravelModel{travelId: $travelId, travelTitle: $travelTitle, '
+        'startDate: $startDate, endDate: $endDate, '
+        'transportType: $transportType, participants: $participants, '
+        'stops: ${stops.toString()}}';
   }
 }

@@ -17,6 +17,7 @@ abstract class ReviewRepository {
 class ReviewRepositoryImpl implements ReviewRepository {
   late final Future<Database> _db = DBConnection().getDatabase();
 
+  @override
   Future<void> addReviews({required List<Review> reviews}) async {
     final db = await _db;
 

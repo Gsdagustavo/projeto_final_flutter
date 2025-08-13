@@ -97,7 +97,7 @@ class _TravelWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        print('Travel widget clicked');
+        debugPrint('Travel widget clicked');
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -174,7 +174,6 @@ class _TravelWidget extends StatelessWidget {
 
 class _StopWidget extends StatelessWidget {
   const _StopWidget({
-    super.key,
     required this.label,
     required this.icon,
     required this.date,
@@ -300,7 +299,8 @@ class _ReviewModalState extends State<ReviewModal> {
                 // Builder(
                 //   builder: (context) {
                 //     print(
-                //       'reviewState.images.isEmpty: ${reviewState.images.isEmpty}',
+                //       'reviewState.images.isEmpty:
+                //       ${reviewState.images.isEmpty}',
                 //     );
                 //
                 //     if (reviewState.images.isNotEmpty) {
@@ -398,7 +398,7 @@ class _ReviewModalState extends State<ReviewModal> {
 // }
 
 class _ParticipantsWidget extends StatelessWidget {
-  const _ParticipantsWidget({super.key, required this.participants});
+  const _ParticipantsWidget({required this.participants});
 
   final List<Participant> participants;
   static const int _maxParticipants = 3;

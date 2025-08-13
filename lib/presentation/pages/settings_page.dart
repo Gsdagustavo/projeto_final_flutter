@@ -101,7 +101,8 @@ class _SettingsPageState extends State<SettingsPage> {
                           MediaQuery.of(context).size.width / 2 - radius - 22,
                       child: InkWell(
                         onTap: () async {
-                          /// TODO: show a modal to choose where the image is going to be picked from (camera, gallery, etc.)
+                          /// TODO: show a modal to choose where the image
+                          /// is going to be picked from (camera, gallery, etc.)
                           final image = await FileService().pickImage();
                           await UserPreferencesService().saveProfilePicture(
                             image,

@@ -61,6 +61,9 @@ class Travel {
 
   @override
   String toString() {
-    return 'Travel{travelId: $travelId, travelTitle: $travelTitle, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: $stops}';
+    return 'Travel{travelId: $travelId, travelTitle: $travelTitle, '
+        'startDate: $startDate, endDate: $endDate, '
+        'transportType: $transportType, participants: $participants, '
+        'stops: $stops}';
   }
 }

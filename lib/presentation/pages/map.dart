@@ -210,7 +210,7 @@ class _TravelMapState extends State<TravelMap> {
         );
       });
 
-      final travelState = Provider.of<RegisterTravelProvider>(
+      Provider.of<RegisterTravelProvider>(
         context,
         listen: false,
       ).addTravelStop(registeredStop);

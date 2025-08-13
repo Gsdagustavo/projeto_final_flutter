@@ -41,11 +41,11 @@ class TravelStopModel {
     List<Review>? reviews,
     PlaceModel place,
   ) {
-    DateTime? arriveDate = map[TravelStopTable.arriveDate] != null
+    var arriveDate = map[TravelStopTable.arriveDate] != null
         ? DateTime.fromMillisecondsSinceEpoch(map[TravelStopTable.arriveDate])
         : null;
 
-    DateTime? leaveDate = map[TravelStopTable.leaveDate] != null
+    var leaveDate = map[TravelStopTable.leaveDate] != null
         ? DateTime.fromMillisecondsSinceEpoch(map[TravelStopTable.leaveDate])
         : null;
 
@@ -96,6 +96,8 @@ class TravelStopModel {
 
   @override
   String toString() {
-    return 'TravelStopModel{travelStopId: $travelStopId, arriveDate: $arriveDate, leaveDate: $leaveDate, type: $type, experiences: $experiences, place: $place}';
+    return 'TravelStopModel{travelStopId: $travelStopId, '
+        'arriveDate: $arriveDate, leaveDate: $leaveDate, type: $type, '
+        'experiences: $experiences, place: $place}';
   }
 }

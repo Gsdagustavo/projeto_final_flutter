@@ -120,6 +120,8 @@ class PlaceModel {
 
   @override
   String toString() {
-    return 'PlaceModel{id: $id, city: $city, state: $state, country: $country, countryCode: $countryCode, latitude: $latitude, longitude: $longitude}';
+    return 'PlaceModel{id: $id, city: $city, state: $state, '
+        'country: $country, countryCode: $countryCode, latitude: $latitude, '
+        'longitude: $longitude}';
   }
 }

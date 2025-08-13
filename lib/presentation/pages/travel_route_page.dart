@@ -21,7 +21,6 @@ class TravelRoutePage extends StatefulWidget {
 }
 
 class _TravelRoutePageState extends State<TravelRoutePage> {
-  GoogleMapController? _mapController;
 
   var _polylines = <Polyline>{};
 
@@ -112,7 +111,6 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
       body: GoogleMap(
         onMapCreated: (controller) {
           setState(() {
-            _mapController = controller;
           });
         },
 
