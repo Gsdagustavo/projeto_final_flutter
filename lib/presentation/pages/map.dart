@@ -40,9 +40,6 @@ class _TravelMapState extends State<TravelMap> {
   static const double _minZoom = 3;
 
   bool _isCreatingMap = true;
-  bool _isLoading = false;
-
-  // bool _isLoadingDialogVisible = false;
 
   @override
   void initState() {
@@ -86,10 +83,6 @@ class _TravelMapState extends State<TravelMap> {
   Future<void> _onMarkerTap(TravelStop stop) async {
     final as = AppLocalizations.of(context)!;
 
-    setState(() {
-      _isLoading = true;
-    });
-
     final Place place;
 
     /// Get place
@@ -110,10 +103,6 @@ class _TravelMapState extends State<TravelMap> {
       );
       return;
     }
-
-    setState(() {
-      _isLoading = false;
-    });
 
     await _showTravelStopModal(
       context,
@@ -166,10 +155,6 @@ class _TravelMapState extends State<TravelMap> {
 
     final Place place;
 
-    setState(() {
-      _isLoading = true;
-    });
-
     /// Get the place from the given position
     try {
       place = await LocationService().getPlaceByPosition(position);
@@ -188,8 +173,6 @@ class _TravelMapState extends State<TravelMap> {
     }
 
     setState(() {
-      _isLoading = false;
-
       /// Removes the marker from the list
       _markers.remove(marker);
     });
@@ -361,101 +344,9 @@ class _TravelMapState extends State<TravelMap> {
   }
 }
 
-class _RegisterStopButton extends StatelessWidget {
-  const _RegisterStopButton({required this.experiences, required this.place});
-
-  final List<Experience> experiences;
-  final Place place;
-
-  @override
-  Widget build(BuildContext context) {
-    final travelState = Provider.of<RegisterTravelProvider>(
-      context,
-      listen: false,
-    );
-
-    final as = AppLocalizations.of(context)!;
-
-    return ElevatedButton(
-      onPressed: () async {
-        final stop = TravelStop(place: place, experiences: experiences);
-
-        travelState.addTravelStop(stop);
-
-        await showDialog(
-          context: context,
-          builder: (context) {
-            return CustomDialog(
-              title: as.travel_stop,
-              content: Text(as.stop_registered_successfully),
-            );
-          },
-        );
-
-        Navigator.pop(context, stop);
-      },
-      child: Text(as.register_stop),
-    );
-  }
-}
-
-class _UpdateStopButton extends StatelessWidget {
-  const _UpdateStopButton({required this.stop, required this.experiences});
-
-  final TravelStop stop;
-  final List<Experience> experiences;
-
-  @override
-  Widget build(BuildContext context) {
-    final travelState = Provider.of<RegisterTravelProvider>(
-      context,
-      listen: false,
-    );
-
-    final as = AppLocalizations.of(context)!;
-
-    return ElevatedButton(
-      onPressed: () {
-        final newStop = travelState.updateTravelStop(
-          stop: stop,
-          experiences: experiences,
-        );
-
-        if (travelState.hasError) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return CustomDialog(
-                title: as.travel_stop,
-                content: Text(travelState.error!),
-                isError: true,
-              );
-            },
-          );
-
-          return;
-        }
-
-        showDialog(
-          context: context,
-          builder: (context) {
-            return CustomDialog(
-              title: as.travel_stop,
-              content: Text(as.stop_updated_successfully),
-              isError: true,
-            );
-          },
-        );
-      },
-      child: Text(as.update_stop),
-    );
-  }
-}
-
 class _DatesPickers extends StatefulWidget {
-  const _DatesPickers({required this.setModalState, this.stop});
+  const _DatesPickers({this.stop});
 
-  final StateSetter setModalState;
   final TravelStop? stop;
 
   @override
@@ -537,7 +428,7 @@ class _DatesPickersState extends State<_DatesPickers> {
                 });
 
                 travelState.selectArriveDate(dateTime);
-                widget.setModalState(() {});
+                // widget.setModalState(() {});
               },
               child: Text(as.arrive_date, style: TextStyle(fontSize: 16)),
             ),
@@ -605,7 +496,7 @@ class _DatesPickersState extends State<_DatesPickers> {
                 });
 
                 travelState.selectLeaveDate(dateTime);
-                widget.setModalState(() {});
+                // widget.setModalState(() {});
               },
               child: Text(as.leave_date, style: const TextStyle(fontSize: 16)),
             ),
@@ -639,116 +530,230 @@ Future<TravelStop?> _showTravelStopModal(
     listen: false,
   );
 
-  final as = AppLocalizations.of(context)!;
-
-  final placeInfo = place.toString();
-
   final registeredStop = await showModalBottomSheet<TravelStop?>(
     context: context,
     showDragHandle: true,
 
     builder: (context) {
-      return StatefulBuilder(
-        builder: (context, setModalState) {
-          final selectedExperiences = travelState.selectedExperiences;
-
-          return SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.all(32),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                /// Text that will display the place's name or position
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        placeInfo,
-                        style: const TextStyle(fontSize: 28),
-                      ),
-                    ),
-
-                    if (stop != null)
-                      IconButton(
-                        onPressed: onStopRemoved,
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                      ),
-                  ],
-                ),
-
-                /// Text that will be shown if the stop is the first stop
-                /// registered (start of the travel)
-                if (stop?.type == TravelStopType.start ||
-                    travelState.stops.isEmpty)
-                  Text(
-                    as.travel_start_location,
-                    style: const TextStyle(fontSize: 22),
-                  ),
-
-                const Padding(padding: EdgeInsets.all(6)),
-
-                // /// Text that shows the type of the place
-                // Text(
-                //   place.type.capitalizedAndSpaced,
-                //   style: const TextStyle(fontSize: 20),
-                // ),
-                // const Padding(padding: EdgeInsets.all(4)),
-                //
-                // /// Text that shows the display name of the place
-                // Text(place.displayName),
-                // const Padding(padding: EdgeInsets.all(12)),
-
-                /// Text to show the "Experiences" label
-                Text(
-                  as.experiences,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Padding(padding: EdgeInsets.all(6)),
-
-                /// Checkbox to select the experiences of the stop
-                for (final experience in Experience.values)
-                  CheckboxListTile(
-                    value: selectedExperiences[experience],
-                    title: Text(experience.getIntlExperience(context)),
-                    onChanged: (value) {
-                      setModalState(() {
-                        selectedExperiences[experience] = value ?? false;
-                      });
-                    },
-                  ),
-                const Padding(padding: EdgeInsets.all(6)),
-
-                // TextField(
-                //   decoration: InputDecoration(hintText: as.other),
-                //   onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
-                // ),
-                // const Padding(padding: EdgeInsets.all(12)),
-
-                /// Date pickers to select the [arriveDate] and [leaveDate]
-                _DatesPickers(setModalState: setModalState, stop: stop),
-                const Padding(padding: EdgeInsets.all(12)),
-
-                if (stop != null)
-                  _UpdateStopButton(
-                    stop: stop,
-                    experiences: selectedExperiences.toExperiencesList(),
-                  )
-                else
-                  _RegisterStopButton(
-                    place: place,
-                    experiences: selectedExperiences.toExperiencesList(),
-                  ),
-              ],
-            ),
-          );
-        },
+      return _TravelStopModal(
+        place: place,
+        onStopRemoved: onStopRemoved,
+        stop: stop,
       );
     },
   );
 
+  if (registeredStop == null && stop == null) {
+    travelState.resetExperiences();
+    debugPrint('No stop was registered. Cleaning ');
+  }
+
   return registeredStop;
+}
+
+class _TravelStopModal extends StatefulWidget {
+  const _TravelStopModal({required this.place, this.stop, this.onStopRemoved});
+
+  final Place place;
+  final TravelStop? stop;
+  final VoidCallback? onStopRemoved;
+
+  @override
+  State<_TravelStopModal> createState() => _TravelStopModalState();
+}
+
+class _TravelStopModalState extends State<_TravelStopModal> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<RegisterTravelProvider>(
+      context,
+      listen: false,
+    ).resetExperiences(widget.stop);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final travelState = Provider.of<RegisterTravelProvider>(
+      context,
+      listen: false,
+    );
+
+    final selectedExperiences = travelState.selectedExperiences;
+
+    final as = AppLocalizations.of(context)!;
+    final placeInfo = widget.place.toString();
+
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.all(32),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          /// Text that will display the place's name or position
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(placeInfo, style: const TextStyle(fontSize: 28)),
+              ),
+
+              if (widget.stop != null)
+                IconButton(
+                  onPressed: widget.onStopRemoved,
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                ),
+            ],
+          ),
+
+          /// Text that will be shown if the stop is the first stop
+          /// registered (start of the travel)
+          if (widget.stop?.type == TravelStopType.start ||
+              travelState.stops.isEmpty)
+            Text(
+              as.travel_start_location,
+              style: const TextStyle(fontSize: 22),
+            ),
+
+          const Padding(padding: EdgeInsets.all(6)),
+
+          /// Text to show the "Experiences" label
+          Text(
+            as.experiences,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+          const Padding(padding: EdgeInsets.all(6)),
+
+          /// Checkbox to select the experiences of the stop
+          for (final experience in Experience.values)
+            CheckboxListTile(
+              value: selectedExperiences[experience],
+              title: Text(experience.getIntlExperience(context)),
+              onChanged: (value) {
+                setState(() {
+                  selectedExperiences[experience] = value ?? false;
+                });
+              },
+            ),
+          const Padding(padding: EdgeInsets.all(6)),
+
+          /// Date pickers to select the [arriveDate] and [leaveDate]
+          _DatesPickers(stop: widget.stop),
+          const Padding(padding: EdgeInsets.all(12)),
+
+          if (widget.stop != null)
+            _UpdateStopButton(
+              stop: widget.stop!,
+              experiences: selectedExperiences.toExperiencesList(),
+            )
+          else
+            _RegisterStopButton(
+              place: widget.place,
+              experiences: selectedExperiences.toExperiencesList(),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RegisterStopButton extends StatelessWidget {
+  const _RegisterStopButton({required this.experiences, required this.place});
+
+  final List<Experience> experiences;
+  final Place place;
+
+  @override
+  Widget build(BuildContext context) {
+    final travelState = Provider.of<RegisterTravelProvider>(
+      context,
+      listen: false,
+    );
+
+    final as = AppLocalizations.of(context)!;
+
+    return ElevatedButton(
+      onPressed: () async {
+        if (travelState.arriveDate == null || travelState.leaveDate == null) {
+          await showDialog(
+            context: context,
+            builder: (context) {
+              return CustomDialog(
+                isError: true,
+                title: 'Invalid Travel Stop',
+                content: Text('The Travel Stop Dates are invalid'),
+              );
+            },
+          );
+        }
+
+        final stop = TravelStop(place: place, experiences: experiences);
+
+        travelState.addTravelStop(stop);
+
+        await showDialog(
+          context: context,
+          builder: (context) {
+            return CustomDialog(
+              title: as.travel_stop,
+              content: Text(as.stop_registered_successfully),
+            );
+          },
+        );
+
+        Navigator.pop(context, stop);
+      },
+      child: Text(as.register_stop),
+    );
+  }
+}
+
+class _UpdateStopButton extends StatelessWidget {
+  const _UpdateStopButton({required this.stop, required this.experiences});
+
+  final TravelStop stop;
+  final List<Experience> experiences;
+
+  @override
+  Widget build(BuildContext context) {
+    final travelState = Provider.of<RegisterTravelProvider>(
+      context,
+      listen: false,
+    );
+
+    final as = AppLocalizations.of(context)!;
+
+    return ElevatedButton(
+      onPressed: () {
+        final newStop = travelState.updateTravelStop(stop: stop);
+
+        // if (travelState.hasError) {
+        //   showDialog(
+        //     context: context,
+        //     builder: (context) {
+        //       return CustomDialog(
+        //         title: as.travel_stop,
+        //         content: Text(travelState.error!),
+        //         isError: true,
+        //       );
+        //     },
+        //   );
+        //
+        //   return;
+        // }
+
+        showDialog(
+          context: context,
+          builder: (context) {
+            return CustomDialog(
+              title: as.travel_stop,
+              content: Text(as.stop_updated_successfully),
+              isError: true,
+            );
+          },
+        );
+      },
+      child: Text(as.update_stop),
+    );
+  }
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import '../../core/extensions/experience_map_extension.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';
@@ -84,7 +85,7 @@ class RegisterTravelProvider with ChangeNotifier {
   /// [values] being whether or not the experience is in the [experiences] list
   ///
   /// Otherwise, set all [values] to [false] (no experience selected)
-  void _resetExperiences([TravelStop? stop]) {
+  void resetExperiences([TravelStop? stop]) {
     var selectedExperiences = <Experience, bool>{};
 
     if (stop != null &&
@@ -98,7 +99,6 @@ class RegisterTravelProvider with ChangeNotifier {
     }
 
     _selectedExperiences = selectedExperiences;
-    notifyListeners();
   }
 
   /// Tries to register a new [Travel] with the given inputs using
@@ -153,7 +153,11 @@ class RegisterTravelProvider with ChangeNotifier {
     _errorMsg = null;
     _isLoading = false;
 
-    _resetForms();
+    resetForms();
+  }
+
+  Future<void> finishTravel(Travel travel) async {
+    await _travelUseCases.finishTravel(travel);
   }
 
   void addTravelStop(TravelStop stop) {
@@ -183,7 +187,6 @@ class RegisterTravelProvider with ChangeNotifier {
       _errorMsg =
           'As datas da parada devem estar dentro do intervalo da viagem '
           'principal';
-      notifyListeners();
       return;
     }
 
@@ -203,23 +206,21 @@ class RegisterTravelProvider with ChangeNotifier {
     _leaveDate = null;
     _errorMsg = null;
 
-    _resetExperiences();
+    resetExperiences();
     debugPrint('Travel stop ${stop.toString()} added');
     notifyListeners();
   }
 
   void removeTravelStop(TravelStop stop) {
     _stops.remove(stop);
-    _resetExperiences();
+    resetExperiences();
     debugPrint('Stop $stop removed from travel stops list');
+    notifyListeners();
   }
 
-  TravelStop updateTravelStop({
-    required TravelStop stop,
-    required List<Experience> experiences,
-  }) {
+  TravelStop updateTravelStop({required TravelStop stop}) {
     final newStop = stop.copyWith(
-      experiences: experiences,
+      experiences: _selectedExperiences.toExperiencesList(),
       arriveDate: _arriveDate,
       leaveDate: _leaveDate,
     );
@@ -232,7 +233,7 @@ class RegisterTravelProvider with ChangeNotifier {
   }
 
   /// Sets all input fields to their default values and cleanses all lists
-  void _resetForms() {
+  void resetForms() {
     _transportType = TransportType.values.first;
 
     _startDate = null;
@@ -250,7 +251,7 @@ class RegisterTravelProvider with ChangeNotifier {
 
     _stops.clear();
 
-    _resetExperiences();
+    resetExperiences();
 
     notifyListeners();
   }
