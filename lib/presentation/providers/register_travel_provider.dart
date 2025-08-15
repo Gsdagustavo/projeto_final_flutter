@@ -54,7 +54,10 @@ class RegisterTravelProvider with ChangeNotifier {
   final _stops = <TravelStop>[];
 
   /// The time range of the travel
-  DateTimeRange? _travelTimeRange;
+  DateTimeRange? _travelTimeRange = DateTimeRange(
+    start: DateTime.now(),
+    end: DateTime.now().add(Duration(days: 30)),
+  );
 
   /// The time range of the current travel stop
   DateTimeRange? _stopTimeRange;
