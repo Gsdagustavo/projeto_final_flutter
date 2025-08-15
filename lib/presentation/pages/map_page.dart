@@ -322,6 +322,8 @@ Future<TravelStop?> _showTravelStopModal(
     listen: false,
   );
 
+  debugPrint('travel stop modal is being shown.\nstop: $stop');
+
   final registeredStop = await showModalBottomSheet<TravelStop?>(
     context: context,
     showDragHandle: true,
@@ -359,24 +361,11 @@ class _TravelStopModal extends StatefulWidget {
 
 class _TravelStopModalState extends State<_TravelStopModal> {
   @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<RegisterTravelProvider>(
-        context,
-        listen: false,
-      ).resetExperiences(widget.stop);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final travelState = Provider.of<RegisterTravelProvider>(
       context,
       listen: false,
     );
-
     final selectedExperiences = travelState.selectedExperiences;
 
     final as = AppLocalizations.of(context)!;
