@@ -41,7 +41,10 @@ class TravelStop {
     List<Experience>? experiences,
     List<Review>? reviews,
   }) {
-    return TravelStop(
+
+    print('Stop copywith called. old stop: $this');
+
+    final stop = TravelStop(
       place: place ?? this.place,
       travelStopId: travelStopId ?? this.travelStopId,
       arriveDate: arriveDate ?? this.arriveDate,
@@ -50,6 +53,10 @@ class TravelStop {
       experiences: experiences ?? this.experiences,
       reviews: reviews ?? this.reviews,
     );
+
+    print('Stop copywith called. new stop: $stop');
+
+    return stop;
   }
 
   @override

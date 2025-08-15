@@ -246,7 +246,7 @@ class _DateTextButtonsState extends State<_DateTextButtons> {
                 );
 
                 if (range != null) {
-                  travelState.selectTravelTimeRange(range);
+                  travelState.travelTimeRange = range;
                 }
               },
               child: Text(as.select_dates_label),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../core/extensions/experience_map_extension.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/participant.dart';
+import '../../domain/entities/place.dart';
 import '../../domain/entities/travel.dart';
 import '../../domain/entities/travel_stop.dart';
 import '../../modules/travel/travel_use_cases.dart';
@@ -22,6 +23,7 @@ class RegisterTravelProvider with ChangeNotifier {
   /// Instance of [FileService]
   final fileService = FileService();
 
+  /// Form key for validation
   final formKey = GlobalKey<FormState>();
 
   /// Default constructor
@@ -48,26 +50,14 @@ class RegisterTravelProvider with ChangeNotifier {
   /// The list of [Participants] assigned to the travel
   final _participants = <Participant>[];
 
+  /// The stops of the travel
   final _stops = <TravelStop>[];
 
-  // /// The start date of the [Travel]
-  // DateTime? _startDate;
-  //
-  // /// The end date of the [Travel]
-  // DateTime? _endDate;
+  /// The time range of the travel
+  DateTimeRange? _travelTimeRange;
 
-  DateTimeRange? travelTimeRange;
-
-  void selectTravelTimeRange(DateTimeRange? range) {
-    travelTimeRange = range;
-    notifyListeners();
-  }
-
-  /// The arrive date of the travel stop that will be registered
-  DateTime? _arriveDate;
-
-  /// The leave date of the travel stop that will be registered
-  DateTime? _leaveDate;
+  /// The time range of the current travel stop
+  DateTimeRange? _stopTimeRange;
 
   /// The selected experiences for the current travel stop
   Map<Experience, bool> _selectedExperiences = {
@@ -87,26 +77,6 @@ class RegisterTravelProvider with ChangeNotifier {
 
   /// Whether there are any asynchronous methods being processed
   bool _isLoading = false;
-
-  /// If a [TravelStop] was given, populates [_selectedExperiences] with the
-  /// [values] being whether or not the experience is in the [experiences] list
-  ///
-  /// Otherwise, set all [values] to [false] (no experience selected)
-  void resetExperiences([TravelStop? stop]) {
-    var selectedExperiences = <Experience, bool>{};
-
-    if (stop != null &&
-        stop.experiences != null &&
-        stop.experiences!.isNotEmpty) {
-      for (final exp in Experience.values) {
-        selectedExperiences[exp] = stop.experiences!.contains(exp);
-      }
-    } else {
-      selectedExperiences = {for (final e in Experience.values) e: false};
-    }
-
-    _selectedExperiences = selectedExperiences;
-  }
 
   /// Tries to register a new [Travel] with the given inputs using
   /// [_travelUseCases]
@@ -142,8 +112,8 @@ class RegisterTravelProvider with ChangeNotifier {
     final travel = Travel(
       travelTitle: _travelTitleController.text,
       participants: participants,
-      startDate: travelTimeRange?.start,
-      endDate: travelTimeRange?.end,
+      startDate: _travelTimeRange?.start,
+      endDate: _travelTimeRange?.end,
       transportType: _transportType,
       stops: _stops,
     );
@@ -167,56 +137,30 @@ class RegisterTravelProvider with ChangeNotifier {
     await _travelUseCases.finishTravel(travel);
   }
 
-  void addTravelStop(TravelStop stop) {
-    // final lastArriveDate = lastPossibleArriveDate;
-    //
-    // /// TODO: add intl for error messages
-    // if (_arriveDate == null || _leaveDate == null) {
-    //   _errorMsg = 'Você precisa selecionar as datas de chegada e saída';
-    //   notifyListeners();
-    //   return;
-    // }
-    //
-    // if (_arriveDate!.isBefore(lastArriveDate!)) {
-    //   _errorMsg =
-    //       'A data de chegada não pode ser anterior à saída da última parada';
-    //   notifyListeners();
-    //   return;
-    // }
-    //
-    // if (_leaveDate!.isBefore(_arriveDate!)) {
-    //   _errorMsg = 'A data de saída não pode ser anterior à data de chegada';
-    //   notifyListeners();
-    //   return;
-    // }
-    //
-    // if (_arriveDate!.isBefore(travelTimeRange!.start) ||
-    //     _leaveDate!.isAfter(travelTimeRange!.start)) {
-    //   _errorMsg =
-    //       'As datas da parada devem estar dentro do intervalo da viagem '
-    //       'principal';
-    //   return;
-    // }
+  TravelStop addTravelStop(Place place) {
+    final type = _stops.isEmpty ? TravelStopType.start : TravelStopType.stop;
+    final arriveDate = _stopTimeRange!.start;
+    final leaveDate = _stopTimeRange!.end;
 
-    if (_stops.isEmpty) {
-      stop.type = TravelStopType.start;
-    } else {
-      stop.type = TravelStopType.stop;
-    }
-
-    stop.arriveDate = _arriveDate;
-    stop.leaveDate = _leaveDate;
+    final stop = TravelStop(
+      place: place,
+      experiences: _selectedExperiences.toExperiencesList(),
+      arriveDate: arriveDate,
+      leaveDate: leaveDate,
+      type: type,
+    );
 
     _stops.add(stop);
 
-    // Reset input fields
-    _arriveDate = null;
-    _leaveDate = null;
     _errorMsg = null;
+    _stopTimeRange = null;
 
-    resetExperiences();
     debugPrint('Travel stop ${stop.toString()} added');
     notifyListeners();
+
+    print('STOP TIME RANGE AFTER ADDING: $_stopTimeRange');
+
+    return stop;
   }
 
   void removeTravelStop(TravelStop stop) {
@@ -229,12 +173,11 @@ class RegisterTravelProvider with ChangeNotifier {
   TravelStop updateTravelStop({required TravelStop stop}) {
     final newStop = stop.copyWith(
       experiences: _selectedExperiences.toExperiencesList(),
-      arriveDate: _arriveDate,
-      leaveDate: _leaveDate,
+      arriveDate: _stopTimeRange!.start,
+      leaveDate: _stopTimeRange!.end,
     );
 
-    _stops[_stops.length - 1] = newStop;
-    notifyListeners();
+    _stops[_stops.indexOf(stop)] = newStop;
 
     notifyListeners();
     return newStop;
@@ -244,7 +187,8 @@ class RegisterTravelProvider with ChangeNotifier {
   void resetForms() {
     _transportType = TransportType.values.first;
 
-    travelTimeRange = null;
+    _travelTimeRange = null;
+    _stopTimeRange = null;
 
     _travelTitleController.clear();
     _participantNameController.clear();
@@ -269,61 +213,6 @@ class RegisterTravelProvider with ChangeNotifier {
     _transportType = value ?? TransportType.values.first;
     notifyListeners();
   }
-
-  void selectArriveDate(DateTime? arriveDate) {
-    if (arriveDate == null) return;
-
-    /// Arrive date is before travel start date
-    if (arriveDate.isBefore(travelTimeRange!.start)) {
-      debugPrint('Arrive date cannot be before travel start date');
-      return;
-    }
-
-    /// Arrive date is after travel end date
-    if (arriveDate.isAfter(travelTimeRange!.start)) {
-      debugPrint('Arrive date cannot be after travel end date');
-      return;
-    }
-
-    _arriveDate = arriveDate;
-    notifyListeners();
-  }
-
-  /// Tries to set the [selectedEndDate] to the given [Date]
-  void selectLeaveDate(DateTime? date) {
-    if (date == null) return;
-    _leaveDate = date;
-    notifyListeners();
-  }
-
-  // /// Tries to set the [selectedStartDate] to the given [Date]
-  // ///
-  // /// There is a validation to check if the [selectedEndDate] is already
-  // /// assigned, and if so, it checks if the given [Date] is after the
-  // /// [selectedEndDate]
-  // ///
-  // /// If the [Date] is after the [selectedEndDate], the [selectedStartDate] is
-  // /// set to null
-  // void selectStartDate(DateTime? date) {
-  //   if (date == null) return;
-  //
-  //   _startDate = date;
-  //
-  //   if (_startDate != null && _endDate != null) {
-  //     if (_startDate!.isAfter(_endDate!)) {
-  //       _endDate = null;
-  //     }
-  //   }
-  //
-  //   notifyListeners();
-  // }
-  //
-  // /// Tries to set the [selectedEndDate] to the given [Date]
-  // void selectEndDate(DateTime? date) {
-  //   if (date == null) return;
-  //   _endDate = date;
-  //   notifyListeners();
-  // }
 
   /// Adds a participant to the [participants] list with the given inputs
   ///
@@ -366,6 +255,26 @@ class RegisterTravelProvider with ChangeNotifier {
     debugPrint('Listing all travels:\n$travels');
   }
 
+  /// If a [TravelStop] was given, populates [_selectedExperiences] with the
+  /// [values] being whether or not the experience is in the [experiences] list
+  ///
+  /// Otherwise, set all [values] to [false] (no experience selected)
+  void resetExperiences([TravelStop? stop]) {
+    var selectedExperiences = <Experience, bool>{};
+
+    if (stop != null &&
+        stop.experiences != null &&
+        stop.experiences!.isNotEmpty) {
+      for (final exp in Experience.values) {
+        selectedExperiences[exp] = stop.experiences!.contains(exp);
+      }
+    } else {
+      selectedExperiences = {for (final e in Experience.values) e: false};
+    }
+
+    _selectedExperiences = selectedExperiences;
+  }
+
   /// Returns the [TextEditingController] for the travel title
   TextEditingController get travelTitleController => _travelTitleController;
 
@@ -377,12 +286,6 @@ class RegisterTravelProvider with ChangeNotifier {
 
   /// Returns the list of [Participants]
   List<Participant> get participants => _participants;
-  //
-  // /// Returns the [selectedStartDate]
-  // DateTime? get startDate => _startDate;
-  //
-  // /// Returns the [selectedEndDate]
-  // DateTime? get endDate => _endDate;
 
   /// Returns the [TextEditingController] for the participant's name
   TextEditingController get participantNameController =>
@@ -391,9 +294,6 @@ class RegisterTravelProvider with ChangeNotifier {
   /// Returns the [TextEditingController] for the participant's age
   TextEditingController get participantAgeController =>
       _participantAgeController;
-
-  // /// Returns whether the start date is selected or not
-  // bool get isStartDateSelected => startDate != null;
 
   /// Returns the error message stored in the provider
   String? get error => _errorMsg;
@@ -406,37 +306,6 @@ class RegisterTravelProvider with ChangeNotifier {
 
   List<TravelStop> get stops => _stops;
 
-  DateTime? get leaveDate => _leaveDate;
-
-  DateTime? get arriveDate => _arriveDate;
-
-  // DateTime? get lastPossibleArriveDate {
-  //   if (_startDate == null || _endDate == null) {
-  //     _errorMsg =
-  //         'You must select the Travel start and end dates before adding stops';
-  //     notifyListeners();
-  //     return null;
-  //   }
-  //
-  //   if (_stops.isEmpty) return _startDate;
-  //
-  //   final latestStop = _stops.last;
-  //   debugPrint('Latest stop: $latestStop');
-  //   debugPrint('Last possible Arrive Date: ${latestStop.leaveDate}');
-  //   return latestStop.leaveDate!;
-  // }
-  //
-  // DateTime? get lastPossibleLeaveDate {
-  //   if (_startDate == null || _endDate == null) {
-  //     _errorMsg =
-  //         'You must select the Travel start and end dates before adding stops';
-  //     notifyListeners();
-  //     return null;
-  //   }
-  //
-  //   return _endDate;
-  // }
-
   Map<Experience, bool> get selectedExperiences => _selectedExperiences;
 
   set selectedExperiences(Map<Experience, bool> value) {
@@ -444,9 +313,6 @@ class RegisterTravelProvider with ChangeNotifier {
   }
 
   bool get areStopsValid {
-    // final hasStart = _stops.any((stop) => stop.type == TravelStopType.stop);
-    // final hasEnd = _stops.any((stop) => stop.type == TravelStopType.end);
-
     return _stops.length >= 2;
   }
 
@@ -456,12 +322,59 @@ class RegisterTravelProvider with ChangeNotifier {
     final isValid =
         areStopsValid && _travelUseCases.isParticipantInfoValid(participants);
 
-    debugPrint('Is travel valid: $isValid');
+    // debugPrint('Is travel valid: $isValid');
 
     return isValid;
   }
 
-  bool validateForm() {
-    return formKey.currentState?.validate() ?? false;
+  DateTime? get lastPossibleArriveDate {
+    if (_travelTimeRange == null) {
+      _errorMsg =
+          'You must select the Travel start and end dates before adding stops';
+      notifyListeners();
+      return null;
+    }
+
+    if (_stops.isEmpty) return _travelTimeRange!.start;
+
+    final latestStop = _stops.last;
+    print('Latest stop: $latestStop');
+    debugPrint('Latest possible Arrive Date: ${latestStop.leaveDate}');
+    return latestStop.leaveDate!;
+  }
+
+  DateTime? get lastPossibleLeaveDate {
+    if (_travelTimeRange == null) {
+      _errorMsg =
+          'You must select the Travel start and end dates before adding stops';
+      notifyListeners();
+      return null;
+    }
+
+    return _travelTimeRange!.end;
+  }
+
+  DateTimeRange? get travelTimeRange => _travelTimeRange;
+
+  set travelTimeRange(DateTimeRange? range) {
+    _travelTimeRange = range;
+
+    if (_stops.isNotEmpty) {
+      /// Stop dates are out of bounds
+      _stops.removeWhere((stop) {
+        return stop.arriveDate!.isBefore(range!.start) ||
+            stop.arriveDate!.isAfter(range.end);
+      });
+    }
+
+    notifyListeners();
+  }
+
+  DateTimeRange? get stopTimeRange => _stopTimeRange;
+
+  set stopTimeRange(DateTimeRange? value) {
+    print('Set stop time range called. New value: $value');
+    _stopTimeRange = value;
+    notifyListeners();
   }
 }

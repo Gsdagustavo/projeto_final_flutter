@@ -44,7 +44,7 @@ class TravelModel {
       transportType: TransportType.values[map[TravelTable.transportType]],
       participants: participants,
       stops: stops,
-      isFinished: intToBool((map[TravelTable.isFinished] as int)),
+      isFinished: (map[TravelTable.isFinished] as int).toBool(),
     );
   }
 
@@ -56,7 +56,7 @@ class TravelModel {
       TravelTable.startDate: startDate?.millisecondsSinceEpoch,
       TravelTable.endDate: endDate?.millisecondsSinceEpoch,
       TravelTable.transportType: transportType.index,
-      TravelTable.isFinished: boolToInt(isFinished),
+      TravelTable.isFinished: isFinished.toInt(),
     };
 
     return map;

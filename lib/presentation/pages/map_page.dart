@@ -5,16 +5,16 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/extensions/date_extensions.dart';
-import '../../core/extensions/experience_map_extension.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/place.dart';
 import '../../domain/entities/travel.dart';
 import '../../domain/entities/travel_stop.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/location_service.dart';
-import '../../services/user_preferences_service.dart';
 import '../extensions/enums_extensions.dart';
 import '../providers/register_travel_provider.dart';
+import '../providers/user_preferences_provider.dart';
+import '../widgets/custom_date_range_widget.dart';
 import '../widgets/custom_dialog.dart';
 import '../widgets/my_app_bar.dart';
 
@@ -179,6 +179,7 @@ class _TravelMapState extends State<TravelMap> {
 
     /// Shows the modal to register the stop
     final registeredStop = await _showTravelStopModal(context, place: place);
+    print('Registered Stop: $registeredStop');
 
     /// If the stop was registered, adds the definitive marker to the list
     if (registeredStop != null) {
@@ -192,11 +193,6 @@ class _TravelMapState extends State<TravelMap> {
           ),
         );
       });
-
-      Provider.of<RegisterTravelProvider>(
-        context,
-        listen: false,
-      ).addTravelStop(registeredStop);
     }
   }
 
@@ -204,25 +200,6 @@ class _TravelMapState extends State<TravelMap> {
     setState(() {
       _mapController = controller;
     });
-  }
-
-  void _showLoadingDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return AlertDialog(
-          content: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircularProgressIndicator(),
-              Padding(padding: EdgeInsets.all(20)),
-              Text('Loading...'),
-            ],
-          ),
-        );
-      },
-    );
   }
 
   @override
@@ -239,26 +216,10 @@ class _TravelMapState extends State<TravelMap> {
         builder: (context) {
           if (_isCreatingMap) return Center(child: CircularProgressIndicator());
 
-          // debugPrint('Is loading dialog visible: $_isLoadingDialogVisible');
-          // /// TODO: implement a better way of showing the loading dialog,
-          // /// since it can be popped unwantedly
-          // if (_isLoading && !_isLoadingDialogVisible) {
-          //   WidgetsBinding.instance.addPostFrameCallback((_) {
-          //     if (mounted && (ModalRoute.of(context)?.isCurrent ?? true)) {
-          //       _isLoadingDialogVisible = true;
-          //       debugPrint('Showing loading dialog...');
-          //       _showLoadingDialog(context);
-          //     }
-          //   });
-          // } else if (!_isLoading && _isLoadingDialogVisible) {
-          //   if (Navigator.canPop(context)) {
-          //     debugPrint('Closing loading dialog...');
-          //     Navigator.of(context).pop();
-          //   }
-          //   _isLoadingDialogVisible = false;
-          // }
-
-          final travelState = Provider.of<RegisterTravelProvider>(context);
+          final travelState = Provider.of<RegisterTravelProvider>(
+            context,
+            listen: false,
+          );
 
           return Stack(
             alignment: Alignment.center,
@@ -321,6 +282,7 @@ class _TravelMapState extends State<TravelMap> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             FloatingActionButton(
+              key: Key('1'),
               onPressed: () {
                 for (final marker in _markers) {
                   debugPrint('${marker.toString()}\n');
@@ -332,6 +294,7 @@ class _TravelMapState extends State<TravelMap> {
             Consumer<RegisterTravelProvider>(
               builder: (_, travelState, __) {
                 return FloatingActionButton(
+                  key: Key('2'),
                   child: Center(child: Text('List stops')),
                   onPressed: () => debugPrint(travelState.stops.toString()),
                 );
@@ -343,177 +306,6 @@ class _TravelMapState extends State<TravelMap> {
     );
   }
 }
-
-// class _DatesPickers extends StatefulWidget {
-//   const _DatesPickers({this.stop});
-//
-//   final TravelStop? stop;
-//
-//   @override
-//   State<_DatesPickers> createState() => _DatesPickersState();
-// }
-//
-// class _DatesPickersState extends State<_DatesPickers> {
-//   DateTime? _arriveDate;
-//   DateTime? _leaveDate;
-//   String? _locale;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _arriveDate = widget.stop?.arriveDate;
-//     _leaveDate = widget.stop?.leaveDate;
-//
-//     WidgetsBinding.instance.addPostFrameCallback((_) async {
-//       final locale = await UserPreferencesService().loadLanguageCode();
-//
-//       if (mounted) {
-//         setState(() {
-//           _locale = locale;
-//         });
-//       }
-//     });
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final travelState = Provider.of<RegisterTravelProvider>(
-//       context,
-//       listen: false,
-//     );
-//
-//     final as = AppLocalizations.of(context)!;
-//
-//     final initialArriveDate = widget.stop?.arriveDate ?? travelState.arriveDate;
-//     final initialLeaveDate = widget.stop?.leaveDate ?? travelState.leaveDate;
-//
-//     return Row(
-//       mainAxisAlignment: MainAxisAlignment.spaceAround,
-//       children: [
-//         Column(
-//           children: [
-//             TextButton(
-//               onPressed: () async {
-//                 final initialDate =
-//                     initialArriveDate ?? travelState.lastPossibleArriveDate;
-//                 final firstDate = travelState.lastPossibleArriveDate!;
-//                 final lastDate = travelState.lastPossibleLeaveDate!;
-//
-//                 var date = await showDatePicker(
-//                   context: context,
-//                   initialDate: initialDate,
-//                   firstDate: firstDate,
-//                   lastDate: lastDate,
-//                 );
-//
-//                 if (date == null) return;
-//
-//                 final time = await showTimePicker(
-//                   context: context,
-//                   initialTime: TimeOfDay.now(),
-//                 );
-//
-//                 if (time == null) return;
-//
-//                 final dateTime = DateTime(
-//                   date.year,
-//                   date.month,
-//                   date.day,
-//                   time.hour,
-//                   time.minute,
-//                 );
-//
-//                 setState(() {
-//                   _arriveDate = dateTime;
-//                 });
-//
-//                 travelState.selectArriveDate(dateTime);
-//                 // widget.setModalState(() {});
-//               },
-//               child: Text(as.arrive_date, style: TextStyle(fontSize: 16)),
-//             ),
-//
-//             if (_arriveDate != null)
-//               if (_locale != null && _locale!.isNotEmpty)
-//                 Text(
-//                   _arriveDate!.getFormattedDate(_locale!),
-//                   style: const TextStyle(fontSize: 14),
-//                 )
-//               else
-//                 const Center(child: CircularProgressIndicator()),
-//           ],
-//         ),
-//
-//         // Column(
-//         //   children: [
-//         //     TextButton(
-//         //       onPressed: () async {
-//         //         final arriveDate =
-//         //             travelState.arriveDate ?? widget.stop?.arriveDate;
-//         //
-//         //         if (arriveDate == null) {
-//         //           await showDialog(
-//         //             context: context,
-//         //             builder: (context) => CustomDialog(
-//         //               title: as.warning,
-//         //               content: Text(as.err_you_must_select_arrive_date_first),
-//         //               isError: true,
-//         //             ),
-//         //           );
-//         //           return;
-//         //         }
-//         //
-//         //         final initialDate = initialLeaveDate ?? arriveDate;
-//         //         final firstDate = arriveDate;
-//         //         final lastDate = travelState.lastPossibleLeaveDate;
-//         //
-//         //         final date = await showDatePicker(
-//         //           context: context,
-//         //           initialDate: initialDate,
-//         //           firstDate: firstDate,
-//         //           lastDate: lastDate!,
-//         //         );
-//         //
-//         //         if (date == null) return;
-//         //
-//         //         final time = await showTimePicker(
-//         //           context: context,
-//         //           initialTime: TimeOfDay.now(),
-//         //         );
-//         //
-//         //         if (time == null) return;
-//         //
-//         //         final dateTime = DateTime(
-//         //           date.year,
-//         //           date.month,
-//         //           date.day,
-//         //           time.hour,
-//         //           time.minute,
-//         //         );
-//         //
-//         //         setState(() {
-//         //           _leaveDate = dateTime;
-//         //         });
-//         //
-//         //         travelState.selectLeaveDate(dateTime);
-//         //         // widget.setModalState(() {});
-//         //       },
-//         //       child: Text(as.leave_date, style: const TextStyle(fontSize: 16)),
-//         //     ),
-//         //     if (_leaveDate != null)
-//         //       if (_locale != null && _locale!.isNotEmpty)
-//         //         Text(
-//         //           _leaveDate!.getFormattedDate(_locale!),
-//         //           style: const TextStyle(fontSize: 14),
-//         //         )
-//         //       else
-//         //         const Center(child: CircularProgressIndicator()),
-//         //   ],
-//         // ),
-//       ],
-//     );
-//   }
-// }
 
 Future<TravelStop?> _showTravelStopModal(
   BuildContext context, {
@@ -535,6 +327,7 @@ Future<TravelStop?> _showTravelStopModal(
     showDragHandle: true,
 
     builder: (context) {
+      print('Stop that will be passed to travel stop modal: $stop');
       return _TravelStopModal(
         place: place,
         onStopRemoved: onStopRemoved,
@@ -543,7 +336,9 @@ Future<TravelStop?> _showTravelStopModal(
     },
   );
 
-  if (registeredStop == null && stop == null) {
+  print('Registered Stop: $registeredStop');
+
+  if (registeredStop == null) {
     travelState.resetExperiences();
     debugPrint('No stop was registered. Cleaning ');
   }
@@ -566,10 +361,13 @@ class _TravelStopModalState extends State<_TravelStopModal> {
   @override
   void initState() {
     super.initState();
-    Provider.of<RegisterTravelProvider>(
-      context,
-      listen: false,
-    ).resetExperiences(widget.stop);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<RegisterTravelProvider>(
+        context,
+        listen: false,
+      ).resetExperiences(widget.stop);
+    });
   }
 
   @override
@@ -584,12 +382,14 @@ class _TravelStopModalState extends State<_TravelStopModal> {
     final as = AppLocalizations.of(context)!;
     final placeInfo = widget.place.toString();
 
+    print('Selected experiences: $selectedExperiences');
+
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.all(32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
+        children: [
           /// Text that will display the place's name or position
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -615,7 +415,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
               style: const TextStyle(fontSize: 22),
             ),
 
-          const Padding(padding: EdgeInsets.all(6)),
+          const Padding(padding: EdgeInsets.all(12)),
 
           /// Text to show the "Experiences" label
           Text(
@@ -635,21 +435,78 @@ class _TravelStopModalState extends State<_TravelStopModal> {
                 });
               },
             ),
-          const Padding(padding: EdgeInsets.all(6)),
+          const Padding(padding: EdgeInsets.all(12)),
 
-          /// Date pickers to select the [arriveDate] and [leaveDate]
-          // _DatesPickers(stop: widget.stop),
+          _DatesWidget(),
+
           const Padding(padding: EdgeInsets.all(12)),
 
           if (widget.stop != null)
             _UpdateStopButton(
-              stop: widget.stop!,
-              experiences: selectedExperiences.toExperiencesList(),
+              onPressed: () {
+                travelState.updateTravelStop(stop: widget.stop!);
+
+                if (travelState.hasError) {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return CustomDialog(
+                        title: as.travel_stop,
+                        content: Text(
+                          'An error occurred while trying to update the travel stop',
+                        ),
+                        isError: true,
+                      );
+                    },
+                  );
+
+                  return;
+                }
+
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return CustomDialog(
+                      title: as.travel_stop,
+                      content: Text(as.stop_updated_successfully),
+                    );
+                  },
+                );
+              },
             )
           else
             _RegisterStopButton(
-              place: widget.place,
-              experiences: selectedExperiences.toExperiencesList(),
+              onPressed: () async {
+                if (travelState.stopTimeRange == null) {
+                  await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return CustomDialog(
+                        isError: true,
+                        title: 'Invalid Travel Stop',
+                        content: Text('The Travel Stop Dates are invalid'),
+                      );
+                    },
+                  );
+
+                  return;
+                }
+
+                final stop = travelState.addTravelStop(widget.place);
+
+                /// TODO: ADD MODAL ERROR MESSAGES
+                await showDialog(
+                  context: context,
+                  builder: (context) {
+                    return CustomDialog(
+                      title: as.travel_stop,
+                      content: Text(as.stop_registered_successfully),
+                    );
+                  },
+                );
+
+                Navigator.pop(context, stop);
+              },
             ),
         ],
       ),
@@ -657,11 +514,16 @@ class _TravelStopModalState extends State<_TravelStopModal> {
   }
 }
 
-class _RegisterStopButton extends StatelessWidget {
-  const _RegisterStopButton({required this.experiences, required this.place});
+class _DatesWidget extends StatefulWidget {
+  const _DatesWidget({super.key});
 
-  final List<Experience> experiences;
-  final Place place;
+  @override
+  State<_DatesWidget> createState() => _DatesWidgetState();
+}
+
+class _DatesWidgetState extends State<_DatesWidget> {
+  final _arriveDateController = TextEditingController();
+  final _leaveDateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -670,90 +532,101 @@ class _RegisterStopButton extends StatelessWidget {
       listen: false,
     );
 
+    print('date widgets build called');
+    print('Stop range: ${travelState.stopTimeRange}');
+
+    final locale = Provider.of<UserPreferencesProvider>(
+      context,
+      listen: false,
+    ).languageCode;
+
+    _arriveDateController.text =
+        travelState.stopTimeRange?.start.getFormattedDate(locale) ?? '';
+    _leaveDateController.text =
+        travelState.stopTimeRange?.end.getFormattedDate(locale) ?? '';
+
     final as = AppLocalizations.of(context)!;
 
-    return ElevatedButton(
-      onPressed: () async {
-        if (travelState.arriveDate == null || travelState.leaveDate == null) {
-          await showDialog(
-            context: context,
-            builder: (context) {
-              return CustomDialog(
-                isError: true,
-                title: 'Invalid Travel Stop',
-                content: Text('The Travel Stop Dates are invalid'),
-              );
-            },
-          );
-        }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              as.dates_label,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            ),
 
-        final stop = TravelStop(place: place, experiences: experiences);
+            TextButton(
+              onPressed: () async {
+                final firstDate = travelState.lastPossibleArriveDate;
+                final lastDate = travelState.lastPossibleLeaveDate;
 
-        travelState.addTravelStop(stop);
+                print('First Date: $firstDate');
+                print('Last Date: $lastDate');
 
-        await showDialog(
-          context: context,
-          builder: (context) {
-            return CustomDialog(
-              title: as.travel_stop,
-              content: Text(as.stop_registered_successfully),
-            );
-          },
-        );
+                final range = await showDateRangePicker(
+                  context: context,
+                  firstDate: firstDate!,
+                  lastDate: lastDate!,
+                );
 
-        Navigator.pop(context, stop);
-      },
-      child: Text(as.register_stop),
+                print('New range: $range');
+
+                if (range != null) {
+                  travelState.stopTimeRange = range;
+                  _arriveDateController.text = range.start.getFormattedDate(
+                    locale,
+                  );
+                  _leaveDateController.text = range.end.getFormattedDate(
+                    locale,
+                  );
+                }
+              },
+              child: Text(as.select_dates_label),
+            ),
+          ],
+        ),
+
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32),
+            child: CustomDateRangeWidget(
+              firstDateController: _arriveDateController,
+              lastDateController: _leaveDateController,
+              firstDateLabelText: 'Arrive Date',
+              lastDateLabelText: 'Leave Date',
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
 
-class _UpdateStopButton extends StatelessWidget {
-  const _UpdateStopButton({required this.stop, required this.experiences});
+class _RegisterStopButton extends StatelessWidget {
+  const _RegisterStopButton({required this.onPressed});
 
-  final TravelStop stop;
-  final List<Experience> experiences;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
-    final travelState = Provider.of<RegisterTravelProvider>(
-      context,
-      listen: false,
-    );
-
     final as = AppLocalizations.of(context)!;
 
-    return ElevatedButton(
-      onPressed: () {
-        final newStop = travelState.updateTravelStop(stop: stop);
+    return ElevatedButton(onPressed: onPressed, child: Text(as.register_stop));
+  }
+}
 
-        // if (travelState.hasError) {
-        //   showDialog(
-        //     context: context,
-        //     builder: (context) {
-        //       return CustomDialog(
-        //         title: as.travel_stop,
-        //         content: Text(travelState.error!),
-        //         isError: true,
-        //       );
-        //     },
-        //   );
-        //
-        //   return;
-        // }
+class _UpdateStopButton extends StatelessWidget {
+  const _UpdateStopButton({required this.onPressed});
 
-        showDialog(
-          context: context,
-          builder: (context) {
-            return CustomDialog(
-              title: as.travel_stop,
-              content: Text(as.stop_updated_successfully),
-              isError: true,
-            );
-          },
-        );
-      },
-      child: Text(as.update_stop),
-    );
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+
+    return ElevatedButton(onPressed: onPressed, child: Text(as.update_stop));
   }
 }
