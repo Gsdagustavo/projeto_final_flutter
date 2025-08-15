@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
+import 'data/local/database/database.dart';
 import 'domain/entities/participant.dart';
 import 'domain/entities/review.dart';
 import 'modules/review/review_repository.dart';
@@ -54,7 +55,7 @@ Future<void> main() async {
   await dotenv.load(fileName: '.env');
 
   /// Resets the database
-  // await DBConnection().getDatabase(reset: true);
+  await DBConnection().getDatabase(reset: true);
 
   /// DEBUG
   /// TESTING PURPOSES ONLY
