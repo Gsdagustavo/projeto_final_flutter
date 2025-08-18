@@ -1,8 +1,10 @@
+import 'package:uuid/uuid.dart';
+
 import '../../domain/entities/place.dart';
 import '../local/database/tables/places_table.dart';
 
 class PlaceModel {
-  final int? id;
+  final String id;
   final String? city;
   final String? state;
   final String? country;
@@ -11,7 +13,7 @@ class PlaceModel {
   final double longitude;
 
   const PlaceModel({
-    this.id,
+    required this.id,
     this.city,
     this.state,
     this.country,
@@ -35,6 +37,7 @@ class PlaceModel {
     final location = json['results'][0]['geometry']['location'];
 
     return PlaceModel(
+      id: Uuid().v4(),
       city:
           getComponent(components, 'locality') ??
           getComponent(components, 'administrative_area_level_2'),
@@ -52,7 +55,7 @@ class PlaceModel {
 
   factory PlaceModel.fromMap(Map<String, dynamic> map) {
     return PlaceModel(
-      id: map[PlacesTable.placeId] as int?,
+      id: map[PlacesTable.placeId] as String,
       city: map[PlacesTable.city] as String?,
       state: map[PlacesTable.state] as String?,
       country: map[PlacesTable.country] as String?,
@@ -75,7 +78,7 @@ class PlaceModel {
   }
 
   PlaceModel copyWith({
-    int? id,
+    String? id,
     String? city,
     String? state,
     String? country,

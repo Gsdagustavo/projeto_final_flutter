@@ -4,6 +4,6 @@ import '../../domain/entities/travel_stop.dart';
 
 extension TravelStopExtensions on TravelStop {
   MarkerId toMarkerId() {
-    return MarkerId('${place.latitude},${place.longitude}');
+    return MarkerId('${place.id},${place.id}');
   }
 }

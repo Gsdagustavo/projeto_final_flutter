@@ -1,5 +1,5 @@
 class Place {
-  final int? id;
+  final String id;
   final String? city;
   final String? state;
   final String? country;
@@ -8,7 +8,7 @@ class Place {
   final double longitude;
 
   const Place({
-    this.id,
+    required this.id,
     this.city,
     this.state,
     this.country,
@@ -18,7 +18,7 @@ class Place {
   });
 
   Place copyWith({
-    int? id,
+    String? id,
     String? city,
     String? state,
     String? country,
