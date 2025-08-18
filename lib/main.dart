@@ -11,6 +11,7 @@ import 'modules/review/review_use_cases.dart';
 import 'modules/travel/travel_repository.dart';
 import 'modules/travel/travel_use_cases.dart';
 import 'presentation/providers/login_provider.dart';
+import 'presentation/providers/map_markers_provider.dart';
 import 'presentation/providers/register_travel_provider.dart';
 import 'presentation/providers/review_provider.dart';
 import 'presentation/providers/travel_list_provider.dart';
@@ -35,6 +36,7 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => MapMarkersProvider()),
         ChangeNotifierProvider(
           create: (context) => TravelListProvider(travelUseCases),
         ),
