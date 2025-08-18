@@ -9,9 +9,20 @@ class MapMarkersProvider with ChangeNotifier {
   final _markers = <Marker>{};
 
   void resetMarkers([List<TravelStop>? stops]) {
+    _markers.clear();
+
+    debugPrint('Reset markers called on MapMarkersProvider');
+    debugPrint('Len stops passed to reset markers: ${stops?.length}');
+
     if (stops != null && stops.isNotEmpty) {
       for (final stop in stops) {
-        _markers.add(Marker(markerId: stop.toMarkerId()));
+        _markers.add(
+          Marker(
+            markerId: stop.toMarkerId(),
+            infoWindow: InfoWindow(title: stop.place.toString()),
+            position: LatLng(stop.place.latitude, stop.place.longitude),
+          ),
+        );
       }
     }
 
@@ -28,5 +39,5 @@ class MapMarkersProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  get markers => _markers;
+  Set<Marker> get markers => _markers;
 }

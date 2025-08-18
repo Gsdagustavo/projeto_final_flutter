@@ -199,6 +199,21 @@ class _TravelMapState extends State<TravelMap> {
           );
         },
       ),
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          final markerState = Provider.of<MapMarkersProvider>(
+            context,
+            listen: false,
+          );
+
+          debugPrint('Markers len: ${markerState.markers.length}');
+
+          for (final (idx, marker) in markerState.markers.indexed) {
+            debugPrint("$idx: ${marker.markerId}");
+          }
+        },
+      ),
     );
   }
 }
@@ -310,15 +325,6 @@ class _TravelStopModalState extends State<_TravelStopModal> {
     }
 
     final stop = travelState.addTravelStop(widget.place);
-
-    Provider.of<MapMarkersProvider>(context, listen: false).addMarker(
-      Marker(
-        markerId: stop.toMarkerId(),
-        position: LatLng(stop.place.latitude, stop.place.longitude),
-        infoWindow: InfoWindow(title: place.toString()),
-        onTap: () => _onMarkerTap(stop, context),
-      ),
-    );
 
     print('new stop: $stop');
 
