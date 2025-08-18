@@ -262,20 +262,24 @@ class RegisterTravelProvider with ChangeNotifier {
   /// [values] being whether or not the experience is in the [experiences] list
   ///
   /// Otherwise, set all [values] to [false] (no experience selected)
-  void resetExperiences([TravelStop? stop]) {
+  Map<Experience, bool> resetExperiences([TravelStop? stop]) {
     var selectedExperiences = <Experience, bool>{};
 
     if (stop != null &&
         stop.experiences != null &&
         stop.experiences!.isNotEmpty) {
+      debugPrint('Stop has experiences. Setting all to their values');
       for (final exp in Experience.values) {
         selectedExperiences[exp] = stop.experiences!.contains(exp);
       }
     } else {
+      debugPrint('Stop has no experiences. Setting all to false');
       selectedExperiences = {for (final e in Experience.values) e: false};
     }
 
     _selectedExperiences = selectedExperiences;
+    // notifyListeners();
+    return _selectedExperiences;
   }
 
   /// Returns the [TextEditingController] for the travel title
@@ -379,5 +383,34 @@ class RegisterTravelProvider with ChangeNotifier {
     print('Set stop time range called. New value: $value');
     _stopTimeRange = value;
     notifyListeners();
+  }
+
+  void resetStopTimeRangeDates([TravelStop? stop]) {
+    if (stop != null) {
+      _stopTimeRange = DateTimeRange(
+        start: stop.arriveDate!,
+        end: stop.leaveDate!,
+      );
+
+      return;
+    }
+
+    _stopTimeRange = null;
+  }
+
+  void resetStopExperiences([TravelStop? stop]) {
+    _selectedExperiences.clear();
+
+    if (stop == null || stop.experiences == null) {
+      debugPrint(
+        'Stop passed to reset stop experience is null. Setting all values to false',
+      );
+      _selectedExperiences = {for (final e in Experience.values) e: false};
+      return;
+    }
+
+    _selectedExperiences = {
+      for (final e in Experience.values) e: stop.experiences!.contains(e),
+    };
   }
 }
