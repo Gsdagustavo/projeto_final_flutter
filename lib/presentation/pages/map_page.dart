@@ -132,7 +132,7 @@ class _TravelMapState extends State<TravelMap> {
 
     final areStopsValid = Provider.of<RegisterTravelProvider>(
       context,
-      listen: false,
+      listen: true,
     ).areStopsValid;
 
     return Scaffold(
@@ -214,10 +214,7 @@ Future<TravelStop?> _showTravelStopModal(
   );
 
   travelState.resetStopExperiences(stop);
-
-  debugPrint('Is stop null: ${stop == null}');
-
-  debugPrint('Selected experiences: ${travelState.selectedExperiences}');
+  travelState.resetStopTimeRangeDates(stop);
 
   debugPrint('travel stop modal is being shown.\nstop: $stop');
 
@@ -226,7 +223,7 @@ Future<TravelStop?> _showTravelStopModal(
     showDragHandle: true,
 
     builder: (context) {
-      // print('Stop that will be passed to travel stop modal: $stop');
+      print('Stop that will be passed to travel stop modal: $stop');
       return _TravelStopModal(place: place, stop: stop);
     },
   );
@@ -237,6 +234,8 @@ Future<TravelStop?> _showTravelStopModal(
 }
 
 Future<void> _onMarkerTap(TravelStop stop, BuildContext context) async {
+  debugPrint('Stop passed to onMarkerTap: $stop');
+
   final as = AppLocalizations.of(context)!;
 
   final Place place;
@@ -337,13 +336,42 @@ class _TravelStopModalState extends State<_TravelStopModal> {
     Navigator.pop(context, stop);
   }
 
-  void onStopUpdated(TravelStop stop) {
+  void onStopUpdated(TravelStop stop) async {
     final travelState = Provider.of<RegisterTravelProvider>(
       context,
       listen: false,
     );
 
     travelState.updateTravelStop(stop: stop);
+
+    if (travelState.hasError) {
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return CustomDialog(
+            title: 'Error',
+            content: Text(
+              'An error has occurred while trying to update the travel stop',
+            ),
+            isError: true,
+          );
+        },
+      );
+
+      return;
+    }
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return CustomDialog(
+          title: 'Travel Stop',
+          content: Text('The travel stop was updated successfully'),
+        );
+      },
+    );
+
+    Navigator.pop(context);
   }
 
   @override
@@ -359,10 +387,6 @@ class _TravelStopModalState extends State<_TravelStopModal> {
     final placeInfo = widget.place.toString();
     final useStop = widget.stop;
     final selectedExperiences = travelState.selectedExperiences;
-
-    travelState.resetStopTimeRangeDates(widget.stop);
-
-    debugPrint('Experiences: $selectedExperiences');
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),

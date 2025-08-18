@@ -41,6 +41,8 @@ class RegisterTravelProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _areStopsValid = false;
+
   /// A [TextEditingController] to be assigned to the travel title
   final _travelTitleController = TextEditingController();
 
@@ -101,7 +103,7 @@ class RegisterTravelProvider with ChangeNotifier {
       return;
     }
 
-    if (_stops.length < 2) {
+    if (_areStopsValid) {
       _errorMsg = 'At least 2 stops must be registered';
       _isLoading = false;
       notifyListeners();
@@ -159,10 +161,11 @@ class RegisterTravelProvider with ChangeNotifier {
     _stopTimeRange = null;
 
     debugPrint('Travel stop ${stop.toString()} added');
-    notifyListeners();
 
     print('STOP TIME RANGE AFTER ADDING: $_stopTimeRange');
 
+    _areStopsValid = _stops.length >= 2;
+    notifyListeners();
     return stop;
   }
 
@@ -170,20 +173,33 @@ class RegisterTravelProvider with ChangeNotifier {
     _stops.remove(stop);
     resetExperiences();
     debugPrint('Stop $stop removed from travel stops list');
+    _areStopsValid = _stops.length >= 2;
     notifyListeners();
   }
 
-  TravelStop updateTravelStop({required TravelStop stop}) {
-    final newStop = stop.copyWith(
+  void updateTravelStop({required TravelStop stop}) {
+    debugPrint('Stops len: ${_stops.length}');
+
+    stop = stop.copyWith(
       experiences: _selectedExperiences.toExperiencesList(),
       arriveDate: _stopTimeRange!.start,
       leaveDate: _stopTimeRange!.end,
     );
 
-    _stops[_stops.indexOf(stop)] = newStop;
+    debugPrint('Stop passed to UpdateTravelStop: $stop');
 
+    debugPrint('Contains: ${_stops.contains(stop)}');
+
+    final idx = _stops.indexOf(stop);
+
+    debugPrint('Index of stop: $idx');
+
+    // _stops.removeAt(idx);
+    // _stops.add(newStop);
+
+    _areStopsValid = _stops.length >= 2;
     notifyListeners();
-    return newStop;
+    // return newStop;
   }
 
   /// Sets all input fields to their default values and cleanses all lists
@@ -319,17 +335,11 @@ class RegisterTravelProvider with ChangeNotifier {
     _selectedExperiences = value;
   }
 
-  bool get areStopsValid {
-    return _stops.length >= 2;
-  }
-
   File? get profilePictureFile => _profilePictureFile;
 
   bool get isTravelValid {
     final isValid =
-        areStopsValid && _travelUseCases.isParticipantInfoValid(participants);
-
-    // debugPrint('Is travel valid: $isValid');
+        _areStopsValid && _travelUseCases.isParticipantInfoValid(participants);
 
     return isValid;
   }
@@ -413,4 +423,6 @@ class RegisterTravelProvider with ChangeNotifier {
       for (final e in Experience.values) e: stop.experiences!.contains(e),
     };
   }
+
+  bool get areStopsValid => _areStopsValid;
 }

@@ -9,8 +9,8 @@ import '../../core/extensions/string_extensions.dart';
 import '../../domain/entities/enums.dart';
 import '../../l10n/app_localizations.dart';
 import '../extensions/enums_extensions.dart';
+import '../providers/map_markers_provider.dart';
 import '../providers/register_travel_provider.dart';
-import '../providers/travel_list_provider.dart';
 import '../providers/user_preferences_provider.dart';
 import '../widgets/custom_date_range_widget.dart';
 import '../widgets/custom_dialog.dart';
@@ -701,10 +701,15 @@ class _RegisterTravelButton extends StatelessWidget {
               },
             );
 
-            await Provider.of<TravelListProvider>(
+            Provider.of<MapMarkersProvider>(
               context,
               listen: false,
-            ).update();
+            ).resetMarkers();
+
+            // await Provider.of<TravelListProvider>(
+            //   context,
+            //   listen: false,
+            // ).update();
           },
           child: Text(as.title_register_travel),
         );
