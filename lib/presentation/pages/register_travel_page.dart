@@ -704,7 +704,7 @@ class _RegisterTravelButton extends StatelessWidget {
             Provider.of<MapMarkersProvider>(
               context,
               listen: false,
-            ).resetMarkers();
+            ).resetMarkers(context);
 
             // await Provider.of<TravelListProvider>(
             //   context,
