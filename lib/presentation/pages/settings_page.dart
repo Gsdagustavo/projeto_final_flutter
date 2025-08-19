@@ -2,13 +2,13 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/extensions/date_extensions.dart';
 import '../../l10n/app_localizations.dart';
 import '../../services/file_service.dart';
 import '../../services/user_preferences_service.dart';
-
 import '../providers/login_provider.dart';
 import '../providers/user_preferences_provider.dart';
 import '../widgets/custom_dialog.dart';
@@ -180,12 +180,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             return;
                           }
 
-                          unawaited(
-                            Navigator.pushReplacementNamed(
-                              context,
-                              AuthPageSwitcher.routeName,
-                            ),
-                          );
+                          context.go(AuthPageSwitcher.routeName);
                         },
                         child: Row(
                           spacing: 10,

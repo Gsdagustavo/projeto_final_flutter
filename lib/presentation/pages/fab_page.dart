@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/bottom_navigation_bar.dart';
 import '../widgets/my_app_bar.dart';
 
 /// A Fab page util that is used in many pages of the app
@@ -29,7 +28,6 @@ class FabPage extends StatelessWidget {
     return Scaffold(
       appBar: MyAppBar(title: title),
       body: body,
-      bottomNavigationBar: const MyBottomNavigationBar(),
       floatingActionButton: floatingActionButton,
     );
   }

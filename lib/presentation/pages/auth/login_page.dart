@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
@@ -90,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
 
-    unawaited(Navigator.pushReplacementNamed(context, HomePage.routeName));
+    context.go(HomePage.routeName);
   }
 
   void _togglePasswordVisibility() {
@@ -190,10 +191,7 @@ class _LoginPageState extends State<LoginPage> {
                     TextButton(
                       child: Text(as.forgot_your_password),
                       onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          ForgotPasswordPage.routeName,
-                        );
+                        context.go(ForgotPasswordPage.routeName);
                       },
                     ),
                   ],

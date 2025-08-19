@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/constants/app_routes.dart';
 import '../../core/constants/themes.dart';
 import '../../l10n/app_localizations.dart';
 import '../providers/user_preferences_provider.dart';
+import '../util/router.dart';
 
 /// This widget is the [MaterialApp] of the application, which contains all
 /// important info about layout, theme, routes, localization, etc.
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
 
     debugPrint('Is dark mode: $isDarkMode');
 
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Roam',
       debugShowCheckedModeBanner: false,
 
@@ -35,8 +35,7 @@ class MyApp extends StatelessWidget {
       darkTheme: getTravelAppDarkTheme(),
       themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
 
-      routes: AppRoutes().appRoutes,
-      initialRoute: AppRoutes.initialRoute,
+      routerConfig: router,
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
@@ -134,9 +135,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
           ElevatedButton(
             onPressed: () {
-              unawaited(
-                Navigator.pushReplacementNamed(context, HomePage.routeName),
-              );
+              context.go(HomePage.routeName);
             },
             child: Text(as.yes),
           ),

@@ -31,7 +31,6 @@ class HomePage extends StatelessWidget {
 
     return FabPage(
       title: as.title_home,
-
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.update),
         onPressed: () async {
@@ -110,17 +109,17 @@ class _TravelWidget extends StatelessWidget {
     return InkWell(
       onTap: () {
         debugPrint('Travel widget clicked');
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return TravelRoutePage(
-                stops: travel.stops,
-                travelTitle: travel.travelTitle,
-              );
-            },
-          ),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) {
+        //       return TravelRoutePage(
+        //         stops: travel.stops,
+        //         travelTitle: travel.travelTitle,
+        //       );
+        //     },
+        //   ),
+        // );
       },
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,

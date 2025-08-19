@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +33,6 @@ class RegisterTravelPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return FabPage(
       title: AppLocalizations.of(context)!.title_register_travel,
-
       body: Padding(
         padding: const EdgeInsets.all(32.0),
         child: SingleChildScrollView(
@@ -651,7 +651,7 @@ class _TravelMapWidget extends StatelessWidget {
                     return;
                   }
 
-                  unawaited(Navigator.pushNamed(context, TravelMap.routeName));
+                  context.go(TravelMap.routeName);
                 },
                 child: Text(
                   as.add_stops_for_your_travel,
@@ -745,7 +745,7 @@ class _TravelStopListItem extends StatelessWidget {
         await showTravelStopModal(
           context,
           LatLng(stop.place.latitude, stop.place.longitude),
-          stop
+          stop,
         );
       },
     );

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/extensions/travel_stop_extensions.dart';
 import '../../domain/entities/place.dart';
 import '../../domain/entities/travel.dart';
 import '../../domain/entities/travel_stop.dart';

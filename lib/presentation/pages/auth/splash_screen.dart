@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/login_provider.dart';
@@ -15,7 +16,7 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   /// The route of the page
-  static const String routeName = '/splashScreen';
+  static const String routeName = '/splash';
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -32,9 +33,10 @@ class _SplashScreenState extends State<SplashScreen> {
         listen: false,
       ).loggedUser;
       if (user == null) {
-        Navigator.pushReplacementNamed(context, AuthPageSwitcher.routeName);
+        context.go(AuthPageSwitcher.routeName);
       } else {
-        Navigator.pushReplacementNamed(context, HomePage.routeName);
+        // Navigator.pushReplacementNamed(context, HomePage.routeName);
+        context.go(HomePage.routeName);
       }
     });
   }
