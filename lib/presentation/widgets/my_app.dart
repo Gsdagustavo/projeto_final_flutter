@@ -15,10 +15,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Provider.of<UserPreferencesProvider>(context).isDarkMode;
+
     final languageCode = Provider.of<UserPreferencesProvider>(
       context,
     ).languageCode;
     final locale = Locale(languageCode);
+
+    debugPrint('Is dark mode: $isDarkMode');
 
     return MaterialApp(
       title: 'Roam',
@@ -28,8 +31,8 @@ class MyApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       locale: locale,
 
-      theme: Themes.lightTheme,
-      darkTheme: Themes.darkTheme,
+      theme: getTravelAppTheme(),
+      darkTheme: getTravelAppDarkTheme(),
       themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
 
       routes: AppRoutes().appRoutes,
