@@ -130,14 +130,14 @@ class TravelRepositoryImpl implements TravelRepository {
     debugPrint('Place map: $placeMap');
 
     /// Insert into [PlacesTable]
-    final placeId = await txn.insert(PlacesTable.tableName, placeMap);
+    await txn.insert(PlacesTable.tableName, placeMap);
 
     final stopMap = stop.toMap();
 
     debugPrint('Stop map: $stopMap');
 
     stopMap[TravelStopTable.travelId] = travelId;
-    stopMap[TravelStopTable.placeId] = placeId;
+    stopMap[TravelStopTable.placeId] = stop.place.id;
 
     /// Insert stop into [TravelStopsTable]
     final stopId = await txn.insert(TravelStopTable.tableName, stopMap);

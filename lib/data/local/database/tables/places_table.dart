@@ -12,7 +12,7 @@ abstract final class PlacesTable {
   static const String createTable =
       '''
       CREATE TABLE $tableName(
-        $placeId INTEGER PRIMARY KEY AUTOINCREMENT, 
+        $placeId TEXT PRIMARY KEY, 
         $city TEXT,
         $state TEXT,
         $country TEXT,
