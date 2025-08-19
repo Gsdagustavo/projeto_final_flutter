@@ -2,16 +2,19 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/extensions/date_extensions.dart';
 import '../../core/extensions/string_extensions.dart';
 import '../../domain/entities/enums.dart';
+import '../../domain/entities/travel_stop.dart';
 import '../../l10n/app_localizations.dart';
 import '../extensions/enums_extensions.dart';
 import '../providers/map_markers_provider.dart';
 import '../providers/register_travel_provider.dart';
 import '../providers/user_preferences_provider.dart';
+import '../scripts/scripts.dart';
 import '../widgets/custom_date_range_widget.dart';
 import '../widgets/custom_dialog.dart';
 import 'fab_page.dart';
@@ -658,7 +661,93 @@ class _TravelMapWidget extends StatelessWidget {
             ),
           ],
         ),
+
+        Padding(padding: EdgeInsets.all(16)),
+
+        TravelStopsWidget(),
       ],
+    );
+  }
+}
+
+class TravelStopsWidget extends StatelessWidget {
+  const TravelStopsWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<RegisterTravelProvider>(
+      builder: (_, state, __) {
+        final stops = state.stops;
+
+        if (stops.isEmpty) {
+          return Center(child: Text('No stops registered'));
+        }
+
+        return SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(),
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemCount: stops.length,
+            separatorBuilder: (context, index) {
+              return Padding(padding: EdgeInsets.all(12));
+            },
+
+            itemBuilder: (context, index) {
+              final stop = stops[index];
+
+              return _TravelStopListItem(stop: stop, index: index);
+            },
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _TravelStopListItem extends StatelessWidget {
+  const _TravelStopListItem({
+    super.key,
+    required this.stop,
+    required this.index,
+  });
+
+  final TravelStop stop;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      key: Key(stop.place.toString()),
+      title: Text(stop.place.toString()),
+      leading: Text('${index + 1}. '),
+      tileColor: Theme.of(context).cardColor,
+      contentPadding: EdgeInsets.all(12),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      trailing: IconButton(
+        onPressed: () {
+          final travelState = Provider.of<RegisterTravelProvider>(
+            context,
+            listen: false,
+          );
+
+          final markerState = Provider.of<MapMarkersProvider>(
+            context,
+            listen: false,
+          );
+
+          travelState.removeTravelStop(stop);
+          markerState.removeMarker(stop);
+        },
+        icon: Icon(Icons.delete),
+      ),
+
+      onTap: () async {
+        await showTravelStopModal(
+          context,
+          LatLng(stop.place.latitude, stop.place.longitude),
+          stop
+        );
+      },
     );
   }
 }
@@ -717,25 +806,3 @@ class _RegisterTravelButton extends StatelessWidget {
     );
   }
 }
-
-//
-// class _TravelStopWidget extends StatelessWidget {
-//   const _TravelStopWidget({required this.travelStop});
-//
-//   final TravelStop travelStop;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         Row(
-//           children: [
-//             Icon(Icons.pin_drop, color: Colors.red),
-//             SizedBox(height: 50, child: Text(travelStop.place.toString())),
-//           ],
-//         ),
-//       ],
-//     );
-//   }
-// }
-//
