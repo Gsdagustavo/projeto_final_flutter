@@ -95,21 +95,7 @@ class _TravelMapState extends State<TravelMap> {
     }
 
     /// Shows the modal to register the stop
-    final registeredStop = await showTravelStopModal(context, position);
-
-    print('Registered Stop: $registeredStop');
-
-    /// If the stop was registered, adds the marker to the list
-    if (registeredStop != null) {
-      Provider.of<MapMarkersProvider>(context, listen: false).addMarker(
-        Marker(
-          markerId: registeredStop.toMarkerId(),
-          position: position,
-          infoWindow: InfoWindow(title: place.toString()),
-          onTap: () => onMarkerTap(registeredStop, position, context),
-        ),
-      );
-    }
+    await showTravelStopModal(context, position);
   }
 
   void _onMapCreated(GoogleMapController controller) {

@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/extensions/date_extensions.dart';
+import '../../core/extensions/travel_stop_extensions.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/place.dart';
 import '../../domain/entities/travel_stop.dart';
@@ -21,7 +22,7 @@ void onMarkerTap(TravelStop stop, LatLng position, BuildContext context) async {
   await showTravelStopModal(context, position, stop);
 }
 
-Future<TravelStop?> showTravelStopModal(
+Future<void> showTravelStopModal(
   BuildContext context,
   LatLng position, [
   TravelStop? stop,
@@ -71,9 +72,19 @@ Future<TravelStop?> showTravelStopModal(
     },
   );
 
-  print('Registered Stop: $registeredStop');
+  // print('Registered Stop: $registeredStop');
 
-  return registeredStop;
+  /// If the stop was registered, adds the marker to the list
+  if (registeredStop != null) {
+    Provider.of<MapMarkersProvider>(context, listen: false).addMarker(
+      Marker(
+        markerId: registeredStop.toMarkerId(),
+        position: position,
+        infoWindow: InfoWindow(title: place.toString()),
+        onTap: () => onMarkerTap(registeredStop, position, context),
+      ),
+    );
+  }
 }
 
 class _TravelStopModal extends StatefulWidget {
@@ -123,6 +134,10 @@ class _TravelStopModalState extends State<_TravelStopModal> {
       return;
     }
 
+    debugPrint('Stop in travel stop modal: ${widget.stop}');
+    debugPrint('Place in travel stop modal: ${widget.place}');
+
+    /// TODO: FIX: PASS STOP INSTEAD OF PLACE TO REGISTER A STOP
     final stop = travelState.addTravelStop(widget.place);
 
     print('new stop: $stop');
@@ -146,6 +161,8 @@ class _TravelStopModalState extends State<_TravelStopModal> {
       context,
       listen: false,
     );
+
+    debugPrint('Stop in travel stop modal ON STOP UPDATED: ${stop}');
 
     travelState.updateTravelStop(stop: stop);
 

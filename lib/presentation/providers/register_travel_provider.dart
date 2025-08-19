@@ -31,7 +31,7 @@ class RegisterTravelProvider with ChangeNotifier {
     _init();
   }
 
-  _init() async {
+  void _init() async {
     _isLoading = true;
     notifyListeners();
 
@@ -103,7 +103,7 @@ class RegisterTravelProvider with ChangeNotifier {
       return;
     }
 
-    if (_areStopsValid) {
+    if (!_areStopsValid) {
       _errorMsg = 'At least 2 stops must be registered';
       _isLoading = false;
       notifyListeners();
@@ -134,6 +134,7 @@ class RegisterTravelProvider with ChangeNotifier {
 
     _errorMsg = null;
     _isLoading = false;
+    _areStopsValid = false;
 
     resetForms();
   }
@@ -180,22 +181,14 @@ class RegisterTravelProvider with ChangeNotifier {
   void updateTravelStop({required TravelStop stop}) {
     debugPrint('Stops len: ${_stops.length}');
 
+    debugPrint('Stop passed to UpdateTravelStop: $stop');
+    debugPrint('Contains: ${_stops.contains(stop)}');
+
     stop = stop.copyWith(
       experiences: _selectedExperiences.toExperiencesList(),
       arriveDate: _stopTimeRange!.start,
       leaveDate: _stopTimeRange!.end,
     );
-
-    debugPrint('Stop passed to UpdateTravelStop: $stop');
-
-    debugPrint('Contains: ${_stops.contains(stop)}');
-
-    final idx = _stops.indexOf(stop);
-
-    debugPrint('Index of stop: $idx');
-
-    // _stops.removeAt(idx);
-    // _stops.add(newStop);
 
     _areStopsValid = _stops.length >= 2;
     notifyListeners();
