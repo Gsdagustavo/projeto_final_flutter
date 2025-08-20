@@ -128,7 +128,7 @@ class _RegisterPageState extends State<RegisterPage> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
+              context.pop();
             },
             child: Text(as.no),
           ),

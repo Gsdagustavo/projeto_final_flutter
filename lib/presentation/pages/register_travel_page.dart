@@ -295,11 +295,13 @@ class _ParticipantsWidget extends StatelessWidget {
               as.participants,
               style: Theme.of(context).textTheme.displayMedium,
             ),
-            TextButton(
-              child: Text(as.register_participant),
-              onPressed: () async {
-                await _showParticipantRegisterModal(context, travelState);
-              },
+            Expanded(
+              child: TextButton(
+                child: Text(as.register_participant),
+                onPressed: () async {
+                  await _showParticipantRegisterModal(context, travelState);
+                },
+              ),
             ),
           ],
         ),
@@ -415,13 +417,13 @@ class _ModalState extends State<_Modal> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           TextButton(
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () => context.pop(),
                             child: Text(as.cancel),
                           ),
                           ElevatedButton(
                             onPressed: () async {
                               await widget.travelState.addParticipant();
-                              Navigator.pop(context);
+                              context.pop();
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(as.participant_registered),
@@ -540,11 +542,11 @@ class _ListParticipants extends StatelessWidget {
                         actions: [
                           TextButton(
                             child: Text(as.cancel),
-                            onPressed: () => Navigator.pop(context, false),
+                            onPressed: () => context.pop(false),
                           ),
                           TextButton(
                             child: Text(as.remove),
-                            onPressed: () => Navigator.pop(context, true),
+                            onPressed: () => context.pop(true),
                           ),
                         ],
                       );
@@ -600,14 +602,13 @@ class _TravelMapWidget extends StatelessWidget {
     final as = AppLocalizations.of(context)!;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               as.travel_map,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              style: Theme.of(context).textTheme.displayMedium,
             ),
             const Padding(padding: EdgeInsets.all(10)),
 
@@ -619,13 +620,14 @@ class _TravelMapWidget extends StatelessWidget {
                     listen: false,
                   );
 
+                  final as = AppLocalizations.of(context)!;
+
                   if (travelState.travelTimeRange == null) {
                     await showDialog(
                       context: context,
                       builder: (context) {
                         return CustomDialog(
-                          /// TODO: intl
-                          title: 'Warning',
+                          title: as.warning,
                           content: Text(
                             'You must select the Travel Date Range first!',
                           ),

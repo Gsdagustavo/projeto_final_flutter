@@ -352,7 +352,7 @@ class _ReviewModalState extends State<ReviewModal> {
               children: [
                 IconButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    context.pop();
                   },
                   icon: Icon(Icons.close),
                 ),
