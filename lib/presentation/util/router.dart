@@ -12,7 +12,7 @@ import '../pages/register_travel_page.dart';
 import '../pages/settings_page.dart';
 
 final router = GoRouter(
-  initialLocation: '/home',
+  initialLocation: SplashScreen.routeName,
 
   routes: [
     StatefulShellRoute.indexedStack(
@@ -24,8 +24,7 @@ final router = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              name: 'home',
-              path: '/home',
+              path: '/',
               pageBuilder: (context, state) =>
                   NoTransitionPage(child: const HomePage()),
             ),
@@ -35,7 +34,6 @@ final router = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              name: 'registerTravel',
               path: '/registerTravel',
               pageBuilder: (context, state) =>
                   NoTransitionPage(child: const RegisterTravelPage()),
@@ -46,7 +44,6 @@ final router = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              name: 'settings',
               path: '/settings',
               pageBuilder: (context, state) =>
                   NoTransitionPage(child: const SettingsPage()),
@@ -57,49 +54,43 @@ final router = GoRouter(
     ),
 
     GoRoute(
-      name: 'travelMap',
       path: '/travelMap',
 
       pageBuilder: (context, state) => NoTransitionPage(child: TravelMap()),
     ),
 
     GoRoute(
-      name: 'authPageSwitcher',
       path: '/authPageSwitcher',
       pageBuilder: (context, state) =>
           NoTransitionPage(child: const AuthPageSwitcher()),
 
       routes: [
         GoRoute(
-          name: 'login',
           path: '/login',
 
           pageBuilder: (context, state) => NoTransitionPage(child: LoginPage()),
         ),
 
         GoRoute(
-          name: 'register',
           path: '/register',
 
           pageBuilder: (context, state) =>
               NoTransitionPage(child: RegisterPage()),
         ),
-
-        GoRoute(
-          name: 'forgotPassword',
-          path: '/forgotPassword',
-
-          pageBuilder: (context, state) =>
-              NoTransitionPage(child: ForgotPasswordPage()),
-        ),
       ],
     ),
 
     GoRoute(
-      name: 'splash',
       path: '/splash',
       pageBuilder: (context, state) =>
           NoTransitionPage(child: const SplashScreen()),
+    ),
+
+    GoRoute(
+      path: ForgotPasswordPage.routeName,
+
+      pageBuilder: (context, state) =>
+          NoTransitionPage(child: ForgotPasswordPage()),
     ),
   ],
 );

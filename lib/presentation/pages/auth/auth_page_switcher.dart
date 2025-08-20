@@ -50,6 +50,7 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            /// TODO: intl
             _buildSwitcherOption('Login', 0),
             Padding(padding: EdgeInsets.all(12)),
             _buildSwitcherOption(AppLocalizations.of(context)!.register, 1),

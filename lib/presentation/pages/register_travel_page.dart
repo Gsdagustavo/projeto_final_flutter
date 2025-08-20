@@ -14,6 +14,7 @@ import '../../l10n/app_localizations.dart';
 import '../extensions/enums_extensions.dart';
 import '../providers/map_markers_provider.dart';
 import '../providers/register_travel_provider.dart';
+import '../providers/travel_list_provider.dart';
 import '../providers/user_preferences_provider.dart';
 import '../scripts/scripts.dart';
 import '../widgets/custom_date_range_widget.dart';
@@ -107,6 +108,7 @@ class _TravelTitleTextField extends StatelessWidget {
 
   String? validator(String? input) {
     if (input == null || input.isEmpty || input.length < 3) {
+      /// TODO: add intl
       return 'Invalid Travel Title';
     }
 
@@ -123,7 +125,7 @@ class _TravelTitleTextField extends StatelessWidget {
       children: [
         Text(
           as.travel_title_label,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          style: Theme.of(context).textTheme.displayMedium,
         ),
         const Padding(padding: EdgeInsets.all(12)),
         Form(
@@ -133,12 +135,7 @@ class _TravelTitleTextField extends StatelessWidget {
             validator: validator,
             controller: travelState.travelTitleController,
             onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
-            decoration: InputDecoration(
-              label: Text(as.travel_title_label),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
+            decoration: InputDecoration(label: Text(as.travel_title_label)),
           ),
         ),
       ],
@@ -159,14 +156,19 @@ class _TransportTypesDropdownButton extends StatelessWidget {
       children: [
         Text(
           as.transport_type_label,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          style: Theme.of(context).textTheme.displayMedium,
         ),
         const Padding(padding: EdgeInsets.all(12)),
 
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            border: BoxBorder.all(color: Theme.of(context).hintColor, width: 1),
+            border: BoxBorder.all(
+              color: Theme.of(
+                context,
+              ).inputDecorationTheme.enabledBorder!.borderSide.color,
+              width: 0.5,
+            ),
           ),
 
           child: DropdownButton<TransportType>(
@@ -235,7 +237,7 @@ class _DateTextButtonsState extends State<_DateTextButtons> {
           children: [
             Text(
               as.dates_label,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              style: Theme.of(context).textTheme.displayMedium,
             ),
 
             TextButton(
@@ -263,6 +265,8 @@ class _DateTextButtonsState extends State<_DateTextButtons> {
             child: CustomDateRangeWidget(
               firstDateController: _startDateController,
               lastDateController: _endDateController,
+
+              /// TODO: intl
               firstDateLabelText: 'First Date',
               lastDateLabelText: 'Last Date',
             ),
@@ -289,16 +293,10 @@ class _ParticipantsWidget extends StatelessWidget {
           children: [
             Text(
               as.participants,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              style: Theme.of(context).textTheme.displayMedium,
             ),
             TextButton(
-              child: Text(
-                as.register_participant,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-              ),
+              child: Text(as.register_participant),
               onPressed: () async {
                 await _showParticipantRegisterModal(context, travelState);
               },
@@ -398,9 +396,6 @@ class _ModalState extends State<_Modal> {
                         decoration: InputDecoration(
                           hintText: as.name,
                           prefixIcon: const Icon(Icons.person),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
                         ),
                       ),
                       const Padding(padding: EdgeInsets.all(16)),
@@ -412,9 +407,6 @@ class _ModalState extends State<_Modal> {
                         decoration: InputDecoration(
                           hintText: as.age,
                           prefixIcon: const Icon(Icons.timer),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
                         ),
                       ),
                       const Padding(padding: EdgeInsets.all(16)),
@@ -482,14 +474,7 @@ class _ModalState extends State<_Modal> {
                   radius: 20,
                   child: CircleAvatar(
                     radius: 20,
-                    backgroundColor: Colors.white,
-                    child: Center(
-                      child: Icon(
-                        Icons.edit,
-                        size: 32,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
+                    child: Center(child: Icon(Icons.edit, size: 32)),
                   ),
                 ),
               ),
@@ -639,6 +624,7 @@ class _TravelMapWidget extends StatelessWidget {
                       context: context,
                       builder: (context) {
                         return CustomDialog(
+                          /// TODO: intl
                           title: 'Warning',
                           content: Text(
                             'You must select the Travel Date Range first!',
@@ -653,10 +639,7 @@ class _TravelMapWidget extends StatelessWidget {
 
                   context.go(TravelMap.routeName);
                 },
-                child: Text(
-                  as.add_stops_for_your_travel,
-                  textAlign: TextAlign.center,
-                ),
+                child: Text(as.add_stops_for_your_travel),
               ),
             ),
           ],
@@ -680,6 +663,7 @@ class TravelStopsWidget extends StatelessWidget {
         final stops = state.stops;
 
         if (stops.isEmpty) {
+          /// TODO: intl
           return Center(child: Text('No stops registered'));
         }
 
@@ -795,10 +779,10 @@ class _RegisterTravelButton extends StatelessWidget {
               listen: false,
             ).resetMarkers(context);
 
-            // await Provider.of<TravelListProvider>(
-            //   context,
-            //   listen: false,
-            // ).update();
+            await Provider.of<TravelListProvider>(
+              context,
+              listen: false,
+            ).update();
           },
           child: Text(as.title_register_travel),
         );

@@ -28,6 +28,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   String? _emailValidator(String? email) {
     if (email == null || email.isEmpty) {
+      /// TODO: intl
       return 'Invalid Email';
     }
 
@@ -77,10 +78,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     keyboardType: TextInputType.emailAddress,
                     onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
                     decoration: InputDecoration(
+                      /// TODO: intl
                       hintText: 'Email',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
                       prefixIcon: const Icon(Icons.email),
                     ),
                   ),

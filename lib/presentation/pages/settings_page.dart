@@ -133,10 +133,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
                 Text(
                   as.account,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                  ),
+                  style: Theme.of(context).textTheme.displayMedium,
                 ),
 
                 Padding(padding: EdgeInsets.all(6)),
@@ -148,15 +145,15 @@ class _SettingsPageState extends State<SettingsPage> {
                     children: [
                       Text(
                         'Email: ${user?.email ?? 'N/A'}',
-                        style: const TextStyle(fontSize: 16),
+                        style: Theme.of(context).textTheme.bodyLarge,
                       ),
                       Text(
                         '${as.account_creation}: $formattedCreationTime',
-                        style: const TextStyle(fontSize: 16),
+                        style: Theme.of(context).textTheme.bodyLarge,
                       ),
                       Text(
                         '${as.last_sign_in}: $formattedSignInTime',
-                        style: const TextStyle(fontSize: 16),
+                        style: Theme.of(context).textTheme.bodyLarge,
                       ),
 
                       Padding(padding: EdgeInsets.all(6)),
@@ -205,10 +202,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
                 Text(
                   as.language,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                  ),
+                  style: Theme.of(context).textTheme.displayMedium,
                 ),
 
                 const Padding(padding: EdgeInsets.all(6)),

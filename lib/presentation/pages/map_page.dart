@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../../domain/entities/place.dart';
 import '../../domain/entities/travel.dart';
 import '../../domain/entities/travel_stop.dart';
 import '../../l10n/app_localizations.dart';
@@ -10,7 +10,6 @@ import '../../services/location_service.dart';
 import '../providers/map_markers_provider.dart';
 import '../providers/register_travel_provider.dart';
 import '../scripts/scripts.dart';
-import '../widgets/custom_dialog.dart';
 import '../widgets/my_app_bar.dart';
 
 /// This is a map widget that will be used to register a [TravelStop] and to
@@ -67,31 +66,10 @@ class _TravelMapState extends State<TravelMap> {
   ///
   /// [position]: the position where the user pressed
   void _onLongPress(LatLng position) async {
-    final as = AppLocalizations.of(context)!;
-
     /// Animates the camera towards the position
     await _mapController?.animateCamera(
       CameraUpdate.newLatLngZoom(position, _defaultZoom),
     );
-
-    final Place place;
-
-    /// Get the place from the given position
-    try {
-      place = await LocationService().getPlaceByPosition(position);
-    } on Exception catch (e) {
-      await showDialog(
-        context: context,
-        builder: (context) {
-          return CustomDialog(
-            title: as.warning,
-            content: Text(e.toString()),
-            isError: true,
-          );
-        },
-      );
-      return;
-    }
 
     /// Shows the modal to register the stop
     await showTravelStopModal(context, position);
@@ -106,8 +84,6 @@ class _TravelMapState extends State<TravelMap> {
   @override
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
-
-    print("map widget build called");
 
     final areStopsValid = Provider.of<RegisterTravelProvider>(
       context,
@@ -147,6 +123,7 @@ class _TravelMapState extends State<TravelMap> {
                 child: TextField(
                   onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
                   decoration: InputDecoration(
+                    /// TODO: intl
                     hintText: 'Search for places',
                     prefixIcon: Icon(Icons.search),
                   ),
@@ -165,9 +142,12 @@ class _TravelMapState extends State<TravelMap> {
                       ),
                     ),
                     onPressed: () {
-                      Navigator.pop(context);
+                      context.pop();
                     },
-                    child: Text(as.finish, style: TextStyle(fontSize: 22)),
+                    child: Text(
+                      as.finish,
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
                   ),
                 ),
             ],

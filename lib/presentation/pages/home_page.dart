@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating/flutter_rating.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/extensions/date_extensions.dart';
@@ -15,7 +16,6 @@ import '../providers/review_provider.dart';
 import '../providers/travel_list_provider.dart';
 import '../providers/user_preferences_provider.dart';
 import 'fab_page.dart';
-import 'travel_route_page.dart';
 
 /// The Home Page of the app
 class HomePage extends StatelessWidget {
@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   /// The route of the page
-  static const String routeName = '/home';
+  static const String routeName = '/';
 
   @override
   Widget build(BuildContext context) {
@@ -58,10 +58,7 @@ class HomePage extends StatelessWidget {
               children: [
                 Text(
                   as.my_travels,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.displayMedium,
                 ),
 
                 const Padding(padding: EdgeInsets.all(12)),
@@ -129,7 +126,7 @@ class _TravelWidget extends StatelessWidget {
 
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            color: Theme.of(context).focusColor,
+            color: Theme.of(context).primaryColor.withOpacity(0.35),
           ),
 
           child: Column(
@@ -137,10 +134,7 @@ class _TravelWidget extends StatelessWidget {
             children: [
               Text(
                 travel.travelTitle.capitalizedAndSpaced,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.headlineMedium,
               ),
 
               const Padding(padding: EdgeInsets.all(12)),
@@ -203,7 +197,11 @@ class _FinishTravelButton extends StatelessWidget {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Finish Travel?'),
+                  /// TODO: intl
+                  Text(
+                    'Finish Travel?',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                   Icon(Icons.warning, color: Colors.orange, size: 28),
                 ],
               ),
@@ -211,8 +209,10 @@ class _FinishTravelButton extends StatelessWidget {
               actions: [
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context, false);
+                    context.pop(false);
                   },
+
+                  /// TODO: intl
                   child: Text('No'),
                 ),
 
@@ -220,8 +220,10 @@ class _FinishTravelButton extends StatelessWidget {
                   style: ElevatedButton.styleFrom(padding: EdgeInsets.all(12)),
                   onPressed: () async {
                     await registerTravelState.finishTravel(travel);
-                    Navigator.pop(context, false);
+                    context.pop(false);
                   },
+
+                  /// TODO: intl
                   child: Text('Yes'),
                 ),
               ],
@@ -238,11 +240,9 @@ class _FinishTravelButton extends StatelessWidget {
         ),
 
         child: Text(
+          /// TODO: intl
           'Finish Travel',
-          style: TextStyle(
-            color: Theme.of(context).cardColor,
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
     );
@@ -283,7 +283,7 @@ class _StopWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               height: 50,
-              child: Text(label, style: const TextStyle(fontSize: 14)),
+              child: Text(label),
             ),
 
             Padding(padding: EdgeInsets.all(6)),
@@ -324,6 +324,7 @@ class _ParticipantsWidget extends StatelessWidget {
   }
 }
 
+/// TODO: implement custom theme
 class ReviewModal extends StatefulWidget {
   const ReviewModal({super.key, required this.travel});
 
@@ -356,6 +357,7 @@ class _ReviewModalState extends State<ReviewModal> {
                   icon: Icon(Icons.close),
                 ),
                 Text(
+                  /// TODO: intl
                   'Give a Review',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                 ),
