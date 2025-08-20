@@ -24,6 +24,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get send_recovery_code => 'Send recovery code';
 
   @override
+  String get email => 'Email';
+
+  @override
   String get register => 'Register';
 
   @override
@@ -37,6 +40,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recovery_code_sent_to => 'Recovery code sent to';
+
+  @override
+  String get invalid_email => 'Email inválido';
 
   @override
   String get account => 'Account';
@@ -102,6 +108,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get my_travels => 'My Travels';
 
   @override
+  String get review => 'Review';
+
+  @override
+  String get detail_review => 'Detail Review';
+
+  @override
+  String get give_a_review => 'Give a Review';
+
+  @override
+  String get send_review => 'Send Review';
+
+  @override
+  String get add_photo => 'Add Photo';
+
+  @override
+  String get finish_travel => 'Finish Travel';
+
+  @override
+  String get finish_travel_confirm => 'Finish Travel?';
+
+  @override
   String get title_home => 'Home';
 
   @override
@@ -117,6 +144,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get travel_title_label => 'Travel Title';
 
   @override
+  String get invalid_travel_title => 'Invalid travel title';
+
+  @override
   String get transport_type_label => 'Transport Type';
 
   @override
@@ -129,10 +159,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get select_dates_label => 'Select dates';
 
   @override
-  String get travel_start_date_label => 'Travel Start Date';
+  String get start_date => 'Start Date';
 
   @override
-  String get travel_end_date_label => 'Travel End Date';
+  String get end_date => 'End Date';
 
   @override
   String get err_invalid_date_snackbar => 'You must select a start date first!';
@@ -171,6 +201,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get add_stops_for_your_travel => 'Add Stops for Your Travel';
 
   @override
+  String get no_stops_registered => 'No stops registered';
+
+  @override
   String get invalid_travel_data => 'Invalid Travel Data';
 
   @override
@@ -178,6 +211,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get travel_stop => 'Travel Stop';
+
+  @override
+  String get search_for_places => 'Search for places';
 
   @override
   String get travel_start_location => 'Travel Start Location';

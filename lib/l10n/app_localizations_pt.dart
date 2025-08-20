@@ -24,6 +24,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get send_recovery_code => 'Enviar código de recuperação';
 
   @override
+  String get email => 'Email';
+
+  @override
   String get register => 'Registrar';
 
   @override
@@ -37,6 +40,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get recovery_code_sent_to => 'Código de recuperação enviado para';
+
+  @override
+  String get invalid_email => 'Email inválido';
 
   @override
   String get account => 'Conta';
@@ -102,6 +108,27 @@ class AppLocalizationsPt extends AppLocalizations {
   String get my_travels => 'Minhas Viagens';
 
   @override
+  String get review => 'Avaliação';
+
+  @override
+  String get detail_review => 'Detalhes da Avaliação';
+
+  @override
+  String get give_a_review => 'Fazer uma Avaliação';
+
+  @override
+  String get send_review => 'Enviar Avaliação';
+
+  @override
+  String get add_photo => 'Adicionar Foto';
+
+  @override
+  String get finish_travel => 'Finalizar Viagem';
+
+  @override
+  String get finish_travel_confirm => 'Finalizar Viagem?';
+
+  @override
   String get title_home => 'Início';
 
   @override
@@ -117,6 +144,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get travel_title_label => 'Título da Viagem';
 
   @override
+  String get invalid_travel_title => 'Título da viagem inválido';
+
+  @override
   String get transport_type_label => 'Tipo de Transporte';
 
   @override
@@ -129,10 +159,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get select_dates_label => 'Selecionar datas';
 
   @override
-  String get travel_start_date_label => 'Data de Início da Viagem';
+  String get start_date => 'Data de Início da Viagem';
 
   @override
-  String get travel_end_date_label => 'Data de Término da Viagem';
+  String get end_date => 'Data de Término da Viagem';
 
   @override
   String get err_invalid_date_snackbar => 'Você deve selecionar uma data de início primeiro!';
@@ -171,6 +201,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get add_stops_for_your_travel => 'Adicionar Paradas para a Sua Viagem';
 
   @override
+  String get no_stops_registered => 'Nenhuma parada registrada';
+
+  @override
   String get invalid_travel_data => 'A viagem contém dados inválidos';
 
   @override
@@ -178,6 +211,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get travel_stop => 'Parada da Viagem';
+
+  @override
+  String get search_for_places => 'Procurar lugares';
 
   @override
   String get travel_start_location => 'Local de Início da Viagem';

@@ -358,8 +358,8 @@ class _DatesWidgetState extends State<_DatesWidget> {
             child: CustomDateRangeWidget(
               firstDateController: _arriveDateController,
               lastDateController: _leaveDateController,
-              firstDateLabelText: 'Arrive Date',
-              lastDateLabelText: 'Leave Date',
+              firstDateLabelText: as.arrive_date,
+              lastDateLabelText: as.leave_date,
             ),
           ),
         ),

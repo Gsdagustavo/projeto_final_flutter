@@ -183,6 +183,8 @@ class _FinishTravelButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+
     return InkWell(
       onTap: () async {
         final registerTravelState = Provider.of<RegisterTravelProvider>(
@@ -197,9 +199,8 @@ class _FinishTravelButton extends StatelessWidget {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  /// TODO: intl
                   Text(
-                    'Finish Travel?',
+                    as.finish_travel_confirm,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   Icon(Icons.warning, color: Colors.orange, size: 28),
@@ -212,8 +213,7 @@ class _FinishTravelButton extends StatelessWidget {
                     context.pop(false);
                   },
 
-                  /// TODO: intl
-                  child: Text('No'),
+                  child: Text(as.no),
                 ),
 
                 ElevatedButton(
@@ -223,8 +223,7 @@ class _FinishTravelButton extends StatelessWidget {
                     context.pop(false);
                   },
 
-                  /// TODO: intl
-                  child: Text('Yes'),
+                  child: Text(as.yes),
                 ),
               ],
             );
@@ -240,8 +239,7 @@ class _FinishTravelButton extends StatelessWidget {
         ),
 
         child: Text(
-          /// TODO: intl
-          'Finish Travel',
+          as.finish_travel,
           style: Theme.of(context).textTheme.labelLarge,
         ),
       ),
@@ -324,7 +322,6 @@ class _ParticipantsWidget extends StatelessWidget {
   }
 }
 
-/// TODO: implement custom theme
 class ReviewModal extends StatefulWidget {
   const ReviewModal({super.key, required this.travel});
 
@@ -338,6 +335,7 @@ class _ReviewModalState extends State<ReviewModal> {
   @override
   Widget build(BuildContext context) {
     final reviewState = Provider.of<ReviewProvider>(context);
+    final as = AppLocalizations.of(context)!;
 
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(
@@ -357,8 +355,9 @@ class _ReviewModalState extends State<ReviewModal> {
                   icon: Icon(Icons.close),
                 ),
                 Text(
-                  /// TODO: intl
-                  'Give a Review',
+                  as.give_a_review,
+
+                  /// TODO: theme
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                 ),
               ],
@@ -377,7 +376,9 @@ class _ReviewModalState extends State<ReviewModal> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Detail Review',
+                  as.detail_review,
+
+                  /// TODO: theme
                   style: TextStyle(color: Colors.grey.shade700),
                 ),
                 Padding(padding: EdgeInsets.all(6)),
@@ -388,7 +389,9 @@ class _ReviewModalState extends State<ReviewModal> {
                   maxLines: 5,
                   decoration: InputDecoration(
                     hint: Text(
-                      'Review',
+                      as.review,
+
+                      /// TODO: theme
                       style: TextStyle(color: Colors.grey.shade500),
                     ),
                     border: OutlineInputBorder(
@@ -435,7 +438,7 @@ class _ReviewModalState extends State<ReviewModal> {
                           Icons.camera_alt,
                           color: Theme.of(context).primaryColor,
                         ),
-                        Text('Add Photo'),
+                        Text(as.add_photo),
                       ],
                     ),
                   ),
@@ -457,7 +460,9 @@ class _ReviewModalState extends State<ReviewModal> {
                 padding: EdgeInsets.all(22),
                 child: Center(
                   child: Text(
-                    'Send Review',
+                    as.send_review,
+
+                    /// TODO: theme
                     style: TextStyle(
                       color: Theme.of(context).cardColor,
                       fontSize: 18,

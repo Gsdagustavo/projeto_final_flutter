@@ -123,8 +123,7 @@ class _TravelMapState extends State<TravelMap> {
                 child: TextField(
                   onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
                   decoration: InputDecoration(
-                    /// TODO: intl
-                    hintText: 'Search for places',
+                    hintText: as.search_for_places,
                     prefixIcon: Icon(Icons.search),
                   ),
                 ),

@@ -27,9 +27,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _emailController = TextEditingController();
 
   String? _emailValidator(String? email) {
+    final as = AppLocalizations.of(context)!;
+
     if (email == null || email.isEmpty) {
-      /// TODO: intl
-      return 'Invalid Email';
+      return as.invalid_email;
     }
 
     return null;
@@ -78,8 +79,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     keyboardType: TextInputType.emailAddress,
                     onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
                     decoration: InputDecoration(
-                      /// TODO: intl
-                      hintText: 'Email',
+                      hintText: as.email,
                       prefixIcon: const Icon(Icons.email),
                     ),
                   ),

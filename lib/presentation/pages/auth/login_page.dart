@@ -112,8 +112,8 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Login',
+                Text(
+                  as.login,
                   style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
                 ),
 
@@ -130,7 +130,7 @@ class _LoginPageState extends State<LoginPage> {
                         keyboardType: TextInputType.emailAddress,
                         onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
                         decoration: InputDecoration(
-                          hintText: 'Email',
+                          hintText: as.email,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),

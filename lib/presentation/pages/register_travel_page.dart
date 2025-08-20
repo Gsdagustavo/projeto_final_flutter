@@ -103,13 +103,19 @@ class RegisterTravelPage extends StatelessWidget {
   }
 }
 
-class _TravelTitleTextField extends StatelessWidget {
+class _TravelTitleTextField extends StatefulWidget {
   const _TravelTitleTextField();
 
+  @override
+  State<_TravelTitleTextField> createState() => _TravelTitleTextFieldState();
+}
+
+class _TravelTitleTextFieldState extends State<_TravelTitleTextField> {
   String? validator(String? input) {
+    final as = AppLocalizations.of(context)!;
+
     if (input == null || input.isEmpty || input.length < 3) {
-      /// TODO: add intl
-      return 'Invalid Travel Title';
+      return as.invalid_travel_title;
     }
 
     return null;
@@ -266,9 +272,8 @@ class _DateTextButtonsState extends State<_DateTextButtons> {
               firstDateController: _startDateController,
               lastDateController: _endDateController,
 
-              /// TODO: intl
-              firstDateLabelText: 'First Date',
-              lastDateLabelText: 'Last Date',
+              firstDateLabelText: as.start_date,
+              lastDateLabelText: as.end_date,
             ),
           ),
         ),
@@ -665,8 +670,8 @@ class TravelStopsWidget extends StatelessWidget {
         final stops = state.stops;
 
         if (stops.isEmpty) {
-          /// TODO: intl
-          return Center(child: Text('No stops registered'));
+          final as = AppLocalizations.of(context)!;
+          return Center(child: Text(as.no_stops_registered));
         }
 
         return SingleChildScrollView(

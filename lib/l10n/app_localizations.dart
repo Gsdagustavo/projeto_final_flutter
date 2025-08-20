@@ -127,6 +127,12 @@ abstract class AppLocalizations {
   /// **'Send recovery code'**
   String get send_recovery_code;
 
+  /// No description provided for @email.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get email;
+
   /// No description provided for @register.
   ///
   /// In en, this message translates to:
@@ -156,6 +162,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Recovery code sent to'**
   String get recovery_code_sent_to;
+
+  /// No description provided for @invalid_email.
+  ///
+  /// In en, this message translates to:
+  /// **'Email inválido'**
+  String get invalid_email;
 
   /// No description provided for @account.
   ///
@@ -283,6 +295,48 @@ abstract class AppLocalizations {
   /// **'My Travels'**
   String get my_travels;
 
+  /// No description provided for @review.
+  ///
+  /// In en, this message translates to:
+  /// **'Review'**
+  String get review;
+
+  /// No description provided for @detail_review.
+  ///
+  /// In en, this message translates to:
+  /// **'Detail Review'**
+  String get detail_review;
+
+  /// No description provided for @give_a_review.
+  ///
+  /// In en, this message translates to:
+  /// **'Give a Review'**
+  String get give_a_review;
+
+  /// No description provided for @send_review.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Review'**
+  String get send_review;
+
+  /// No description provided for @add_photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Photo'**
+  String get add_photo;
+
+  /// No description provided for @finish_travel.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish Travel'**
+  String get finish_travel;
+
+  /// No description provided for @finish_travel_confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish Travel?'**
+  String get finish_travel_confirm;
+
   /// No description provided for @title_home.
   ///
   /// In en, this message translates to:
@@ -313,6 +367,12 @@ abstract class AppLocalizations {
   /// **'Travel Title'**
   String get travel_title_label;
 
+  /// No description provided for @invalid_travel_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid travel title'**
+  String get invalid_travel_title;
+
   /// No description provided for @transport_type_label.
   ///
   /// In en, this message translates to:
@@ -337,17 +397,17 @@ abstract class AppLocalizations {
   /// **'Select dates'**
   String get select_dates_label;
 
-  /// No description provided for @travel_start_date_label.
+  /// No description provided for @start_date.
   ///
   /// In en, this message translates to:
-  /// **'Travel Start Date'**
-  String get travel_start_date_label;
+  /// **'Start Date'**
+  String get start_date;
 
-  /// No description provided for @travel_end_date_label.
+  /// No description provided for @end_date.
   ///
   /// In en, this message translates to:
-  /// **'Travel End Date'**
-  String get travel_end_date_label;
+  /// **'End Date'**
+  String get end_date;
 
   /// No description provided for @err_invalid_date_snackbar.
   ///
@@ -421,6 +481,12 @@ abstract class AppLocalizations {
   /// **'Add Stops for Your Travel'**
   String get add_stops_for_your_travel;
 
+  /// No description provided for @no_stops_registered.
+  ///
+  /// In en, this message translates to:
+  /// **'No stops registered'**
+  String get no_stops_registered;
+
   /// No description provided for @invalid_travel_data.
   ///
   /// In en, this message translates to:
@@ -438,6 +504,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Travel Stop'**
   String get travel_stop;
+
+  /// No description provided for @search_for_places.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for places'**
+  String get search_for_places;
 
   /// No description provided for @travel_start_location.
   ///

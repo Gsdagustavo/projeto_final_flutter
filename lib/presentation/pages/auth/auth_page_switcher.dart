@@ -43,6 +43,8 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
   }
 
   Widget _buildSwitcherBar() {
+    final as = AppLocalizations.of(context)!;
+
     return Stack(
       children: [
         Positioned(right: 22, child: ThemeToggleButton()),
@@ -50,8 +52,7 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            /// TODO: intl
-            _buildSwitcherOption('Login', 0),
+            _buildSwitcherOption(as.login, 0),
             Padding(padding: EdgeInsets.all(12)),
             _buildSwitcherOption(AppLocalizations.of(context)!.register, 1),
           ],
