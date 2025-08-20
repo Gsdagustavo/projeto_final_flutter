@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/constants/themes.dart';
@@ -14,14 +15,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ---- THEME RELATED ----
     final isDarkMode = Provider.of<UserPreferencesProvider>(context).isDarkMode;
 
+    final baseDarkTheme = getTravelAppDarkTheme();
+    final baseTheme = getTravelAppTheme();
+
+    final theme = baseTheme.copyWith(
+      textTheme: GoogleFonts.quicksandTextTheme(baseTheme.textTheme),
+    );
+
+    final darkTheme = baseDarkTheme.copyWith(
+      textTheme: GoogleFonts.quicksandTextTheme(baseDarkTheme.textTheme),
+    );
+
+    // ---- LANGUAGE RELATED ----
     final languageCode = Provider.of<UserPreferencesProvider>(
       context,
     ).languageCode;
     final locale = Locale(languageCode);
-
-    debugPrint('Is dark mode: $isDarkMode');
 
     return MaterialApp.router(
       title: 'Roam',
@@ -31,8 +43,8 @@ class MyApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       locale: locale,
 
-      theme: getTravelAppTheme(),
-      darkTheme: getTravelAppDarkTheme(),
+      theme: theme,
+      darkTheme: darkTheme,
       themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
 
       routerConfig: router,
