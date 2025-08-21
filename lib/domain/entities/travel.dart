@@ -39,9 +39,18 @@ class Travel {
     required this.stops,
   });
 
+  /// Returns a [Duration] that represents the total duration of the travel
+  Duration get totalDuration => endDate!.difference(startDate!);
+
+  @override
+  String toString() {
+    return 'Travel{travelId: $travelId, travelTitle: $travelTitle, isFinished: $isFinished, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: $stops}';
+  }
+
   Travel copyWith({
     int? travelId,
     String? travelTitle,
+    bool? isFinished,
     DateTime? startDate,
     DateTime? endDate,
     TransportType? transportType,
@@ -51,19 +60,12 @@ class Travel {
     return Travel(
       travelId: travelId ?? this.travelId,
       travelTitle: travelTitle ?? this.travelTitle,
+      isFinished: isFinished ?? this.isFinished,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       transportType: transportType ?? this.transportType,
       participants: participants ?? this.participants,
       stops: stops ?? this.stops,
     );
-  }
-
-  /// Returns a [Duration] that represents the total duration of the travel
-  Duration get totalDuration => endDate!.difference(startDate!);
-
-  @override
-  String toString() {
-    return 'Travel{travelId: $travelId, travelTitle: $travelTitle, isFinished: $isFinished, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: $stops}';
   }
 }

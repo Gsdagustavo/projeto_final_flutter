@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import '../../core/util/binary_utils.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/travel.dart';
@@ -92,30 +90,30 @@ class TravelModel {
     );
   }
 
+  @override
+  String toString() {
+    return 'Travel{travelId: $travelId, travelTitle: $travelTitle, isFinished: $isFinished, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: $stops}';
+  }
+
   TravelModel copyWith({
     int? travelId,
     String? travelTitle,
+    bool? isFinished,
     DateTime? startDate,
     DateTime? endDate,
     TransportType? transportType,
     List<ParticipantModel>? participants,
     List<TravelStopModel>? stops,
-    bool? isFinished,
   }) {
     return TravelModel(
       travelId: travelId ?? this.travelId,
       travelTitle: travelTitle ?? this.travelTitle,
+      isFinished: isFinished ?? this.isFinished,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       transportType: transportType ?? this.transportType,
       participants: participants ?? this.participants,
       stops: stops ?? this.stops,
-      isFinished: isFinished ?? this.isFinished,
     );
-  }
-
-  @override
-  String toString() {
-    return 'Travel{travelId: $travelId, travelTitle: $travelTitle, isFinished: $isFinished, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: $stops}';
   }
 }
