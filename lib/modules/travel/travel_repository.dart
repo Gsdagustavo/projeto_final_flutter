@@ -109,7 +109,10 @@ class TravelRepositoryImpl implements TravelRepository {
       final newTravel = travelModel.copyWith(
         endDate: now,
         stops: travelModel.stops,
+        isFinished: true,
       );
+
+      debugPrint('New travel: $newTravel');
 
       await txn.update(
         TravelTable.tableName,
