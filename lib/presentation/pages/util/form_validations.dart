@@ -8,6 +8,9 @@ class FormValidations {
   static const int _minParticipantAge = 0;
   static const int _maxParticipantAge = 120;
 
+  static const int _minReviewCharacters = 5;
+  static const int _maxReviewCharacters = 500;
+
   String? emailValidator(String? email) {
     if (email == null || email.isEmpty || !email.contains('@')) {
       return as.invalid_email;
@@ -43,9 +46,7 @@ class FormValidations {
   }
 
   String? participantAgeValidator(String? participantAge) {
-    if (participantAge == null ||
-        participantAge.isEmpty ||
-        participantAge.length < 3) {
+    if (participantAge == null) {
       return as.err_invalid_participant_age;
     }
 
@@ -57,6 +58,24 @@ class FormValidations {
 
     if (!intParticipantAge.isBetween(_minParticipantAge, _maxParticipantAge)) {
       return as.err_invalid_participant_age;
+    }
+
+    return null;
+  }
+
+  /// TODO: intl
+  String? reviewValidator(String? review) {
+    if (review == null) {
+      return 'Invalid review';
+    }
+
+    if (review.trim().length < _minReviewCharacters &&
+        review.trim().isNotEmpty) {
+      return 'Review must have at least $_minReviewCharacters characters';
+    }
+
+    if (review.trim().length > _maxReviewCharacters) {
+      return 'Review must have at most $_minReviewCharacters characters';
     }
 
     return null;
