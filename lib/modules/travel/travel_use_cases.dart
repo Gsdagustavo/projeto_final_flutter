@@ -114,7 +114,21 @@ class TravelUseCasesImpl implements TravelUseCases {
 
   @override
   Future<void> finishTravel(Travel travel) async {
-    await travelRepository.finishTravel(travel);
+    final now = DateTime.now();
+
+    if (travel.startDate!.isAfter(now)) {
+      /// TODO: intl
+      throw Exception('Cannot finish a travel that has not started yet');
+    }
+
+    if (travel.isFinished) {
+      /// TODO: intl
+      throw Exception('Travel is already finished');
+    }
+
+    await travelRepository.finishTravel(
+      travel.copyWith(endDate: now, isFinished: true),
+    );
   }
 }
 
