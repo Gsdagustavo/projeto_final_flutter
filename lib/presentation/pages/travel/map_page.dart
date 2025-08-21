@@ -16,8 +16,6 @@ class TravelMap extends StatefulWidget {
   /// Constant constructor
   const TravelMap({super.key});
 
-  static const String routeName = '/travelMap';
-
   @override
   State<TravelMap> createState() => _TravelMapState();
 }
@@ -114,18 +112,18 @@ class _TravelMapState extends State<TravelMap> {
               ),
 
               /// Text field to search for places
-              Positioned(
-                right: 30,
-                left: 30,
-                top: 15,
-                child: TextField(
-                  onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
-                  decoration: InputDecoration(
-                    hintText: as.search_for_places,
-                    prefixIcon: Icon(Icons.search),
-                  ),
-                ),
-              ),
+              // Positioned(
+              //   right: 30,
+              //   left: 30,
+              //   top: 15,
+              //   child: TextField(
+              //     onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
+              //     decoration: InputDecoration(
+              //       hintText: as.search_for_places,
+              //       prefixIcon: Icon(Icons.search),
+              //     ),
+              //   ),
+              // ),
 
               /// 'Finish' button
               if (areStopsValid)

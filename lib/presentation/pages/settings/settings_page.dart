@@ -33,7 +33,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
@@ -146,7 +145,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     children: [
                       Text(
                         /// TODO: intl
-                        'Email: ${user?.email ?? 'N/A'}',
+                        '${as.email}: ${user?.email ?? 'N/A'}',
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
                       Text(

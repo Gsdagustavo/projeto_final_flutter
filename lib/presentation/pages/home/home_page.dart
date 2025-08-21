@@ -228,6 +228,8 @@ class _FinishTravelButton extends StatelessWidget {
         );
       },
       borderRadius: BorderRadius.circular(16),
+
+      /// TODO: refactor this to a textbutton
       child: Container(
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
@@ -274,7 +276,12 @@ class _StopWidget extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                border: BoxBorder.all(color: Colors.black, width: 1),
+                border: BoxBorder.all(
+                  color: Theme.of(
+                    context,
+                  ).inputDecorationTheme.enabledBorder!.borderSide.color,
+                  width: 1,
+                ),
                 borderRadius: BorderRadius.circular(12),
               ),
               height: 50,

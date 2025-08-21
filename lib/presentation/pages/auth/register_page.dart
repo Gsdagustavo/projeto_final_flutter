@@ -186,9 +186,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
                         decoration: InputDecoration(
                           hintText: as.email,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
                           prefixIcon: const Icon(Icons.email),
                         ),
                       ),
@@ -201,9 +198,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
                         decoration: InputDecoration(
                           hintText: as.password,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
                           prefixIcon: const Icon(Icons.lock),
                           suffixIcon: IconButton(
                             onPressed: _togglePasswordVisibility,

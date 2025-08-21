@@ -131,9 +131,6 @@ class _LoginPageState extends State<LoginPage> {
                         onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
                         decoration: InputDecoration(
                           hintText: as.email,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
                           prefixIcon: const Icon(Icons.email),
                         ),
                       ),
@@ -147,9 +144,6 @@ class _LoginPageState extends State<LoginPage> {
                         onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
                         decoration: InputDecoration(
                           hintText: as.password,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
                           prefixIcon: const Icon(Icons.lock),
                           suffixIcon: IconButton(
                             onPressed: _togglePasswordVisibility,
@@ -177,9 +171,9 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: _login,
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.all(16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
+                          // shape: RoundedRectangleBorder(
+                          //   borderRadius: BorderRadius.circular(16),
+                          // ),
                         ),
                         child: Text(as.login),
                       ),

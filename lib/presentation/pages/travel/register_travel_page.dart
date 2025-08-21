@@ -631,6 +631,8 @@ class _TravelMapWidget extends StatelessWidget {
                         return CustomDialog(
                           title: as.warning,
                           content: Text(
+
+                            /// TODO: intl
                             'You must select the Travel Date Range first!',
                           ),
                           isError: true,
@@ -709,7 +711,7 @@ class _TravelStopListItem extends StatelessWidget {
       title: Text(stop.place.toString()),
       leading: Text('${index + 1}. '),
       tileColor: Theme.of(context).cardColor,
-      contentPadding: EdgeInsets.all(12),
+      contentPadding: const EdgeInsets.all(12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       trailing: IconButton(
         onPressed: () {
