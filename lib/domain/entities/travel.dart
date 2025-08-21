@@ -10,6 +10,8 @@ class Travel {
   /// Travel Title
   final String travelTitle;
 
+  bool isFinished;
+
   /// Travel start date
   final DateTime? startDate;
 
@@ -24,8 +26,6 @@ class Travel {
 
   /// Travel stops
   final List<TravelStop> stops;
-
-  bool isFinished;
 
   /// Named constructor for the Travel
   Travel({
@@ -64,9 +64,6 @@ class Travel {
 
   @override
   String toString() {
-    return 'Travel{travelId: $travelId, travelTitle: $travelTitle, '
-        'startDate: $startDate, endDate: $endDate, '
-        'transportType: $transportType, participants: $participants, '
-        'stops: $stops}';
+    return 'Travel{travelId: $travelId, travelTitle: $travelTitle, isFinished: $isFinished, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: $stops}';
   }
 }

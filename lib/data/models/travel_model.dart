@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import '../../core/util/binary_utils.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/travel.dart';
@@ -8,12 +10,12 @@ import 'travel_stop_model.dart';
 class TravelModel {
   int? travelId;
   final String travelTitle;
+  bool isFinished;
   final DateTime? startDate;
   final DateTime? endDate;
   final TransportType transportType;
   final List<ParticipantModel> participants;
   final List<TravelStopModel> stops;
-  bool isFinished;
 
   TravelModel({
     this.travelId,
@@ -114,9 +116,6 @@ class TravelModel {
 
   @override
   String toString() {
-    return 'TravelModel{travelId: $travelId, travelTitle: $travelTitle, '
-        'startDate: $startDate, endDate: $endDate, '
-        'transportType: $transportType, participants: $participants, '
-        'stops: ${stops.toString()}}';
+    return 'Travel{travelId: $travelId, travelTitle: $travelTitle, isFinished: $isFinished, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: $stops}';
   }
 }
