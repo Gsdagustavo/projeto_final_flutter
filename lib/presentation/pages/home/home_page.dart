@@ -229,14 +229,8 @@ class _FinishTravelButton extends StatelessWidget {
       },
       borderRadius: BorderRadius.circular(16),
 
-      /// TODO: refactor this to a textbutton
-      child: Container(
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
-          borderRadius: BorderRadius.circular(16),
-        ),
-
+      child: ElevatedButton(
+        onPressed: () {},
         child: Text(
           as.finish_travel,
           style: Theme.of(context).textTheme.labelLarge,
@@ -386,6 +380,8 @@ class _ReviewModalState extends State<ReviewModal> {
                   style: TextStyle(color: Colors.grey.shade700),
                 ),
                 Padding(padding: EdgeInsets.all(6)),
+
+                /// TODO: make this a textformfield with validation
                 TextField(
                   controller: reviewState.reviewController,
                   onTapOutside: (_) => FocusScope.of(context).unfocus(),
