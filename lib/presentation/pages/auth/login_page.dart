@@ -8,6 +8,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../providers/login_provider.dart';
 import '../../util/app_routes.dart';
 import '../../widgets/custom_dialog.dart';
+import '../util/form_validations.dart';
 import 'forgot_password_page.dart';
 
 /// A [Login] page
@@ -32,25 +33,6 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController(text: '123456');
 
   bool _obscurePassword = true;
-
-  String? _emailValidator(String? email) {
-    final as = AppLocalizations.of(context)!;
-
-    if (email == null || email.isEmpty || !email.contains('@')) {
-      return as.invalid_email;
-    }
-
-    return null;
-  }
-
-  String? _passwordValidator(String? password) {
-    if (password == null || password.isEmpty) {
-      /// TODO: intl
-      return 'Invalid password';
-    }
-
-    return null;
-  }
 
   void _login() async {
     if (!_formKey.currentState!.validate()) return;
@@ -103,6 +85,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
+    final validations = FormValidations(as);
 
     return Scaffold(
       body: SafeArea(
@@ -125,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       /// Email text field
                       TextFormField(
-                        validator: _emailValidator,
+                        validator: validations.emailValidator,
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
                         onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
@@ -139,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
 
                       /// Password text field
                       TextFormField(
-                        validator: _passwordValidator,
+                        validator: validations.passwordValidator,
                         controller: _passwordController,
                         onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
                         decoration: InputDecoration(
@@ -171,9 +154,6 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: _login,
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.all(16),
-                          // shape: RoundedRectangleBorder(
-                          //   borderRadius: BorderRadius.circular(16),
-                          // ),
                         ),
                         child: Text(as.login),
                       ),

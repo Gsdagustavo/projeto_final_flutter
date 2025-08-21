@@ -7,6 +7,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../providers/login_provider.dart';
 import '../../widgets/custom_dialog.dart';
 import '../../widgets/theme_toggle_button.dart';
+import '../util/form_validations.dart';
 
 /// A password recovery page
 ///
@@ -23,19 +24,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
 
-  String? _emailValidator(String? email) {
-    final as = AppLocalizations.of(context)!;
-
-    if (email == null || email.isEmpty) {
-      return as.invalid_email;
-    }
-
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
+    final validations = FormValidations(as);
 
     return Scaffold(
       appBar: AppBar(
@@ -72,7 +64,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
                   /// Email text field
                   child: TextFormField(
-                    validator: _emailValidator,
+                    validator: validations.emailValidator,
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     onTapUpOutside: (_) => FocusScope.of(context).unfocus(),

@@ -21,6 +21,7 @@ import '../../util/app_routes.dart';
 import '../../widgets/custom_date_range_widget.dart';
 import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_page.dart';
+import '../util/form_validations.dart';
 
 /// This is a page for registering a travel
 class RegisterTravelPage extends StatelessWidget {
@@ -108,20 +109,11 @@ class _TravelTitleTextField extends StatefulWidget {
 }
 
 class _TravelTitleTextFieldState extends State<_TravelTitleTextField> {
-  String? validator(String? input) {
-    final as = AppLocalizations.of(context)!;
-
-    if (input == null || input.isEmpty || input.length < 3) {
-      return as.invalid_travel_title;
-    }
-
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     final travelState = Provider.of<RegisterTravelProvider>(context);
     final as = AppLocalizations.of(context)!;
+    final validations = FormValidations(as);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,7 +127,7 @@ class _TravelTitleTextFieldState extends State<_TravelTitleTextField> {
           key: travelState.formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: TextFormField(
-            validator: validator,
+            validator: validations.travelTitleValidator,
             controller: travelState.travelTitleController,
             onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
             decoration: InputDecoration(label: Text(as.travel_title_label)),
@@ -393,6 +385,7 @@ class _ModalState extends State<_Modal> {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      /// TODO: make this a textformfield with validations
                       TextField(
                         onTapOutside: (_) => FocusScope.of(context).unfocus(),
                         controller:
@@ -404,6 +397,7 @@ class _ModalState extends State<_Modal> {
                       ),
                       const Padding(padding: EdgeInsets.all(16)),
 
+                      /// TODO: make this a textformfield with validations
                       TextField(
                         onTapOutside: (_) => FocusScope.of(context).unfocus(),
                         controller: widget.travelState.participantAgeController,
@@ -631,7 +625,6 @@ class _TravelMapWidget extends StatelessWidget {
                         return CustomDialog(
                           title: as.warning,
                           content: Text(
-
                             /// TODO: intl
                             'You must select the Travel Date Range first!',
                           ),

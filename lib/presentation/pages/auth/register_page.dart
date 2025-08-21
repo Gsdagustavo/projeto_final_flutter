@@ -8,6 +8,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../providers/login_provider.dart';
 import '../../util/app_routes.dart';
 import '../../widgets/custom_dialog.dart';
+import '../util/form_validations.dart';
 
 /// A [Register] page
 ///
@@ -30,33 +31,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final _passwordController = TextEditingController();
 
   bool _obscurePassword = true;
-
-  String? _passwordValidator(String? password) {
-    final as = AppLocalizations.of(context)!;
-
-    if (password == null || password.isEmpty) {
-      /// TODO: intl
-      return 'Invalid Password';
-    }
-
-    /// TODO: intl
-    if (password.length <= 3) {
-      return 'Password too short';
-    }
-
-    return null;
-  }
-
-  String? _emailValidator(String? email) {
-    final as = AppLocalizations.of(context)!;
-
-    if (email == null || email.isEmpty) {
-      /// TODO: intl
-      return as.invalid_email;
-    }
-
-    return null;
-  }
 
   void _register() async {
     if (!_formKey.currentState!.validate()) return;
@@ -157,6 +131,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
+    final validations = FormValidations(as);
 
     return Scaffold(
       body: SafeArea(
@@ -181,7 +156,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: Column(
                     children: [
                       TextFormField(
-                        validator: _emailValidator,
+                        validator: validations.emailValidator,
                         controller: _emailController,
                         onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
                         decoration: InputDecoration(
@@ -193,7 +168,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       const Padding(padding: EdgeInsets.all(18)),
 
                       TextFormField(
-                        validator: _passwordValidator,
+                        validator: validations.passwordValidator,
                         controller: _passwordController,
                         onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
                         decoration: InputDecoration(
