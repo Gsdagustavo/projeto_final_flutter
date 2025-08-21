@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../pages/auth/auth_page_switcher.dart';
 import '../pages/auth/forgot_password_page.dart';
 import '../pages/auth/login_page.dart';
@@ -102,21 +103,22 @@ class ScaffoldWithNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: navigationShell,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: navigationShell.currentIndex,
         onTap: _onItemTapped,
         items: [
-          /// TODO: intl
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: as.title_home),
           BottomNavigationBarItem(
             icon: Icon(Icons.map),
-            label: 'Register Travel',
+            label: as.title_register_travel,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
-            label: 'Settings',
+            label: as.title_settings,
           ),
         ],
       ),
