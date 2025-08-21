@@ -15,15 +15,25 @@ class ReviewProvider with ChangeNotifier {
   final _fileService = FileService();
 
   final _images = <File>[];
+
+  final _key = GlobalKey<FormState>();
+
   final _reviewController = TextEditingController();
+
   int _reviewRate = 5;
+
   Participant? _author;
+
+  String? _errorMessage;
 
   Future<void> pickReviewImage() async {
     final image = await _fileService.pickImage();
 
-    /// TODO: add proper validation
-    if (image == null) return;
+    if (image == null) {
+      _errorMessage = 'Invalid image';
+      notifyListeners();
+      return;
+    }
 
     _images.add(image);
 
@@ -40,6 +50,19 @@ class ReviewProvider with ChangeNotifier {
     );
 
     await _reviewUseCases.addReviews(reviews: [review]);
+    notifyListeners();
+  }
+
+  Future<void> submitReview({required int travelStopId}) async {
+    if (!_key.currentState!.validate()) {
+      /// TODO: intl
+      _errorMessage = 'Invalid review description';
+      notifyListeners();
+      return;
+    }
+
+    await addReview(travelStopId: travelStopId);
+    notifyListeners();
   }
 
   int get reviewRate => _reviewRate;
@@ -49,9 +72,9 @@ class ReviewProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  get reviewController => _reviewController;
+  TextEditingController get reviewController => _reviewController;
 
-  get images => _images;
+  List<File> get images => _images;
 
-  get fileService => _fileService;
+  GlobalKey<FormState> get key => _key;
 }

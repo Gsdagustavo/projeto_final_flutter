@@ -16,6 +16,7 @@ import '../../providers/review_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../widgets/fab_page.dart';
+import '../util/form_validations.dart';
 
 /// The Home Page of the app
 class HomePage extends StatelessWidget {
@@ -339,6 +340,7 @@ class _ReviewModalState extends State<ReviewModal> {
   Widget build(BuildContext context) {
     final reviewState = Provider.of<ReviewProvider>(context);
     final as = AppLocalizations.of(context)!;
+    final validations = FormValidations(as);
 
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(
@@ -381,20 +383,20 @@ class _ReviewModalState extends State<ReviewModal> {
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
                 Padding(padding: EdgeInsets.all(6)),
-
-                /// TODO: make this a textformfield with validation
-                TextField(
-                  controller: reviewState.reviewController,
-                  onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                  maxLength: 500,
-                  maxLines: 5,
-                  decoration: InputDecoration(
-                    hint: Text(
-                      as.review,
-                      style: Theme.of(context).textTheme.labelSmall,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
+                Form(
+                  key: reviewState.key,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: TextFormField(
+                    validator: validations.reviewValidator,
+                    controller: reviewState.reviewController,
+                    onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                    maxLength: 500,
+                    maxLines: 5,
+                    decoration: InputDecoration(
+                      hint: Text(
+                        as.review,
+                        style: Theme.of(context).textTheme.labelSmall,
+                      ),
                     ),
                   ),
                 ),
