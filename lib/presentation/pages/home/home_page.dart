@@ -29,20 +29,16 @@ class HomePage extends StatelessWidget {
 
     return FabPage(
       title: as.title_home,
-      floatingActionButton: Column(
-        children: [
-          FloatingActionButton(
-            child: const Icon(Icons.update),
-            onPressed: () async {
-              final travelListProvider = Provider.of<TravelListProvider>(
-                context,
-                listen: false,
-              );
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.update),
+        onPressed: () async {
+          final travelListProvider = Provider.of<TravelListProvider>(
+            context,
+            listen: false,
+          );
 
-              await travelListProvider.update();
-            },
-          ),
-        ],
+          await travelListProvider.update();
+        },
       ),
 
       body: Consumer<TravelListProvider>(
@@ -188,8 +184,8 @@ class _FinishTravelButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
 
-    return InkWell(
-      onTap: () async {
+    return ElevatedButton(
+      onPressed: () async {
         final registerTravelState = Provider.of<RegisterTravelProvider>(
           context,
           listen: false,
@@ -233,14 +229,9 @@ class _FinishTravelButton extends StatelessWidget {
           },
         );
       },
-      borderRadius: BorderRadius.circular(16),
-
-      child: ElevatedButton(
-        onPressed: () {},
-        child: Text(
-          as.finish_travel,
-          style: Theme.of(context).textTheme.labelLarge,
-        ),
+      child: Text(
+        as.finish_travel,
+        style: Theme.of(context).textTheme.labelLarge,
       ),
     );
   }
