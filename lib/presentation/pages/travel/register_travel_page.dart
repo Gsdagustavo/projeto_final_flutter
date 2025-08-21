@@ -673,21 +673,19 @@ class TravelStopsWidget extends StatelessWidget {
           return Center(child: Text(as.no_stops_registered));
         }
 
-        return SingleChildScrollView(
+        return ListView.separated(
           physics: NeverScrollableScrollPhysics(),
-          child: ListView.separated(
-            shrinkWrap: true,
-            itemCount: stops.length,
-            separatorBuilder: (context, index) {
-              return Padding(padding: EdgeInsets.all(12));
-            },
+          shrinkWrap: true,
+          itemCount: stops.length,
+          separatorBuilder: (context, index) {
+            return Padding(padding: EdgeInsets.all(12));
+          },
 
-            itemBuilder: (context, index) {
-              final stop = stops[index];
+          itemBuilder: (context, index) {
+            final stop = stops[index];
 
-              return _TravelStopListItem(stop: stop, index: index);
-            },
-          ),
+            return _TravelStopListItem(stop: stop, index: index);
+          },
         );
       },
     );
