@@ -39,6 +39,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         actionsPadding: const EdgeInsets.only(right: 22),
         actions: [const ThemeToggleButton()],
       ),
