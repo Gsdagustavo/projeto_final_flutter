@@ -20,7 +20,7 @@ linter:
     - avoid_catching_errors
     - use_to_and_as_if_applicable
     - one_member_abstracts
-    - avoid_classes_with_only_static_members
+#    - avoid_classes_with_only_static_members
     - prefer_mixin
     - use_setters_to_change_properties
     - avoid_setters_without_getters

@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../../domain/entities/place.dart';
-import '../../domain/entities/travel.dart';
-import '../../domain/entities/travel_stop.dart';
-import '../../l10n/app_localizations.dart';
-import '../../services/location_service.dart';
-import '../providers/map_markers_provider.dart';
-import '../providers/register_travel_provider.dart';
-import '../scripts/scripts.dart';
-import '../widgets/custom_dialog.dart';
-import '../widgets/my_app_bar.dart';
+import '../../../domain/entities/place.dart';
+import '../../../domain/entities/travel.dart';
+import '../../../domain/entities/travel_stop.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../services/location_service.dart';
+import '../../providers/map_markers_provider.dart';
+import '../../providers/register_travel_provider.dart';
+import '../../scripts/scripts.dart';
+import '../../widgets/custom_dialog.dart';
+import '../../widgets/my_app_bar.dart';
 
 /// This is a map widget that will be used to register a [TravelStop] and to
 /// view a [Travel] route
 class TravelMap extends StatefulWidget {
   /// Constant constructor
   const TravelMap({super.key});
-
-  static const String routeName = '/travelMap';
 
   @override
   State<TravelMap> createState() => _TravelMapState();
@@ -165,7 +164,7 @@ class _TravelMapState extends State<TravelMap> {
                       ),
                     ),
                     onPressed: () {
-                      Navigator.pop(context);
+                      context.pop();
                     },
                     child: Text(as.finish, style: TextStyle(fontSize: 22)),
                   ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -106,7 +107,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
 
     Provider.of<MapMarkersProvider>(context, listen: false).removeMarker(stop);
 
-    Navigator.pop(context);
+    context.pop();
   }
 
   Future<void> onStopRegistered(Place place) async {
@@ -153,7 +154,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
       },
     );
 
-    Navigator.pop(context, stop);
+    context.pop(stop);
   }
 
   void onStopUpdated(TravelStop stop) async {
@@ -193,7 +194,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
       },
     );
 
-    Navigator.pop(context);
+    context.pop();
   }
 
   @override

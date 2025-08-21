@@ -6,8 +6,9 @@ import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
 import '../../providers/login_provider.dart';
+import '../../util/app_routes.dart';
 import '../../widgets/custom_dialog.dart';
-import '../home_page.dart';
+import '../home/home_page.dart';
 
 /// A [Register] page
 ///
@@ -18,9 +19,6 @@ import '../home_page.dart';
 class RegisterPage extends StatefulWidget {
   /// Constant constructor
   const RegisterPage({super.key});
-
-  /// The route of the page
-  static const String routeName = '/register';
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -35,10 +33,14 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _obscurePassword = true;
 
   String? _passwordValidator(String? password) {
+    final as = AppLocalizations.of(context)!;
+
     if (password == null || password.isEmpty) {
+      /// TODO: intl
       return 'Invalid Password';
     }
 
+    /// TODO: intl
     if (password.length <= 3) {
       return 'Password too short';
     }
@@ -48,6 +50,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   String? _emailValidator(String? email) {
     if (email == null || email.isEmpty) {
+      /// TODO: intl
       return 'Invalid Email';
     }
 
@@ -122,20 +125,20 @@ class _RegisterPageState extends State<RegisterPage> {
       context: context,
       barrierDismissible: false,
       builder: (_) => AlertDialog(
-        title: const Text('Login'),
+        title: Text(as.login),
         content: Text(as.register_login),
         actionsAlignment: MainAxisAlignment.spaceBetween,
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
+              context.pop(context);
             },
             child: Text(as.no),
           ),
 
           ElevatedButton(
             onPressed: () {
-              context.go(HomePage.routeName);
+              context.go(Routes.home);
             },
             child: Text(as.yes),
           ),

@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../core/constants/themes.dart';
 import '../../l10n/app_localizations.dart';
 import '../providers/user_preferences_provider.dart';
-import '../util/router.dart';
+import '../util/app_router.dart';
 
 /// This widget is the [MaterialApp] of the application, which contains all
 /// important info about layout, theme, routes, localization, etc.
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       darkTheme: getTravelAppDarkTheme(),
       themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
 
-      routerConfig: router,
+      routerConfig: AppRouter.router,
     );
   }
 }

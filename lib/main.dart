@@ -22,6 +22,9 @@ import 'services/file_service.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  /// Resets the database
+  await DBConnection().getDatabase(reset: true);
+
   /// Initialize Firebase App
   await Firebase.initializeApp();
 
@@ -55,9 +58,6 @@ Future<void> main() async {
 
   /// Initialize dotenv
   await dotenv.load(fileName: '.env');
-
-  /// Resets the database
-  await DBConnection().getDatabase(reset: true);
 
   /// DEBUG
   /// TESTING PURPOSES ONLY

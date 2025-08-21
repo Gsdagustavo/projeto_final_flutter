@@ -6,8 +6,9 @@ import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
 import '../../providers/login_provider.dart';
+import '../../util/app_routes.dart';
 import '../../widgets/custom_dialog.dart';
-import '../home_page.dart';
+import '../home/home_page.dart';
 import 'forgot_password_page.dart';
 
 /// A [Login] page
@@ -20,9 +21,6 @@ import 'forgot_password_page.dart';
 class LoginPage extends StatefulWidget {
   /// Constant constructor
   const LoginPage({super.key});
-
-  /// The route of the page
-  static const String routeName = '/login';
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -91,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
 
-    context.go(HomePage.routeName);
+    context.go(Routes.home);
   }
 
   void _togglePasswordVisibility() {
@@ -191,7 +189,7 @@ class _LoginPageState extends State<LoginPage> {
                     TextButton(
                       child: Text(as.forgot_your_password),
                       onPressed: () {
-                        context.go(ForgotPasswordPage.routeName);
+                        context.push('${Routes.auth}${Routes.forgotPassword}');
                       },
                     ),
                   ],

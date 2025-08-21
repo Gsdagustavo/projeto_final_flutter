@@ -15,9 +15,6 @@ class ForgotPasswordPage extends StatefulWidget {
   /// Constant constructor
   const ForgotPasswordPage({super.key});
 
-  /// The route of the page
-  static const String routeName = '/forgotPassword';
-
   @override
   State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
 }

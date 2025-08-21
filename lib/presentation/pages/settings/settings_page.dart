@@ -5,15 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/extensions/date_extensions.dart';
-import '../../l10n/app_localizations.dart';
-import '../../services/file_service.dart';
-import '../../services/user_preferences_service.dart';
-import '../providers/login_provider.dart';
-import '../providers/user_preferences_provider.dart';
-import '../widgets/custom_dialog.dart';
-import 'auth/auth_page_switcher.dart';
-import 'fab_page.dart';
+import '../../../core/extensions/date_extensions.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../services/file_service.dart';
+import '../../../services/user_preferences_service.dart';
+import '../../providers/login_provider.dart';
+import '../../providers/user_preferences_provider.dart';
+import '../../util/app_routes.dart';
+import '../../widgets/custom_dialog.dart';
+import '../auth/auth_page_switcher.dart';
+import '../util/fab_page.dart';
 
 /// This is the settings page of the app
 ///
@@ -22,9 +23,6 @@ import 'fab_page.dart';
 class SettingsPage extends StatefulWidget {
   /// Constant constructor
   const SettingsPage({super.key});
-
-  /// The route of the page
-  static const String routeName = '/settings';
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -58,6 +56,10 @@ class _SettingsPageState extends State<SettingsPage> {
       title: as!.title_settings,
       body: Consumer<LoginProvider>(
         builder: (_, authProvider, __) {
+          final as = AppLocalizations.of(context)!;
+
+          const defaultPfpPath = 'assets/images/default_profile_picture.png';
+
           final locale = Localizations.localeOf(context).toString();
 
           final user = authProvider.loggedUser;
@@ -75,8 +77,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
           final backgroundImage = _profilePicture != null
               ? FileImage(_profilePicture!)
-              : const AssetImage('assets/images/default_profile_picture.png')
-                    as ImageProvider;
+              : const AssetImage(defaultPfpPath) as ImageProvider;
 
           const double radius = 72;
 
@@ -147,6 +148,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
+                        /// TODO: intl
                         'Email: ${user?.email ?? 'N/A'}',
                         style: const TextStyle(fontSize: 16),
                       ),
@@ -163,24 +165,22 @@ class _SettingsPageState extends State<SettingsPage> {
 
                       InkWell(
                         onTap: () async {
+                          context.go(Routes.auth);
                           await loginProvider.signOut();
-
-                          if (loginProvider.hasError) {
-                            unawaited(
-                              showDialog(
-                                context: context,
-                                builder: (_) => CustomDialog(
-                                  title: as.warning,
-                                  content: Text(loginProvider.errorMsg),
-                                  isError: true,
-                                ),
-                              ),
-                            );
-
-                            return;
-                          }
-
-                          context.go(AuthPageSwitcher.routeName);
+                          // if (loginProvider.hasError) {
+                          //   unawaited(
+                          //     showDialog(
+                          //       context: context,
+                          //       builder: (_) => CustomDialog(
+                          //         title: as.warning,
+                          //         content: Text(loginProvider.errorMsg),
+                          //         isError: true,
+                          //       ),
+                          //     ),
+                          //   );
+                          //
+                          //   return;
+                          // }
                         },
                         child: Row(
                           spacing: 10,
@@ -205,6 +205,9 @@ class _SettingsPageState extends State<SettingsPage> {
 
                 Text(
                   as.language,
+
+
+                  /// TODO: add custom theme
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 24,
