@@ -225,9 +225,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         onPressed: _register,
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.all(16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
                         ),
                         child: Text(as.register),
                       ),
