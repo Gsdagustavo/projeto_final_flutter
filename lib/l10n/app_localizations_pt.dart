@@ -45,6 +45,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get invalid_email => 'Email inválido';
 
   @override
+  String get invalid_password => 'Senha inválida';
+
+  @override
   String get account => 'Conta';
 
   @override
@@ -165,10 +168,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get end_date => 'Data de Término da Viagem';
 
   @override
-  String get err_invalid_date_snackbar => 'Você deve selecionar uma data de início primeiro!';
+  String get participants => 'Participantes';
 
   @override
-  String get participants => 'Participantes';
+  String get err_invalid_participant_name => 'Nome do participante inválido';
+
+  @override
+  String get err_invalid_participant_age => 'Idade do participante inválida';
 
   @override
   String get no_participants_on_the_list => 'Nenhum participante na lista';

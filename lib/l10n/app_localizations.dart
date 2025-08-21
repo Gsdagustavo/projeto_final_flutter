@@ -166,8 +166,14 @@ abstract class AppLocalizations {
   /// No description provided for @invalid_email.
   ///
   /// In en, this message translates to:
-  /// **'Email inválido'**
+  /// **'Invalid email'**
   String get invalid_email;
+
+  /// No description provided for @invalid_password.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid password'**
+  String get invalid_password;
 
   /// No description provided for @account.
   ///
@@ -409,17 +415,23 @@ abstract class AppLocalizations {
   /// **'End Date'**
   String get end_date;
 
-  /// No description provided for @err_invalid_date_snackbar.
-  ///
-  /// In en, this message translates to:
-  /// **'You must select a start date first!'**
-  String get err_invalid_date_snackbar;
-
   /// No description provided for @participants.
   ///
   /// In en, this message translates to:
   /// **'Participants'**
   String get participants;
+
+  /// No description provided for @err_invalid_participant_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid participant name'**
+  String get err_invalid_participant_name;
+
+  /// No description provided for @err_invalid_participant_age.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid participant age'**
+  String get err_invalid_participant_age;
 
   /// No description provided for @no_participants_on_the_list.
   ///

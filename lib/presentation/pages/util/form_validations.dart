@@ -18,8 +18,7 @@ class FormValidations {
 
   String? passwordValidator(String? password) {
     if (password == null || password.isEmpty) {
-      /// TODO: intl
-      return 'Invalid password';
+      return as.invalid_password;
     }
 
     return null;
@@ -37,8 +36,7 @@ class FormValidations {
     if (participantName == null ||
         participantName.isEmpty ||
         participantName.length < 3) {
-      /// TODO: intl
-      return '';
+      return as.err_invalid_participant_name;
     }
 
     return null;
@@ -48,20 +46,17 @@ class FormValidations {
     if (participantAge == null ||
         participantAge.isEmpty ||
         participantAge.length < 3) {
-      /// TODO: intl
-      return '';
+      return as.err_invalid_participant_age;
     }
 
     final intParticipantAge = int.tryParse(participantAge);
 
     if (intParticipantAge == null) {
-      /// TODO: intl
-      return '';
+      return as.err_invalid_participant_age;
     }
 
     if (!intParticipantAge.isBetween(_minParticipantAge, _maxParticipantAge)) {
-      /// TODO: intl
-      return '';
+      return as.err_invalid_participant_age;
     }
 
     return null;

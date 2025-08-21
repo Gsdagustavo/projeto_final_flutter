@@ -42,7 +42,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recovery_code_sent_to => 'Recovery code sent to';
 
   @override
-  String get invalid_email => 'Email inválido';
+  String get invalid_email => 'Invalid email';
+
+  @override
+  String get invalid_password => 'Invalid password';
 
   @override
   String get account => 'Account';
@@ -165,10 +168,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get end_date => 'End Date';
 
   @override
-  String get err_invalid_date_snackbar => 'You must select a start date first!';
+  String get participants => 'Participants';
 
   @override
-  String get participants => 'Participants';
+  String get err_invalid_participant_name => 'Invalid participant name';
+
+  @override
+  String get err_invalid_participant_age => 'Invalid participant age';
 
   @override
   String get no_participants_on_the_list => 'No participants on the list';

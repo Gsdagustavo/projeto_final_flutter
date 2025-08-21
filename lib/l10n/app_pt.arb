@@ -20,6 +20,7 @@
   "register_login": "Deseja fazer login?",
   "recovery_code_sent_to": "Código de recuperação enviado para",
   "invalid_email": "Email inválido",
+  "invalid_password": "Senha inválida",
 
   "@@settings_page": {},
   "account": "Conta",
@@ -76,6 +77,8 @@
   "end_date": "Data de Término da Viagem",
   "err_invalid_date_snackbar": "Você deve selecionar uma data de início primeiro!",
   "participants": "Participantes",
+  "err_invalid_participant_name": "Nome do participante inválido",
+  "err_invalid_participant_age": "Idade do participante inválida",
   "no_participants_on_the_list": "Nenhum participante na lista",
   "register_participant": "Registrar participante",
   "name": "Nome",
