@@ -35,29 +35,33 @@ ThemeData getTravelAppTheme() {
       brightness: Brightness.light,
     ),
     scaffoldBackgroundColor: backgroundColor,
-    textTheme: const TextTheme(
-      displayLarge: TextStyle(
+    textTheme: TextTheme(
+      displayLarge: const TextStyle(
         fontSize: 36.0,
         fontWeight: FontWeight.bold,
         color: onBackground,
       ),
-      displayMedium: TextStyle(
+      displayMedium: const TextStyle(
         fontSize: 28.0,
         fontWeight: FontWeight.bold,
         color: onBackground,
       ),
-      displaySmall: TextStyle(
+      displaySmall: const TextStyle(
         fontSize: 24.0,
         fontWeight: FontWeight.bold,
         color: onBackground,
       ),
-      bodyLarge: TextStyle(fontSize: 16.0, color: onBackground),
-      bodyMedium: TextStyle(fontSize: 14.0, color: onBackground),
-      bodySmall: TextStyle(fontSize: 12.0, color: onBackground),
-      labelLarge: TextStyle(
+      bodyLarge: const TextStyle(fontSize: 16.0, color: onBackground),
+      bodyMedium: const TextStyle(fontSize: 14.0, color: onBackground),
+      bodySmall: const TextStyle(fontSize: 12.0, color: onBackground),
+      labelLarge: const TextStyle(
         fontSize: 16.0,
         fontWeight: FontWeight.w500,
         color: onPrimary,
+      ),
+      labelSmall: TextStyle(
+        fontSize: 12.0,
+        color: onBackground.withOpacity(0.6),
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
@@ -147,29 +151,33 @@ ThemeData getTravelAppDarkTheme() {
       brightness: Brightness.dark,
     ),
     scaffoldBackgroundColor: backgroundColor,
-    textTheme: const TextTheme(
-      displayLarge: TextStyle(
+    textTheme: TextTheme(
+      displayLarge: const TextStyle(
         fontSize: 36.0,
         fontWeight: FontWeight.bold,
         color: onBackground,
       ),
-      displayMedium: TextStyle(
+      displayMedium: const TextStyle(
         fontSize: 28.0,
         fontWeight: FontWeight.bold,
         color: onBackground,
       ),
-      displaySmall: TextStyle(
+      displaySmall: const TextStyle(
         fontSize: 24.0,
         fontWeight: FontWeight.bold,
         color: onBackground,
       ),
-      bodyLarge: TextStyle(fontSize: 16.0, color: onBackground),
-      bodyMedium: TextStyle(fontSize: 14.0, color: onBackground),
-      bodySmall: TextStyle(fontSize: 12.0, color: onBackground),
-      labelLarge: TextStyle(
+      bodyLarge: const TextStyle(fontSize: 16.0, color: onBackground),
+      bodyMedium: const TextStyle(fontSize: 14.0, color: onBackground),
+      bodySmall: const TextStyle(fontSize: 12.0, color: onBackground),
+      labelLarge: const TextStyle(
         fontSize: 16.0,
         fontWeight: FontWeight.w500,
         color: onPrimary,
+      ),
+      labelSmall: TextStyle(
+        fontSize: 12.0,
+        color: onBackground.withOpacity(0.6),
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(

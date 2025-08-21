@@ -28,16 +28,20 @@ class HomePage extends StatelessWidget {
 
     return FabPage(
       title: as.title_home,
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.update),
-        onPressed: () async {
-          final travelListProvider = Provider.of<TravelListProvider>(
-            context,
-            listen: false,
-          );
+      floatingActionButton: Column(
+        children: [
+          FloatingActionButton(
+            child: const Icon(Icons.update),
+            onPressed: () async {
+              final travelListProvider = Provider.of<TravelListProvider>(
+                context,
+                listen: false,
+              );
 
-          await travelListProvider.update();
-        },
+              await travelListProvider.update();
+            },
+          ),
+        ],
       ),
 
       body: Consumer<TravelListProvider>(
@@ -101,7 +105,8 @@ class _TravelWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
+        await showReviewModal(context);
         debugPrint('Travel widget clicked');
         // Navigator.push(
         //   context,
@@ -354,9 +359,7 @@ class _ReviewModalState extends State<ReviewModal> {
                 ),
                 Text(
                   as.give_a_review,
-
-                  /// TODO: theme
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                  style: Theme.of(context).textTheme.displaySmall,
                 ),
               ],
             ),
@@ -375,9 +378,7 @@ class _ReviewModalState extends State<ReviewModal> {
               children: [
                 Text(
                   as.detail_review,
-
-                  /// TODO: theme
-                  style: TextStyle(color: Colors.grey.shade700),
+                  style: Theme.of(context).textTheme.labelMedium,
                 ),
                 Padding(padding: EdgeInsets.all(6)),
 
@@ -390,9 +391,7 @@ class _ReviewModalState extends State<ReviewModal> {
                   decoration: InputDecoration(
                     hint: Text(
                       as.review,
-
-                      /// TODO: theme
-                      style: TextStyle(color: Colors.grey.shade500),
+                      style: Theme.of(context).textTheme.labelSmall,
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),

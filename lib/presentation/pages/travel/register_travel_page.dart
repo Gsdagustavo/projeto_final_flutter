@@ -289,6 +289,8 @@ class _ParticipantsWidget extends StatelessWidget {
               as.participants,
               style: Theme.of(context).textTheme.displayMedium,
             ),
+
+            /// TODO: fix ui
             Expanded(
               child: TextButton(
                 child: Text(as.register_participant),
