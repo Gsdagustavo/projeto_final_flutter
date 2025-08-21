@@ -223,7 +223,7 @@ class AccountInfoWidget extends StatelessWidget {
           children: [
             icon,
             Padding(padding: EdgeInsets.all(6)),
-            text,
+            Expanded(child: text),
           ],
         ),
       ),
