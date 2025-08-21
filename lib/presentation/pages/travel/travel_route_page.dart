@@ -3,8 +3,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../../domain/entities/travel_stop.dart';
-import '../widgets/my_app_bar.dart';
+import '../../../domain/entities/travel_stop.dart';
+import '../../widgets/my_app_bar.dart';
 
 class TravelRoutePage extends StatefulWidget {
   const TravelRoutePage({

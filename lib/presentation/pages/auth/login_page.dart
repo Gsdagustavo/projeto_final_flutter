@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
 import '../../providers/login_provider.dart';
+import '../../util/app_routes.dart';
 import '../../widgets/custom_dialog.dart';
-import '../home_page.dart';
 import 'forgot_password_page.dart';
 
 /// A [Login] page
@@ -20,9 +20,6 @@ import 'forgot_password_page.dart';
 class LoginPage extends StatefulWidget {
   /// Constant constructor
   const LoginPage({super.key});
-
-  /// The route of the page
-  static const String routeName = '/login';
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -37,8 +34,10 @@ class _LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
 
   String? _emailValidator(String? email) {
+    final as = AppLocalizations.of(context)!;
+
     if (email == null || email.isEmpty || !email.contains('@')) {
-      return 'Invalid Email';
+      return as.invalid_email;
     }
 
     return null;
@@ -46,7 +45,8 @@ class _LoginPageState extends State<LoginPage> {
 
   String? _passwordValidator(String? password) {
     if (password == null || password.isEmpty) {
-      return 'Invalid Password';
+      /// TODO: intl
+      return 'Invalid password';
     }
 
     return null;
@@ -86,12 +86,12 @@ class _LoginPageState extends State<LoginPage> {
     await showDialog(
       context: context,
       builder: (_) => CustomDialog(
-        title: 'Login',
+        title: as.login,
         content: Text(as.logged_in_successfully),
       ),
     );
 
-    context.go(HomePage.routeName);
+    context.go(Routes.home);
   }
 
   void _togglePasswordVisibility() {
@@ -181,7 +181,7 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(16),
                           ),
                         ),
-                        child: const Text('Login'),
+                        child: Text(as.login),
                       ),
                     ),
 
@@ -191,7 +191,7 @@ class _LoginPageState extends State<LoginPage> {
                     TextButton(
                       child: Text(as.forgot_your_password),
                       onPressed: () {
-                        context.go(ForgotPasswordPage.routeName);
+                        context.push('${Routes.auth}${Routes.forgotPassword}');
                       },
                     ),
                   ],

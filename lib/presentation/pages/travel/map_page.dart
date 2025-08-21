@@ -3,14 +3,12 @@ import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../../domain/entities/travel.dart';
-import '../../domain/entities/travel_stop.dart';
-import '../../l10n/app_localizations.dart';
-import '../../services/location_service.dart';
-import '../providers/map_markers_provider.dart';
-import '../providers/register_travel_provider.dart';
-import '../scripts/scripts.dart';
-import '../widgets/my_app_bar.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../services/location_service.dart';
+import '../../providers/map_markers_provider.dart';
+import '../../providers/register_travel_provider.dart';
+import '../../scripts/scripts.dart';
+import '../../widgets/my_app_bar.dart';
 
 /// This is a map widget that will be used to register a [TravelStop] and to
 /// view a [Travel] route

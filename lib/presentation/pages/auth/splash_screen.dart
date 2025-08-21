@@ -3,7 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/login_provider.dart';
-import '../home_page.dart';
+import '../../util/app_routes.dart';
+import '../home/home_page.dart';
 import 'auth_page_switcher.dart';
 
 /// A default Splash Screen that will be shown very briefly when the app is
@@ -14,9 +15,6 @@ import 'auth_page_switcher.dart';
 class SplashScreen extends StatefulWidget {
   /// Constant constructor
   const SplashScreen({super.key});
-
-  /// The route of the page
-  static const String routeName = '/splash';
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -33,10 +31,9 @@ class _SplashScreenState extends State<SplashScreen> {
         listen: false,
       ).loggedUser;
       if (user == null) {
-        context.go(AuthPageSwitcher.routeName);
+        context.go(Routes.auth);
       } else {
-        // Navigator.pushReplacementNamed(context, HomePage.routeName);
-        context.go(HomePage.routeName);
+        context.go(Routes.home);
       }
     });
   }

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
 import '../../providers/user_preferences_provider.dart';
+import '../../util/app_routes.dart';
 import '../../widgets/theme_toggle_button.dart';
 import 'login_page.dart';
 import 'register_page.dart';
@@ -15,9 +16,6 @@ import 'register_page.dart';
 class AuthPageSwitcher extends StatefulWidget {
   /// Constant constructor
   const AuthPageSwitcher({super.key});
-
-  /// The route of the page
-  static const String routeName = '/authPageSwitcher';
 
   @override
   State<AuthPageSwitcher> createState() => _AuthPageSwitcherState();
@@ -114,8 +112,8 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
               },
 
               children: const [
-                LoginPage(key: Key(LoginPage.routeName)),
-                RegisterPage(key: Key(RegisterPage.routeName)),
+                LoginPage(key: Key(Routes.login)),
+                RegisterPage(key: Key(Routes.register)),
               ],
             ),
           ),

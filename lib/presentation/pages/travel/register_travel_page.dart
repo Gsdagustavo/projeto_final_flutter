@@ -6,29 +6,26 @@ import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/extensions/date_extensions.dart';
-import '../../core/extensions/string_extensions.dart';
-import '../../domain/entities/enums.dart';
-import '../../domain/entities/travel_stop.dart';
-import '../../l10n/app_localizations.dart';
-import '../extensions/enums_extensions.dart';
-import '../providers/map_markers_provider.dart';
-import '../providers/register_travel_provider.dart';
-import '../providers/travel_list_provider.dart';
-import '../providers/user_preferences_provider.dart';
-import '../scripts/scripts.dart';
-import '../widgets/custom_date_range_widget.dart';
-import '../widgets/custom_dialog.dart';
-import 'fab_page.dart';
-import 'map_page.dart';
+import '../../../core/extensions/date_extensions.dart';
+import '../../../core/extensions/string_extensions.dart';
+import '../../../domain/entities/enums.dart';
+import '../../../domain/entities/travel_stop.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../extensions/enums_extensions.dart';
+import '../../providers/map_markers_provider.dart';
+import '../../providers/register_travel_provider.dart';
+import '../../providers/travel_list_provider.dart';
+import '../../providers/user_preferences_provider.dart';
+import '../../scripts/scripts.dart';
+import '../../util/app_routes.dart';
+import '../../widgets/custom_date_range_widget.dart';
+import '../../widgets/custom_dialog.dart';
+import '../util/fab_page.dart';
 
 /// This is a page for registering a travel
 class RegisterTravelPage extends StatelessWidget {
   /// Constant constructor
   const RegisterTravelPage({super.key});
-
-  /// The route of the page
-  static const String routeName = '/registerTravel';
 
   @override
   Widget build(BuildContext context) {
@@ -644,7 +641,7 @@ class _TravelMapWidget extends StatelessWidget {
                     return;
                   }
 
-                  context.go(TravelMap.routeName);
+                  context.push(Routes.travelMap);
                 },
                 child: Text(as.add_stops_for_your_travel),
               ),

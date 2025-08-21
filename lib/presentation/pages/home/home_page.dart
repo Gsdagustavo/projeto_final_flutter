@@ -5,25 +5,22 @@ import 'package:flutter_rating/flutter_rating.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/extensions/date_extensions.dart';
-import '../../core/extensions/string_extensions.dart';
-import '../../domain/entities/participant.dart';
-import '../../domain/entities/review.dart';
-import '../../domain/entities/travel.dart';
-import '../../l10n/app_localizations.dart';
-import '../providers/register_travel_provider.dart';
-import '../providers/review_provider.dart';
-import '../providers/travel_list_provider.dart';
-import '../providers/user_preferences_provider.dart';
-import 'fab_page.dart';
+import '../../../core/extensions/date_extensions.dart';
+import '../../../core/extensions/string_extensions.dart';
+import '../../../domain/entities/participant.dart';
+import '../../../domain/entities/review.dart';
+import '../../../domain/entities/travel.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../providers/register_travel_provider.dart';
+import '../../providers/review_provider.dart';
+import '../../providers/travel_list_provider.dart';
+import '../../providers/user_preferences_provider.dart';
+import '../util/fab_page.dart';
 
 /// The Home Page of the app
 class HomePage extends StatelessWidget {
   /// Constant constructor
   const HomePage({super.key});
-
-  /// The route of the page
-  static const String routeName = '/';
 
   @override
   Widget build(BuildContext context) {
