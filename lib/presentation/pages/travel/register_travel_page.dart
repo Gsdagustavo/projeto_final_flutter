@@ -20,7 +20,7 @@ import '../../scripts/scripts.dart';
 import '../../util/app_routes.dart';
 import '../../widgets/custom_date_range_widget.dart';
 import '../../widgets/custom_dialog.dart';
-import '../util/fab_page.dart';
+import '../../widgets/fab_page.dart';
 
 /// This is a page for registering a travel
 class RegisterTravelPage extends StatelessWidget {

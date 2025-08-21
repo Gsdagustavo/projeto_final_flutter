@@ -11,7 +11,7 @@ import '../../../services/user_preferences_service.dart';
 import '../../providers/login_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../util/app_routes.dart';
-import '../util/fab_page.dart';
+import '../../widgets/fab_page.dart';
 
 /// This is the settings page of the app
 ///

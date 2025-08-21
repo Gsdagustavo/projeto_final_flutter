@@ -15,7 +15,7 @@ import '../../providers/register_travel_provider.dart';
 import '../../providers/review_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
-import '../util/fab_page.dart';
+import '../../widgets/fab_page.dart';
 
 /// The Home Page of the app
 class HomePage extends StatelessWidget {
