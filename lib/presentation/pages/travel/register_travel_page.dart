@@ -36,7 +36,7 @@ class RegisterTravelPage extends StatelessWidget {
         padding: const EdgeInsets.all(32.0),
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               /// Travel title text field
               _TravelTitleTextField(),
@@ -289,11 +289,12 @@ class _ParticipantsWidget extends StatelessWidget {
               as.participants,
               style: Theme.of(context).textTheme.displayMedium,
             ),
-
-            /// TODO: fix ui
             Expanded(
               child: TextButton(
-                child: Text(as.register_participant),
+                child: Text(
+                  as.register_participant,
+                  textAlign: TextAlign.center,
+                ),
                 onPressed: () async {
                   await _showParticipantRegisterModal(context, travelState);
                 },
@@ -302,9 +303,11 @@ class _ParticipantsWidget extends StatelessWidget {
           ],
         ),
 
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 32),
-          child: _ListParticipants(),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32),
+            child: _ListParticipants(),
+          ),
         ),
       ],
     );
@@ -640,7 +643,10 @@ class _TravelMapWidget extends StatelessWidget {
 
                   context.push(Routes.travelMap);
                 },
-                child: Text(as.add_stops_for_your_travel),
+                child: Text(
+                  as.add_stops_for_your_travel,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ],
