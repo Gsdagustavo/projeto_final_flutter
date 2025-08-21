@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -12,8 +11,6 @@ import '../../../services/user_preferences_service.dart';
 import '../../providers/login_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../util/app_routes.dart';
-import '../../widgets/custom_dialog.dart';
-import '../auth/auth_page_switcher.dart';
 import '../util/fab_page.dart';
 
 /// This is the settings page of the app
@@ -53,164 +50,182 @@ class _SettingsPageState extends State<SettingsPage> {
 
     return FabPage(
       title: as!.title_settings,
-      body: Consumer<LoginProvider>(
-        builder: (_, authProvider, __) {
-          final as = AppLocalizations.of(context)!;
+      body: SingleChildScrollView(
+        child: Consumer<LoginProvider>(
+          builder: (_, authProvider, __) {
+            final as = AppLocalizations.of(context)!;
 
-          const defaultPfpPath = 'assets/images/default_profile_picture.png';
+            const defaultPfpPath = 'assets/images/default_profile_picture.png';
 
-          final locale = Localizations.localeOf(context).toString();
+            final locale = Localizations.localeOf(context).toString();
 
-          final user = authProvider.loggedUser;
+            final user = authProvider.loggedUser;
 
-          final creationTime = user?.metadata.creationTime;
-          final lastSignInTime = user?.metadata.lastSignInTime;
+            final creationTime = user?.metadata.creationTime;
+            final lastSignInTime = user?.metadata.lastSignInTime;
 
-          final formattedCreationTime = creationTime != null
-              ? creationTime.getFormattedDateWithYear(locale)
-              : 'N/A';
+            final formattedCreationTime = creationTime != null
+                ? creationTime.getFormattedDateWithYear(locale)
+                : 'N/A';
 
-          final formattedSignInTime = lastSignInTime != null
-              ? lastSignInTime.getFormattedDateWithYear(locale)
-              : 'N/A';
+            final formattedSignInTime = lastSignInTime != null
+                ? lastSignInTime.getFormattedDateWithYear(locale)
+                : 'N/A';
 
-          final backgroundImage = _profilePicture != null
-              ? FileImage(_profilePicture!)
-              : const AssetImage(defaultPfpPath) as ImageProvider;
+            final backgroundImage = _profilePicture != null
+                ? FileImage(_profilePicture!)
+                : const AssetImage(defaultPfpPath) as ImageProvider;
 
-          const double radius = 72;
+            const double radius = 72;
 
-          return Padding(
-            padding: const EdgeInsets.all(32.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Center(
-                      child: CircleAvatar(
-                        backgroundImage: backgroundImage,
-                        radius: radius,
-                      ),
-                    ),
-
-                    Positioned(
-                      bottom: 0,
-                      right:
-                          MediaQuery.of(context).size.width / 2 - radius - 22,
-                      child: InkWell(
-                        onTap: () async {
-                          /// TODO: show a modal to choose where the image
-                          /// is going to be picked from (camera, gallery, etc.)
-                          final image = await FileService().pickImage();
-                          await UserPreferencesService().saveProfilePicture(
-                            image,
-                          );
-
-                          setState(() {
-                            _profilePicture = image;
-                          });
-                        },
-                        radius: 20,
+            return Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Center(
                         child: CircleAvatar(
+                          backgroundImage: backgroundImage,
+                          radius: radius,
+                        ),
+                      ),
+
+                      Positioned(
+                        bottom: 0,
+                        right:
+                            MediaQuery.of(context).size.width / 2 - radius - 22,
+                        child: InkWell(
+                          onTap: () async {
+                            /// TODO: show a modal to choose where the image
+                            /// is going to be picked from (camera, gallery, etc.)
+                            final image = await FileService().pickImage();
+                            await UserPreferencesService().saveProfilePicture(
+                              image,
+                            );
+
+                            setState(() {
+                              _profilePicture = image;
+                            });
+                          },
                           radius: 20,
-                          backgroundColor: Colors.white,
-                          child: Center(
-                            child: Icon(
-                              Icons.edit,
-                              size: 32,
-                              color: Theme.of(context).primaryColor,
+                          child: CircleAvatar(
+                            radius: 20,
+                            backgroundColor: Colors.white,
+                            child: Center(
+                              child: Icon(
+                                Icons.edit,
+                                size: 32,
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
 
-                const Padding(padding: EdgeInsets.all(12)),
+                  const Padding(padding: EdgeInsets.all(16)),
 
-                Text(
-                  as.account,
-                  style: Theme.of(context).textTheme.displayMedium,
-                ),
+                  Text(
+                    as.account,
+                    style: Theme.of(context).textTheme.displayMedium,
+                  ),
 
-                Padding(padding: EdgeInsets.all(6)),
+                  Padding(padding: EdgeInsets.all(6)),
 
-                Padding(
-                  padding: const EdgeInsets.only(left: 5),
-                  child: Column(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        /// TODO: intl
-                        '${as.email}: ${user?.email ?? 'N/A'}',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      Text(
-                        '${as.account_creation}: $formattedCreationTime',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                      Text(
-                        '${as.last_sign_in}: $formattedSignInTime',
-                        style: Theme.of(context).textTheme.bodyLarge,
+                      /// Email
+                      AccountInfoWidget(
+                        icon: Icon(Icons.email),
+                        text: Text(
+                          '${as.email}: ${user?.email ?? 'N/A'}',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
                       ),
 
-                      Padding(padding: EdgeInsets.all(6)),
+                      /// Account creation
+                      AccountInfoWidget(
+                        icon: Icon(Icons.date_range),
+                        text: Text(
+                          '${as.account_creation}: $formattedCreationTime',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ),
+
+                      /// Last sign in
+                      AccountInfoWidget(
+                        icon: Icon(Icons.assignment_ind_outlined),
+                        text: Text(
+                          '${as.last_sign_in}: $formattedSignInTime',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ),
 
                       InkWell(
+                        borderRadius: BorderRadius.circular(16),
                         onTap: () async {
                           context.go(Routes.auth);
                           await loginProvider.signOut();
-                          // if (loginProvider.hasError) {
-                          //   unawaited(
-                          //     showDialog(
-                          //       context: context,
-                          //       builder: (_) => CustomDialog(
-                          //         title: as.warning,
-                          //         content: Text(loginProvider.errorMsg),
-                          //         isError: true,
-                          //       ),
-                          //     ),
-                          //   );
-                          //
-                          //   return;
-                          // }
                         },
-                        child: Row(
-                          spacing: 10,
-                          children: [
-                            Text(
-                              as.exit,
-                              style: const TextStyle(color: Colors.red),
-                            ),
-                            const Icon(
-                              Icons.logout,
-                              color: Colors.red,
-                              size: 18,
-                            ),
-                          ],
+                        child: AccountInfoWidget(
+                          icon: const Icon(Icons.logout, color: Colors.red),
+                          text: Text(
+                            as.exit,
+                            style: const TextStyle(color: Colors.red),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                ),
 
-                const Padding(padding: EdgeInsets.all(12)),
+                  Text(
+                    as.language,
+                    style: Theme.of(context).textTheme.displayMedium,
+                  ),
 
-                Text(
-                  as.language,
-                  style: Theme.of(context).textTheme.displayMedium,
-                ),
+                  const Padding(padding: EdgeInsets.all(6)),
 
-                const Padding(padding: EdgeInsets.all(6)),
+                  const _LanguagesRadio(),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
 
-                const _LanguagesRadio(),
-              ],
-            ),
-          );
-        },
+class AccountInfoWidget extends StatelessWidget {
+  const AccountInfoWidget({super.key, required this.icon, required this.text});
+
+  final Icon icon;
+  final Text text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Container(
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Theme.of(context).primaryColor.withOpacity(0.25),
+        ),
+
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            icon,
+            Padding(padding: EdgeInsets.all(6)),
+            text,
+          ],
+        ),
       ),
     );
   }
