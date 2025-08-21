@@ -454,7 +454,7 @@ abstract class AppLocalizations {
   /// No description provided for @remove_participant_confirmation.
   ///
   /// In en, this message translates to:
-  /// **'Would you really want to remove the participant?'**
+  /// **'Would you really want to remove the participant'**
   String get remove_participant_confirmation;
 
   /// No description provided for @remove_participant.

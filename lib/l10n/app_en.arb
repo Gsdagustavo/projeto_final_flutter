@@ -81,7 +81,7 @@
   "name": "Name",
   "age": "Age",
   "participant_registered": "Participant registered",
-  "remove_participant_confirmation": "Would you really want to remove the participant?",
+  "remove_participant_confirmation": "Would you really want to remove the participant",
   "remove_participant": "Remove participant",
   "participant_removed": "Participant removed",
   "travel_map": "Travel Map",

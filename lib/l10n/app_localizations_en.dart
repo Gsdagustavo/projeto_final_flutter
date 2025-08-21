@@ -186,7 +186,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get participant_registered => 'Participant registered';
 
   @override
-  String get remove_participant_confirmation => 'Would you really want to remove the participant?';
+  String get remove_participant_confirmation => 'Would you really want to remove the participant';
 
   @override
   String get remove_participant => 'Remove participant';
