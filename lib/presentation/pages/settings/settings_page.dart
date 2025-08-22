@@ -82,6 +82,7 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  /// Profile picture
                   Stack(
                     alignment: Alignment.center,
                     children: [
@@ -97,8 +98,10 @@ class _SettingsPageState extends State<SettingsPage> {
                         right:
                             MediaQuery.of(context).size.width / 2 - radius - 22,
                         child: InkWell(
+                          borderRadius: BorderRadius.circular(12),
                           onTap: () async {
                             /// TODO: show a modal to choose where the image
+
                             /// is going to be picked from (camera, gallery, etc.)
                             final image = await FileService().pickImage();
                             await UserPreferencesService().saveProfilePicture(
@@ -126,14 +129,15 @@ class _SettingsPageState extends State<SettingsPage> {
                     ],
                   ),
 
-                  const Padding(padding: EdgeInsets.all(16)),
+                  const Padding(padding: EdgeInsets.all(20)),
 
+                  /// 'Account' label
                   Text(
                     as.account,
                     style: Theme.of(context).textTheme.displayMedium,
                   ),
 
-                  Padding(padding: EdgeInsets.all(6)),
+                  const Padding(padding: EdgeInsets.all(12)),
 
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,12 +186,15 @@ class _SettingsPageState extends State<SettingsPage> {
                     ],
                   ),
 
+                  const Padding(padding: EdgeInsets.all(12)),
+
+                  /// 'Language' label
                   Text(
                     as.language,
                     style: Theme.of(context).textTheme.displayMedium,
                   ),
 
-                  const Padding(padding: EdgeInsets.all(6)),
+                  const Padding(padding: EdgeInsets.all(12)),
 
                   const _LanguagesRadio(),
                 ],
