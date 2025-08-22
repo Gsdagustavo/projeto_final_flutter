@@ -23,8 +23,13 @@ class RegisterTravelProvider with ChangeNotifier {
   /// Instance of [FileService]
   final fileService = FileService();
 
-  /// Form key for validation
-  final formKey = GlobalKey<FormState>();
+  /// TODO: make form keys private and add getters to access them
+
+  /// Form key for travel title validation
+  final travelTitleFormKey = GlobalKey<FormState>();
+
+  /// Form key for participant info validation
+  final participantInfoFormKey = GlobalKey<FormState>();
 
   /// Default constructor
   RegisterTravelProvider(this._travelUseCases) {

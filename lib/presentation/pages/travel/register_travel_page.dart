@@ -124,7 +124,7 @@ class _TravelTitleTextFieldState extends State<_TravelTitleTextField> {
         ),
         const Padding(padding: EdgeInsets.all(12)),
         Form(
-          key: travelState.formKey,
+          key: travelState.travelTitleFormKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: TextFormField(
             validator: validations.travelTitleValidator,
@@ -296,7 +296,7 @@ class _ParticipantsWidget extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 onPressed: () async {
-                  await _showParticipantRegisterModal(context, travelState);
+                  await _showParticipantRegisterModal(context);
                 },
               ),
             ),
@@ -313,34 +313,25 @@ class _ParticipantsWidget extends StatelessWidget {
     );
   }
 
-  Future<void> _showParticipantRegisterModal(
-    BuildContext context,
-    RegisterTravelProvider travelState,
-  ) async {
+  Future<void> _showParticipantRegisterModal(BuildContext context) async {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        return _AddParticipantModal(travelState);
+        return _AddParticipantModal();
       },
     );
   }
 }
 
-class _AddParticipantModal extends StatefulWidget {
-  const _AddParticipantModal(this.travelState);
+class _AddParticipantModal extends StatelessWidget {
+  const _AddParticipantModal();
 
-  final RegisterTravelProvider travelState;
-
-  @override
-  State<_AddParticipantModal> createState() => _AddParticipantModalState();
-}
-
-class _AddParticipantModalState extends State<_AddParticipantModal> {
   @override
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
+    final validations = FormValidations(as);
 
     return Stack(
       clipBehavior: Clip.none,
@@ -390,49 +381,73 @@ class _AddParticipantModalState extends State<_AddParticipantModal> {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      /// TODO: make this a textformfield with validations
-                      TextField(
-                        onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                        controller:
-                            widget.travelState.participantNameController,
-                        decoration: InputDecoration(
-                          hintText: as.name,
-                          prefixIcon: const Icon(Icons.person),
-                        ),
+                      Consumer<RegisterTravelProvider>(
+                        builder: (_, travelState, __) {
+                          return Form(
+                            key: travelState.participantInfoFormKey,
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  validator:
+                                      validations.participantNameValidator,
+                                  onTapOutside: (_) =>
+                                      FocusScope.of(context).unfocus(),
+                                  controller:
+                                      travelState.participantNameController,
+                                  decoration: InputDecoration(
+                                    hintText: as.name,
+                                    prefixIcon: const Icon(Icons.person),
+                                  ),
+                                ),
+                                const Padding(padding: EdgeInsets.all(16)),
+                                TextFormField(
+                                  validator:
+                                      validations.participantAgeValidator,
+                                  onTapOutside: (_) =>
+                                      FocusScope.of(context).unfocus(),
+                                  controller:
+                                      travelState.participantAgeController,
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    hintText: as.age,
+                                    prefixIcon: const Icon(
+                                      Icons.calendar_today,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                       ),
-                      const Padding(padding: EdgeInsets.all(16)),
 
-                      /// TODO: make this a textformfield with validations
-                      TextField(
-                        onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                        controller: widget.travelState.participantAgeController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: as.age,
-                          prefixIcon: const Icon(Icons.timer),
-                        ),
-                      ),
                       const Padding(padding: EdgeInsets.all(16)),
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          /// 'Cancel' button
                           TextButton(
                             onPressed: () => context.pop(),
                             child: Text(as.cancel),
                           ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              await widget.travelState.addParticipant();
-                              context.pop();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(as.participant_registered),
-                                ),
+
+                          /// 'Register' button
+                          Consumer<RegisterTravelProvider>(
+                            builder: (_, travelState, __) {
+                              return ElevatedButton(
+                                onPressed: () async {
+                                  await travelState.addParticipant();
+                                  context.pop();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(as.participant_registered),
+                                    ),
+                                  );
+                                },
+                                child: Text(as.register),
                               );
                             },
-
-                            child: Text(as.register),
                           ),
                         ],
                       ),
@@ -452,33 +467,41 @@ class _AddParticipantModalState extends State<_AddParticipantModal> {
               SizedBox(
                 width: 128,
                 height: 128,
-                child: CircleAvatar(
-                  backgroundImage: widget.travelState.profilePictureFile != null
-                      ? FileImage(widget.travelState.profilePictureFile!)
-                      : const AssetImage(
-                              'assets/images/default_profile_picture.png',
-                            )
-                            as ImageProvider,
-                  backgroundColor: Colors.transparent,
+                child: Consumer<RegisterTravelProvider>(
+                  builder: (_, travelState, __) {
+                    return CircleAvatar(
+                      backgroundImage: travelState.profilePictureFile != null
+                          ? FileImage(travelState.profilePictureFile!)
+                          : const AssetImage(
+                                  'assets/images/default_profile_picture.png',
+                                )
+                                as ImageProvider,
+                      backgroundColor: Colors.transparent,
+                    );
+                  },
                 ),
               ),
 
               Positioned(
                 bottom: 0,
                 right: 2,
-                child: InkWell(
-                  onTap: () async {
-                    /// TODO: show a modal to choose where the image is going
-                    /// to be picked from (camera, gallery, etc.)
-                    await widget.travelState.pickImage();
+                child: Consumer<RegisterTravelProvider>(
+                  builder: (_, travelState, __) {
+                    return InkWell(
+                      onTap: () async {
+                        /// TODO: show a modal to choose where the image is going
+                        /// to be picked from (camera, gallery, etc.)
+                        await travelState.pickImage();
 
-                    setState(() {});
+                        // setState(() {});
+                      },
+                      radius: 20,
+                      child: CircleAvatar(
+                        radius: 20,
+                        child: Center(child: Icon(Icons.edit, size: 32)),
+                      ),
+                    );
                   },
-                  radius: 20,
-                  child: CircleAvatar(
-                    radius: 20,
-                    child: Center(child: Icon(Icons.edit, size: 32)),
-                  ),
                 ),
               ),
             ],
