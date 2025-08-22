@@ -104,45 +104,47 @@ class _SendRecoveryCodeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
 
-    return ElevatedButton(
-      onPressed: () async {
-        if (!formKey.currentState!.validate()) return;
+    return Consumer<LoginProvider>(
+      builder: (_, loginProvider, __) {
+        return ElevatedButton(
+          onPressed: () async {
+            if (!formKey.currentState!.validate()) return;
 
-        final loginProvider = Provider.of<LoginProvider>(
-          context,
-          listen: false,
-        );
-        await loginProvider.sendPasswordResetEmail(email: emailController.text);
+            await loginProvider.sendPasswordResetEmail(
+              email: emailController.text,
+            );
 
-        if (loginProvider.hasError) {
-          unawaited(
-            showDialog(
-              context: context,
-              builder: (context) => CustomDialog(
-                title: as.warning,
-                content: Text(loginProvider.errorMsg),
-                isError: true,
+            if (loginProvider.hasError) {
+              unawaited(
+                showDialog(
+                  context: context,
+                  builder: (context) => CustomDialog(
+                    title: as.warning,
+                    content: Text(loginProvider.errorMsg),
+                    isError: true,
+                  ),
+                ),
+              );
+
+              return;
+            }
+
+            unawaited(
+              showDialog(
+                context: context,
+                builder: (context) => CustomDialog(
+                  title: '',
+                  content: Text(
+                    '${as.recovery_code_sent_to} '
+                    '${emailController.text}',
+                  ),
+                ),
               ),
-            ),
-          );
-
-          return;
-        }
-
-        unawaited(
-          showDialog(
-            context: context,
-            builder: (context) => CustomDialog(
-              title: '',
-              content: Text(
-                '${as.recovery_code_sent_to} '
-                '${emailController.text}',
-              ),
-            ),
-          ),
+            );
+          },
+          child: Text(as.send_recovery_code),
         );
       },
-      child: Text(as.send_recovery_code),
     );
   }
 }

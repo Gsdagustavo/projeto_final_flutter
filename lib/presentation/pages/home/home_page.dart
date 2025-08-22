@@ -184,55 +184,56 @@ class _FinishTravelButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
 
-    return ElevatedButton(
-      onPressed: () async {
-        final registerTravelState = Provider.of<RegisterTravelProvider>(
-          context,
-          listen: false,
-        );
-
-        await showDialog<bool>(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    as.finish_travel_confirm,
-                    style: Theme.of(context).textTheme.titleLarge,
+    return Consumer<RegisterTravelProvider>(
+      builder: (_, travelState, __) {
+        return ElevatedButton(
+          onPressed: () async {
+            await showDialog<bool>(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        as.finish_travel_confirm,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      Icon(Icons.warning, color: Colors.orange, size: 28),
+                    ],
                   ),
-                  Icon(Icons.warning, color: Colors.orange, size: 28),
-                ],
-              ),
-              actionsAlignment: MainAxisAlignment.spaceAround,
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    context.pop(false);
-                  },
+                  actionsAlignment: MainAxisAlignment.spaceAround,
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        context.pop(false);
+                      },
 
-                  child: Text(as.no),
-                ),
+                      child: Text(as.no),
+                    ),
 
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(padding: EdgeInsets.all(12)),
-                  onPressed: () async {
-                    await registerTravelState.finishTravel(travel);
-                    context.pop(false);
-                  },
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.all(12),
+                      ),
+                      onPressed: () async {
+                        await travelState.finishTravel(travel);
+                        context.pop(false);
+                      },
 
-                  child: Text(as.yes),
-                ),
-              ],
+                      child: Text(as.yes),
+                    ),
+                  ],
+                );
+              },
             );
           },
+          child: Text(
+            as.finish_travel,
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
         );
       },
-      child: Text(
-        as.finish_travel,
-        style: Theme.of(context).textTheme.labelLarge,
-      ),
     );
   }
 }
@@ -250,11 +251,6 @@ class _StopWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final locale = Provider.of<UserPreferencesProvider>(
-      context,
-      listen: false,
-    ).languageCode;
-
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -281,7 +277,11 @@ class _StopWidget extends StatelessWidget {
 
             Padding(padding: EdgeInsets.all(6)),
 
-            Text(date.getFormattedDate(locale)),
+            Consumer<UserPreferencesProvider>(
+              builder: (_, prefState, __) {
+                return Text(date.getFormattedDate(prefState.languageCode));
+              },
+            ),
           ],
         ),
       ],
@@ -329,7 +329,6 @@ class ReviewModal extends StatefulWidget {
 class _ReviewModalState extends State<ReviewModal> {
   @override
   Widget build(BuildContext context) {
-    final reviewState = Provider.of<ReviewProvider>(context);
     final as = AppLocalizations.of(context)!;
     final validations = FormValidations(as);
 
@@ -357,12 +356,16 @@ class _ReviewModalState extends State<ReviewModal> {
               ],
             ),
             Padding(padding: EdgeInsets.all(16)),
-            StarRating(
-              size: 52,
-              color: Colors.yellow.shade800,
-              rating: reviewState.reviewRate.toDouble(),
-              onRatingChanged: (r) {
-                reviewState.reviewRate = r.toInt();
+            Consumer<ReviewProvider>(
+              builder: (_, reviewState, __) {
+                return StarRating(
+                  size: 52,
+                  color: Colors.yellow.shade800,
+                  rating: reviewState.reviewRate.toDouble(),
+                  onRatingChanged: (r) {
+                    reviewState.reviewRate = r.toInt();
+                  },
+                );
               },
             ),
             Padding(padding: EdgeInsets.all(16)),
@@ -374,22 +377,26 @@ class _ReviewModalState extends State<ReviewModal> {
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
                 Padding(padding: EdgeInsets.all(6)),
-                Form(
-                  key: reviewState.key,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  child: TextFormField(
-                    validator: validations.reviewValidator,
-                    controller: reviewState.reviewController,
-                    onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                    maxLength: 500,
-                    maxLines: 5,
-                    decoration: InputDecoration(
-                      hint: Text(
-                        as.review,
-                        style: Theme.of(context).textTheme.labelSmall,
+                Consumer<ReviewProvider>(
+                  builder: (_, reviewState, __) {
+                    return Form(
+                      key: reviewState.key,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      child: TextFormField(
+                        validator: validations.reviewValidator,
+                        controller: reviewState.reviewController,
+                        onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                        maxLength: 500,
+                        maxLines: 5,
+                        decoration: InputDecoration(
+                          hint: Text(
+                            as.review,
+                            style: Theme.of(context).textTheme.labelSmall,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -412,57 +419,65 @@ class _ReviewModalState extends State<ReviewModal> {
                 //     return Container();
                 //   },
                 // ),
-                InkWell(
-                  onTap: () async {
-                    await reviewState.pickReviewImage();
-                  },
-                  borderRadius: BorderRadius.circular(32),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: BoxBorder.all(color: Colors.black, width: 1),
+                Consumer<ReviewProvider>(
+                  builder: (_, reviewState, __) {
+                    return InkWell(
+                      onTap: () async {
+                        await reviewState.pickReviewImage();
+                      },
                       borderRadius: BorderRadius.circular(32),
-                    ),
-                    padding: EdgeInsets.all(24),
-                    child: Column(
-                      children: [
-                        Icon(
-                          size: 42,
-                          Icons.camera_alt,
-                          color: Theme.of(context).primaryColor,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: BoxBorder.all(color: Colors.black, width: 1),
+                          borderRadius: BorderRadius.circular(32),
                         ),
-                        Text(as.add_photo),
-                      ],
-                    ),
-                  ),
+                        padding: EdgeInsets.all(24),
+                        child: Column(
+                          children: [
+                            Icon(
+                              size: 42,
+                              Icons.camera_alt,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            Text(as.add_photo),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
 
             Padding(padding: EdgeInsets.all(16)),
-            InkWell(
-              onTap: () async {
-                // await reviewState.addReview();
-              },
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                padding: EdgeInsets.all(22),
-                child: Center(
-                  child: Text(
-                    as.send_review,
+            Consumer<ReviewProvider>(
+              builder: (_, reviewState, __) {
+                return InkWell(
+                  onTap: () async {
+                    // await reviewState.addReview();
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    padding: EdgeInsets.all(22),
+                    child: Center(
+                      child: Text(
+                        as.send_review,
 
-                    /// TODO: theme
-                    style: TextStyle(
-                      color: Theme.of(context).cardColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                        /// TODO: theme
+                        style: TextStyle(
+                          color: Theme.of(context).cardColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ],
         ),

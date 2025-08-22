@@ -111,7 +111,6 @@ class _TravelTitleTextField extends StatefulWidget {
 class _TravelTitleTextFieldState extends State<_TravelTitleTextField> {
   @override
   Widget build(BuildContext context) {
-    final travelState = Provider.of<RegisterTravelProvider>(context);
     final as = AppLocalizations.of(context)!;
     final validations = FormValidations(as);
 
@@ -123,15 +122,19 @@ class _TravelTitleTextFieldState extends State<_TravelTitleTextField> {
           style: Theme.of(context).textTheme.displayMedium,
         ),
         const Padding(padding: EdgeInsets.all(12)),
-        Form(
-          key: travelState.travelTitleFormKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: TextFormField(
-            validator: validations.travelTitleValidator,
-            controller: travelState.travelTitleController,
-            onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
-            decoration: InputDecoration(label: Text(as.travel_title_label)),
-          ),
+        Consumer<RegisterTravelProvider>(
+          builder: (_, travelState, __) {
+            return Form(
+              key: travelState.travelTitleFormKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: TextFormField(
+                validator: validations.travelTitleValidator,
+                controller: travelState.travelTitleController,
+                onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
+                decoration: InputDecoration(label: Text(as.travel_title_label)),
+              ),
+            );
+          },
         ),
       ],
     );
@@ -143,7 +146,6 @@ class _TransportTypesDropdownButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final travelState = Provider.of<RegisterTravelProvider>(context);
     final as = AppLocalizations.of(context)!;
 
     return Column(
@@ -166,27 +168,33 @@ class _TransportTypesDropdownButton extends StatelessWidget {
             ),
           ),
 
-          child: DropdownButton<TransportType>(
-            value: travelState.transportType,
-            icon: const Icon(Icons.arrow_downward),
-            underline: Container(color: Colors.transparent),
-            borderRadius: BorderRadius.circular(12),
-            isExpanded: true,
+          child: Consumer<RegisterTravelProvider>(
+            builder: (_, travelState, __) {
+              return DropdownButton<TransportType>(
+                value: travelState.transportType,
+                icon: const Icon(Icons.arrow_downward),
+                underline: Container(color: Colors.transparent),
+                borderRadius: BorderRadius.circular(12),
+                isExpanded: true,
 
-            items: [
-              for (final item in TransportType.values)
-                DropdownMenuItem(
-                  value: item,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: Text(
-                      item.getIntlTransportType(context).capitalizedAndSpaced,
+                items: [
+                  for (final item in TransportType.values)
+                    DropdownMenuItem(
+                      value: item,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: Text(
+                          item
+                              .getIntlTransportType(context)
+                              .capitalizedAndSpaced,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-            ],
+                ],
 
-            onChanged: travelState.selectTransportType,
+                onChanged: travelState.selectTransportType,
+              );
+            },
           ),
         ),
       ],
@@ -276,8 +284,6 @@ class _ParticipantsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final travelState = Provider.of<RegisterTravelProvider>(context);
-
     final as = AppLocalizations.of(context)!;
 
     return Column(
@@ -492,8 +498,6 @@ class _AddParticipantModal extends StatelessWidget {
                         /// TODO: show a modal to choose where the image is going
                         /// to be picked from (camera, gallery, etc.)
                         await travelState.pickImage();
-
-                        // setState(() {});
                       },
                       radius: 20,
                       child: CircleAvatar(
@@ -637,39 +641,38 @@ class _TravelMapWidget extends StatelessWidget {
             const Padding(padding: EdgeInsets.all(10)),
 
             Expanded(
-              child: TextButton(
-                onPressed: () async {
-                  final travelState = Provider.of<RegisterTravelProvider>(
-                    context,
-                    listen: false,
-                  );
+              child: Consumer<RegisterTravelProvider>(
+                builder: (_, travelState, __) {
+                  return TextButton(
+                    onPressed: () async {
+                      final as = AppLocalizations.of(context)!;
 
-                  final as = AppLocalizations.of(context)!;
-
-                  if (travelState.travelTimeRange == null) {
-                    await showDialog(
-                      context: context,
-                      builder: (context) {
-                        return CustomDialog(
-                          title: as.warning,
-                          content: Text(
-                            /// TODO: intl
-                            'You must select the Travel Date Range first!',
-                          ),
-                          isError: true,
+                      if (travelState.travelTimeRange == null) {
+                        await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return CustomDialog(
+                              title: as.warning,
+                              content: Text(
+                                /// TODO: intl
+                                'You must select the Travel Date Range first!',
+                              ),
+                              isError: true,
+                            );
+                          },
                         );
-                      },
-                    );
 
-                    return;
-                  }
+                        return;
+                      }
 
-                  context.push(Routes.travelMap);
+                      context.push(Routes.travelMap);
+                    },
+                    child: Text(
+                      as.add_stops_for_your_travel,
+                      textAlign: TextAlign.center,
+                    ),
+                  );
                 },
-                child: Text(
-                  as.add_stops_for_your_travel,
-                  textAlign: TextAlign.center,
-                ),
               ),
             ),
           ],
@@ -728,29 +731,24 @@ class _TravelStopListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// TODO: theme
     return ListTile(
       key: Key(stop.place.toString()),
       title: Text(stop.place.toString()),
       leading: Text('${index + 1}. '),
       tileColor: Theme.of(context).cardColor,
       contentPadding: const EdgeInsets.all(12),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      trailing: IconButton(
-        onPressed: () {
-          final travelState = Provider.of<RegisterTravelProvider>(
-            context,
-            listen: false,
+      // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      trailing: Consumer2<RegisterTravelProvider, MapMarkersProvider>(
+        builder: (_, travelState, markerState, __) {
+          return IconButton(
+            onPressed: () {
+              travelState.removeTravelStop(stop);
+              markerState.removeMarker(stop);
+            },
+            icon: Icon(Icons.delete),
           );
-
-          final markerState = Provider.of<MapMarkersProvider>(
-            context,
-            listen: false,
-          );
-
-          travelState.removeTravelStop(stop);
-          markerState.removeMarker(stop);
         },
-        icon: Icon(Icons.delete),
       ),
 
       onTap: () async {

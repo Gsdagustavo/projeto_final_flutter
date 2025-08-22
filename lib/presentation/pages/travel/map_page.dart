@@ -80,12 +80,6 @@ class _TravelMapState extends State<TravelMap> {
   @override
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
-
-    final areStopsValid = Provider.of<RegisterTravelProvider>(
-      context,
-      listen: true,
-    ).areStopsValid;
-
     return Scaffold(
       appBar: MyAppBar(
         title: as.title_map_select_travel_stops,
@@ -124,27 +118,37 @@ class _TravelMapState extends State<TravelMap> {
               //     ),
               //   ),
               // ),
+              Consumer<RegisterTravelProvider>(
+                builder: (_, travelState, __) {
+                  final areStopsValid = travelState.areStopsValid;
 
-              /// 'Finish' button
-              if (areStopsValid)
-                Positioned(
-                  bottom: 30,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 16,
-                        horizontal: 64,
+                  /// 'Finish' button
+                  if (areStopsValid) {
+                    return Positioned(
+                      bottom: 30,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 16,
+                            horizontal: 64,
+                          ),
+                        ),
+                        onPressed: () {
+                          context.pop();
+                        },
+
+                        /// TODO: fix theme
+                        child: Text(
+                          as.finish,
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
                       ),
-                    ),
-                    onPressed: () {
-                      context.pop();
-                    },
-                    child: Text(
-                      as.finish,
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
-                  ),
-                ),
+                    );
+                  }
+
+                  return Container();
+                },
+              ),
             ],
           );
         },

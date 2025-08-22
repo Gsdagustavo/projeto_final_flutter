@@ -45,21 +45,20 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final loginProvider = Provider.of<LoginProvider>(context, listen: false);
     final as = AppLocalizations.of(context);
 
     return FabPage(
       title: as!.title_settings,
       body: SingleChildScrollView(
         child: Consumer<LoginProvider>(
-          builder: (_, authProvider, __) {
+          builder: (_, loginProvider, __) {
             final as = AppLocalizations.of(context)!;
 
             const defaultPfpPath = 'assets/images/default_profile_picture.png';
 
             final locale = Localizations.localeOf(context).toString();
 
-            final user = authProvider.loggedUser;
+            final user = loginProvider.loggedUser;
 
             final creationTime = user?.metadata.creationTime;
             final lastSignInTime = user?.metadata.lastSignInTime;
@@ -266,42 +265,38 @@ class _LanguagesRadioState extends State<_LanguagesRadio> {
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (context) {
-        if (_isLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
-        return Wrap(
-          direction: Axis.horizontal,
-          children: [
-            for (final locale in locales)
-              ListTile(
-                title: Text(locale.toString().toUpperCase()),
-                leading: Radio<String>(
-                  value: locale.toString(),
-                  groupValue: selectedOption,
-                  onChanged: (value) async {
-                    setState(() {
-                      debugPrint('Value: $value');
-                      selectedOption = value.toString();
-                    });
+    return Wrap(
+      direction: Axis.horizontal,
+      children: [
+        for (final locale in locales)
+          ListTile(
+            title: Text(locale.toString().toUpperCase()),
+            leading: Radio<String>(
+              value: locale.toString(),
+              groupValue: selectedOption,
+              onChanged: (value) async {
+                setState(() {
+                  debugPrint('Value: $value');
+                  selectedOption = value.toString();
+                });
 
-                    final languageCodeProvider =
-                        Provider.of<UserPreferencesProvider>(
-                          context,
-                          listen: false,
-                        );
-
-                    await languageCodeProvider.changeLanguageCode(
-                      languageCode: locale.toString(),
+                final languageCodeProvider =
+                    Provider.of<UserPreferencesProvider>(
+                      context,
+                      listen: false,
                     );
-                  },
-                ),
-              ),
-          ],
-        );
-      },
+
+                await languageCodeProvider.changeLanguageCode(
+                  languageCode: locale.toString(),
+                );
+              },
+            ),
+          ),
+      ],
     );
   }
 }
