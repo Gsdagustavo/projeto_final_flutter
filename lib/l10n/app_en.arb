@@ -49,6 +49,7 @@
   "experience_historical_places": "Visit Historical Places",
   "experience_visit_local_establishments": "Visit Local Establishments (Bars, Restaurants, Parks, etc.)",
   "experience_contact_with_nature": "Contact With Nature",
+  "other":  "Other",
 
   "@@home_page": {},
   "my_travels": "My Travels",
@@ -102,7 +103,7 @@
   "err_register_stop": "An error occurred while trying to register the stop",
   "update_stop": "Update Stop",
   "stop_updated_successfully": "Stop updated successfully!",
-  "arrive_date": "ArriveDate",
+  "arrive_date": "Arrive Date",
   "leave_date": "Leave Date",
   "err_you_must_select_arrive_date_first": "You must select the Arrive Date first!",
   "finish": "Finish",
