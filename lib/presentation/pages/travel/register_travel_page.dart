@@ -126,7 +126,6 @@ class _TravelTitleTextFieldState extends State<_TravelTitleTextField> {
           builder: (_, travelState, __) {
             return Form(
               key: travelState.travelTitleFormKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
               child: TextFormField(
                 validator: validations.travelTitleValidator,
                 controller: travelState.travelTitleController,
@@ -337,7 +336,6 @@ class _AddParticipantModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
-    final validations = FormValidations(as);
 
     return Stack(
       clipBehavior: Clip.none,
@@ -515,6 +513,7 @@ class _ParticipantFormFields extends StatelessWidget {
       builder: (_, travelState, __) {
         return Form(
           key: travelState.participantInfoFormKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             children: [
               TextFormField(
