@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../../../core/extensions/date_extensions.dart';
 import '../../../core/extensions/string_extensions.dart';
 import '../../../domain/entities/enums.dart';
+import '../../../domain/entities/participant.dart';
 import '../../../domain/entities/travel_stop.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../extensions/enums_extensions.dart';
@@ -547,6 +548,50 @@ class _ParticipantFormFields extends StatelessWidget {
 class _ListParticipants extends StatelessWidget {
   const _ListParticipants();
 
+  void onParticipantRemoved(
+    BuildContext context,
+    Participant participant,
+  ) async {
+    final as = AppLocalizations.of(context)!;
+    final travelState = Provider.of<RegisterTravelProvider>(
+      context,
+      listen: false,
+    );
+
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(as.remove),
+          content: Text(
+            '${as.remove_participant_confirmation} '
+            '${participant.name}?',
+          ),
+
+          icon: const Icon(Icons.warning, color: Colors.red),
+
+          actions: [
+            TextButton(
+              child: Text(as.cancel),
+              onPressed: () => context.pop(false),
+            ),
+            TextButton(
+              child: Text(as.remove),
+              onPressed: () => context.pop(true),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (result != null && result == true) {
+      travelState.removeParticipant(participant);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(as.participant_removed)));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final travelState = Provider.of<RegisterTravelProvider>(context);
@@ -565,62 +610,55 @@ class _ListParticipants extends StatelessWidget {
       itemCount: travelState.numParticipants,
       itemBuilder: (context, index) {
         final participant = travelState.participants[index];
-
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Row(
-            children: [
-              _ParticipantProfilePicture(image: participant.profilePicture),
-              const Padding(padding: EdgeInsets.all(8)),
-
-              Text(
-                '${as.name}: ${participant.name}\n'
-                '${as.age}: ${participant.age}',
-              ),
-
-              const Spacer(),
-
-              IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () async {
-                  final result = await showDialog<bool>(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text(as.remove),
-                        content: Text(
-                          '${as.remove_participant_confirmation} '
-                          '${participant.name}?',
-                        ),
-
-                        icon: const Icon(Icons.warning, color: Colors.red),
-
-                        actions: [
-                          TextButton(
-                            child: Text(as.cancel),
-                            onPressed: () => context.pop(false),
-                          ),
-                          TextButton(
-                            child: Text(as.remove),
-                            onPressed: () => context.pop(true),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-
-                  if (result != null && result == true) {
-                    travelState.removeParticipant(index);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(as.participant_removed)),
-                    );
-                  }
-                },
-              ),
-            ],
-          ),
+        return _ParticipantListItem(
+          participant: participant,
+          onParticipantRemoved: () {
+            onParticipantRemoved(context, participant);
+          },
         );
       },
+    );
+  }
+}
+
+class _ParticipantListItem extends StatelessWidget {
+  const _ParticipantListItem({
+    super.key,
+    required this.participant,
+    required this.onParticipantRemoved,
+  });
+
+  final Participant participant;
+  final VoidCallback onParticipantRemoved;
+
+  @override
+  Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        children: [
+          _ParticipantProfilePicture(image: participant.profilePicture),
+          const Padding(padding: EdgeInsets.all(8)),
+
+          Text(
+            '${as.name}: ${participant.name}\n'
+            '${as.age}: ${participant.age}',
+          ),
+
+          const Spacer(),
+
+          Consumer<RegisterTravelProvider>(
+            builder: (_, travelState, __) {
+              return IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: onParticipantRemoved,
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

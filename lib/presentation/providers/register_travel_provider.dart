@@ -276,8 +276,8 @@ class RegisterTravelProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeParticipant(int index) {
-    _participants.removeAt(index);
+  void removeParticipant(Participant participant) {
+    _participants.remove(participant);
     notifyListeners();
   }
 
