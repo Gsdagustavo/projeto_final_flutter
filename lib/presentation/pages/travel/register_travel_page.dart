@@ -444,12 +444,35 @@ class _AddParticipantModal extends StatelessWidget {
                               return ElevatedButton(
                                 onPressed: () async {
                                   await travelState.addParticipant();
-                                  context.pop();
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(as.participant_registered),
-                                    ),
+
+                                  if (travelState.hasError) {
+                                    await showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return CustomDialog(
+                                          title: as.warning,
+                                          content: Text(travelState.error!),
+                                          isError: true,
+                                        );
+                                      },
+                                    );
+
+                                    return;
+                                  }
+
+                                  await showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return CustomDialog(
+                                        title: as.register_participant,
+                                        content: Text(
+                                          as.participant_registered,
+                                        ),
+                                      );
+                                    },
                                   );
+
+                                  context.pop();
                                 },
                                 child: Text(as.register),
                               );

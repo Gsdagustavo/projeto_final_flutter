@@ -46,7 +46,7 @@ class CustomDialog extends StatelessWidget {
     final titleRow = Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title, style: TextStyle(fontSize: 26),),
+        Text(title, style: TextStyle(fontSize: 26)),
         Padding(padding: const EdgeInsets.only(right: 20), child: icon),
       ],
     );

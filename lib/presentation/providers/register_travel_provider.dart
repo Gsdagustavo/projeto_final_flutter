@@ -243,7 +243,19 @@ class RegisterTravelProvider with ChangeNotifier {
   /// profile picture of the participant
   Future<void> addParticipant() async {
     final intAge = int.tryParse(_participantAgeController.text);
-    if (intAge == null) return;
+
+    if (intAge == null) {
+      debugPrint('Int age is null');
+      _errorMsg = 'Invalid participant age.';
+      notifyListeners();
+      return;
+    }
+
+    if (!participantInfoFormKey.currentState!.validate()) {
+      _errorMsg = 'Invalid participant data.';
+      notifyListeners();
+      return;
+    }
 
     _profilePictureFile ??= await fileService.getDefaultProfilePictureFile();
 
@@ -260,6 +272,7 @@ class RegisterTravelProvider with ChangeNotifier {
     _participants.add(participant);
 
     debugPrint('Participant $participant added');
+    _errorMsg = null;
     notifyListeners();
   }
 
