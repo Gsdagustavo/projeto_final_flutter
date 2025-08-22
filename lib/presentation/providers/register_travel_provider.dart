@@ -102,6 +102,12 @@ class RegisterTravelProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
+    if (!travelTitleFormKey.currentState!.validate()) {
+      _errorMsg = 'Invalid Travel Title';
+      notifyListeners();
+      return;
+    }
+
     if (!isTravelValid) {
       _errorMsg = 'Invalid Travel Info. Verify the data and try again';
       notifyListeners();
