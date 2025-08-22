@@ -322,22 +322,22 @@ class _ParticipantsWidget extends StatelessWidget {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        return _Modal(travelState);
+        return _AddParticipantModal(travelState);
       },
     );
   }
 }
 
-class _Modal extends StatefulWidget {
-  const _Modal(this.travelState);
+class _AddParticipantModal extends StatefulWidget {
+  const _AddParticipantModal(this.travelState);
 
   final RegisterTravelProvider travelState;
 
   @override
-  State<_Modal> createState() => _ModalState();
+  State<_AddParticipantModal> createState() => _AddParticipantModalState();
 }
 
-class _ModalState extends State<_Modal> {
+class _AddParticipantModalState extends State<_AddParticipantModal> {
   @override
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
