@@ -11,7 +11,6 @@ import '../../../domain/entities/participant.dart';
 import '../../../domain/entities/review.dart';
 import '../../../domain/entities/travel.dart';
 import '../../../l10n/app_localizations.dart';
-import '../../providers/register_travel_provider.dart';
 import '../../providers/review_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
@@ -163,7 +162,10 @@ class _TravelWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _ParticipantsWidget(participants: travel.participants),
-                    _FinishTravelButton(travel: travel),
+
+                    travel.isFinished
+                        ? SizedBox.shrink()
+                        : _FinishTravelButton(travel: travel),
                   ],
                 ),
               ),
@@ -184,7 +186,7 @@ class _FinishTravelButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
 
-    return Consumer<RegisterTravelProvider>(
+    return Consumer<TravelListProvider>(
       builder: (_, travelState, __) {
         return ElevatedButton(
           onPressed: () async {
@@ -218,6 +220,7 @@ class _FinishTravelButton extends StatelessWidget {
                       ),
                       onPressed: () async {
                         await travelState.finishTravel(travel);
+                        await travelState.update();
                         context.pop(false);
                       },
 

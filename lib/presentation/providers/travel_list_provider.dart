@@ -14,14 +14,20 @@ class TravelListProvider with ChangeNotifier {
     update();
   }
 
-  Future<void> update() async {
+  Future<void> finishTravel(Travel travel) async {
     _isLoading = true;
     notifyListeners();
 
-    _travels.clear();
-    _travels.addAll(await _travelUseCases.getAllTravels());
+    await _travelUseCases.finishTravel(travel);
+    await update();
 
     _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> update() async {
+    _travels.clear();
+    _travels.addAll(await _travelUseCases.getAllTravels());
     notifyListeners();
   }
 

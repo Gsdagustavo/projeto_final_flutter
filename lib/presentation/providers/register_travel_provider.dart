@@ -150,10 +150,6 @@ class RegisterTravelProvider with ChangeNotifier {
     resetForms();
   }
 
-  Future<void> finishTravel(Travel travel) async {
-    await _travelUseCases.finishTravel(travel);
-  }
-
   TravelStop addTravelStop(Place place) {
     final type = _stops.isEmpty ? TravelStopType.start : TravelStopType.stop;
     final arriveDate = _stopTimeRange!.start;

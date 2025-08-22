@@ -9,7 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   cupertino_icons: ^1.0.8
   intl: ^0.20.2
   flutter_localization: ^0.3.3
@@ -37,15 +36,15 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-
   flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true
-
   assets:
     - 'assets/images/default_profile_picture.png'
     - .env
 
-  generate: true
+flutter_native_splash:
+  color: "#F54927"
+  android: true
+  ios: true

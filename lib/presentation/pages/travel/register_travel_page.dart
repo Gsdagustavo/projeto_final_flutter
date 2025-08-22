@@ -129,6 +129,7 @@ class _TravelTitleTextFieldState extends State<_TravelTitleTextField> {
               key: travelState.travelTitleFormKey,
               child: TextFormField(
                 validator: validations.travelTitleValidator,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 controller: travelState.travelTitleController,
                 onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
                 decoration: InputDecoration(label: Text(as.travel_title_label)),
