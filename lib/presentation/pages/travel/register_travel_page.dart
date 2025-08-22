@@ -387,48 +387,12 @@ class _AddParticipantModal extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Consumer<RegisterTravelProvider>(
-                        builder: (_, travelState, __) {
-                          return Form(
-                            key: travelState.participantInfoFormKey,
-                            child: Column(
-                              children: [
-                                TextFormField(
-                                  validator:
-                                      validations.participantNameValidator,
-                                  onTapOutside: (_) =>
-                                      FocusScope.of(context).unfocus(),
-                                  controller:
-                                      travelState.participantNameController,
-                                  decoration: InputDecoration(
-                                    hintText: as.name,
-                                    prefixIcon: const Icon(Icons.person),
-                                  ),
-                                ),
-                                const Padding(padding: EdgeInsets.all(16)),
-                                TextFormField(
-                                  validator:
-                                      validations.participantAgeValidator,
-                                  onTapOutside: (_) =>
-                                      FocusScope.of(context).unfocus(),
-                                  controller:
-                                      travelState.participantAgeController,
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    hintText: as.age,
-                                    prefixIcon: const Icon(
-                                      Icons.calendar_today,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
+                      /// Participant text form fields
+                      const _ParticipantFormFields(),
 
                       const Padding(padding: EdgeInsets.all(16)),
 
+                      /// 'Cancel' / 'Register' buttons
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -535,6 +499,48 @@ class _AddParticipantModal extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ParticipantFormFields extends StatelessWidget {
+  const _ParticipantFormFields({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+    final validations = FormValidations(as);
+
+    return Consumer<RegisterTravelProvider>(
+      builder: (_, travelState, __) {
+        return Form(
+          key: travelState.participantInfoFormKey,
+          child: Column(
+            children: [
+              TextFormField(
+                validator: validations.participantNameValidator,
+                onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                controller: travelState.participantNameController,
+                decoration: InputDecoration(
+                  hintText: as.name,
+                  prefixIcon: const Icon(Icons.person),
+                ),
+              ),
+              const Padding(padding: EdgeInsets.all(16)),
+              TextFormField(
+                validator: validations.participantAgeValidator,
+                onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                controller: travelState.participantAgeController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: as.age,
+                  prefixIcon: const Icon(Icons.calendar_today),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
