@@ -11,6 +11,7 @@ import '../../../services/user_preferences_service.dart';
 import '../../providers/login_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../util/app_routes.dart';
+import '../../widgets/fab_list_item.dart';
 import '../../widgets/fab_page.dart';
 
 /// This is the settings page of the app
@@ -143,7 +144,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       /// Email
-                      AccountInfoWidget(
+                      _SettingsListItem(
                         icon: Icon(Icons.email),
                         text: Text(
                           '${as.email}: ${user?.email ?? 'N/A'}',
@@ -152,7 +153,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
 
                       /// Account creation
-                      AccountInfoWidget(
+                      _SettingsListItem(
                         icon: Icon(Icons.date_range),
                         text: Text(
                           '${as.account_creation}: $formattedCreationTime',
@@ -161,7 +162,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
 
                       /// Last sign in
-                      AccountInfoWidget(
+                      _SettingsListItem(
                         icon: Icon(Icons.assignment_ind_outlined),
                         text: Text(
                           '${as.last_sign_in}: $formattedSignInTime',
@@ -175,7 +176,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           context.go(Routes.auth);
                           await loginProvider.signOut();
                         },
-                        child: AccountInfoWidget(
+                        child: _SettingsListItem(
                           icon: const Icon(Icons.logout, color: Colors.red),
                           text: Text(
                             as.exit,
@@ -207,38 +208,28 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 }
 
-class AccountInfoWidget extends StatelessWidget {
-  const AccountInfoWidget({super.key, required this.icon, required this.text});
+class _SettingsListItem extends StatelessWidget {
+  const _SettingsListItem({super.key, required this.icon, required this.text});
 
   final Icon icon;
   final Text text;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Container(
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: Theme.of(context).primaryColor.withOpacity(0.25),
-        ),
-
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            icon,
-            Padding(padding: EdgeInsets.all(6)),
-            Expanded(child: text),
-          ],
-        ),
+    return FabListItem(
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          icon,
+          Padding(padding: EdgeInsets.all(6)),
+          text,
+        ],
       ),
     );
   }
 }
 
 /// This is a custom [Widget] that is used in the [SettingsPage]
-///
 /// It is a RadioButton that contains values for language codes, allowing
 /// the user to dynamically change the current language of the app
 class _LanguagesRadio extends StatefulWidget {
