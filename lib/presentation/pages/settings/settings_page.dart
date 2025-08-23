@@ -152,6 +152,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       ),
 
+                      Padding(padding: EdgeInsets.all(12)),
+
                       /// Account creation
                       _SettingsListItem(
                         icon: Icon(Icons.date_range),
@@ -160,6 +162,8 @@ class _SettingsPageState extends State<SettingsPage> {
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
+
+                      Padding(padding: EdgeInsets.all(12)),
 
                       /// Last sign in
                       _SettingsListItem(
@@ -170,18 +174,46 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       ),
 
-                      InkWell(
-                        borderRadius: BorderRadius.circular(16),
+                      Padding(padding: EdgeInsets.all(12)),
+
+                      _SettingsListItem(
                         onTap: () async {
-                          context.go(Routes.auth);
-                          await loginProvider.signOut();
+                          final logout = await showDialog<bool>(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text('Logout'),
+                                content: Text('Do you really want to logout?'),
+                                actionsAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop(false);
+                                    },
+                                    child: Text('No'),
+                                  ),
+
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop(true);
+                                    },
+                                    child: Text('Yes'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+
+                          if (logout!) {
+                            context.go(Routes.auth);
+                            await loginProvider.signOut();
+                          }
                         },
-                        child: _SettingsListItem(
-                          icon: const Icon(Icons.logout, color: Colors.red),
-                          text: Text(
-                            as.exit,
-                            style: const TextStyle(color: Colors.red),
-                          ),
+                        icon: const Icon(Icons.logout, color: Colors.red),
+                        text: Text(
+                          as.exit,
+                          style: const TextStyle(color: Colors.red),
                         ),
                       ),
                     ],
@@ -209,20 +241,27 @@ class _SettingsPageState extends State<SettingsPage> {
 }
 
 class _SettingsListItem extends StatelessWidget {
-  const _SettingsListItem({super.key, required this.icon, required this.text});
+  const _SettingsListItem({
+    super.key,
+    required this.icon,
+    required this.text,
+    this.onTap,
+  });
 
   final Icon icon;
   final Text text;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return FabListItem(
+      onTap: onTap,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           icon,
           Padding(padding: EdgeInsets.all(6)),
-          text,
+          Expanded(child: text),
         ],
       ),
     );
