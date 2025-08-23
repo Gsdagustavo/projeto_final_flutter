@@ -83,9 +83,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             child: Icon(
                               Icons.edit,
                               size: 16,
-                              color: Theme
-                                  .of(context)
-                                  .primaryColor,
+                              color: Theme.of(context).primaryColor,
                             ),
                           ),
                         ),
@@ -107,19 +105,26 @@ class _SettingsPageState extends State<SettingsPage> {
                   children: [
                     Text(
                       as.account,
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .titleMedium,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
-                    ListTile(
-                      leading: const Icon(Icons.email),
-                      title: Text(user.email ?? 'N/A'),
+                    Column(
+                      children: [
+                        ListTile(
+                          leading: const Icon(Icons.email),
+                          title: Text(as.email),
+                          subtitle: Text(user.email ?? 'N/A'),
+                        ),
+                      ],
                     ),
                     const Divider(color: Colors.grey),
-                    ListTile(
-                      leading: const Icon(Icons.date_range),
-                      title: Text(formattedCreationTime),
+                    Column(
+                      children: [
+                        ListTile(
+                          leading: const Icon(Icons.date_range),
+                          title: Text(as.account_creation),
+                          subtitle: Text(formattedCreationTime),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -131,6 +136,11 @@ class _SettingsPageState extends State<SettingsPage> {
               child: ListTile(
                 leading: const Icon(Icons.language),
                 title: Text(as.language),
+                subtitle: Text(
+                  languageGetters[Localizations.localeOf(
+                    context,
+                  ).languageCode]!(as),
+                ),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
                   showModalBottomSheet(
@@ -144,44 +154,47 @@ class _SettingsPageState extends State<SettingsPage> {
 
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () async {
-                  final logout = await showDialog<bool>(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text(as.logout),
-                        content: Text(as.logout_confirmation),
-                        actionsAlignment: MainAxisAlignment.spaceBetween,
-                        actions: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).pop(false);
-                            },
-                            child: Text(as.no),
-                          ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    final logout = await showDialog<bool>(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text(as.logout),
+                          content: Text(as.logout_confirmation),
+                          actionsAlignment: MainAxisAlignment.spaceBetween,
+                          actions: [
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(false);
+                              },
+                              child: Text(as.no),
+                            ),
 
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop(true);
-                            },
-                            child: Text(as.yes),
-                          ),
-                        ],
-                      );
-                    },
-                  );
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(true);
+                              },
+                              child: Text(as.yes),
+                            ),
+                          ],
+                        );
+                      },
+                    );
 
-                  if (logout!) {
-                    context.go(Routes.auth);
-                    await loginProvider.signOut();
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
+                    if (logout!) {
+                      context.go(Routes.auth);
+                      await loginProvider.signOut();
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  child: Text(as.logout),
                 ),
-                child: Text(as.logout),
               ),
             ),
           ],
@@ -196,7 +209,7 @@ class LanguageSelectionSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
+    final as = AppLocalizations.of(context)!;
 
     return Padding(
       padding: const EdgeInsets.all(32.0),
@@ -204,7 +217,7 @@ class LanguageSelectionSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: locales.map((lang) {
           return ListTile(
-            title: Text(languageGetters[lang.languageCode]!(loc)),
+            title: Text(languageGetters[lang.languageCode]!(as)),
             onTap: () async {
               final newLocale = Locale(lang.languageCode);
               final userPreferencesState = Provider.of<UserPreferencesProvider>(
