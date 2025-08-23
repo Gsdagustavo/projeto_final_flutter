@@ -108,6 +108,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get experience_contact_with_nature => 'Contacto con la Naturaleza';
 
   @override
+  String get other => 'Otro';
+
+  @override
   String get my_travels => 'Mis Viajes';
 
   @override
@@ -177,10 +180,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get err_invalid_participant_age => 'Edad de participante inválida';
 
   @override
+  String get err_invalid_participant_data => 'Datos de participante inválidos';
+
+  @override
   String get no_participants_on_the_list => 'No hay participantes en la lista';
 
   @override
   String get register_participant => 'Registrar participante';
+
+  @override
+  String get update_participant => 'Actualizar participante';
 
   @override
   String get name => 'Nombre';
@@ -199,6 +208,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get participant_removed => 'Participante eliminado';
+
+  @override
+  String get participant_updated => 'Participante actualizado';
 
   @override
   String get travel_map => 'Mapa del Viaje';

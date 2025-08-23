@@ -12,6 +12,7 @@ import '../../../domain/entities/enums.dart';
 import '../../../domain/entities/participant.dart';
 import '../../../domain/entities/travel_stop.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../services/file_service.dart';
 import '../../extensions/enums_extensions.dart';
 import '../../providers/map_markers_provider.dart';
 import '../../providers/register_travel_provider.dart';
@@ -21,6 +22,7 @@ import '../../scripts/scripts.dart';
 import '../../util/app_routes.dart';
 import '../../widgets/custom_date_range_widget.dart';
 import '../../widgets/custom_dialog.dart';
+import '../../widgets/fab_list_item.dart';
 import '../../widgets/fab_page.dart';
 import '../util/form_validations.dart';
 
@@ -270,7 +272,6 @@ class _DateTextButtonsState extends State<_DateTextButtons> {
             child: CustomDateRangeWidget(
               firstDateController: _startDateController,
               lastDateController: _endDateController,
-
               firstDateLabelText: as.start_date,
               lastDateLabelText: as.end_date,
             ),
@@ -304,7 +305,7 @@ class _ParticipantsWidget extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 onPressed: () async {
-                  await _showParticipantRegisterModal(context);
+                  await _showParticipantModal(context);
                 },
               ),
             ),
@@ -320,25 +321,71 @@ class _ParticipantsWidget extends StatelessWidget {
       ],
     );
   }
+}
 
-  Future<void> _showParticipantRegisterModal(BuildContext context) async {
-    await showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) {
-        return _AddParticipantModal();
-      },
-    );
+Future<void> _showParticipantModal(
+  BuildContext context, {
+  Participant? participant,
+}) async {
+  final state = context.read<RegisterTravelProvider>();
+
+  final result = await showModalBottomSheet<Participant?>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (context) {
+      return _ParticipantModal(participant: participant);
+    },
+  );
+
+  if (result != null) {
+    if (participant == null) {
+      await state.addParticipant(result);
+    } else {
+      await state.updateParticipant(participant, result);
+    }
   }
 }
 
-class _AddParticipantModal extends StatelessWidget {
-  const _AddParticipantModal();
+class _ParticipantModal extends StatefulWidget {
+  const _ParticipantModal({this.participant});
+
+  final Participant? participant;
+
+  @override
+  State<_ParticipantModal> createState() => _ParticipantModalState();
+}
+
+class _ParticipantModalState extends State<_ParticipantModal> {
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _ageController = TextEditingController();
+  File? _profilePicture;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.participant case Participant(
+      name: final name,
+      age: final age,
+      profilePicture: final profilePicture,
+    )) {
+      _nameController.text = name;
+      _ageController.text = age.toString();
+      _profilePicture = profilePicture;
+    }
+  }
+
+  Future<void> _pickImage() async {
+    _profilePicture = await FileService().pickImage();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
+    final validations = FormValidations(as);
 
     return Stack(
       clipBehavior: Clip.none,
@@ -389,7 +436,37 @@ class _AddParticipantModal extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       /// Participant text form fields
-                      const _ParticipantFormFields(),
+                      Form(
+                        key: _formKey,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              textCapitalization: TextCapitalization.words,
+                              validator: validations.participantNameValidator,
+                              onTapOutside: (_) =>
+                                  FocusScope.of(context).unfocus(),
+                              controller: _nameController,
+                              decoration: InputDecoration(
+                                hintText: as.name,
+                                prefixIcon: const Icon(Icons.person),
+                              ),
+                            ),
+                            const Padding(padding: EdgeInsets.all(16)),
+                            TextFormField(
+                              validator: validations.participantAgeValidator,
+                              onTapOutside: (_) =>
+                                  FocusScope.of(context).unfocus(),
+                              controller: _ageController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                hintText: as.age,
+                                prefixIcon: const Icon(Icons.calendar_today),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
 
                       const Padding(padding: EdgeInsets.all(16)),
 
@@ -403,43 +480,83 @@ class _AddParticipantModal extends StatelessWidget {
                             child: Text(as.cancel),
                           ),
 
-                          /// 'Register' button
-                          Consumer<RegisterTravelProvider>(
-                            builder: (_, travelState, __) {
-                              return ElevatedButton(
-                                onPressed: () async {
-                                  await travelState.addParticipant();
+                          Builder(
+                            builder: (context) {
+                              debugPrint('${widget.participant == null}');
 
-                                  if (travelState.hasError) {
-                                    await showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return CustomDialog(
-                                          title: as.warning,
-                                          content: Text(travelState.error!),
-                                          isError: true,
+                              /// Register participant
+                              if (widget.participant == null) {
+                                return Consumer<RegisterTravelProvider>(
+                                  builder: (_, travelState, __) {
+                                    return ElevatedButton(
+                                      onPressed: () async {
+                                        if (!_formKey.currentState!
+                                            .validate()) {
+                                          await showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return CustomDialog(
+                                                title: as.warning,
+                                                content: Text(
+                                                  as.err_invalid_participant_data,
+                                                ),
+                                                isError: true,
+                                              );
+                                            },
+                                          );
+                                        }
+
+                                        final participant = Participant(
+                                          name: _nameController.text,
+                                          age: int.parse(_ageController.text),
+                                          profilePicture:
+                                              _profilePicture ??
+                                              await FileService()
+                                                  .getDefaultProfilePictureFile(),
                                         );
+
+                                        Navigator.of(context).pop(participant);
                                       },
+                                      child: Text(as.register),
                                     );
+                                  },
+                                );
+                              }
 
-                                    return;
-                                  }
+                              /// Update participant
+                              return Consumer<RegisterTravelProvider>(
+                                builder: (_, travelState, __) {
+                                  return ElevatedButton(
+                                    onPressed: () async {
+                                      if (!_formKey.currentState!.validate()) {
+                                        await showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return CustomDialog(
+                                              title: as.update_participant,
+                                              content: Text(
+                                                as.err_invalid_participant_data,
+                                              ),
+                                              isError: true,
+                                            );
+                                          },
+                                        );
+                                      }
 
-                                  await showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return CustomDialog(
-                                        title: as.register_participant,
-                                        content: Text(
-                                          as.participant_registered,
-                                        ),
+                                      final participant = Participant(
+                                        name: _nameController.text,
+                                        age: int.parse(_ageController.text),
+                                        profilePicture:
+                                            _profilePicture ??
+                                            await FileService()
+                                                .getDefaultProfilePictureFile(),
                                       );
-                                    },
-                                  );
 
-                                  context.pop();
+                                      Navigator.of(context).pop(participant);
+                                    },
+                                    child: Text(as.update_participant),
+                                  );
                                 },
-                                child: Text(as.register),
                               );
                             },
                           ),
@@ -464,8 +581,8 @@ class _AddParticipantModal extends StatelessWidget {
                 child: Consumer<RegisterTravelProvider>(
                   builder: (_, travelState, __) {
                     return CircleAvatar(
-                      backgroundImage: travelState.profilePictureFile != null
-                          ? FileImage(travelState.profilePictureFile!)
+                      backgroundImage: _profilePicture != null
+                          ? FileImage(_profilePicture!)
                           : const AssetImage(
                                   'assets/images/default_profile_picture.png',
                                 )
@@ -485,7 +602,7 @@ class _AddParticipantModal extends StatelessWidget {
                       onTap: () async {
                         /// TODO: show a modal to choose where the image is going
                         /// to be picked from (camera, gallery, etc.)
-                        await travelState.pickImage();
+                        await _pickImage();
                       },
                       radius: 20,
                       child: CircleAvatar(
@@ -500,50 +617,6 @@ class _AddParticipantModal extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _ParticipantFormFields extends StatelessWidget {
-  const _ParticipantFormFields({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
-    final validations = FormValidations(as);
-
-    return Consumer<RegisterTravelProvider>(
-      builder: (_, travelState, __) {
-        return Form(
-          key: travelState.participantInfoFormKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: Column(
-            children: [
-              TextFormField(
-                textCapitalization: TextCapitalization.words,
-                validator: validations.participantNameValidator,
-                onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                controller: travelState.participantNameController,
-                decoration: InputDecoration(
-                  hintText: as.name,
-                  prefixIcon: const Icon(Icons.person),
-                ),
-              ),
-              const Padding(padding: EdgeInsets.all(16)),
-              TextFormField(
-                validator: validations.participantAgeValidator,
-                onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                controller: travelState.participantAgeController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: as.age,
-                  prefixIcon: const Icon(Icons.calendar_today),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }
@@ -607,7 +680,10 @@ class _ListParticipants extends StatelessWidget {
       );
     }
 
-    return ListView.builder(
+    return ListView.separated(
+      separatorBuilder: (context, index) {
+        return Padding(padding: EdgeInsets.all(12));
+      },
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: travelState.numParticipants,
@@ -638,8 +714,11 @@ class _ParticipantListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+    return FabListItem(
+      onTap: () async {
+        await _showParticipantModal(context, participant: participant);
+      },
+
       child: Row(
         children: [
           _ParticipantProfilePicture(image: participant.profilePicture),
@@ -749,14 +828,14 @@ class _TravelMapWidget extends StatelessWidget {
 
         Padding(padding: EdgeInsets.all(16)),
 
-        TravelStopsWidget(),
+        _TravelStopsWidget(),
       ],
     );
   }
 }
 
-class TravelStopsWidget extends StatelessWidget {
-  const TravelStopsWidget({super.key});
+class _TravelStopsWidget extends StatelessWidget {
+  const _TravelStopsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -776,10 +855,8 @@ class TravelStopsWidget extends StatelessWidget {
           separatorBuilder: (context, index) {
             return Padding(padding: EdgeInsets.all(12));
           },
-
           itemBuilder: (context, index) {
             final stop = stops[index];
-
             return _TravelStopListItem(stop: stop, index: index);
           },
         );
@@ -800,26 +877,7 @@ class _TravelStopListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /// TODO: theme
-    return ListTile(
-      key: Key(stop.place.toString()),
-      title: Text(stop.place.toString()),
-      leading: Text('${index + 1}. '),
-      tileColor: Theme.of(context).cardColor,
-      contentPadding: const EdgeInsets.all(12),
-      // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      trailing: Consumer2<RegisterTravelProvider, MapMarkersProvider>(
-        builder: (_, travelState, markerState, __) {
-          return IconButton(
-            onPressed: () {
-              travelState.removeTravelStop(stop);
-              markerState.removeMarker(stop);
-            },
-            icon: Icon(Icons.delete),
-          );
-        },
-      ),
-
+    return FabListItem(
       onTap: () async {
         await showTravelStopModal(
           context,
@@ -827,6 +885,27 @@ class _TravelStopListItem extends StatelessWidget {
           stop,
         );
       },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text('${index + 1}.'),
+          Padding(padding: EdgeInsets.all(12)),
+          Expanded(
+            child: Text(stop.place.toString(), style: TextStyle(fontSize: 16)),
+          ),
+          Consumer2<RegisterTravelProvider, MapMarkersProvider>(
+            builder: (_, travelState, markerState, __) {
+              return IconButton(
+                onPressed: () {
+                  travelState.removeTravelStop(stop);
+                  markerState.removeMarker(stop);
+                },
+                icon: Icon(Icons.delete),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

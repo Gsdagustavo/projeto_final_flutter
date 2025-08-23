@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 import '../../core/extensions/experience_map_extension.dart';
@@ -28,23 +26,18 @@ class RegisterTravelProvider with ChangeNotifier {
   /// Form key for travel title validation
   final travelTitleFormKey = GlobalKey<FormState>();
 
-  /// Form key for participant info validation
-  final participantInfoFormKey = GlobalKey<FormState>();
-
   /// Default constructor
   RegisterTravelProvider(this._travelUseCases) {
-    _init();
+    // _init();
   }
 
-  void _init() async {
-    _isLoading = true;
-    notifyListeners();
-
-    _profilePictureFile = await fileService.getDefaultProfilePictureFile();
-
-    _isLoading = false;
-    notifyListeners();
-  }
+  // void _init() async {
+  //   _isLoading = true;
+  //   notifyListeners();
+  //
+  //   _isLoading = false;
+  //   notifyListeners();
+  // }
 
   bool _areStopsValid = false;
 
@@ -73,14 +66,6 @@ class RegisterTravelProvider with ChangeNotifier {
   Map<Experience, bool> _selectedExperiences = {
     for (var e in Experience.values) e: false,
   };
-
-  /// A [TextEditingController] to be assigned to a participant name
-  final _participantNameController = TextEditingController();
-
-  /// A [TextEditingController] to be assigned to a participant age
-  final _participantAgeController = TextEditingController();
-
-  File? _profilePictureFile;
 
   /// The error message (obtained via exception.message on try-catch structures)
   String? _errorMsg;
@@ -210,11 +195,8 @@ class RegisterTravelProvider with ChangeNotifier {
     _stopTimeRange = null;
 
     _travelTitleController.clear();
-    _participantNameController.clear();
-    _participantAgeController.clear();
 
     _participants.clear();
-    _profilePictureFile = null;
 
     _errorMsg = null;
     _isLoading = false;
@@ -237,34 +219,7 @@ class RegisterTravelProvider with ChangeNotifier {
   ///
   /// [profilePictureUrl]: An optional argument that represents the path of the
   /// profile picture of the participant
-  Future<void> addParticipant() async {
-    final intAge = int.tryParse(_participantAgeController.text);
-
-    if (intAge == null) {
-      debugPrint('Int age is null');
-      _errorMsg = 'Invalid participant age.';
-      notifyListeners();
-      return;
-    }
-
-    if (!participantInfoFormKey.currentState!.validate()) {
-      _errorMsg = 'Invalid participant data.';
-      notifyListeners();
-      return;
-    }
-
-    _profilePictureFile ??= await fileService.getDefaultProfilePictureFile();
-
-    final participant = Participant(
-      name: _participantNameController.text,
-      age: intAge,
-      profilePicture: _profilePictureFile!,
-    );
-
-    _participantNameController.clear();
-    _participantAgeController.clear();
-    _profilePictureFile = null;
-
+  Future<void> addParticipant(Participant participant) async {
     _participants.add(participant);
 
     debugPrint('Participant $participant added');
@@ -277,8 +232,21 @@ class RegisterTravelProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> pickImage() async {
-    _profilePictureFile = await fileService.pickImage();
+  Future<void> updateParticipant(
+    Participant oldParticipant,
+    Participant newParticipant,
+  ) async {
+    debugPrint('Participants len: ${_participants.length}');
+
+    debugPrint('Old participants: $_participants');
+
+    final idx = _participants.indexOf(oldParticipant);
+
+    _participants.removeAt(idx);
+    _participants.insert(idx, newParticipant);
+
+    debugPrint('New participants: $_participants');
+
     notifyListeners();
   }
 
@@ -323,14 +291,6 @@ class RegisterTravelProvider with ChangeNotifier {
   /// Returns the list of [Participants]
   List<Participant> get participants => _participants;
 
-  /// Returns the [TextEditingController] for the participant's name
-  TextEditingController get participantNameController =>
-      _participantNameController;
-
-  /// Returns the [TextEditingController] for the participant's age
-  TextEditingController get participantAgeController =>
-      _participantAgeController;
-
   /// Returns the error message stored in the provider
   String? get error => _errorMsg;
 
@@ -347,8 +307,6 @@ class RegisterTravelProvider with ChangeNotifier {
   set selectedExperiences(Map<Experience, bool> value) {
     _selectedExperiences = value;
   }
-
-  File? get profilePictureFile => _profilePictureFile;
 
   bool get isTravelValid {
     final isValid =

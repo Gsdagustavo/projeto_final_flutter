@@ -295,6 +295,12 @@ abstract class AppLocalizations {
   /// **'Contact With Nature'**
   String get experience_contact_with_nature;
 
+  /// No description provided for @other.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get other;
+
   /// No description provided for @my_travels.
   ///
   /// In en, this message translates to:
@@ -433,6 +439,12 @@ abstract class AppLocalizations {
   /// **'Invalid participant age'**
   String get err_invalid_participant_age;
 
+  /// No description provided for @err_invalid_participant_data.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid participant data'**
+  String get err_invalid_participant_data;
+
   /// No description provided for @no_participants_on_the_list.
   ///
   /// In en, this message translates to:
@@ -444,6 +456,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Register participant'**
   String get register_participant;
+
+  /// No description provided for @update_participant.
+  ///
+  /// In en, this message translates to:
+  /// **'Update participant'**
+  String get update_participant;
 
   /// No description provided for @name.
   ///
@@ -480,6 +498,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Participant removed'**
   String get participant_removed;
+
+  /// No description provided for @participant_updated.
+  ///
+  /// In en, this message translates to:
+  /// **'Participant updated'**
+  String get participant_updated;
 
   /// No description provided for @travel_map.
   ///
@@ -568,7 +592,7 @@ abstract class AppLocalizations {
   /// No description provided for @arrive_date.
   ///
   /// In en, this message translates to:
-  /// **'ArriveDate'**
+  /// **'Arrive Date'**
   String get arrive_date;
 
   /// No description provided for @leave_date.

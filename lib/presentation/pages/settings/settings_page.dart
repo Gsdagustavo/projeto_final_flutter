@@ -217,7 +217,7 @@ class _SettingsListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FabListItem(
-      content: Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           icon,
