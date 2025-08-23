@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -128,6 +129,7 @@ class _TravelTitleTextFieldState extends State<_TravelTitleTextField> {
             return Form(
               key: travelState.travelTitleFormKey,
               child: TextFormField(
+                textCapitalization: TextCapitalization.words,
                 validator: validations.travelTitleValidator,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 controller: travelState.travelTitleController,
@@ -519,6 +521,7 @@ class _ParticipantFormFields extends StatelessWidget {
           child: Column(
             children: [
               TextFormField(
+                textCapitalization: TextCapitalization.words,
                 validator: validations.participantNameValidator,
                 onTapOutside: (_) => FocusScope.of(context).unfocus(),
                 controller: travelState.participantNameController,

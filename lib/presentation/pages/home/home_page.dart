@@ -386,6 +386,7 @@ class _ReviewModalState extends State<ReviewModal> {
                       key: reviewState.key,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       child: TextFormField(
+                        textCapitalization: TextCapitalization.sentences,
                         validator: validations.reviewValidator,
                         controller: reviewState.reviewController,
                         onTapOutside: (_) => FocusScope.of(context).unfocus(),
