@@ -187,7 +187,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       },
                     );
 
-                    if (logout!) {
+                    if (logout ?? false) {
                       context.go(Routes.auth);
                       await loginProvider.signOut();
                     }
@@ -196,7 +196,19 @@ class _SettingsPageState extends State<SettingsPage> {
                     backgroundColor: Colors.red,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  child: Text(as.logout),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 32),
+                          child: const Icon(Icons.logout),
+                        ),
+                      ),
+                      Text(as.logout),
+                    ],
+                  ),
                 ),
               ),
             ),
