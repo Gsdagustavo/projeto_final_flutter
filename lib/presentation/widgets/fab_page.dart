@@ -32,7 +32,7 @@ class FabPage extends StatelessWidget {
               title,
               style: Theme.of(context).textTheme.headlineLarge,
             ),
-            expandedHeight: 120,
+            expandedHeight: 100,
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             actions: const [ThemeToggleButton()],
           ),
