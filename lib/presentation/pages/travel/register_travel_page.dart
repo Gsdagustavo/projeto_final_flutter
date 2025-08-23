@@ -504,6 +504,8 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                                               );
                                             },
                                           );
+
+                                          return;
                                         }
 
                                         final participant = Participant(
@@ -541,6 +543,8 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                                             );
                                           },
                                         );
+
+                                        return;
                                       }
 
                                       final participant = Participant(
