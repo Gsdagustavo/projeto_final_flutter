@@ -198,26 +198,29 @@ class LanguageSelectionSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: locales.map((lang) {
-        return ListTile(
-          title: Text(languageGetters[lang.languageCode]!(loc)),
-          onTap: () async {
-            final newLocale = Locale(lang.languageCode);
-            final userPreferencesState = Provider.of<UserPreferencesProvider>(
-              context,
-              listen: false,
-            );
+    return Padding(
+      padding: const EdgeInsets.all(32.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: locales.map((lang) {
+          return ListTile(
+            title: Text(languageGetters[lang.languageCode]!(loc)),
+            onTap: () async {
+              final newLocale = Locale(lang.languageCode);
+              final userPreferencesState = Provider.of<UserPreferencesProvider>(
+                context,
+                listen: false,
+              );
 
-            await userPreferencesState.changeLanguageCode(
-              languageCode: newLocale.languageCode,
-            );
+              await userPreferencesState.changeLanguageCode(
+                languageCode: newLocale.languageCode,
+              );
 
-            Navigator.pop(context);
-          },
-        );
-      }).toList(),
+              Navigator.pop(context);
+            },
+          );
+        }).toList(),
+      ),
     );
   }
 }
