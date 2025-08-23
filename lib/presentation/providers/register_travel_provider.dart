@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../core/extensions/experience_map_extension.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/participant.dart';
-import '../../domain/entities/place.dart';
 import '../../domain/entities/travel.dart';
 import '../../domain/entities/travel_stop.dart';
 import '../../modules/travel/travel_use_cases.dart';
@@ -27,17 +25,7 @@ class RegisterTravelProvider with ChangeNotifier {
   final travelTitleFormKey = GlobalKey<FormState>();
 
   /// Default constructor
-  RegisterTravelProvider(this._travelUseCases) {
-    // _init();
-  }
-
-  // void _init() async {
-  //   _isLoading = true;
-  //   notifyListeners();
-  //
-  //   _isLoading = false;
-  //   notifyListeners();
-  // }
+  RegisterTravelProvider(this._travelUseCases);
 
   bool _areStopsValid = false;
 
@@ -58,14 +46,6 @@ class RegisterTravelProvider with ChangeNotifier {
     start: DateTime.now(),
     end: DateTime.now().add(Duration(days: 30)),
   );
-
-  /// The time range of the current travel stop
-  DateTimeRange? _stopTimeRange;
-
-  /// The selected experiences for the current travel stop
-  Map<Experience, bool> _selectedExperiences = {
-    for (var e in Experience.values) e: false,
-  };
 
   /// The error message (obtained via exception.message on try-catch structures)
   String? _errorMsg;
@@ -135,27 +115,19 @@ class RegisterTravelProvider with ChangeNotifier {
     resetForms();
   }
 
-  TravelStop addTravelStop(Place place) {
-    final type = _stops.isEmpty ? TravelStopType.start : TravelStopType.stop;
-    final arriveDate = _stopTimeRange!.start;
-    final leaveDate = _stopTimeRange!.end;
-
-    final stop = TravelStop(
-      place: place,
-      experiences: _selectedExperiences.toExperiencesList(),
-      arriveDate: arriveDate,
-      leaveDate: leaveDate,
-      type: type,
-    );
+  TravelStop? addTravelStop(TravelStop stop) {
+    if (stop.arriveDate!.isBefore(_stops.last.leaveDate!) ||
+        stop.leaveDate!.isAfter(_travelTimeRange!.end)) {
+      _errorMsg = 'Invalid travel stop dates';
+      notifyListeners();
+      return null;
+    }
 
     _stops.add(stop);
 
     _errorMsg = null;
-    _stopTimeRange = null;
 
     debugPrint('Travel stop ${stop.toString()} added');
-
-    print('STOP TIME RANGE AFTER ADDING: $_stopTimeRange');
 
     _areStopsValid = _stops.length >= 2;
     notifyListeners();
@@ -164,27 +136,28 @@ class RegisterTravelProvider with ChangeNotifier {
 
   void removeTravelStop(TravelStop stop) {
     _stops.remove(stop);
-    resetExperiences();
     debugPrint('Stop $stop removed from travel stops list');
     _areStopsValid = _stops.length >= 2;
     notifyListeners();
   }
 
-  void updateTravelStop({required TravelStop stop}) {
-    debugPrint('Stops len: ${_stops.length}');
+  void updateTravelStop({
+    required TravelStop oldStop,
+    required TravelStop newStop,
+  }) {
+    debugPrint('Travel stops len: ${_stops.length}');
 
-    debugPrint('Stop passed to UpdateTravelStop: $stop');
-    debugPrint('Contains: ${_stops.contains(stop)}');
+    debugPrint('Old stops: $_stops');
 
-    stop = stop.copyWith(
-      experiences: _selectedExperiences.toExperiencesList(),
-      arriveDate: _stopTimeRange!.start,
-      leaveDate: _stopTimeRange!.end,
-    );
+    final idx = _stops.indexOf(oldStop);
+
+    _stops.removeAt(idx);
+    _stops.insert(idx, newStop);
+
+    debugPrint('New stops: $_stops');
 
     _areStopsValid = _stops.length >= 2;
     notifyListeners();
-    // return newStop;
   }
 
   /// Sets all input fields to their default values and cleanses all lists
@@ -192,7 +165,6 @@ class RegisterTravelProvider with ChangeNotifier {
     _transportType = TransportType.values.first;
 
     _travelTimeRange = null;
-    _stopTimeRange = null;
 
     _travelTitleController.clear();
 
@@ -202,8 +174,6 @@ class RegisterTravelProvider with ChangeNotifier {
     _isLoading = false;
 
     _stops.clear();
-
-    resetExperiences();
 
     notifyListeners();
   }
@@ -255,30 +225,6 @@ class RegisterTravelProvider with ChangeNotifier {
     debugPrint('Listing all travels:\n$travels');
   }
 
-  /// If a [TravelStop] was given, populates [_selectedExperiences] with the
-  /// [values] being whether or not the experience is in the [experiences] list
-  ///
-  /// Otherwise, set all [values] to [false] (no experience selected)
-  Map<Experience, bool> resetExperiences([TravelStop? stop]) {
-    var selectedExperiences = <Experience, bool>{};
-
-    if (stop != null &&
-        stop.experiences != null &&
-        stop.experiences!.isNotEmpty) {
-      debugPrint('Stop has experiences. Setting all to their values');
-      for (final exp in Experience.values) {
-        selectedExperiences[exp] = stop.experiences!.contains(exp);
-      }
-    } else {
-      debugPrint('Stop has no experiences. Setting all to false');
-      selectedExperiences = {for (final e in Experience.values) e: false};
-    }
-
-    _selectedExperiences = selectedExperiences;
-    // notifyListeners();
-    return _selectedExperiences;
-  }
-
   /// Returns the [TextEditingController] for the travel title
   TextEditingController get travelTitleController => _travelTitleController;
 
@@ -301,12 +247,6 @@ class RegisterTravelProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
 
   List<TravelStop> get stops => _stops;
-
-  Map<Experience, bool> get selectedExperiences => _selectedExperiences;
-
-  set selectedExperiences(Map<Experience, bool> value) {
-    _selectedExperiences = value;
-  }
 
   bool get isTravelValid {
     final isValid =
@@ -356,43 +296,6 @@ class RegisterTravelProvider with ChangeNotifier {
     }
 
     notifyListeners();
-  }
-
-  DateTimeRange? get stopTimeRange => _stopTimeRange;
-
-  set stopTimeRange(DateTimeRange? value) {
-    print('Set stop time range called. New value: $value');
-    _stopTimeRange = value;
-    notifyListeners();
-  }
-
-  void resetStopTimeRangeDates([TravelStop? stop]) {
-    if (stop != null) {
-      _stopTimeRange = DateTimeRange(
-        start: stop.arriveDate!,
-        end: stop.leaveDate!,
-      );
-
-      return;
-    }
-
-    _stopTimeRange = null;
-  }
-
-  void resetStopExperiences([TravelStop? stop]) {
-    _selectedExperiences.clear();
-
-    if (stop == null || stop.experiences == null) {
-      debugPrint(
-        'Stop passed to reset stop experience is null. Setting all values to false',
-      );
-      _selectedExperiences = {for (final e in Experience.values) e: false};
-      return;
-    }
-
-    _selectedExperiences = {
-      for (final e in Experience.values) e: stop.experiences!.contains(e),
-    };
   }
 
   bool get areStopsValid => _areStopsValid;

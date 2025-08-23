@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/extensions/date_extensions.dart';
+import '../../core/extensions/experience_map_extension.dart';
 import '../../core/extensions/travel_stop_extensions.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/place.dart';
@@ -30,11 +30,6 @@ Future<void> showTravelStopModal(
 ]) async {
   final as = AppLocalizations.of(context)!;
 
-  final travelState = Provider.of<RegisterTravelProvider>(
-    context,
-    listen: false,
-  );
-
   final Place place;
 
   if (stop != null) {
@@ -57,9 +52,6 @@ Future<void> showTravelStopModal(
       return null;
     }
   }
-
-  travelState.resetStopExperiences(stop);
-  travelState.resetStopTimeRangeDates(stop);
 
   debugPrint('travel stop modal is being shown.\nstop: $stop');
 
@@ -99,6 +91,15 @@ class _TravelStopModal extends StatefulWidget {
 }
 
 class _TravelStopModalState extends State<_TravelStopModal> {
+  DateTimeRange? _stopTimeRange;
+
+  Map<Experience, bool> _selectedExperiences = {
+    for (var e in Experience.values) e: false,
+  };
+
+  final _arriveDateController = TextEditingController();
+  final _leaveDateController = TextEditingController();
+
   void onStopRemoved(TravelStop stop) {
     Provider.of<RegisterTravelProvider>(
       context,
@@ -107,11 +108,13 @@ class _TravelStopModalState extends State<_TravelStopModal> {
 
     Provider.of<MapMarkersProvider>(context, listen: false).removeMarker(stop);
 
-    context.pop();
+    Navigator.of(context).pop();
   }
 
   Future<void> onStopRegistered(Place place) async {
     print('on stop registered called');
+
+    debugPrint('range: $_stopTimeRange');
 
     final as = AppLocalizations.of(context)!;
 
@@ -120,7 +123,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
       listen: false,
     );
 
-    if (travelState.stopTimeRange == null) {
+    if (_stopTimeRange == null) {
       await showDialog(
         context: context,
         builder: (context) {
@@ -138,12 +141,29 @@ class _TravelStopModalState extends State<_TravelStopModal> {
     debugPrint('Stop in travel stop modal: ${widget.stop}');
     debugPrint('Place in travel stop modal: ${widget.place}');
 
-    /// TODO: FIX: PASS STOP INSTEAD OF PLACE TO REGISTER A STOP
-    final stop = travelState.addTravelStop(widget.place);
+    final stop = TravelStop(
+      place: place,
+      arriveDate: _stopTimeRange!.start,
+      leaveDate: _stopTimeRange!.end,
+      experiences: _selectedExperiences.toExperiencesList(),
+    );
 
-    print('new stop: $stop');
+    if (travelState.hasError) {
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return CustomDialog(
+            title: as.warning,
 
-    /// TODO: ADD MODAL ERROR MESSAGES
+            /// TODO: intl 'Invalid Travel Stop Data'
+            content: Text(travelState.error!),
+          );
+        },
+      );
+
+      return;
+    }
+
     await showDialog(
       context: context,
       builder: (context) {
@@ -154,18 +174,29 @@ class _TravelStopModalState extends State<_TravelStopModal> {
       },
     );
 
-    context.pop(stop);
+    Navigator.of(context).pop(stop);
   }
 
-  void onStopUpdated(TravelStop stop) async {
+  void onStopUpdated() async {
     final travelState = Provider.of<RegisterTravelProvider>(
       context,
       listen: false,
     );
 
-    debugPrint('Stop in travel stop modal ON STOP UPDATED: ${stop}');
+    if (_stopTimeRange == null) {
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return CustomDialog(
+            isError: true,
+            title: 'Invalid Travel Stop',
+            content: Text('The Travel Stop Dates are invalid'),
+          );
+        },
+      );
 
-    travelState.updateTravelStop(stop: stop);
+      return;
+    }
 
     if (travelState.hasError) {
       await showDialog(
@@ -194,7 +225,13 @@ class _TravelStopModalState extends State<_TravelStopModal> {
       },
     );
 
-    context.pop();
+    if (widget.stop != null) {
+      final newStop = widget.stop!.copyWith(
+        experiences: _selectedExperiences.toExperiencesList(),
+        arriveDate: _stopTimeRange!.start,
+        leaveDate: _stopTimeRange!.end,
+      );
+    }
   }
 
   @override
@@ -209,7 +246,16 @@ class _TravelStopModalState extends State<_TravelStopModal> {
     final as = AppLocalizations.of(context)!;
     final placeInfo = widget.place.toString();
     final useStop = widget.stop;
-    final selectedExperiences = travelState.selectedExperiences;
+
+    final locale = Provider.of<UserPreferencesProvider>(
+      context,
+      listen: false,
+    ).languageCode;
+
+    _arriveDateController.text =
+        _stopTimeRange?.start.getFormattedDate(locale) ?? '';
+    _leaveDateController.text =
+        _stopTimeRange?.end.getFormattedDate(locale) ?? '';
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
@@ -254,116 +300,85 @@ class _TravelStopModalState extends State<_TravelStopModal> {
           /// Checkbox to select the experiences of the stop
           for (final experience in Experience.values)
             CheckboxListTile(
-              value: selectedExperiences[experience],
+              value: _selectedExperiences[experience],
               title: Text(experience.getIntlExperience(context)),
               onChanged: (value) {
                 setState(() {
-                  selectedExperiences[experience] = value ?? false;
+                  _selectedExperiences[experience] = value ?? false;
                 });
               },
             ),
           const Padding(padding: EdgeInsets.all(12)),
 
-          _DatesWidget(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    as.dates_label,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  ),
+
+                  TextButton(
+                    onPressed: () async {
+                      final firstDate = travelState.lastPossibleArriveDate;
+                      final lastDate = travelState.lastPossibleLeaveDate;
+
+                      print('First Date: $firstDate');
+                      print('Last Date: $lastDate');
+
+                      final range = await showDateRangePicker(
+                        context: context,
+                        firstDate: firstDate!,
+                        lastDate: lastDate!,
+                      );
+
+                      print('New range: $range');
+
+                      if (range != null) {
+                        setState(() {
+                          _stopTimeRange = range;
+                          _arriveDateController.text = range.start
+                              .getFormattedDate(locale);
+                          _leaveDateController.text = range.end
+                              .getFormattedDate(locale);
+                        });
+                      }
+                    },
+                    child: Text(as.select_dates_label),
+                  ),
+                ],
+              ),
+
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 32),
+                  child: CustomDateRangeWidget(
+                    firstDateController: _arriveDateController,
+                    lastDateController: _leaveDateController,
+                    firstDateLabelText: as.arrive_date,
+                    lastDateLabelText: as.leave_date,
+                  ),
+                ),
+              ),
+            ],
+          ),
 
           const Padding(padding: EdgeInsets.all(12)),
 
           if (widget.stop != null)
-            _UpdateStopButton(onPressed: () => onStopUpdated(widget.stop!))
+            _UpdateStopButton(onPressed: onStopUpdated)
           else
             _RegisterStopButton(
               onPressed: () => onStopRegistered(widget.place),
             ),
         ],
       ),
-    );
-  }
-}
-
-class _DatesWidget extends StatefulWidget {
-  const _DatesWidget({super.key});
-
-  @override
-  State<_DatesWidget> createState() => _DatesWidgetState();
-}
-
-class _DatesWidgetState extends State<_DatesWidget> {
-  final _arriveDateController = TextEditingController();
-  final _leaveDateController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    final travelState = Provider.of<RegisterTravelProvider>(
-      context,
-      listen: false,
-    );
-
-    final locale = Provider.of<UserPreferencesProvider>(
-      context,
-      listen: false,
-    ).languageCode;
-
-    _arriveDateController.text =
-        travelState.stopTimeRange?.start.getFormattedDate(locale) ?? '';
-    _leaveDateController.text =
-        travelState.stopTimeRange?.end.getFormattedDate(locale) ?? '';
-
-    final as = AppLocalizations.of(context)!;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              as.dates_label,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-            ),
-
-            TextButton(
-              onPressed: () async {
-                final firstDate = travelState.lastPossibleArriveDate;
-                final lastDate = travelState.lastPossibleLeaveDate;
-
-                print('First Date: $firstDate');
-                print('Last Date: $lastDate');
-
-                final range = await showDateRangePicker(
-                  context: context,
-                  firstDate: firstDate!,
-                  lastDate: lastDate!,
-                );
-
-                print('New range: $range');
-
-                if (range != null) {
-                  travelState.stopTimeRange = range;
-                  _arriveDateController.text = range.start.getFormattedDate(
-                    locale,
-                  );
-                  _leaveDateController.text = range.end.getFormattedDate(
-                    locale,
-                  );
-                }
-              },
-              child: Text(as.select_dates_label),
-            ),
-          ],
-        ),
-
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 32),
-            child: CustomDateRangeWidget(
-              firstDateController: _arriveDateController,
-              lastDateController: _leaveDateController,
-              firstDateLabelText: as.arrive_date,
-              lastDateLabelText: as.leave_date,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

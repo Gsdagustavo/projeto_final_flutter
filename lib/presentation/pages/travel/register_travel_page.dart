@@ -33,73 +33,40 @@ class RegisterTravelPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+
     return FabPage(
-      title: AppLocalizations.of(context)!.title_register_travel,
+      title: as.title_register_travel,
       body: Padding(
         padding: const EdgeInsets.all(32.0),
-        child: SingleChildScrollView(
-          child: Column(
-            // crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /// Travel title text field
-              _TravelTitleTextField(),
-              const Padding(padding: EdgeInsets.all(16)),
+        child: Column(
+          children: [
+            /// Travel title text field
+            _TravelTitleTextField(),
+            const Padding(padding: EdgeInsets.all(16)),
 
-              /// Transport types dropdown button
-              _TransportTypesDropdownButton(),
-              const Padding(padding: EdgeInsets.all(16)),
+            /// Transport types dropdown button
+            _TransportTypesDropdownButton(),
+            const Padding(padding: EdgeInsets.all(16)),
 
-              /// Text buttons to choose the Travel Start and End dates
-              _DateTextButtons(),
+            /// Text buttons to choose the Travel Start and End dates
+            _DateTextButtons(),
 
-              /// List all participants and add new participants
-              _ParticipantsWidget(),
+            /// List all participants and add new participants
+            _ParticipantsWidget(),
 
-              _TravelMapWidget(),
-              const Padding(padding: EdgeInsets.all(16)),
+            _TravelMapWidget(),
+            const Padding(padding: EdgeInsets.all(16)),
 
-              if (Provider.of<RegisterTravelProvider>(context).isTravelValid)
-                SizedBox(
-                  height: 64,
-                  width: double.infinity,
-                  child: const _RegisterTravelButton(),
-                ),
-            ],
-          ),
+            if (Provider.of<RegisterTravelProvider>(context).isTravelValid)
+              SizedBox(
+                height: 64,
+                width: double.infinity,
+                child: const _RegisterTravelButton(),
+              ),
+          ],
         ),
       ),
-
-      // floatingActionButton: Column(
-      //   mainAxisAlignment: MainAxisAlignment.end,
-      //   crossAxisAlignment: CrossAxisAlignment.end,
-      //   children: [
-      //     FloatingActionButton(
-      //       tooltip: 'List travels',
-      //       child: const Icon(Icons.get_app),
-      //       onPressed: () async {
-      //         final registerTravelState = Provider.of<RegisterTravelProvider>(
-      //           context,
-      //           listen: false,
-      //         );
-      //
-      //         await registerTravelState.select();
-      //       },
-      //     ),
-      //
-      //     FloatingActionButton(
-      //       tooltip: 'List Stops',
-      //       child: const Icon(Icons.stop),
-      //       onPressed: () async {
-      //         final registerTravelState = Provider.of<RegisterTravelProvider>(
-      //           context,
-      //           listen: false,
-      //         );
-      //
-      //         debugPrint(registerTravelState.stops.toString());
-      //       },
-      //     ),
-      //   ],
-      // ),
     );
   }
 }
@@ -312,15 +279,19 @@ class _ParticipantsWidget extends StatelessWidget {
           ],
         ),
 
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 32),
-            child: _ListParticipants(),
-          ),
-        ),
+        Center(child: _ListParticipants()),
       ],
     );
   }
+}
+
+class _ParticipantModal extends StatefulWidget {
+  const _ParticipantModal({this.participant});
+
+  final Participant? participant;
+
+  @override
+  State<_ParticipantModal> createState() => _ParticipantModalState();
 }
 
 Future<void> _showParticipantModal(
@@ -345,15 +316,6 @@ Future<void> _showParticipantModal(
       await state.updateParticipant(participant, result);
     }
   }
-}
-
-class _ParticipantModal extends StatefulWidget {
-  const _ParticipantModal({this.participant});
-
-  final Participant? participant;
-
-  @override
-  State<_ParticipantModal> createState() => _ParticipantModalState();
 }
 
 class _ParticipantModalState extends State<_ParticipantModal> {
@@ -746,19 +708,15 @@ class _ParticipantListItem extends StatelessWidget {
       onTap: () async {
         await _showParticipantModal(context, participant: participant);
       },
-
       child: Row(
         children: [
           _ParticipantProfilePicture(image: participant.profilePicture),
           const Padding(padding: EdgeInsets.all(8)),
-
           Text(
             '${as.name}: ${participant.name}\n'
             '${as.age}: ${participant.age}',
           ),
-
           const Spacer(),
-
           Consumer<RegisterTravelProvider>(
             builder: (_, travelState, __) {
               return IconButton(

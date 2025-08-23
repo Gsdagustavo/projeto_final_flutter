@@ -50,191 +50,188 @@ class _SettingsPageState extends State<SettingsPage> {
 
     return FabPage(
       title: as!.title_settings,
-      body: SingleChildScrollView(
-        child: Consumer<LoginProvider>(
-          builder: (_, loginProvider, __) {
-            final as = AppLocalizations.of(context)!;
+      body: Consumer<LoginProvider>(
+        builder: (_, loginProvider, __) {
+          final as = AppLocalizations.of(context)!;
 
-            const defaultPfpPath = 'assets/images/default_profile_picture.png';
+          const defaultPfpPath = 'assets/images/default_profile_picture.png';
 
-            final locale = Localizations.localeOf(context).toString();
+          final locale = Localizations.localeOf(context).toString();
 
-            final user = loginProvider.loggedUser;
+          final user = loginProvider.loggedUser;
 
-            final creationTime = user?.metadata.creationTime;
-            final lastSignInTime = user?.metadata.lastSignInTime;
+          final creationTime = user?.metadata.creationTime;
+          final lastSignInTime = user?.metadata.lastSignInTime;
 
-            final formattedCreationTime = creationTime != null
-                ? creationTime.getFormattedDateWithYear(locale)
-                : 'N/A';
+          final formattedCreationTime = creationTime != null
+              ? creationTime.getFormattedDateWithYear(locale)
+              : 'N/A';
 
-            final formattedSignInTime = lastSignInTime != null
-                ? lastSignInTime.getFormattedDateWithYear(locale)
-                : 'N/A';
+          final formattedSignInTime = lastSignInTime != null
+              ? lastSignInTime.getFormattedDateWithYear(locale)
+              : 'N/A';
 
-            final backgroundImage = _profilePicture != null
-                ? FileImage(_profilePicture!)
-                : const AssetImage(defaultPfpPath) as ImageProvider;
+          final backgroundImage = _profilePicture != null
+              ? FileImage(_profilePicture!)
+              : const AssetImage(defaultPfpPath) as ImageProvider;
 
-            const double radius = 72;
+          const double radius = 72;
 
-            return Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  /// Profile picture
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Center(
-                        child: CircleAvatar(
-                          backgroundImage: backgroundImage,
-                          radius: radius,
-                        ),
+          return Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// Profile picture
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Center(
+                      child: CircleAvatar(
+                        backgroundImage: backgroundImage,
+                        radius: radius,
                       ),
+                    ),
 
-                      Positioned(
-                        bottom: 0,
-                        right:
-                            MediaQuery.of(context).size.width / 2 - radius - 22,
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(12),
-                          onTap: () async {
-                            /// TODO: show a modal to choose where the image
+                    Positioned(
+                      bottom: 0,
+                      right:
+                          MediaQuery.of(context).size.width / 2 - radius - 22,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(12),
+                        onTap: () async {
+                          /// TODO: show a modal to choose where the image
 
-                            /// is going to be picked from (camera, gallery, etc.)
-                            final image = await FileService().pickImage();
-                            await UserPreferencesService().saveProfilePicture(
-                              image,
-                            );
+                          /// is going to be picked from (camera, gallery, etc.)
+                          final image = await FileService().pickImage();
+                          await UserPreferencesService().saveProfilePicture(
+                            image,
+                          );
 
-                            setState(() {
-                              _profilePicture = image;
-                            });
-                          },
+                          setState(() {
+                            _profilePicture = image;
+                          });
+                        },
+                        radius: 20,
+                        child: CircleAvatar(
                           radius: 20,
-                          child: CircleAvatar(
-                            radius: 20,
-                            backgroundColor: Colors.white,
-                            child: Center(
-                              child: Icon(
-                                Icons.edit,
-                                size: 32,
-                                color: Theme.of(context).primaryColor,
-                              ),
+                          backgroundColor: Colors.white,
+                          child: Center(
+                            child: Icon(
+                              Icons.edit,
+                              size: 32,
+                              color: Theme.of(context).primaryColor,
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
 
-                  const Padding(padding: EdgeInsets.all(20)),
+                const Padding(padding: EdgeInsets.all(20)),
 
-                  /// 'Account' label
-                  Text(
-                    as.account,
-                    style: Theme.of(context).textTheme.displayMedium,
-                  ),
+                /// 'Account' label
+                Text(
+                  as.account,
+                  style: Theme.of(context).textTheme.displayMedium,
+                ),
 
-                  const Padding(padding: EdgeInsets.all(12)),
+                const Padding(padding: EdgeInsets.all(12)),
 
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      /// Email
-                      _SettingsListItem(
-                        icon: Icon(Icons.email),
-                        text: Text(
-                          '${as.email}: ${user?.email ?? 'N/A'}',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    /// Email
+                    _SettingsListItem(
+                      icon: Icon(Icons.email),
+                      text: Text(
+                        '${as.email}: ${user?.email ?? 'N/A'}',
+                        style: Theme.of(context).textTheme.bodyLarge,
                       ),
+                    ),
 
-                      Padding(padding: EdgeInsets.all(12)),
+                    Padding(padding: EdgeInsets.all(12)),
 
-                      /// Account creation
-                      _SettingsListItem(
-                        icon: Icon(Icons.date_range),
-                        text: Text(
-                          '${as.account_creation}: $formattedCreationTime',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
+                    /// Account creation
+                    _SettingsListItem(
+                      icon: Icon(Icons.date_range),
+                      text: Text(
+                        '${as.account_creation}: $formattedCreationTime',
+                        style: Theme.of(context).textTheme.bodyLarge,
                       ),
+                    ),
 
-                      Padding(padding: EdgeInsets.all(12)),
+                    Padding(padding: EdgeInsets.all(12)),
 
-                      /// Last sign in
-                      _SettingsListItem(
-                        icon: Icon(Icons.assignment_ind_outlined),
-                        text: Text(
-                          '${as.last_sign_in}: $formattedSignInTime',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
+                    /// Last sign in
+                    _SettingsListItem(
+                      icon: Icon(Icons.assignment_ind_outlined),
+                      text: Text(
+                        '${as.last_sign_in}: $formattedSignInTime',
+                        style: Theme.of(context).textTheme.bodyLarge,
                       ),
+                    ),
 
-                      Padding(padding: EdgeInsets.all(12)),
+                    Padding(padding: EdgeInsets.all(12)),
 
-                      _SettingsListItem(
-                        onTap: () async {
-                          final logout = await showDialog<bool>(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text('Logout'),
-                                content: Text('Do you really want to logout?'),
-                                actionsAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                actions: [
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop(false);
-                                    },
-                                    child: Text('No'),
-                                  ),
+                    _SettingsListItem(
+                      onTap: () async {
+                        final logout = await showDialog<bool>(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text('Logout'),
+                              content: Text('Do you really want to logout?'),
+                              actionsAlignment: MainAxisAlignment.spaceBetween,
+                              actions: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(false);
+                                  },
+                                  child: Text('No'),
+                                ),
 
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop(true);
-                                    },
-                                    child: Text('Yes'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(true);
+                                  },
+                                  child: Text('Yes'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
 
-                          if (logout!) {
-                            context.go(Routes.auth);
-                            await loginProvider.signOut();
-                          }
-                        },
-                        icon: const Icon(Icons.logout, color: Colors.red),
-                        text: Text(
-                          as.exit,
-                          style: const TextStyle(color: Colors.red),
-                        ),
+                        if (logout!) {
+                          context.go(Routes.auth);
+                          await loginProvider.signOut();
+                        }
+                      },
+                      icon: const Icon(Icons.logout, color: Colors.red),
+                      text: Text(
+                        as.exit,
+                        style: const TextStyle(color: Colors.red),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
 
-                  const Padding(padding: EdgeInsets.all(12)),
+                const Padding(padding: EdgeInsets.all(12)),
 
-                  /// 'Language' label
-                  Text(
-                    as.language,
-                    style: Theme.of(context).textTheme.displayMedium,
-                  ),
+                /// 'Language' label
+                Text(
+                  as.language,
+                  style: Theme.of(context).textTheme.displayMedium,
+                ),
 
-                  const Padding(padding: EdgeInsets.all(12)),
+                const Padding(padding: EdgeInsets.all(12)),
 
-                  const _LanguagesRadio(),
-                ],
-              ),
-            );
-          },
-        ),
+                const _LanguagesRadio(),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
