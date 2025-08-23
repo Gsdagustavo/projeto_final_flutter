@@ -3,25 +3,27 @@ import 'package:provider/provider.dart';
 
 import '../providers/user_preferences_provider.dart';
 
-/// A custom [IconButton] that toggles the current [ThemeMode] by calling the
-/// [ThemeProvider] provider
-///
-/// It is meant to be reused in many contexts
 class ThemeToggleButton extends StatelessWidget {
-  /// Constant constructor
   const ThemeToggleButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserPreferencesProvider>(
-      builder: (_, themeState, __) {
-        return IconButton(
-          onPressed: themeState.toggleTheme,
-          icon: Icon(
-            themeState.isDarkMode ? Icons.dark_mode : Icons.light_mode,
-          ),
-        );
-      },
+    final state = context.watch<UserPreferencesProvider>();
+    final isDarkMode = state.isDarkMode;
+
+    return IconButton(
+      onPressed: state.toggleTheme,
+      icon: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 250),
+        transitionBuilder: (child, animation) {
+          return RotationTransition(turns: animation, child: child);
+        },
+        child: Icon(
+          isDarkMode ? Icons.dark_mode : Icons.light_mode,
+          key: ValueKey<bool>(isDarkMode),
+          color: isDarkMode ? Colors.white : Colors.black,
+        ),
+      ),
     );
   }
 }
