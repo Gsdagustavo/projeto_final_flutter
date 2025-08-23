@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'my_app_bar.dart';
-import 'theme_toggle_button.dart';
 
 /// A Fab page util that is used in many pages of the app
 class FabPage extends StatelessWidget {
@@ -33,15 +32,13 @@ class FabPage extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            snap: false,
-            pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              centerTitle: true,
-              title: Text(title, style: Theme.of(context).textTheme.titleLarge),
+            pinned: false,
+            expandedHeight: 120,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            title: Text(
+              title,
+              style: Theme.of(context).textTheme.headlineLarge,
             ),
-            expandedHeight: 140,
-            backgroundColor: Theme.of(context).primaryColor,
-            actions: [const ThemeToggleButton()],
           ),
 
           SliverToBoxAdapter(child: body),

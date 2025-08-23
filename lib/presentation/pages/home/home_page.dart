@@ -28,17 +28,17 @@ class HomePage extends StatelessWidget {
 
     return FabPage(
       title: as.title_home,
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.update),
-        onPressed: () async {
-          final travelListProvider = Provider.of<TravelListProvider>(
-            context,
-            listen: false,
-          );
-
-          await travelListProvider.update();
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: const Icon(Icons.update),
+      //   onPressed: () async {
+      //     final travelListProvider = Provider.of<TravelListProvider>(
+      //       context,
+      //       listen: false,
+      //     );
+      //
+      //     await travelListProvider.update();
+      //   },
+      // ),
 
       body: Consumer<TravelListProvider>(
         builder: (_, travelListProvider, __) {
@@ -116,61 +116,57 @@ class _TravelWidget extends StatelessWidget {
         //   ),
         // );
       },
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        physics: BouncingScrollPhysics(),
-        child: Container(
-          padding: const EdgeInsets.all(32.0),
+      child: Container(
+        padding: const EdgeInsets.all(32.0),
 
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: Theme.of(context).primaryColor.withOpacity(0.35),
-          ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Theme.of(context).primaryColor.withOpacity(0.35),
+        ),
 
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                travel.travelTitle.capitalizedAndSpaced,
-                style: Theme.of(context).textTheme.headlineMedium,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              travel.travelTitle.capitalizedAndSpaced,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+
+            const Padding(padding: EdgeInsets.all(12)),
+
+            _StopWidget(
+              label: travel.stops.first.place.toString(),
+              icon: const Icon(Icons.circle_outlined, color: Colors.blue),
+              date: travel.stops.first.arriveDate!,
+            ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: const Icon(Icons.route),
+            ),
+
+            _StopWidget(
+              label: travel.stops.last.place.toString(),
+              icon: const Icon(Icons.pin_drop, color: Colors.red),
+              date: travel.stops.last.leaveDate!,
+            ),
+
+            const Padding(padding: EdgeInsets.all(16)),
+
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _ParticipantsWidget(participants: travel.participants),
+
+                  travel.isFinished
+                      ? SizedBox.shrink()
+                      : _FinishTravelButton(travel: travel),
+                ],
               ),
-
-              const Padding(padding: EdgeInsets.all(12)),
-
-              _StopWidget(
-                label: travel.stops.first.place.toString(),
-                icon: const Icon(Icons.circle_outlined, color: Colors.blue),
-                date: travel.stops.first.arriveDate!,
-              ),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: const Icon(Icons.route),
-              ),
-
-              _StopWidget(
-                label: travel.stops.last.place.toString(),
-                icon: const Icon(Icons.pin_drop, color: Colors.red),
-                date: travel.stops.last.leaveDate!,
-              ),
-
-              const Padding(padding: EdgeInsets.all(16)),
-
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _ParticipantsWidget(participants: travel.participants),
-
-                    travel.isFinished
-                        ? SizedBox.shrink()
-                        : _FinishTravelButton(travel: travel),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

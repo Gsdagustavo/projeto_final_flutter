@@ -95,8 +95,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
                     Positioned(
                       bottom: 0,
-                      right:
-                          MediaQuery.of(context).size.width / 2 - radius - 22,
+                      right: MediaQuery.of(context).size.width / 2 - radius - 22,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(12),
                         onTap: () async {
