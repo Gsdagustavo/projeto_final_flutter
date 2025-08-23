@@ -22,24 +22,24 @@ class AppRouter {
           return ScaffoldWithNavBar(navigationShell: navigationShell);
         },
         branches: [
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: Routes.home,
-                pageBuilder: (context, state) =>
-                    NoTransitionPage(child: const HomePage()),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: Routes.registerTravel,
-                pageBuilder: (context, state) =>
-                    NoTransitionPage(child: const RegisterTravelPage()),
-              ),
-            ],
-          ),
+          // StatefulShellBranch(
+          //   routes: [
+          //     GoRoute(
+          //       path: Routes.home,
+          //       pageBuilder: (context, state) =>
+          //           NoTransitionPage(child: const HomePage()),
+          //     ),
+          //   ],
+          // ),
+          // StatefulShellBranch(
+          //   routes: [
+          //     GoRoute(
+          //       path: Routes.registerTravel,
+          //       pageBuilder: (context, state) =>
+          //           NoTransitionPage(child: const RegisterTravelPage()),
+          //     ),
+          //   ],
+          // ),
           StatefulShellBranch(
             routes: [
               GoRoute(

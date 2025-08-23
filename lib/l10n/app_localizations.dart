@@ -97,6 +97,24 @@ abstract class AppLocalizations {
     Locale('pt')
   ];
 
+  /// No description provided for @language_en.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get language_en;
+
+  /// No description provided for @language_pt.
+  ///
+  /// In en, this message translates to:
+  /// **'Portuguese'**
+  String get language_pt;
+
+  /// No description provided for @language_es.
+  ///
+  /// In en, this message translates to:
+  /// **'Spanish'**
+  String get language_es;
+
   /// No description provided for @login.
   ///
   /// In en, this message translates to:

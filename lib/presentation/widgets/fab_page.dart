@@ -1,30 +1,24 @@
 import 'package:flutter/material.dart';
 
-import 'my_app_bar.dart';
+import 'theme_toggle_button.dart';
 
 /// A Fab page util that is used in many pages of the app
 class FabPage extends StatelessWidget {
   /// Const constructor
   const FabPage({
     super.key,
-    required this.body,
-    required this.title,
+    required this.children,
     this.floatingActionButton,
-    this.pageIcon,
+    required this.title,
   });
 
-  /// The title of the page
-  ///
-  /// Will be shown in the [MyAppBar]
+  /// A list of children widgets or slivers
+  final List<Widget> children;
+
   final String title;
 
-  /// The body of the page
-  final Widget body;
-
-  /// An optional [FloatingActionButton]
+  /// Optional FAB
   final Widget? floatingActionButton;
-
-  final Icon? pageIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -32,19 +26,34 @@ class FabPage extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            pinned: false,
-            expandedHeight: 120,
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            snap: false,
+            floating: false,
             title: Text(
               title,
               style: Theme.of(context).textTheme.headlineLarge,
             ),
+            expandedHeight: 120,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            actions: const [ThemeToggleButton()],
           ),
 
-          SliverToBoxAdapter(child: body),
+          ...children.map((child) {
+            if (_isSliver(child)) {
+              return child;
+            } else {
+              return SliverToBoxAdapter(child: child);
+            }
+          }),
         ],
       ),
       floatingActionButton: floatingActionButton,
     );
+  }
+
+  bool _isSliver(Widget widget) {
+    return widget is SliverList ||
+        widget is SliverGrid ||
+        widget is SliverToBoxAdapter ||
+        widget is SliverFillRemaining;
   }
 }

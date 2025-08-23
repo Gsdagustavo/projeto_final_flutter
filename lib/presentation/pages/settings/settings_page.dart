@@ -11,15 +11,9 @@ import '../../../services/user_preferences_service.dart';
 import '../../providers/login_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../util/app_routes.dart';
-import '../../widgets/fab_list_item.dart';
 import '../../widgets/fab_page.dart';
 
-/// This is the settings page of the app
-///
-/// Currently, it does not have any interaction nor action available, but in the
-/// future, more features will be added
 class SettingsPage extends StatefulWidget {
-  /// Constant constructor
   const SettingsPage({super.key});
 
   @override
@@ -32,304 +26,200 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       final image = await UserPreferencesService().getCurrentProfilePicture();
-
-      if (mounted) {
-        setState(() {
-          _profilePicture = image;
-        });
-      }
+      if (mounted) setState(() => _profilePicture = image);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context);
+    final as = AppLocalizations.of(context)!;
+    final loginProvider = Provider.of<LoginProvider>(context);
+    final user = loginProvider.loggedUser!;
+
+    const defaultPfpPath = 'assets/images/default_profile_picture.png';
+    final backgroundImage = _profilePicture != null
+        ? FileImage(_profilePicture!)
+        : const AssetImage(defaultPfpPath) as ImageProvider;
+
+    final locale = Localizations.localeOf(context).toString();
+
+    final creationTime = user.metadata.creationTime;
+    final lastSignInTime = user.metadata.lastSignInTime;
+
+    final formattedCreationTime = creationTime != null
+        ? creationTime.getFormattedDateWithYear(locale)
+        : 'N/A';
 
     return FabPage(
-      title: as!.title_settings,
-      body: Consumer<LoginProvider>(
-        builder: (_, loginProvider, __) {
-          final as = AppLocalizations.of(context)!;
-
-          const defaultPfpPath = 'assets/images/default_profile_picture.png';
-
-          final locale = Localizations.localeOf(context).toString();
-
-          final user = loginProvider.loggedUser;
-
-          final creationTime = user?.metadata.creationTime;
-          final lastSignInTime = user?.metadata.lastSignInTime;
-
-          final formattedCreationTime = creationTime != null
-              ? creationTime.getFormattedDateWithYear(locale)
-              : 'N/A';
-
-          final formattedSignInTime = lastSignInTime != null
-              ? lastSignInTime.getFormattedDateWithYear(locale)
-              : 'N/A';
-
-          final backgroundImage = _profilePicture != null
-              ? FileImage(_profilePicture!)
-              : const AssetImage(defaultPfpPath) as ImageProvider;
-
-          const double radius = 72;
-
-          return Padding(
-            padding: const EdgeInsets.all(32.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                /// Profile picture
-                Stack(
-                  alignment: Alignment.center,
+      title: 'Settings',
+      children: [
+        Column(
+          children: [
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
                   children: [
-                    Center(
-                      child: CircleAvatar(
-                        backgroundImage: backgroundImage,
-                        radius: radius,
-                      ),
-                    ),
-
-                    Positioned(
-                      bottom: 0,
-                      right: MediaQuery.of(context).size.width / 2 - radius - 22,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(12),
-                        onTap: () async {
-                          /// TODO: show a modal to choose where the image
-
-                          /// is going to be picked from (camera, gallery, etc.)
-                          final image = await FileService().pickImage();
-                          await UserPreferencesService().saveProfilePicture(
-                            image,
-                          );
-
-                          setState(() {
-                            _profilePicture = image;
-                          });
-                        },
-                        radius: 20,
-                        child: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: Colors.white,
-                          child: Center(
+                    Stack(
+                      alignment: Alignment.bottomRight,
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: Colors.transparent,
+                          radius: 32,
+                          backgroundImage: backgroundImage,
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            final image = await FileService().pickImage();
+                            await UserPreferencesService().saveProfilePicture(
+                              image,
+                            );
+                            setState(() => _profilePicture = image);
+                          },
+                          child: CircleAvatar(
+                            radius: 14,
+                            backgroundColor: Colors.white,
                             child: Icon(
                               Icons.edit,
-                              size: 32,
+                              size: 16,
                               color: Theme.of(context).primaryColor,
                             ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
+                    Padding(padding: EdgeInsets.all(16)),
+                    Text(user.email!),
                   ],
                 ),
+              ),
+            ),
+            Padding(padding: EdgeInsets.all(16)),
 
-                const Padding(padding: EdgeInsets.all(20)),
-
-                /// 'Account' label
-                Text(
-                  as.account,
-                  style: Theme.of(context).textTheme.displayMedium,
-                ),
-
-                const Padding(padding: EdgeInsets.all(12)),
-
-                Column(
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    /// Email
-                    _SettingsListItem(
-                      icon: Icon(Icons.email),
-                      text: Text(
-                        '${as.email}: ${user?.email ?? 'N/A'}',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
+                    Text(
+                      as.account,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
-
-                    Padding(padding: EdgeInsets.all(12)),
-
-                    /// Account creation
-                    _SettingsListItem(
-                      icon: Icon(Icons.date_range),
-                      text: Text(
-                        '${as.account_creation}: $formattedCreationTime',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
+                    ListTile(
+                      leading: const Icon(Icons.email),
+                      title: Text(user.email ?? 'N/A'),
                     ),
-
-                    Padding(padding: EdgeInsets.all(12)),
-
-                    /// Last sign in
-                    _SettingsListItem(
-                      icon: Icon(Icons.assignment_ind_outlined),
-                      text: Text(
-                        '${as.last_sign_in}: $formattedSignInTime',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                    ),
-
-                    Padding(padding: EdgeInsets.all(12)),
-
-                    _SettingsListItem(
-                      onTap: () async {
-                        final logout = await showDialog<bool>(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text('Logout'),
-                              content: Text('Do you really want to logout?'),
-                              actionsAlignment: MainAxisAlignment.spaceBetween,
-                              actions: [
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop(false);
-                                  },
-                                  child: Text('No'),
-                                ),
-
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop(true);
-                                  },
-                                  child: Text('Yes'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-
-                        if (logout!) {
-                          context.go(Routes.auth);
-                          await loginProvider.signOut();
-                        }
-                      },
-                      icon: const Icon(Icons.logout, color: Colors.red),
-                      text: Text(
-                        as.exit,
-                        style: const TextStyle(color: Colors.red),
-                      ),
+                    const Divider(color: Colors.grey),
+                    ListTile(
+                      leading: const Icon(Icons.date_range),
+                      title: Text(formattedCreationTime),
                     ),
                   ],
                 ),
+              ),
+            ),
+            Padding(padding: EdgeInsets.all(16)),
 
-                const Padding(padding: EdgeInsets.all(12)),
+            Card(
+              child: ListTile(
+                leading: const Icon(Icons.language),
+                title: Text(as.language),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) => LanguageSelectionSheet(),
+                  );
+                },
+              ),
+            ),
+            Padding(padding: EdgeInsets.all(16)),
 
-                /// 'Language' label
-                Text(
-                  as.language,
-                  style: Theme.of(context).textTheme.displayMedium,
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () async {
+                  final logout = await showDialog<bool>(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('Logout'),
+                        content: Text('Do you really want to logout?'),
+                        actionsAlignment: MainAxisAlignment.spaceBetween,
+                        actions: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(false);
+                            },
+                            child: Text(as.no),
+                          ),
+
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(true);
+                            },
+                            child: Text(as.yes),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+
+                  if (logout!) {
+                    context.go(Routes.auth);
+                    await loginProvider.signOut();
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-
-                const Padding(padding: EdgeInsets.all(12)),
-
-                const _LanguagesRadio(),
-              ],
+                child: Text(as.exit),
+              ),
             ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _SettingsListItem extends StatelessWidget {
-  const _SettingsListItem({
-    super.key,
-    required this.icon,
-    required this.text,
-    this.onTap,
-  });
-
-  final Icon icon;
-  final Text text;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return FabListItem(
-      onTap: onTap,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          icon,
-          Padding(padding: EdgeInsets.all(6)),
-          Expanded(child: text),
-        ],
-      ),
-    );
-  }
-}
-
-/// This is a custom [Widget] that is used in the [SettingsPage]
-/// It is a RadioButton that contains values for language codes, allowing
-/// the user to dynamically change the current language of the app
-class _LanguagesRadio extends StatefulWidget {
-  /// Constant constructor
-  const _LanguagesRadio();
-
-  @override
-  State<_LanguagesRadio> createState() => _LanguagesRadioState();
-}
-
-class _LanguagesRadioState extends State<_LanguagesRadio> {
-  final locales = AppLocalizations.supportedLocales;
-  late String selectedOption;
-
-  bool _isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      setState(() {
-        selectedOption = Provider.of<UserPreferencesProvider>(
-          context,
-          listen: false,
-        ).languageCode;
-
-        _isLoading = false;
-      });
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    return Wrap(
-      direction: Axis.horizontal,
-      children: [
-        for (final locale in locales)
-          ListTile(
-            title: Text(locale.toString().toUpperCase()),
-            leading: Radio<String>(
-              value: locale.toString(),
-              groupValue: selectedOption,
-              onChanged: (value) async {
-                setState(() {
-                  debugPrint('Value: $value');
-                  selectedOption = value.toString();
-                });
-
-                final languageCodeProvider =
-                    Provider.of<UserPreferencesProvider>(
-                      context,
-                      listen: false,
-                    );
-
-                await languageCodeProvider.changeLanguageCode(
-                  languageCode: locale.toString(),
-                );
-              },
-            ),
-          ),
+          ],
+        ),
       ],
     );
   }
 }
+
+class LanguageSelectionSheet extends StatelessWidget {
+  final locales = AppLocalizations.supportedLocales;
+
+  @override
+  Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: locales.map((lang) {
+        return ListTile(
+          title: Text(languageGetters[lang.languageCode]!(loc)),
+          onTap: () async {
+            final newLocale = Locale(lang.languageCode);
+            final userPreferencesState = Provider.of<UserPreferencesProvider>(
+              context,
+              listen: false,
+            );
+
+            await userPreferencesState.changeLanguageCode(
+              languageCode: newLocale.languageCode,
+            );
+
+            Navigator.pop(context);
+          },
+        );
+      }).toList(),
+    );
+  }
+}
+
+final Map<String, String Function(AppLocalizations)> languageGetters = {
+  'en': (loc) => loc.language_en,
+  'pt': (loc) => loc.language_pt,
+  'es': (loc) => loc.language_es,
+};

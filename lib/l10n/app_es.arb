@@ -1,5 +1,8 @@
 {
   "@@locale": "es",
+  "language_en": "Inglés",
+  "language_pt": "Portugués",
+  "language_es": "Español",
 
   "@@login_page": {},
   "login": "Iniciar sesión",

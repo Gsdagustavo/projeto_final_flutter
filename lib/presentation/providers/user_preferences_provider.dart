@@ -47,5 +47,9 @@ class UserPreferencesProvider with ChangeNotifier {
   /// Returns the current [LanguageCode]
   String get languageCode => _languageCode;
 
+  set languageCode(String value) {
+    _languageCode = value;
+  }
+
   bool _isDarkMode = false;
 }
