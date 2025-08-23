@@ -66,7 +66,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get last_sign_in => 'Último login';
 
   @override
-  String get exit => 'Sair';
+  String get logout => 'Sair';
+
+  @override
+  String get logout_confirmation => 'Você realmente quer sair?';
 
   @override
   String get language => 'Idioma';

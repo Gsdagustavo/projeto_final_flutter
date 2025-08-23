@@ -46,14 +46,13 @@ class _SettingsPageState extends State<SettingsPage> {
     final locale = Localizations.localeOf(context).toString();
 
     final creationTime = user.metadata.creationTime;
-    final lastSignInTime = user.metadata.lastSignInTime;
 
     final formattedCreationTime = creationTime != null
         ? creationTime.getFormattedDateWithYear(locale)
         : 'N/A';
 
     return FabPage(
-      title: 'Settings',
+      title: as.title_settings,
       children: [
         Column(
           children: [
@@ -84,7 +83,9 @@ class _SettingsPageState extends State<SettingsPage> {
                             child: Icon(
                               Icons.edit,
                               size: 16,
-                              color: Theme.of(context).primaryColor,
+                              color: Theme
+                                  .of(context)
+                                  .primaryColor,
                             ),
                           ),
                         ),
@@ -106,7 +107,10 @@ class _SettingsPageState extends State<SettingsPage> {
                   children: [
                     Text(
                       as.account,
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .titleMedium,
                     ),
                     ListTile(
                       leading: const Icon(Icons.email),
@@ -146,8 +150,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                        title: Text('Logout'),
-                        content: Text('Do you really want to logout?'),
+                        title: Text(as.logout),
+                        content: Text(as.logout_confirmation),
                         actionsAlignment: MainAxisAlignment.spaceBetween,
                         actions: [
                           ElevatedButton(
@@ -177,7 +181,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   backgroundColor: Colors.red,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: Text(as.exit),
+                child: Text(as.logout),
               ),
             ),
           ],

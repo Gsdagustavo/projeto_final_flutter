@@ -211,11 +211,17 @@ abstract class AppLocalizations {
   /// **'Last sign in'**
   String get last_sign_in;
 
-  /// No description provided for @exit.
+  /// No description provided for @logout.
   ///
   /// In en, this message translates to:
-  /// **'Exit'**
-  String get exit;
+  /// **'Logout'**
+  String get logout;
+
+  /// No description provided for @logout_confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you really want to logout?'**
+  String get logout_confirmation;
 
   /// No description provided for @language.
   ///

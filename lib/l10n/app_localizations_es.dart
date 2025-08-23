@@ -66,7 +66,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get last_sign_in => 'Último inicio de sesión';
 
   @override
-  String get exit => 'Salir';
+  String get logout => 'Salir';
+
+  @override
+  String get logout_confirmation => '¿Realmente quieres cerrar sesión?';
 
   @override
   String get language => 'Idioma';

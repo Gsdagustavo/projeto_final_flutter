@@ -29,7 +29,8 @@
   "account": "Account",
   "account_creation": "Account creation",
   "last_sign_in": "Last sign in",
-  "exit": "Exit",
+  "logout": "Logout",
+  "logout_confirmation": "Do you really want to logout?",
   "language": "Language",
 
   "@@transport_types": {},

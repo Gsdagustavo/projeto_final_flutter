@@ -29,7 +29,8 @@
   "account": "Cuenta",
   "account_creation": "Creación de cuenta",
   "last_sign_in": "Último inicio de sesión",
-  "exit": "Salir",
+  "logout": "Salir",
+  "logout_confirmation": "¿Realmente quieres cerrar sesión?",
   "language": "Idioma",
 
   "@@transport_types": {},
