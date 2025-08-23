@@ -517,6 +517,18 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                                                   .getDefaultProfilePictureFile(),
                                         );
 
+                                        await showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return CustomDialog(
+                                              title: as.register_participant,
+                                              content: Text(
+                                                as.participant_registered,
+                                              ),
+                                            );
+                                          },
+                                        );
+
                                         Navigator.of(context).pop(participant);
                                       },
                                       child: Text(as.register),
@@ -554,6 +566,18 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                                             _profilePicture ??
                                             await FileService()
                                                 .getDefaultProfilePictureFile(),
+                                      );
+
+                                      await showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return CustomDialog(
+                                            title: as.update_participant,
+                                            content: Text(
+                                              as.participant_updated,
+                                            ),
+                                          );
+                                        },
                                       );
 
                                       Navigator.of(context).pop(participant);
