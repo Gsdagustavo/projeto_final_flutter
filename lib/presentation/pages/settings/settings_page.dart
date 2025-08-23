@@ -84,7 +84,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             radius: 14,
                             backgroundColor: Colors.white,
                             child: Icon(
-                              Icons.edit,
+                              Icons.camera_alt,
                               size: 16,
                               color: Theme.of(context).primaryColor,
                             ),
