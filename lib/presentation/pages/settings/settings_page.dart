@@ -72,6 +72,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         InkWell(
                           onTap: () async {
                             final image = await FileService().pickImage();
+
+                            if (image == null) return;
+
                             await UserPreferencesService().saveProfilePicture(
                               image,
                             );
