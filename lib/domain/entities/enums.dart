@@ -36,3 +36,5 @@ enum Experience {
 }
 
 enum TravelStopType { start, stop, end }
+
+enum TravelStatus { upcoming, ongoing, finished }

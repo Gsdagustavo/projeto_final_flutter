@@ -64,3 +64,21 @@ extension ExperiencesIntlString on Experience {
     }
   }
 }
+
+/// This extension is a simple way to return the localized version of
+/// the [TravelStopType] enum
+extension TravelStatusIntlString on TravelStatus {
+  /// Returns the localized [TravelStopType]
+  String getIntlTravelStatus(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
+    switch (this) {
+      case TravelStatus.upcoming:
+        return loc.upcoming;
+      case TravelStatus.ongoing:
+        return loc.ongoing;
+      case TravelStatus.finished:
+        return loc.finished;
+    }
+  }
+}
