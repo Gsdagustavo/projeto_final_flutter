@@ -20,8 +20,7 @@ class ThemeToggleButton extends StatelessWidget {
         },
         child: Icon(
           isDarkMode ? Icons.dark_mode : Icons.light_mode,
-          key: ValueKey<bool>(isDarkMode),
-          color: isDarkMode ? Colors.white : Colors.black,
+          color: Theme.of(context).iconTheme.color,
         ),
       ),
     );

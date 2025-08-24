@@ -5,19 +5,18 @@ ThemeData getTravelAppTheme() {
   const primaryColor = Color(0xFFF0934F);
   const primaryVariantColor = Color(0xFFC46A2E);
   const secondaryColor = Color(0xFF5A7C6B);
-  const accentColor = Color(0xFFB57F50);
   const backgroundColor = Color(0xFFF7F4F0);
   const surfaceColor = Color(0xFFFFFFFF);
   const errorColor = Color(0xFFB00020);
 
   const onPrimary = Colors.white;
-  const onSecondary = Colors.white;
   const onBackground = Color(0xFF333333);
-  const onSurface = Color(0xFF333333);
   const onPrimaryHint = Color(0xFFBDBDBD);
 
   const appBarColor = Color(0xFFD67735);
   const bottomNavBarColor = Color(0xFFE0D8D0);
+
+  const greyIconColor = Color(0xFF666666);
 
   return ThemeData(
     colorScheme: const ColorScheme(
@@ -28,41 +27,40 @@ ThemeData getTravelAppTheme() {
       surface: surfaceColor,
       error: errorColor,
       onPrimary: onPrimary,
-      onSecondary: onSecondary,
+      onSecondary: onPrimary,
       onBackground: onBackground,
-      onSurface: onSurface,
+      onSurface: onBackground,
       onError: Colors.white,
       brightness: Brightness.light,
     ),
     scaffoldBackgroundColor: backgroundColor,
-    textTheme: TextTheme(
-      displayLarge: const TextStyle(
-        fontSize: 36.0,
+    iconTheme: const IconThemeData(color: greyIconColor, size: 24.0),
+    listTileTheme: ListTileThemeData(iconColor: greyIconColor),
+    textTheme: const TextTheme(
+      displayLarge: TextStyle(
+        fontSize: 36,
         fontWeight: FontWeight.bold,
         color: onBackground,
       ),
-      displayMedium: const TextStyle(
-        fontSize: 28.0,
+      displayMedium: TextStyle(
+        fontSize: 28,
         fontWeight: FontWeight.bold,
         color: onBackground,
       ),
-      displaySmall: const TextStyle(
-        fontSize: 24.0,
+      displaySmall: TextStyle(
+        fontSize: 24,
         fontWeight: FontWeight.bold,
         color: onBackground,
       ),
-      bodyLarge: const TextStyle(fontSize: 16.0, color: onBackground),
-      bodyMedium: const TextStyle(fontSize: 14.0, color: onBackground),
-      bodySmall: const TextStyle(fontSize: 12.0, color: onBackground),
-      labelLarge: const TextStyle(
-        fontSize: 16.0,
+      bodyLarge: TextStyle(fontSize: 16, color: onBackground),
+      bodyMedium: TextStyle(fontSize: 14, color: onBackground),
+      bodySmall: TextStyle(fontSize: 12, color: onBackground),
+      labelLarge: TextStyle(
+        fontSize: 16,
         fontWeight: FontWeight.w500,
         color: onPrimary,
       ),
-      labelSmall: TextStyle(
-        fontSize: 12.0,
-        color: onBackground.withOpacity(0.6),
-      ),
+      labelSmall: TextStyle(fontSize: 12, color: onBackground, height: 1.2),
     ),
     inputDecorationTheme: InputDecorationTheme(
       hintStyle: TextStyle(
@@ -100,10 +98,6 @@ ThemeData getTravelAppTheme() {
         elevation: 5.0,
       ),
     ),
-    bannerTheme: MaterialBannerThemeData(
-      contentTextStyle: const TextStyle(color: onPrimary),
-      backgroundColor: secondaryColor,
-    ),
     appBarTheme: const AppBarTheme(
       backgroundColor: appBarColor,
       foregroundColor: onPrimary,
@@ -111,11 +105,8 @@ ThemeData getTravelAppTheme() {
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: bottomNavBarColor,
       selectedItemColor: primaryColor,
-      unselectedItemColor: onBackground,
+      unselectedItemColor: greyIconColor,
     ),
-    extensions: const <_SuccessColorExtension>[
-      _SuccessColorExtension(successColor: Color(0xFF4CAF50)),
-    ],
   );
 }
 
@@ -124,16 +115,15 @@ ThemeData getTravelAppDarkTheme() {
   const primaryColor = Color(0xFFF0934F);
   const primaryVariantColor = Color(0xFFC46A2E);
   const secondaryColor = Color(0xFF5A7C6B);
-  const accentColor = Color(0xFFB57F50);
   const backgroundColor = Color(0xFF1E272E);
   const surfaceColor = Color(0xFF2E3942);
   const errorColor = Color(0xFFCF6679);
 
   const onPrimary = Colors.white;
-  const onSecondary = Colors.white;
   const onBackground = Color(0xFFEEEEEE);
-  const onSurface = Color(0xFFEEEEEE);
   const onPrimaryHint = Color(0xFFB0B0B0);
+
+  const greyIconColorDark = Color(0xFFAAAAAA);
 
   return ThemeData(
     colorScheme: const ColorScheme(
@@ -144,41 +134,40 @@ ThemeData getTravelAppDarkTheme() {
       surface: surfaceColor,
       error: errorColor,
       onPrimary: onPrimary,
-      onSecondary: onSecondary,
+      onSecondary: onPrimary,
       onBackground: onBackground,
-      onSurface: onSurface,
+      onSurface: onBackground,
       onError: Colors.black,
       brightness: Brightness.dark,
     ),
     scaffoldBackgroundColor: backgroundColor,
-    textTheme: TextTheme(
-      displayLarge: const TextStyle(
-        fontSize: 36.0,
+    iconTheme: const IconThemeData(color: greyIconColorDark, size: 24.0),
+    listTileTheme: ListTileThemeData(iconColor: greyIconColorDark),
+    textTheme: const TextTheme(
+      displayLarge: TextStyle(
+        fontSize: 36,
         fontWeight: FontWeight.bold,
         color: onBackground,
       ),
-      displayMedium: const TextStyle(
-        fontSize: 28.0,
+      displayMedium: TextStyle(
+        fontSize: 28,
         fontWeight: FontWeight.bold,
         color: onBackground,
       ),
-      displaySmall: const TextStyle(
-        fontSize: 24.0,
+      displaySmall: TextStyle(
+        fontSize: 24,
         fontWeight: FontWeight.bold,
         color: onBackground,
       ),
-      bodyLarge: const TextStyle(fontSize: 16.0, color: onBackground),
-      bodyMedium: const TextStyle(fontSize: 14.0, color: onBackground),
-      bodySmall: const TextStyle(fontSize: 12.0, color: onBackground),
-      labelLarge: const TextStyle(
-        fontSize: 16.0,
+      bodyLarge: TextStyle(fontSize: 16, color: onBackground),
+      bodyMedium: TextStyle(fontSize: 14, color: onBackground),
+      bodySmall: TextStyle(fontSize: 12, color: onBackground),
+      labelLarge: TextStyle(
+        fontSize: 16,
         fontWeight: FontWeight.w500,
         color: onPrimary,
       ),
-      labelSmall: TextStyle(
-        fontSize: 12.0,
-        color: onBackground.withOpacity(0.6),
-      ),
+      labelSmall: TextStyle(fontSize: 12, color: onBackground, height: 1.2),
     ),
     inputDecorationTheme: InputDecorationTheme(
       hintStyle: TextStyle(
@@ -216,10 +205,6 @@ ThemeData getTravelAppDarkTheme() {
         elevation: 5.0,
       ),
     ),
-    bannerTheme: MaterialBannerThemeData(
-      contentTextStyle: const TextStyle(color: onPrimary),
-      backgroundColor: secondaryColor,
-    ),
     appBarTheme: const AppBarTheme(
       backgroundColor: Color(0xFFB15F29),
       foregroundColor: onPrimary,
@@ -227,11 +212,8 @@ ThemeData getTravelAppDarkTheme() {
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Color(0xFF141920),
       selectedItemColor: primaryColor,
-      unselectedItemColor: onBackground,
+      unselectedItemColor: greyIconColorDark,
     ),
-    extensions: const <_SuccessColorExtension>[
-      _SuccessColorExtension(successColor: Color(0xFF81C784)),
-    ],
   );
 }
 

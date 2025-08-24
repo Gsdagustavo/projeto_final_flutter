@@ -11,7 +11,7 @@ import '../../../services/user_preferences_service.dart';
 import '../../providers/login_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../util/app_routes.dart';
-import '../../widgets/fab_page.dart';
+import '../../widgets/theme_toggle_button.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -51,170 +51,180 @@ class _SettingsPageState extends State<SettingsPage> {
         ? creationTime.getFormattedDateWithYear(locale)
         : 'N/A';
 
-    return FabPage(
-      title: as.title_settings,
-      children: [
-        Column(
-          children: [
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    Stack(
-                      alignment: Alignment.bottomRight,
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            floating: false,
+            snap: false,
+            expandedHeight: 120,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            title: Text(
+              as.title_settings,
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
+            actions: const [ThemeToggleButton()],
+          ),
+
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
                       children: [
-                        CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          radius: 32,
-                          backgroundImage: backgroundImage,
-                        ),
-                        InkWell(
-                          onTap: () async {
-                            final image = await FileService().pickImage();
-
-                            if (image == null) return;
-
-                            await UserPreferencesService().saveProfilePicture(
-                              image,
-                            );
-                            setState(() => _profilePicture = image);
-                          },
-                          child: CircleAvatar(
-                            radius: 14,
-                            backgroundColor: Colors.white,
-                            child: Icon(
-                              Icons.camera_alt,
-                              size: 16,
-                              color: Theme.of(context).primaryColor,
+                        Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.transparent,
+                              radius: 32,
+                              backgroundImage: backgroundImage,
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(padding: EdgeInsets.all(16)),
-                    Text(user.email!),
-                  ],
-                ),
-              ),
-            ),
-            Padding(padding: EdgeInsets.all(16)),
+                            InkWell(
+                              onTap: () async {
+                                final image = await FileService().pickImage();
 
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      as.account,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    Column(
-                      children: [
-                        ListTile(
-                          leading: const Icon(Icons.email),
-                          title: Text(as.email),
-                          subtitle: Text(user.email ?? 'N/A'),
-                        ),
-                      ],
-                    ),
-                    const Divider(color: Colors.grey),
-                    Column(
-                      children: [
-                        ListTile(
-                          leading: const Icon(Icons.date_range),
-                          title: Text(as.account_creation),
-                          subtitle: Text(formattedCreationTime),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Padding(padding: EdgeInsets.all(16)),
+                                if (image == null) return;
 
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.language),
-                title: Text(as.language),
-                subtitle: Text(
-                  languageGetters[Localizations.localeOf(
-                    context,
-                  ).languageCode]!(as),
-                ),
-                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) => LanguageSelectionSheet(),
-                  );
-                },
-              ),
-            ),
-            Padding(padding: EdgeInsets.all(16)),
-
-            SizedBox(
-              width: double.infinity,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    final logout = await showDialog<bool>(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text(as.logout),
-                          content: Text(as.logout_confirmation),
-                          actionsAlignment: MainAxisAlignment.spaceBetween,
-                          actions: [
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).pop(false);
+                                await UserPreferencesService()
+                                    .saveProfilePicture(image);
+                                setState(() => _profilePicture = image);
                               },
-                              child: Text(as.no),
-                            ),
-
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop(true);
-                              },
-                              child: Text(as.yes),
+                              child: CircleAvatar(
+                                radius: 14,
+                                backgroundColor: Colors.white,
+                                child: Icon(Icons.camera_alt, size: 16),
+                              ),
                             ),
                           ],
-                        );
-                      },
-                    );
-
-                    if (logout ?? false) {
-                      context.go(Routes.auth);
-                      await loginProvider.signOut();
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 32),
-                          child: const Icon(Icons.logout),
                         ),
-                      ),
-                      Text(as.logout),
-                    ],
+                        Padding(padding: EdgeInsets.all(16)),
+                        Text(user.email!),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+                Padding(padding: EdgeInsets.all(16)),
+
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          as.account,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        Column(
+                          children: [
+                            ListTile(
+                              leading: const Icon(Icons.email),
+                              title: Text(as.email),
+                              subtitle: Text(user.email ?? 'N/A'),
+                            ),
+                          ],
+                        ),
+                        const Divider(color: Colors.grey),
+                        Column(
+                          children: [
+                            ListTile(
+                              leading: const Icon(Icons.date_range),
+                              title: Text(as.account_creation),
+                              subtitle: Text(formattedCreationTime),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.all(16)),
+
+                Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.language),
+                    title: Text(as.language),
+                    subtitle: Text(
+                      languageGetters[Localizations.localeOf(
+                        context,
+                      ).languageCode]!(as),
+                    ),
+                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) => LanguageSelectionSheet(),
+                      );
+                    },
+                  ),
+                ),
+                Padding(padding: EdgeInsets.all(16)),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final logout = await showDialog<bool>(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text(as.logout),
+                              content: Text(as.logout_confirmation),
+                              actionsAlignment: MainAxisAlignment.spaceBetween,
+                              actions: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(false);
+                                  },
+                                  child: Text(as.no),
+                                ),
+
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(true);
+                                  },
+                                  child: Text(as.yes),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+
+                        if (logout ?? false) {
+                          context.go(Routes.auth);
+                          await loginProvider.signOut();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 32),
+                              child: const Icon(Icons.logout),
+                            ),
+                          ),
+                          Text(as.logout),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 }

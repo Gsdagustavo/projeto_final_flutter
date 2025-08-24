@@ -135,30 +135,37 @@ class _TravelWidget extends StatelessWidget {
                   ),
                 ),
 
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Container(
-                      padding: EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey,
-                      ),
-
+                Positioned(
+                  top: 12,
+                  left: 12,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: travel.isFinished
+                          ? Colors.green.withOpacity(0.9)
+                          : Colors.red.withOpacity(0.9),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
                       /// TODO: intl
-                      child: Text('Completed'),
+                      travel.isFinished ? "Completed" : "Ongoing",
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ),
                 ),
 
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Align(
-                    alignment: Alignment.topRight,
+                Positioned(
+                  right: 12,
+                  top: 12,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                     child: IconButton(
-                      style: IconButton.styleFrom(backgroundColor: Colors.grey),
-
                       /// TODO: implement onPressed
                       onPressed: () {},
                       icon: Icon(Icons.more_vert),
