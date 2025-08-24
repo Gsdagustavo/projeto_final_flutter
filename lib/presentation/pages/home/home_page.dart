@@ -102,23 +102,25 @@ class _TravelWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
 
-    return InkWell(
-      onTap: () async {
-        await showReviewModal(context);
-        debugPrint('Travel widget clicked');
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) {
-        //       return TravelRoutePage(
-        //         stops: travel.stops,
-        //         travelTitle: travel.travelTitle,
-        //       );
-        //     },
-        //   ),
-        // );
-      },
-      child: Card(
+    return Card(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        /// TODO: navigate to travel details when on tap
+        onTap: () async {
+          await showReviewModal(context);
+          debugPrint('Travel widget clicked');
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) {
+          //       return TravelRoutePage(
+          //         stops: travel.stops,
+          //         travelTitle: travel.travelTitle,
+          //       );
+          //     },
+          //   ),
+          // );
+        },
         child: Column(
           children: [
             Stack(
@@ -256,6 +258,7 @@ class _TravelWidget extends StatelessWidget {
                               width: 1,
                             ),
                           ),
+                          /// TODO: intl
                           child: Text('${travel.stops.length} stops'),
                         ),
                       ),
