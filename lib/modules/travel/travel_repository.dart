@@ -109,7 +109,7 @@ class TravelRepositoryImpl implements TravelRepository {
       final newTravel = travelModel.copyWith(
         endDate: now,
         stops: travelModel.stops,
-        isFinished: true,
+        status: TravelStatus.finished,
       );
 
       debugPrint('New travel: $newTravel');

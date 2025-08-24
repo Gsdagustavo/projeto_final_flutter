@@ -1,4 +1,3 @@
-import '../../core/util/binary_utils.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/travel.dart';
 import '../local/database/tables/travel_table.dart';
@@ -8,22 +7,22 @@ import 'travel_stop_model.dart';
 class TravelModel {
   int? travelId;
   final String travelTitle;
-  bool isFinished;
   final DateTime? startDate;
   final DateTime? endDate;
   final TransportType transportType;
   final List<ParticipantModel> participants;
   final List<TravelStopModel> stops;
+  final TravelStatus status;
 
   TravelModel({
     this.travelId,
-    this.isFinished = false,
     required this.travelTitle,
     required this.startDate,
     required this.endDate,
     required this.transportType,
     required this.participants,
     required this.stops,
+    this.status = TravelStatus.upcoming,
   });
 
   /// Factory to create a model from a Map (e.g. from database)
@@ -44,7 +43,7 @@ class TravelModel {
       transportType: TransportType.values[map[TravelTable.transportType]],
       participants: participants,
       stops: stops,
-      isFinished: (map[TravelTable.isFinished] as int).toBool(),
+      status: TravelStatus.values[map[TravelTable.status]],
     );
   }
 
@@ -56,7 +55,7 @@ class TravelModel {
       TravelTable.startDate: startDate?.millisecondsSinceEpoch,
       TravelTable.endDate: endDate?.millisecondsSinceEpoch,
       TravelTable.transportType: transportType.index,
-      TravelTable.isFinished: isFinished.toInt(),
+      TravelTable.status: status.index,
     };
 
     return map;
@@ -73,7 +72,7 @@ class TravelModel {
           .map(ParticipantModel.fromEntity)
           .toList(),
       stops: travel.stops.map(TravelStopModel.fromEntity).toList(),
-      isFinished: travel.isFinished,
+      status: travel.status,
     );
   }
 
@@ -86,34 +85,34 @@ class TravelModel {
       transportType: transportType,
       participants: participants.map((p) => p.toEntity()).toList(),
       stops: stops.map((s) => s.toEntity()).toList(),
-      isFinished: isFinished,
+      status: status,
     );
   }
 
   @override
   String toString() {
-    return 'Travel{travelId: $travelId, travelTitle: $travelTitle, isFinished: $isFinished, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: $stops}';
+    return 'TravelModel{travelId: $travelId, travelTitle: $travelTitle, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: $stops, status: $status}';
   }
 
   TravelModel copyWith({
     int? travelId,
     String? travelTitle,
-    bool? isFinished,
     DateTime? startDate,
     DateTime? endDate,
     TransportType? transportType,
     List<ParticipantModel>? participants,
     List<TravelStopModel>? stops,
+    TravelStatus? status,
   }) {
     return TravelModel(
       travelId: travelId ?? this.travelId,
       travelTitle: travelTitle ?? this.travelTitle,
-      isFinished: isFinished ?? this.isFinished,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       transportType: transportType ?? this.transportType,
       participants: participants ?? this.participants,
       stops: stops ?? this.stops,
+      status: status ?? this.status,
     );
   }
 }

@@ -10,8 +10,6 @@ class Travel {
   /// Travel Title
   final String travelTitle;
 
-  bool isFinished;
-
   /// Travel start date
   final DateTime? startDate;
 
@@ -27,9 +25,10 @@ class Travel {
   /// Travel stops
   final List<TravelStop> stops;
 
+  final TravelStatus status;
+
   /// Named constructor for the Travel
   Travel({
-    this.isFinished = false,
     this.travelId,
     required this.travelTitle,
     required this.participants,
@@ -37,6 +36,7 @@ class Travel {
     required this.endDate,
     required this.transportType,
     required this.stops,
+    this.status = TravelStatus.upcoming,
   });
 
   /// Returns a [Duration] that represents the total duration of the travel
@@ -44,28 +44,28 @@ class Travel {
 
   @override
   String toString() {
-    return 'Travel{travelId: $travelId, travelTitle: $travelTitle, isFinished: $isFinished, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: $stops}';
+    return 'Travel{travelId: $travelId, travelTitle: $travelTitle, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: $stops, status: $status}';
   }
 
   Travel copyWith({
     int? travelId,
     String? travelTitle,
-    bool? isFinished,
     DateTime? startDate,
     DateTime? endDate,
     TransportType? transportType,
     List<Participant>? participants,
     List<TravelStop>? stops,
+    TravelStatus? status,
   }) {
     return Travel(
       travelId: travelId ?? this.travelId,
       travelTitle: travelTitle ?? this.travelTitle,
-      isFinished: isFinished ?? this.isFinished,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       transportType: transportType ?? this.transportType,
       participants: participants ?? this.participants,
       stops: stops ?? this.stops,
+      status: status ?? this.status,
     );
   }
 }

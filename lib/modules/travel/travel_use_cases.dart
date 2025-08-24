@@ -3,6 +3,7 @@ import 'dart:core';
 import 'package:flutter/cupertino.dart';
 
 import '../../core/extensions/string_extensions.dart';
+import '../../domain/entities/enums.dart';
 import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';
 import 'travel_repository.dart';
@@ -121,13 +122,13 @@ class TravelUseCasesImpl implements TravelUseCases {
       throw Exception('Cannot finish a travel that has not started yet');
     }
 
-    if (travel.isFinished) {
+    if (travel.status == TravelStatus.finished) {
       /// TODO: intl
       throw Exception('Travel is already finished');
     }
 
     await travelRepository.finishTravel(
-      travel.copyWith(endDate: now, isFinished: true),
+      travel.copyWith(endDate: now, status: TravelStatus.finished),
     );
   }
 }
