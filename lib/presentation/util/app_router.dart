@@ -10,7 +10,6 @@ import '../pages/auth/splash_screen.dart';
 import '../pages/home/home_page.dart';
 import '../pages/settings/settings_page.dart';
 import '../pages/travel/map_page.dart';
-import '../pages/travel/register_travel_page.dart';
 import 'app_routes.dart';
 
 class AppRouter {
@@ -22,15 +21,15 @@ class AppRouter {
           return ScaffoldWithNavBar(navigationShell: navigationShell);
         },
         branches: [
-          // StatefulShellBranch(
-          //   routes: [
-          //     GoRoute(
-          //       path: Routes.home,
-          //       pageBuilder: (context, state) =>
-          //           NoTransitionPage(child: const HomePage()),
-          //     ),
-          //   ],
-          // ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: Routes.home,
+                pageBuilder: (context, state) =>
+                    NoTransitionPage(child: const HomePage()),
+              ),
+            ],
+          ),
           // StatefulShellBranch(
           //   routes: [
           //     GoRoute(
@@ -112,10 +111,10 @@ class ScaffoldWithNavBar extends StatelessWidget {
         onTap: _onItemTapped,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: as.title_home),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            label: as.title_register_travel,
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.map),
+          //   label: as.title_register_travel,
+          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: as.title_settings,

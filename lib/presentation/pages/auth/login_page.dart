@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
@@ -83,98 +84,126 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
     final validations = FormValidations(as);
 
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(32.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  as.login,
-                  style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
-                ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                as.login,
+                style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+              ),
 
-                const Padding(padding: EdgeInsets.all(86)),
+              const Padding(padding: EdgeInsets.all(12)),
 
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      /// Email text field
-                      TextFormField(
-                        validator: validations.emailValidator,
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
-                        decoration: InputDecoration(
-                          hintText: as.email,
-                          prefixIcon: const Icon(Icons.email),
-                        ),
-                      ),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  return _FabAuthAnimation(
+                    asset: 'assets/animations/road trip.json',
+                    width: constraints.maxWidth,
+                  );
+                },
+              ),
 
-                      const Padding(padding: EdgeInsets.all(18)),
+              const Padding(padding: EdgeInsets.all(12)),
 
-                      /// Password text field
-                      TextFormField(
-                        validator: validations.passwordValidator,
-                        controller: _passwordController,
-                        onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
-                        decoration: InputDecoration(
-                          hintText: as.password,
-                          prefixIcon: const Icon(Icons.lock),
-                          suffixIcon: IconButton(
-                            onPressed: _togglePasswordVisibility,
-                            icon: Icon(
-                              _obscurePassword
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                            ),
-                          ),
-                        ),
-
-                        obscureText: _obscurePassword,
-                      ),
-                    ],
-                  ),
-                ),
-
-                const Padding(padding: EdgeInsets.all(16)),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Form(
+                key: _formKey,
+                child: Column(
                   children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: _login,
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.all(16),
-                        ),
-                        child: Text(as.login),
+                    /// Email text field
+                    TextFormField(
+                      validator: validations.emailValidator,
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
+                      decoration: InputDecoration(
+                        hintText: as.email,
+                        prefixIcon: const Icon(Icons.email),
                       ),
                     ),
 
-                    const Padding(padding: EdgeInsets.all(16)),
+                    const Padding(padding: EdgeInsets.all(18)),
 
-                    /// 'Forgot your password?' button
-                    TextButton(
-                      child: Text(as.forgot_your_password),
-                      onPressed: () {
-                        context.push('${Routes.auth}${Routes.forgotPassword}');
-                      },
+                    /// Password text field
+                    TextFormField(
+                      validator: validations.passwordValidator,
+                      controller: _passwordController,
+                      onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
+                      decoration: InputDecoration(
+                        hintText: as.password,
+                        prefixIcon: const Icon(Icons.lock),
+                        suffixIcon: IconButton(
+                          onPressed: _togglePasswordVisibility,
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                        ),
+                      ),
+
+                      obscureText: _obscurePassword,
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+
+              const Padding(padding: EdgeInsets.all(16)),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: _login,
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(16),
+                      ),
+                      child: Text(as.login),
+                    ),
+                  ),
+
+                  const Padding(padding: EdgeInsets.all(16)),
+
+                  /// 'Forgot your password?' button
+                  TextButton(
+                    child: Text(as.forgot_your_password),
+                    onPressed: () {
+                      context.push('${Routes.auth}${Routes.forgotPassword}');
+                    },
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
     );
+  }
+}
+
+class _FabAuthAnimation extends StatelessWidget {
+  const _FabAuthAnimation({super.key, required this.asset, this.width});
+
+  final String asset;
+  final double? width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Lottie.asset(asset, width: width, repeat: true, fit: BoxFit.cover);
   }
 }
