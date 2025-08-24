@@ -5,9 +5,11 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/extensions/date_extensions.dart';
+import '../../../domain/entities/enums.dart';
 import '../../../domain/entities/review.dart';
 import '../../../domain/entities/travel.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../extensions/enums_extensions.dart';
 import '../../providers/review_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
@@ -104,6 +106,7 @@ class _TravelWidget extends StatelessWidget {
     return Card(
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
+
         /// TODO: navigate to travel details when on tap
         onTap: () async {
           await showReviewModal(context);
@@ -139,23 +142,7 @@ class _TravelWidget extends StatelessWidget {
                 Positioned(
                   top: 12,
                   left: 12,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: travel.isFinished
-                          ? Colors.green.withOpacity(0.9)
-                          : Colors.red.withOpacity(0.9),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Text(
-                      /// TODO: intl
-                      travel.isFinished ? "Completed" : "Ongoing",
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                  ),
+                  child: _TravelStatusWidget(status: travel.status),
                 ),
 
                 Positioned(
@@ -257,8 +244,7 @@ class _TravelWidget extends StatelessWidget {
                               width: 1,
                             ),
                           ),
-                          /// TODO: intl
-                          child: Text('${travel.stops.length} stops'),
+                          child: Text('${travel.stops.length} ${as.stops}'),
                         ),
                       ),
                     ],
@@ -268,6 +254,43 @@ class _TravelWidget extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _TravelStatusWidget extends StatelessWidget {
+  const _TravelStatusWidget({super.key, required this.status});
+
+  final TravelStatus status;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color color;
+
+    switch (status) {
+      case TravelStatus.upcoming:
+        color = Colors.lightBlueAccent.shade400.withOpacity(0.8);
+        break;
+
+      case TravelStatus.ongoing:
+        color = Colors.green.withOpacity(0.8);
+        break;
+
+      case TravelStatus.finished:
+        color = Colors.grey.withOpacity(0.8);
+        break;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Text(
+        status.getIntlTravelStatus(context),
+        style: Theme.of(context).textTheme.labelLarge,
       ),
     );
   }

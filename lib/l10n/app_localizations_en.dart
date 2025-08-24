@@ -156,7 +156,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get finished => 'Finished';
 
   @override
-  String get stops => 'Stops';
+  String get stops => 'Stop(s)';
 
   @override
   String get title_home => 'Home';

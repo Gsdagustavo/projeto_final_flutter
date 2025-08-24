@@ -394,7 +394,7 @@ abstract class AppLocalizations {
   /// No description provided for @stops.
   ///
   /// In en, this message translates to:
-  /// **'Stops'**
+  /// **'Stop(s)'**
   String get stops;
 
   /// No description provided for @title_home.
