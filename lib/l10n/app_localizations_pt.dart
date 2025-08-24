@@ -147,6 +147,18 @@ class AppLocalizationsPt extends AppLocalizations {
   String get finish_travel_confirm => 'Finalizar Viagem?';
 
   @override
+  String get upcoming => 'Futura';
+
+  @override
+  String get ongoing => 'Em andamento';
+
+  @override
+  String get finished => 'Concluída';
+
+  @override
+  String get stops => 'Parada(s)';
+
+  @override
   String get title_home => 'Início';
 
   @override

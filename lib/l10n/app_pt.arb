@@ -64,6 +64,10 @@
   "add_photo": "Adicionar Foto",
   "finish_travel": "Finalizar Viagem",
   "finish_travel_confirm": "Finalizar Viagem?",
+  "upcoming": "Futura",
+  "ongoing": "Em andamento",
+  "finished": "Concluída",
+  "stops": "Parada(s)",
 
   "@@pages_titles": {},
   "title_home": "Início",

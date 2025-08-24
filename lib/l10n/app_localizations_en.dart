@@ -147,6 +147,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get finish_travel_confirm => 'Finish Travel?';
 
   @override
+  String get upcoming => 'Upcoming';
+
+  @override
+  String get ongoing => 'Ongoing';
+
+  @override
+  String get finished => 'Finished';
+
+  @override
+  String get stops => 'Stops';
+
+  @override
   String get title_home => 'Home';
 
   @override

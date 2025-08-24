@@ -64,6 +64,10 @@
   "add_photo": "Add Photo",
   "finish_travel": "Finish Travel",
   "finish_travel_confirm": "Finish Travel?",
+  "upcoming": "Upcoming",
+  "ongoing": "Ongoing",
+  "finished": "Finished",
+  "stops": "Stops",
 
   "@@pages_titles": {},
   "title_home": "Home",

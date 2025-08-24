@@ -147,6 +147,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get finish_travel_confirm => '¿Finalizar Viaje?';
 
   @override
+  String get upcoming => 'Próximo';
+
+  @override
+  String get ongoing => 'En curso';
+
+  @override
+  String get finished => 'Finalizado';
+
+  @override
+  String get stops => 'Parada(s)';
+
+  @override
   String get title_home => 'Inicio';
 
   @override

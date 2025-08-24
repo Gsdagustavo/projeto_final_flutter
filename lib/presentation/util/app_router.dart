@@ -10,6 +10,7 @@ import '../pages/auth/splash_screen.dart';
 import '../pages/home/home_page.dart';
 import '../pages/settings/settings_page.dart';
 import '../pages/travel/map_page.dart';
+import '../pages/travel/register_travel_page.dart';
 import 'app_routes.dart';
 
 class AppRouter {
@@ -104,19 +105,39 @@ class ScaffoldWithNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
 
+    final currentIndex = navigationShell.currentIndex;
+
     return Scaffold(
       body: navigationShell,
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: navigationShell.currentIndex,
+        currentIndex: currentIndex,
         onTap: _onItemTapped,
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: as.title_home),
+          BottomNavigationBarItem(
+            icon: AnimatedScale(
+              scale: currentIndex == 0 ? 1.2 : 1.0,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOut,
+              child: const Icon(Icons.home),
+            ),
+            label: as.title_home,
+          ),
           // BottomNavigationBarItem(
-          //   icon: Icon(Icons.map),
+          //   icon: AnimatedScale(
+          //     scale: currentIndex == 1 ? 1.2 : 1.0,
+          //     duration: const Duration(milliseconds: 200),
+          //     curve: Curves.easeOut,
+          //     child: const Icon(Icons.search),
+          //   ),
           //   label: as.title_register_travel,
           // ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
+            icon: AnimatedScale(
+              scale: currentIndex == 2 ? 1.2 : 1.0,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOut,
+              child: const Icon(Icons.settings),
+            ),
             label: as.title_settings,
           ),
         ],

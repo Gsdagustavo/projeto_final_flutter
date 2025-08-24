@@ -61,7 +61,6 @@ class _HomePageState extends State<HomePage> {
                 return SliverFillRemaining(
                   hasScrollBody: false,
                   child: Center(
-                    /// TODO: add actual travel image
                     child: Lottie.asset('assets/animations/traveler.json'),
                   ),
                 );
@@ -131,7 +130,7 @@ class _TravelWidget extends StatelessWidget {
                     topRight: Radius.circular(12),
                   ),
                   child: Image.asset(
-                    /// TODO: move this to a constant declaration
+                    /// TODO: add actual travel image
                     'assets/images/tokyo.jpg',
                     fit: BoxFit.cover,
                   ),
