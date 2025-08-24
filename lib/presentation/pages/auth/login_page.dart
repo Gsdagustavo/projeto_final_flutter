@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
 import '../../providers/login_provider.dart';
 import '../../util/app_routes.dart';
 import '../../widgets/custom_dialog.dart';
+import '../../widgets/fab_auth_animation.dart';
 import '../util/form_validations.dart';
 import 'forgot_password_page.dart';
 
@@ -109,13 +109,12 @@ class _LoginPageState extends State<LoginPage> {
 
               const Padding(padding: EdgeInsets.all(12)),
 
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  return _FabAuthAnimation(
-                    asset: 'assets/animations/road trip.json',
-                    width: constraints.maxWidth,
-                  );
-                },
+              Center(
+                child: FabAuthAnimation(
+                  asset:
+                      'assets/animations/traveller.json',
+                  height: 300,
+                ),
               ),
 
               const Padding(padding: EdgeInsets.all(12)),
@@ -193,17 +192,5 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-}
-
-class _FabAuthAnimation extends StatelessWidget {
-  const _FabAuthAnimation({super.key, required this.asset, this.width});
-
-  final String asset;
-  final double? width;
-
-  @override
-  Widget build(BuildContext context) {
-    return Lottie.asset(asset, width: width, repeat: true, fit: BoxFit.cover);
   }
 }

@@ -8,6 +8,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../providers/login_provider.dart';
 import '../../util/app_routes.dart';
 import '../../widgets/custom_dialog.dart';
+import '../../widgets/fab_auth_animation.dart';
 import '../util/form_validations.dart';
 
 /// A [Register] page
@@ -141,80 +142,82 @@ class _RegisterPageState extends State<RegisterPage> {
     final validations = FormValidations(as);
 
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(32.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  as.register,
-                  style: const TextStyle(
-                    fontSize: 48,
-                    fontWeight: FontWeight.bold,
-                  ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                as.register,
+                style: const TextStyle(
+                  fontSize: 48,
+                  fontWeight: FontWeight.bold,
                 ),
+              ),
 
-                const Padding(padding: EdgeInsets.all(86)),
+              const Padding(padding: EdgeInsets.all(12)),
 
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        validator: validations.emailValidator,
-                        controller: _emailController,
-                        onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
-                        decoration: InputDecoration(
-                          hintText: as.email,
-                          prefixIcon: const Icon(Icons.email),
-                        ),
+              FabAuthAnimation(asset: 'assets/animations/road trip.json'),
+
+              const Padding(padding: EdgeInsets.all(12)),
+
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      validator: validations.emailValidator,
+                      controller: _emailController,
+                      onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
+                      decoration: InputDecoration(
+                        hintText: as.email,
+                        prefixIcon: const Icon(Icons.email),
                       ),
+                    ),
 
-                      const Padding(padding: EdgeInsets.all(18)),
+                    const Padding(padding: EdgeInsets.all(18)),
 
-                      TextFormField(
-                        validator: validations.passwordValidator,
-                        controller: _passwordController,
-                        onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
-                        decoration: InputDecoration(
-                          hintText: as.password,
-                          prefixIcon: const Icon(Icons.lock),
-                          suffixIcon: IconButton(
-                            onPressed: _togglePasswordVisibility,
-                            icon: Icon(
-                              _obscurePassword
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                            ),
+                    TextFormField(
+                      validator: validations.passwordValidator,
+                      controller: _passwordController,
+                      onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
+                      decoration: InputDecoration(
+                        hintText: as.password,
+                        prefixIcon: const Icon(Icons.lock),
+                        suffixIcon: IconButton(
+                          onPressed: _togglePasswordVisibility,
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                           ),
                         ),
-
-                        obscureText: _obscurePassword,
                       ),
-                    ],
-                  ),
-                ),
 
-                const Padding(padding: EdgeInsets.all(16)),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: _register,
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.all(16),
-                        ),
-                        child: Text(as.register),
-                      ),
+                      obscureText: _obscurePassword,
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+
+              const Padding(padding: EdgeInsets.all(16)),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: _register,
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(16),
+                      ),
+                      child: Text(as.register),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
