@@ -94,7 +94,6 @@ class _SettingsPageState extends State<SettingsPage> {
                               },
                               child: CircleAvatar(
                                 radius: 14,
-                                backgroundColor: Colors.white,
                                 child: Icon(Icons.camera_alt, size: 16),
                               ),
                             ),
