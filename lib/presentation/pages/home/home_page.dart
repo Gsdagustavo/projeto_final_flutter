@@ -162,7 +162,7 @@ class _TravelWidget extends StatelessWidget {
                   top: 12,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
+                      color: Theme.of(context).cardColor.withOpacity(0.7),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: IconButton(
@@ -211,30 +211,53 @@ class _TravelWidget extends StatelessWidget {
                     ],
                   ),
 
-                  Row(
+                  Stack(
                     children: [
-                      Icon(Icons.calendar_today),
-                      Padding(padding: EdgeInsets.all(4)),
-                      Consumer<UserPreferencesProvider>(
-                        builder: (_, state, __) {
-                          return Text.rich(
-                            TextSpan(
-                              children: [
+                      Row(
+                        children: [
+                          Icon(Icons.calendar_today),
+                          Padding(padding: EdgeInsets.all(4)),
+                          Consumer<UserPreferencesProvider>(
+                            builder: (_, state, __) {
+                              return Text.rich(
                                 TextSpan(
-                                  text: travel.startDate!.getMonthDay(
-                                    state.languageCode,
-                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: travel.startDate!.getMonthDay(
+                                        state.languageCode,
+                                      ),
+                                    ),
+                                    const TextSpan(text: ' - '),
+                                    TextSpan(
+                                      text: travel.endDate!.getMonthDay(
+                                        state.languageCode,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                const TextSpan(text: ' - '),
-                                TextSpan(
-                                  text: travel.endDate!.getMonthDay(
-                                    state.languageCode,
-                                  ),
-                                ),
-                              ],
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 4,
+                            horizontal: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                            color: Theme.of(context).cardColor.withOpacity(0.7),
+                            border: BoxBorder.all(
+                              color: Theme.of(context).iconTheme.color!,
+                              width: 1,
                             ),
-                          );
-                        },
+                          ),
+                          child: Text('${travel.stops.length} stops'),
+                        ),
                       ),
                     ],
                   ),
