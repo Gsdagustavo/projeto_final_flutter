@@ -158,7 +158,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
               const Padding(padding: EdgeInsets.all(12)),
 
-              FabAuthAnimation(asset: 'assets/animations/road trip.json'),
+              FabAuthAnimation(asset: 'assets/animations/road_trip.json'),
 
               const Padding(padding: EdgeInsets.all(12)),
 

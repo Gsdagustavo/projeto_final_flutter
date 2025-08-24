@@ -112,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
               Center(
                 child: FabAuthAnimation(
                   asset:
-                      'assets/animations/traveller.json',
+                      'assets/animations/traveler.json',
                   height: 300,
                 ),
               ),
