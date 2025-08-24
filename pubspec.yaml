@@ -16,7 +16,7 @@ dependencies:
   shared_preferences: ^2.5.3
   sqflite: ^2.4.2
   path: ^1.9.1
-  font_awesome_flutter: ^10.8.0
+  font_awesome_flutter: ^10.9.1
   geolocator: ^14.0.2
   google_maps_flutter: ^2.12.3
   firebase_auth: ^5.6.2
@@ -41,6 +41,6 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
-    - 'assets/images/default_profile_picture.png'
+    - 'assets/images/'
     - 'assets/animations/'
     - '.env'
