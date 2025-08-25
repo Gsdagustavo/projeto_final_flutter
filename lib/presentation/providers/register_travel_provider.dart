@@ -113,11 +113,15 @@ class RegisterTravelProvider with ChangeNotifier {
   }
 
   TravelStop? addTravelStop(TravelStop stop) {
-    if (stop.arriveDate!.isBefore(_stops.last.leaveDate!) ||
-        stop.leaveDate!.isAfter(_endDate!)) {
-      _errorMsg = 'Invalid travel stop dates';
-      notifyListeners();
-      return null;
+    debugPrint('dkapodwokad ${_stops.length}');
+
+    if (_stops.isNotEmpty) {
+      if ((stop.arriveDate!.isBefore(_stops.last.leaveDate!)) ||
+          (stop.leaveDate!.isAfter(_endDate!))) {
+        _errorMsg = 'Invalid travel stop dates';
+        notifyListeners();
+        return null;
+      }
     }
 
     _stops.add(stop);
