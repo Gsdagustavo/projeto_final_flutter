@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:animated_list_plus/animated_list_plus.dart';
+import 'package:animated_list_plus/transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
@@ -262,10 +264,6 @@ class AddParticipant extends StatefulWidget {
 
 class _AddParticipantState extends State<AddParticipant>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-  var isExpanded = false;
-
   final participantNameController = TextEditingController();
   final participantAgeController = TextEditingController();
 
@@ -356,14 +354,17 @@ class _AddParticipantState extends State<AddParticipant>
     final state = context.read<RegisterTravelProvider>();
     if (remove ?? false) {
       state.removeParticipant(participant);
-
+    } else {
       await showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(title: Text('Participant removed'));
+          return CustomDialog(
+            title: 'Warning',
+            content: Text('Could not remove participant'),
+            isError: true,
+          );
         },
       );
-      return;
     }
   }
 
@@ -424,39 +425,99 @@ class _AddParticipantState extends State<AddParticipant>
 
             Consumer<RegisterTravelProvider>(
               builder: (_, state, __) {
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: state.participants.length,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    final participant = state.participants[index];
-                    return Card(
-                      margin: EdgeInsets.symmetric(horizontal: 6, vertical: 16),
-                      child: ListTile(
-                        onTap: () => _showParticipantModal(
-                          context,
-                          participant: participant,
-                        ),
-                        leading: CircleAvatar(
-                          backgroundImage: FileImage(
-                            participant.profilePicture,
-                          ),
-                          backgroundColor: Colors.transparent,
-                          foregroundColor: Colors.transparent,
-                        ),
-                        title: Text(participant.name),
-                        trailing: IconButton(
-                          onPressed: () =>
-                              onParticipantRemovePress(participant),
-                          icon: Icon(FontAwesomeIcons.remove),
-                        ),
+                final participants = state.participants;
 
-                        /// TODO: intl
-                        subtitle: Text('Age: ${participant.age.toString()}'),
+                return ImplicitlyAnimatedList<Participant>(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  items: state.participants,
+                  areItemsTheSame: (oldItem, newItem) {
+                    return oldItem.hashCode == newItem.hashCode;
+                  },
+                  removeItemBuilder: (context, animation, participant) {
+                    return SizeFadeTransition(
+                      animation: animation,
+                      child: Card(
+                        margin: EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 16,
+                        ),
+                        child: ListTile(
+                          title: Text(participant.name),
+                          subtitle: Text('Age: ${participant.age}'),
+                        ),
+                      ),
+                    );
+                  },
+
+                  itemBuilder: (context, animation, participant, i) {
+                    return SizeFadeTransition(
+                      animation: animation,
+                      child: Card(
+                        margin: EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 16,
+                        ),
+                        child: ListTile(
+                          onTap: () => _showParticipantModal(
+                            context,
+                            participant: participant,
+                          ),
+                          leading: CircleAvatar(
+                            backgroundImage: FileImage(
+                              participant.profilePicture,
+                            ),
+                            backgroundColor: Colors.transparent,
+                            foregroundColor: Colors.transparent,
+                          ),
+                          title: Text(participant.name),
+                          trailing: IconButton(
+                            onPressed: () =>
+                                onParticipantRemovePress(participant),
+                            icon: Icon(FontAwesomeIcons.remove),
+                          ),
+
+                          /// TODO: intl
+                          subtitle: Text('Age: ${participant.age.toString()}'),
+                        ),
                       ),
                     );
                   },
                 );
+
+                // return ListView.builder(
+                //   shrinkWrap: true,
+                //   itemCount: state.participants.length,
+                //   physics: NeverScrollableScrollPhysics(),
+                //   itemBuilder: (context, index) {
+                //     final participant = state.participants[index];
+                //     return Card(
+                //       margin: EdgeInsets.symmetric(horizontal: 6, vertical: 16),
+                //       child: ListTile(
+                //         onTap: () => _showParticipantModal(
+                //           context,
+                //           participant: participant,
+                //         ),
+                //         leading: CircleAvatar(
+                //           backgroundImage: FileImage(
+                //             participant.profilePicture,
+                //           ),
+                //           backgroundColor: Colors.transparent,
+                //           foregroundColor: Colors.transparent,
+                //         ),
+                //         title: Text(participant.name),
+                //         trailing: IconButton(
+                //           onPressed: () =>
+                //               onParticipantRemovePress(participant),
+                //           icon: Icon(FontAwesomeIcons.remove),
+                //         ),
+                //
+                //         /// TODO: intl
+                //         subtitle: Text('Age: ${participant.age.toString()}'),
+                //       ),
+                //     );
+                //   },
+                // );
               },
             ),
           ],
