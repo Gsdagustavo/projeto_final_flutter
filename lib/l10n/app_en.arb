@@ -53,7 +53,7 @@
   "experience_historical_places": "Visit Historical Places",
   "experience_visit_local_establishments": "Visit Local Establishments (Bars, Restaurants, Parks, etc.)",
   "experience_contact_with_nature": "Contact With Nature",
-  "other":  "Other",
+  "other": "Other",
 
   "@@home_page": {},
   "my_travels": "My Travels",
@@ -86,6 +86,7 @@
   "select_dates_label": "Select dates",
   "start_date": "Start Date",
   "end_date": "End Date",
+  "err_invalid_date_snackbar": "You must select a start date first!",
   "participants": "Participants",
   "err_invalid_participant_name": "Invalid participant name",
   "err_invalid_participant_age": "Invalid participant age",

@@ -201,6 +201,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get end_date => 'Fecha de Fin del Viaje';
 
   @override
+  String get err_invalid_date_snackbar => '¡Debes seleccionar una fecha de inicio primero!';
+
+  @override
   String get participants => 'Participantes';
 
   @override
@@ -228,7 +231,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get age => 'Edad';
 
   @override
-  String get participant_added => 'Participante agregado ';
+  String get participant_added => 'Participante agregado!';
 
   @override
   String get remove_participant_confirmation => '¿Realmente deseas eliminar al participante';

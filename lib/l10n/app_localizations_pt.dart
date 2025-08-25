@@ -201,6 +201,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get end_date => 'Data de Término da Viagem';
 
   @override
+  String get err_invalid_date_snackbar => 'Você deve selecionar uma data de início primeiro!';
+
+  @override
   String get participants => 'Participantes';
 
   @override

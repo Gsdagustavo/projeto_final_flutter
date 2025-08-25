@@ -201,6 +201,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get end_date => 'End Date';
 
   @override
+  String get err_invalid_date_snackbar => 'You must select a start date first!';
+
+  @override
   String get participants => 'Participants';
 
   @override

@@ -481,6 +481,12 @@ abstract class AppLocalizations {
   /// **'End Date'**
   String get end_date;
 
+  /// No description provided for @err_invalid_date_snackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'You must select a start date first!'**
+  String get err_invalid_date_snackbar;
+
   /// No description provided for @participants.
   ///
   /// In en, this message translates to:
