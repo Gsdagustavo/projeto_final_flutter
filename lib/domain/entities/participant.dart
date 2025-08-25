@@ -20,7 +20,6 @@ class Participant {
     required this.age,
     required this.profilePicture,
     this.id,
-    tra,
   });
 
   Participant copyWith({

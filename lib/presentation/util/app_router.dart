@@ -31,15 +31,15 @@ class AppRouter {
               ),
             ],
           ),
-          // StatefulShellBranch(
-          //   routes: [
-          //     GoRoute(
-          //       path: Routes.registerTravel,
-          //       pageBuilder: (context, state) =>
-          //           NoTransitionPage(child: const RegisterTravelPage()),
-          //     ),
-          //   ],
-          // ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: Routes.registerTravel,
+                pageBuilder: (context, state) =>
+                    NoTransitionPage(child: const RegisterTravelPage()),
+              ),
+            ],
+          ),
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -122,15 +122,15 @@ class ScaffoldWithNavBar extends StatelessWidget {
             ),
             label: as.title_home,
           ),
-          // BottomNavigationBarItem(
-          //   icon: AnimatedScale(
-          //     scale: currentIndex == 1 ? 1.2 : 1.0,
-          //     duration: const Duration(milliseconds: 200),
-          //     curve: Curves.easeOut,
-          //     child: const Icon(Icons.search),
-          //   ),
-          //   label: as.title_register_travel,
-          // ),
+          BottomNavigationBarItem(
+            icon: AnimatedScale(
+              scale: currentIndex == 1 ? 1.2 : 1.0,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOut,
+              child: const Icon(Icons.search),
+            ),
+            label: as.title_register_travel,
+          ),
           BottomNavigationBarItem(
             icon: AnimatedScale(
               scale: currentIndex == 2 ? 1.2 : 1.0,

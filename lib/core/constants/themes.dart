@@ -142,7 +142,9 @@ ThemeData getTravelAppDarkTheme() {
     ),
     scaffoldBackgroundColor: backgroundColor,
     iconTheme: const IconThemeData(color: greyIconColorDark, size: 24.0),
-    listTileTheme: ListTileThemeData(iconColor: greyIconColorDark),
+    listTileTheme: ListTileThemeData(
+      iconColor: greyIconColorDark,
+    ),
     textTheme: const TextTheme(
       displayLarge: TextStyle(
         fontSize: 36,
