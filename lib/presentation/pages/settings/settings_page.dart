@@ -11,7 +11,7 @@ import '../../../services/user_preferences_service.dart';
 import '../../providers/login_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../util/app_routes.dart';
-import '../../widgets/theme_toggle_button.dart';
+import '../../widgets/fab_app_bar.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -54,17 +54,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            floating: false,
-            snap: false,
-            expandedHeight: 120,
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            title: Text(
-              as.title_settings,
-              style: Theme.of(context).textTheme.headlineLarge,
-            ),
-            actions: const [ThemeToggleButton()],
-          ),
+          FabAppBar(title: as.title_settings),
 
           SliverToBoxAdapter(
             child: Column(

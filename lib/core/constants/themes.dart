@@ -79,7 +79,7 @@ class AppTheme {
           color: Color(0xFF252525),
         ),
         headlineLarge: TextStyle(
-          fontSize: 22.0,
+          fontSize: 26.0,
           fontWeight: FontWeight.w500,
           height: 1.5,
           color: Color(0xFF252525),
@@ -287,11 +287,11 @@ class AppTheme {
         type: BottomNavigationBarType.fixed,
         elevation: 8,
         selectedLabelStyle: TextStyle(
-          fontSize: 10,
+          fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
         unselectedLabelStyle: TextStyle(
-          fontSize: 10,
+          fontSize: 12,
           fontWeight: FontWeight.w400,
         ),
       ),

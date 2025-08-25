@@ -15,7 +15,7 @@ import '../../../services/file_service.dart';
 import '../../extensions/enums_extensions.dart';
 import '../../providers/register_travel_provider.dart';
 import '../../widgets/custom_dialog.dart';
-import '../../widgets/theme_toggle_button.dart';
+import '../../widgets/fab_app_bar.dart';
 import '../util/form_validations.dart';
 
 class RegisterTravelPage extends StatefulWidget {
@@ -48,17 +48,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
       child: Scaffold(
         body: CustomScrollView(
           slivers: [
-            SliverAppBar(
-              floating: false,
-              snap: false,
-              expandedHeight: 120,
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              title: Text(
-                as.title_register_travel,
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
-              actions: const [ThemeToggleButton()],
-            ),
+            FabAppBar(title: as.title_register_travel),
 
             SliverToBoxAdapter(
               child: Column(

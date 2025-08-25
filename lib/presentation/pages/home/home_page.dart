@@ -13,7 +13,7 @@ import '../../extensions/enums_extensions.dart';
 import '../../providers/review_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
-import '../../widgets/theme_toggle_button.dart';
+import '../../widgets/fab_app_bar.dart';
 import '../util/form_validations.dart';
 
 /// The Home Page of the app
@@ -36,18 +36,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            floating: false,
-            snap: false,
-            expandedHeight: 120,
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            title: Text(
-              as.my_travels,
-              style: Theme.of(context).textTheme.headlineLarge,
-            ),
-            actions: const [ThemeToggleButton()],
-          ),
-
+          FabAppBar(title: as.title_home),
           Consumer<TravelListProvider>(
             builder: (context, travelListProvider, child) {
               if (travelListProvider.isLoading) {
