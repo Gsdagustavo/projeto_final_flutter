@@ -812,6 +812,10 @@ class RoutePlanning extends StatelessWidget {
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
 
+    final baseColor = Theme.of(
+      context,
+    ).elevatedButtonTheme.style!.backgroundColor!.resolve({})!;
+
     return Card(
       child: Padding(
         padding: EdgeInsets.all(cardPadding),
@@ -834,15 +838,25 @@ class RoutePlanning extends StatelessWidget {
             ),
 
             Expanded(
-              child: ElevatedButton(
-                /// TODO: go to map page
-                onPressed: () {
-                  context.push(Routes.travelMap);
+              child: Consumer<RegisterTravelProvider>(
+                builder: (_, state, __) {
+                  return ElevatedButton(
+                    /// TODO: go to map page
+                    onPressed: () {
+                      context.push(Routes.travelMap);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          state.startDate != null && state.endDate != null
+                          ? baseColor
+                          : baseColor.withOpacity(0.3),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [Icon(Icons.pin_drop), Text(as.open_map)],
+                    ),
+                  );
                 },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Icon(Icons.pin_drop), Text(as.open_map)],
-                ),
               ),
             ),
           ],
