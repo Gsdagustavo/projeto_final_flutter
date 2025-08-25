@@ -29,6 +29,9 @@ class RegisterTravelProvider with ChangeNotifier {
 
   bool _areStopsValid = false;
 
+  DateTime? _startDate;
+  DateTime? _endDate;
+
   /// A [TextEditingController] to be assigned to the travel title
   final _travelTitleController = TextEditingController();
 
@@ -40,12 +43,6 @@ class RegisterTravelProvider with ChangeNotifier {
 
   /// The stops of the travel
   final _stops = <TravelStop>[];
-
-  /// The time range of the travel
-  DateTimeRange? _travelTimeRange = DateTimeRange(
-    start: DateTime.now(),
-    end: DateTime.now().add(Duration(days: 30)),
-  );
 
   /// The error message (obtained via exception.message on try-catch structures)
   String? _errorMsg;
@@ -93,8 +90,8 @@ class RegisterTravelProvider with ChangeNotifier {
     final travel = Travel(
       travelTitle: _travelTitleController.text,
       participants: participants,
-      startDate: _travelTimeRange?.start,
-      endDate: _travelTimeRange?.end,
+      startDate: _startDate,
+      endDate: _endDate,
       transportType: _transportType,
       stops: _stops,
     );
@@ -117,7 +114,7 @@ class RegisterTravelProvider with ChangeNotifier {
 
   TravelStop? addTravelStop(TravelStop stop) {
     if (stop.arriveDate!.isBefore(_stops.last.leaveDate!) ||
-        stop.leaveDate!.isAfter(_travelTimeRange!.end)) {
+        stop.leaveDate!.isAfter(_endDate!)) {
       _errorMsg = 'Invalid travel stop dates';
       notifyListeners();
       return null;
@@ -164,7 +161,8 @@ class RegisterTravelProvider with ChangeNotifier {
   void resetForms() {
     _transportType = TransportType.values.first;
 
-    _travelTimeRange = null;
+    _startDate = null;
+    _endDate = null;
 
     _travelTitleController.clear();
 
@@ -256,14 +254,14 @@ class RegisterTravelProvider with ChangeNotifier {
   }
 
   DateTime? get lastPossibleArriveDate {
-    if (_travelTimeRange == null) {
+    if (_startDate == null || _endDate == null) {
       _errorMsg =
           'You must select the Travel start and end dates before adding stops';
       notifyListeners();
       return null;
     }
 
-    if (_stops.isEmpty) return _travelTimeRange!.start;
+    if (_stops.isEmpty) return _startDate;
 
     final latestStop = _stops.last;
     print('Latest stop: $latestStop');
@@ -272,31 +270,27 @@ class RegisterTravelProvider with ChangeNotifier {
   }
 
   DateTime? get lastPossibleLeaveDate {
-    if (_travelTimeRange == null) {
+    if (_startDate == null || _endDate == null) {
       _errorMsg =
           'You must select the Travel start and end dates before adding stops';
       notifyListeners();
       return null;
     }
 
-    return _travelTimeRange!.end;
-  }
-
-  DateTimeRange? get travelTimeRange => _travelTimeRange;
-
-  set travelTimeRange(DateTimeRange? range) {
-    _travelTimeRange = range;
-
-    if (_stops.isNotEmpty) {
-      /// Stop dates are out of bounds
-      _stops.removeWhere((stop) {
-        return stop.arriveDate!.isBefore(range!.start) ||
-            stop.arriveDate!.isAfter(range.end);
-      });
-    }
-
-    notifyListeners();
+    return _endDate;
   }
 
   bool get areStopsValid => _areStopsValid;
+
+  DateTime? get endDate => _endDate;
+
+  set endDate(DateTime? value) {
+    _endDate = value;
+  }
+
+  DateTime? get startDate => _startDate;
+
+  set startDate(DateTime? value) {
+    _startDate = value;
+  }
 }

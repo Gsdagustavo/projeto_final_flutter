@@ -14,6 +14,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../../services/file_service.dart';
 import '../../extensions/enums_extensions.dart';
 import '../../providers/register_travel_provider.dart';
+import '../../util/app_routes.dart';
 import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_app_bar.dart';
 import '../util/form_validations.dart';
@@ -155,9 +156,6 @@ class DateRangePickerRow extends StatefulWidget {
 }
 
 class _DateRangePickerRowState extends State<DateRangePickerRow> {
-  DateTime? _startDate;
-  DateTime? _endDate;
-
   final _startController = TextEditingController();
   final _endController = TextEditingController();
 
@@ -169,23 +167,25 @@ class _DateRangePickerRowState extends State<DateRangePickerRow> {
   }
 
   Future<void> _pickDate({required bool isStart}) async {
+    final state = context.read<RegisterTravelProvider>();
+
     final initialDate = DateTime.now();
     var firstDate = DateTime.now();
     var lastDate = DateTime(_maxYear);
 
-    if (isStart && _endDate != null) {
-      lastDate = _endDate!;
-    } else if (!isStart && _startDate != null) {
-      firstDate = _startDate!;
+    if (isStart && state.endDate != null) {
+      lastDate = state.endDate!;
+    } else if (!isStart && state.startDate != null) {
+      firstDate = state.startDate!;
     }
 
     DateTime pickInitialDate;
     if (isStart) {
-      pickInitialDate = _startDate ?? initialDate;
+      pickInitialDate = state.startDate ?? initialDate;
       if (pickInitialDate.isAfter(lastDate)) pickInitialDate = lastDate;
       if (pickInitialDate.isBefore(firstDate)) pickInitialDate = firstDate;
     } else {
-      pickInitialDate = _endDate ?? initialDate;
+      pickInitialDate = state.endDate ?? initialDate;
       if (pickInitialDate.isAfter(lastDate)) pickInitialDate = lastDate;
       if (pickInitialDate.isBefore(firstDate)) pickInitialDate = firstDate;
     }
@@ -200,15 +200,15 @@ class _DateRangePickerRowState extends State<DateRangePickerRow> {
     if (newDate != null) {
       setState(() {
         if (isStart) {
-          _startDate = newDate;
+          state.startDate = newDate;
           _startController.text = _formatDate(newDate);
 
-          if (_endDate?.isBefore(newDate) == true) {
-            _endDate = null;
+          if (state.endDate?.isBefore(newDate) == true) {
+            state.endDate = null;
             _endController.clear();
           }
         } else {
-          _endDate = newDate;
+          state.endDate = newDate;
           _endController.text = _formatDate(newDate);
         }
       });
@@ -837,7 +837,7 @@ class RoutePlanning extends StatelessWidget {
               child: ElevatedButton(
                 /// TODO: go to map page
                 onPressed: () {
-                  debugPrint('todo: go to map page');
+                  context.push(Routes.travelMap);
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -966,7 +966,7 @@ class _RegisterTravelButtonState extends State<RegisterTravelButton> {
           );
         }
       },
-      child: Text('Register Travel'),
+      child: Text(as.title_register_travel),
     );
   }
 }
