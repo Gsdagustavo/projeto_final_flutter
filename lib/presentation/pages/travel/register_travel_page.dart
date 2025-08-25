@@ -389,44 +389,23 @@ class _AddParticipantState extends State<AddParticipant>
               children: [
                 Consumer<RegisterTravelProvider>(
                   builder: (_, state, __) {
-                    /// TODO: intl
                     return Text(
-                      'Participants (${state.participants.length})',
+                      '${as.participants} (${state.participants.length})',
                       style: Theme.of(context).textTheme.displaySmall,
                     );
                   },
                 ),
-                InkWell(
-                  onTap: () => _showParticipantModal(context),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8,
-                      horizontal: 24,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Theme.of(
-                        context,
-                      ).listTileTheme.iconColor?.withValues(alpha: 0.1),
-                    ),
-                    child: Row(
-                      children: const [
-                        Icon(Icons.add),
-                        SizedBox(width: 6),
-
-                        /// TODO: intl
-                        Text('Add'),
-                      ],
-                    ),
+                Padding(padding: EdgeInsets.all(12)),
+                Flexible(
+                  child: ElevatedButton(
+                    onPressed: () => _showParticipantModal(context),
+                    child: Text(as.add),
                   ),
                 ),
               ],
             ),
-
             Consumer<RegisterTravelProvider>(
               builder: (_, state, __) {
-                final participants = state.participants;
-
                 return ImplicitlyAnimatedList<Participant>(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
@@ -436,6 +415,7 @@ class _AddParticipantState extends State<AddParticipant>
                   },
                   removeItemBuilder: (context, animation, participant) {
                     return SizeFadeTransition(
+                      curve: Curves.easeInOut,
                       animation: animation,
                       child: Card(
                         margin: EdgeInsets.symmetric(
@@ -444,7 +424,7 @@ class _AddParticipantState extends State<AddParticipant>
                         ),
                         child: ListTile(
                           title: Text(participant.name),
-                          subtitle: Text('Age: ${participant.age}'),
+                          subtitle: Text('${as.age}: ${participant.age}'),
                         ),
                       ),
                     );
@@ -476,48 +456,14 @@ class _AddParticipantState extends State<AddParticipant>
                                 onParticipantRemovePress(participant),
                             icon: Icon(FontAwesomeIcons.remove),
                           ),
-
-                          /// TODO: intl
-                          subtitle: Text('Age: ${participant.age.toString()}'),
+                          subtitle: Text(
+                            '${as.age}: ${participant.age.toString()}',
+                          ),
                         ),
                       ),
                     );
                   },
                 );
-
-                // return ListView.builder(
-                //   shrinkWrap: true,
-                //   itemCount: state.participants.length,
-                //   physics: NeverScrollableScrollPhysics(),
-                //   itemBuilder: (context, index) {
-                //     final participant = state.participants[index];
-                //     return Card(
-                //       margin: EdgeInsets.symmetric(horizontal: 6, vertical: 16),
-                //       child: ListTile(
-                //         onTap: () => _showParticipantModal(
-                //           context,
-                //           participant: participant,
-                //         ),
-                //         leading: CircleAvatar(
-                //           backgroundImage: FileImage(
-                //             participant.profilePicture,
-                //           ),
-                //           backgroundColor: Colors.transparent,
-                //           foregroundColor: Colors.transparent,
-                //         ),
-                //         title: Text(participant.name),
-                //         trailing: IconButton(
-                //           onPressed: () =>
-                //               onParticipantRemovePress(participant),
-                //           icon: Icon(FontAwesomeIcons.remove),
-                //         ),
-                //
-                //         /// TODO: intl
-                //         subtitle: Text('Age: ${participant.age.toString()}'),
-                //       ),
-                //     );
-                //   },
-                // );
               },
             ),
           ],

@@ -122,8 +122,9 @@
   "@@util": {},
   "yes": "Yes",
   "no": "No",
+  "add": "Add",
+  "remove": "Remove",
   "warning": "Warning",
   "cancel": "Cancel",
-  "remove": "Remove",
   "unknown_error": "Unknown error"
 }

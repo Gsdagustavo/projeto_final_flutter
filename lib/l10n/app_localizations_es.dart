@@ -297,13 +297,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get no => 'No';
 
   @override
+  String get add => 'Agregar';
+
+  @override
+  String get remove => 'Eliminar';
+
+  @override
   String get warning => 'Advertencia';
 
   @override
   String get cancel => 'Cancelar';
-
-  @override
-  String get remove => 'Eliminar';
 
   @override
   String get unknown_error => 'Error desconocido';

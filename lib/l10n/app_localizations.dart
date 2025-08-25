@@ -673,6 +673,18 @@ abstract class AppLocalizations {
   /// **'No'**
   String get no;
 
+  /// No description provided for @add.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get add;
+
+  /// No description provided for @remove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get remove;
+
   /// No description provided for @warning.
   ///
   /// In en, this message translates to:
@@ -684,12 +696,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
-
-  /// No description provided for @remove.
-  ///
-  /// In en, this message translates to:
-  /// **'Remove'**
-  String get remove;
 
   /// No description provided for @unknown_error.
   ///

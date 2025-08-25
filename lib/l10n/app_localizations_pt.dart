@@ -297,13 +297,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get no => 'Não';
 
   @override
+  String get add => 'Adicionar';
+
+  @override
+  String get remove => 'Remover';
+
+  @override
   String get warning => 'Aviso';
 
   @override
   String get cancel => 'Cancelar';
-
-  @override
-  String get remove => 'Remover';
 
   @override
   String get unknown_error => 'Erro desconhecido';

@@ -123,8 +123,9 @@
   "@@util": {},
   "yes": "Sí",
   "no": "No",
+  "add": "Agregar",
+  "remove": "Eliminar",
   "warning": "Advertencia",
   "cancel": "Cancelar",
-  "remove": "Eliminar",
   "unknown_error": "Error desconocido"
 }
