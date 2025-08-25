@@ -18,8 +18,8 @@ class MyApp extends StatelessWidget {
     // ---- THEME RELATED ----
     final isDarkMode = Provider.of<UserPreferencesProvider>(context).isDarkMode;
 
-    final baseDarkTheme = getTravelAppDarkTheme();
-    final baseTheme = getTravelAppTheme();
+    final baseTheme = AppTheme.lightTheme;
+    final baseDarkTheme = AppTheme.darkTheme;
 
     final theme = baseTheme.copyWith(
       textTheme: GoogleFonts.quicksandTextTheme(baseTheme.textTheme),
