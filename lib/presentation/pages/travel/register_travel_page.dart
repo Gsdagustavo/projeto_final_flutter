@@ -61,8 +61,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            /// TODO: intl
-                            'Travel Details',
+                            as.travel_details,
                             style: Theme.of(context).textTheme.displaySmall,
                           ),
                           Padding(padding: EdgeInsets.all(26)),
@@ -78,8 +77,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                                   FocusScope.of(context).unfocus(),
                               controller: _travelTitleController,
                               decoration: InputDecoration(
-                                /// TODO: intl
-                                hintText: 'Enter travel title...',
+                                hintText: as.enter_travel_title,
                               ),
                             ),
                           ),
@@ -260,13 +258,15 @@ class _AddParticipantState extends State<AddParticipant>
   final _formKey = GlobalKey<FormState>();
 
   Future<void> onSubmit() async {
+    final as = AppLocalizations.of(context)!;
+
     if (!_formKey.currentState!.validate()) {
       await showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Warning'),
-            content: Text('Invalid participant data'),
+            title: Text(as.warning),
+            content: Text(as.err_invalid_participant_data),
           );
         },
       );
@@ -292,7 +292,7 @@ class _AddParticipantState extends State<AddParticipant>
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Warning'),
+            title: Text(as.warning),
             content: Text(state.error!),
           );
         },
@@ -305,7 +305,7 @@ class _AddParticipantState extends State<AddParticipant>
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Participant added!'),
+          title: Text(as.participant_added),
           icon: Icon(Icons.check, color: Colors.green),
         );
       },
@@ -313,13 +313,15 @@ class _AddParticipantState extends State<AddParticipant>
   }
 
   Future<void> onParticipantRemovePress(Participant participant) async {
+    final as = AppLocalizations.of(context)!;
+
     final remove = await showDialog<bool>(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Warning'),
+          title: Text(as.warning),
           content: Text(
-            'Do you really want to remove participant ${participant.name}?',
+            '${as.remove_participant_confirmation} ${participant.name}?',
           ),
           actionsAlignment: MainAxisAlignment.spaceBetween,
           actions: [
@@ -327,14 +329,14 @@ class _AddParticipantState extends State<AddParticipant>
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: Text('No'),
+              child: Text(as.no),
             ),
 
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
-              child: Text('Yes'),
+              child: Text(as.yes),
             ),
           ],
         );
@@ -349,8 +351,8 @@ class _AddParticipantState extends State<AddParticipant>
         context: context,
         builder: (context) {
           return CustomDialog(
-            title: 'Warning',
-            content: Text('Could not remove participant'),
+            title: as.warning,
+            content: Text(as.err_could_not_add_participant),
             isError: true,
           );
         },
@@ -661,9 +663,9 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                                           context: context,
                                           builder: (context) {
                                             return CustomDialog(
-                                              title: as.register_participant,
+                                              title: as.add_participant,
                                               content: Text(
-                                                as.participant_registered,
+                                                as.participant_added,
                                               ),
                                             );
                                           },
@@ -671,7 +673,7 @@ class _ParticipantModalState extends State<_ParticipantModal> {
 
                                         Navigator.of(context).pop(participant);
                                       },
-                                      child: Text(as.register),
+                                      child: Text(as.add),
                                     );
                                   },
                                 );

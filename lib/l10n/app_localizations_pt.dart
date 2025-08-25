@@ -174,6 +174,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get travel_title_label => 'Título da Viagem';
 
   @override
+  String get travel_details => 'Detalhes da viagem';
+
+  @override
+  String get enter_travel_title => 'Insira o título da viagem...';
+
+  @override
   String get invalid_travel_title => 'Título da viagem inválido';
 
   @override
@@ -210,7 +216,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get no_participants_on_the_list => 'Nenhum participante na lista';
 
   @override
-  String get register_participant => 'Registrar participante';
+  String get add_participant => 'Adicionar participante';
 
   @override
   String get update_participant => 'Atualizar participante';
@@ -222,7 +228,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get age => 'Idade';
 
   @override
-  String get participant_registered => 'Participante registrado';
+  String get participant_added => 'Participante adicionado!';
 
   @override
   String get remove_participant_confirmation => 'Você realmente deseja remover o participante';
@@ -235,6 +241,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get participant_updated => 'Participante atualizado';
+
+  @override
+  String get err_could_not_add_participant => 'Não foi possível adicionar o participante';
 
   @override
   String get travel_map => 'Mapa da Viagem';

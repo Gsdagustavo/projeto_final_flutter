@@ -79,7 +79,7 @@ class AppTheme {
           color: Color(0xFF252525),
         ),
         headlineLarge: TextStyle(
-          fontSize: 26.0,
+          fontSize: 32.0,
           fontWeight: FontWeight.w500,
           height: 1.5,
           color: Color(0xFF252525),
@@ -156,6 +156,7 @@ class AppTheme {
       cardTheme: CardThemeData(
         color: Colors.white,
         elevation: 2,
+        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         shadowColor: Colors.black.withOpacity(0.1),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10), // --radius: 0.625rem = 10px
@@ -390,7 +391,7 @@ class AppTheme {
           color: Color(0xFFFAFAFA),
         ),
         headlineLarge: TextStyle(
-          fontSize: 22.0,
+          fontSize: 32.0,
           fontWeight: FontWeight.w500,
           height: 1.5,
           color: Color(0xFFFAFAFA),
@@ -599,11 +600,11 @@ class AppTheme {
         type: BottomNavigationBarType.fixed,
         elevation: 8,
         selectedLabelStyle: TextStyle(
-          fontSize: 10,
+          fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
         unselectedLabelStyle: TextStyle(
-          fontSize: 10,
+          fontSize: 12,
           fontWeight: FontWeight.w400,
         ),
       ),

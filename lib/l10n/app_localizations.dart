@@ -427,6 +427,18 @@ abstract class AppLocalizations {
   /// **'Travel Title'**
   String get travel_title_label;
 
+  /// No description provided for @travel_details.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel Details'**
+  String get travel_details;
+
+  /// No description provided for @enter_travel_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter travel title...'**
+  String get enter_travel_title;
+
   /// No description provided for @invalid_travel_title.
   ///
   /// In en, this message translates to:
@@ -499,11 +511,11 @@ abstract class AppLocalizations {
   /// **'No participants on the list'**
   String get no_participants_on_the_list;
 
-  /// No description provided for @register_participant.
+  /// No description provided for @add_participant.
   ///
   /// In en, this message translates to:
-  /// **'Register participant'**
-  String get register_participant;
+  /// **'Add participant'**
+  String get add_participant;
 
   /// No description provided for @update_participant.
   ///
@@ -523,11 +535,11 @@ abstract class AppLocalizations {
   /// **'Age'**
   String get age;
 
-  /// No description provided for @participant_registered.
+  /// No description provided for @participant_added.
   ///
   /// In en, this message translates to:
-  /// **'Participant registered'**
-  String get participant_registered;
+  /// **'Participant added!'**
+  String get participant_added;
 
   /// No description provided for @remove_participant_confirmation.
   ///
@@ -552,6 +564,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Participant updated'**
   String get participant_updated;
+
+  /// No description provided for @err_could_not_add_participant.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not add participant'**
+  String get err_could_not_add_participant;
 
   /// No description provided for @travel_map.
   ///
