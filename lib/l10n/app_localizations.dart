@@ -583,16 +583,34 @@ abstract class AppLocalizations {
   /// **'Travel Map'**
   String get travel_map;
 
-  /// No description provided for @add_stops_for_your_travel.
+  /// No description provided for @open_map.
   ///
   /// In en, this message translates to:
-  /// **'Add Stops for Your Travel'**
-  String get add_stops_for_your_travel;
+  /// **'Open Map'**
+  String get open_map;
+
+  /// No description provided for @route_planning.
+  ///
+  /// In en, this message translates to:
+  /// **'Route Planning'**
+  String get route_planning;
+
+  /// No description provided for @route_planning_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan your travel route and stops'**
+  String get route_planning_label;
+
+  /// No description provided for @registered_stops.
+  ///
+  /// In en, this message translates to:
+  /// **'Registered Stops'**
+  String get registered_stops;
 
   /// No description provided for @no_stops_registered.
   ///
   /// In en, this message translates to:
-  /// **'No stops registered'**
+  /// **'No stops registered yet. Use the map to plan your route across different cities and countries'**
   String get no_stops_registered;
 
   /// No description provided for @invalid_travel_data.

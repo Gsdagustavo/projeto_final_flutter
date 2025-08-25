@@ -252,10 +252,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get travel_map => 'Travel Map';
 
   @override
-  String get add_stops_for_your_travel => 'Add Stops for Your Travel';
+  String get open_map => 'Open Map';
 
   @override
-  String get no_stops_registered => 'No stops registered';
+  String get route_planning => 'Route Planning';
+
+  @override
+  String get route_planning_label => 'Plan your travel route and stops';
+
+  @override
+  String get registered_stops => 'Registered Stops';
+
+  @override
+  String get no_stops_registered => 'No stops registered yet. Use the map to plan your route across different cities and countries';
 
   @override
   String get invalid_travel_data => 'Invalid Travel Data';

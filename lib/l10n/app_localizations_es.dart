@@ -252,10 +252,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get travel_map => 'Mapa del Viaje';
 
   @override
-  String get add_stops_for_your_travel => 'Agregar Paradas para Tu Viaje';
+  String get open_map => 'Abrir Mapa';
 
   @override
-  String get no_stops_registered => 'No hay paradas registradas';
+  String get route_planning => 'Planificación de Ruta';
+
+  @override
+  String get route_planning_label => 'Planifica la ruta y las paradas de tu viaje';
+
+  @override
+  String get registered_stops => 'Paradas Registradas';
+
+  @override
+  String get no_stops_registered => 'No hay paradas registradas aún. Usa el mapa para planificar tu ruta entre diferentes ciudades y países';
 
   @override
   String get invalid_travel_data => '¡Datos de viaje no válidos!';

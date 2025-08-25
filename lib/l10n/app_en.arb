@@ -103,8 +103,11 @@
   "participant_updated": "Participant updated",
   "err_could_not_add_participant": "Could not add participant",
   "travel_map": "Travel Map",
-  "add_stops_for_your_travel": "Add Stops for Your Travel",
-  "no_stops_registered": "No stops registered",
+  "open_map": "Open Map",
+  "route_planning": "Route Planning",
+  "route_planning_label": "Plan your travel route and stops",
+  "registered_stops": "Registered Stops",
+  "no_stops_registered": "No stops registered yet. Use the map to plan your route across different cities and countries",
   "invalid_travel_data": "Invalid Travel Data",
   "travel_registered_successfully": "Your Travel was successfully registered!",
 

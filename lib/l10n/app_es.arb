@@ -103,8 +103,11 @@
   "participant_updated": "Participante actualizado",
   "err_could_not_add_participant": "No se pudo agregar participante",
   "travel_map": "Mapa del Viaje",
-  "add_stops_for_your_travel": "Agregar Paradas para Tu Viaje",
-  "no_stops_registered": "No hay paradas registradas",
+  "open_map": "Abrir Mapa",
+  "route_planning": "Planificación de Ruta",
+  "route_planning_label": "Planifica la ruta y las paradas de tu viaje",
+  "registered_stops": "Paradas Registradas",
+  "no_stops_registered": "No hay paradas registradas aún. Usa el mapa para planificar tu ruta entre diferentes ciudades y países",
   "invalid_travel_data": "¡Datos de viaje no válidos!",
   "travel_registered_successfully": "Viaje registrado con éxito",
 

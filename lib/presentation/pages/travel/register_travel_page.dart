@@ -18,6 +18,8 @@ import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_app_bar.dart';
 import '../util/form_validations.dart';
 
+const double cardPadding = 16;
+
 class RegisterTravelPage extends StatefulWidget {
   const RegisterTravelPage({super.key});
 
@@ -56,7 +58,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                 children: [
                   Card(
                     child: Padding(
-                      padding: const EdgeInsets.all(32.0),
+                      padding: const EdgeInsets.all(cardPadding),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -123,6 +125,18 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                   ),
 
                   AddParticipant(),
+
+                  RoutePlanning(),
+
+                  RegisteredStops(),
+
+                  Padding(
+                    padding: const EdgeInsets.all(cardPadding),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: RegisterTravelButton(),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -373,7 +387,7 @@ class _AddParticipantState extends State<AddParticipant>
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(32.0),
+        padding: const EdgeInsets.all(cardPadding),
         child: Column(
           children: [
             Row(
@@ -567,7 +581,7 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(32.0),
+                padding: const EdgeInsets.all(cardPadding),
                 child: SingleChildScrollView(
                   padding: EdgeInsets.only(
                     top: 72,
@@ -787,6 +801,172 @@ class _ParticipantModalState extends State<_ParticipantModal> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class RoutePlanning extends StatelessWidget {
+  const RoutePlanning({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.all(cardPadding),
+        child: Row(
+          spacing: 12,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 12,
+                children: [
+                  Text(
+                    as.route_planning,
+                    style: Theme.of(context).textTheme.displaySmall,
+                  ),
+                  Text(as.route_planning_label),
+                ],
+              ),
+            ),
+
+            Expanded(
+              child: ElevatedButton(
+                /// TODO: go to map page
+                onPressed: () {
+                  debugPrint('todo: go to map page');
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [Icon(Icons.pin_drop), Text(as.open_map)],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class RegisteredStops extends StatelessWidget {
+  const RegisteredStops({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.all(cardPadding),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  as.registered_stops,
+                  style: Theme.of(context).textTheme.displaySmall,
+                ),
+                Consumer<RegisterTravelProvider>(
+                  builder: (_, state, __) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text('${state.stops.length} ${as.stops}'),
+                    );
+                  },
+                ),
+              ],
+            ),
+
+            Padding(padding: EdgeInsets.all(26)),
+
+            Column(
+              children: [
+                Icon(Icons.pin_drop, size: 42),
+                Padding(padding: EdgeInsets.all(12)),
+                Text(as.no_stops_registered, textAlign: TextAlign.center),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class RegisterTravelButton extends StatefulWidget {
+  const RegisterTravelButton({super.key});
+
+  @override
+  State<RegisterTravelButton> createState() => _RegisterTravelButtonState();
+}
+
+class _RegisterTravelButtonState extends State<RegisterTravelButton> {
+  bool _isTravelValid = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final state = context.read<RegisterTravelProvider>();
+    _isTravelValid = state.isTravelValid;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+    final state = context.watch<RegisterTravelProvider>();
+
+    _isTravelValid = state.isTravelValid;
+    debugPrint('Is travel valid: $_isTravelValid');
+
+    final baseColor = Theme.of(
+      context,
+    ).elevatedButtonTheme.style!.backgroundColor!.resolve({})!;
+
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: _isTravelValid
+            ? baseColor
+            : baseColor.withOpacity(0.3),
+      ),
+      onPressed: () async {
+        if (_isTravelValid) {
+          final state = context.read<RegisterTravelProvider>();
+          await state.registerTravel();
+
+          if (state.hasError) {
+            await showDialog(
+              context: context,
+              builder: (context) {
+                return CustomDialog(
+                  title: as.warning,
+                  content: Text(state.error!),
+                  isError: true,
+                );
+              },
+            );
+
+            return;
+          }
+
+          await showDialog(
+            context: context,
+            builder: (context) {
+              return CustomDialog(
+                title: as.title_register_travel,
+                content: Text(as.travel_registered_successfully),
+              );
+            },
+          );
+        }
+      },
+      child: Text('Register Travel'),
     );
   }
 }
