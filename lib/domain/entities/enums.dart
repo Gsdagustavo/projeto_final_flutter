@@ -33,6 +33,9 @@ enum Experience {
 
   /// Contact with nature
   contactWithNature,
+
+  /// Social events
+  socialEvents,
 }
 
 enum TravelStopType { start, stop, end }

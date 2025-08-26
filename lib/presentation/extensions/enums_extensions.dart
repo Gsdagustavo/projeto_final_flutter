@@ -61,6 +61,8 @@ extension ExperiencesIntlString on Experience {
         return loc.experience_historical_places;
       case Experience.visitLocalEstablishments:
         return loc.experience_visit_local_establishments;
+      case Experience.socialEvents:
+        return loc.experience_social_events;
     }
   }
 }
