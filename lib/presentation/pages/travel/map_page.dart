@@ -8,10 +8,7 @@ import '../../../services/location_service.dart';
 import '../../providers/map_markers_provider.dart';
 import '../../providers/register_travel_provider.dart';
 import '../../scripts/scripts.dart';
-import '../../widgets/my_app_bar.dart';
 
-/// This is a map widget that will be used to register a [TravelStop] and to
-/// view a [Travel] route
 class TravelMap extends StatefulWidget {
   /// Constant constructor
   const TravelMap({super.key});
@@ -81,8 +78,20 @@ class _TravelMapState extends State<TravelMap> {
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: MyAppBar(
-        title: as.title_map_select_travel_stops,
+      /// TODO: add transparency to appbar
+      appBar: AppBar(
+        title: Column(
+          children: [
+            Text(
+              as.route_planning,
+              style: Theme.of(context).textTheme.displaySmall,
+            ),
+            Text(
+              'Long press to add stops',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ],
+        ),
         automaticallyImplyLeading: true,
       ),
 
@@ -91,7 +100,7 @@ class _TravelMapState extends State<TravelMap> {
           if (_isCreatingMap) return Center(child: CircularProgressIndicator());
 
           return Stack(
-            alignment: Alignment.center,
+            // alignment: Alignment.center,
             children: [
               GoogleMap(
                 minMaxZoomPreference: MinMaxZoomPreference(_minZoom, _maxZoom),
@@ -103,6 +112,37 @@ class _TravelMapState extends State<TravelMap> {
                   zoom: _defaultZoom,
                 ),
                 markers: Provider.of<MapMarkersProvider>(context).markers,
+              ),
+
+              Positioned(
+                top: 12,
+                left: 12,
+                right: 12,
+                child: Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.grey.withOpacity(0.75),
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 14,
+                      ),
+                      child: Consumer<RegisterTravelProvider>(
+                        builder: (_, state, __) {
+                          return Row(
+                            spacing: 12,
+                            children: [
+                              Icon(Icons.route, size: 18),
+                              Text('${state.stops.length} stop(s)'),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
 
               /// Text field to search for places
@@ -146,7 +186,7 @@ class _TravelMapState extends State<TravelMap> {
                     );
                   }
 
-                  return Container();
+                  return SizedBox.shrink();
                 },
               ),
             ],
@@ -154,22 +194,39 @@ class _TravelMapState extends State<TravelMap> {
         },
       ),
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          final markerState = Provider.of<MapMarkersProvider>(
-            context,
-            listen: false,
-          );
+      floatingActionButton: Column(
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              final markerState = Provider.of<MapMarkersProvider>(
+                context,
+                listen: false,
+              );
 
-          debugPrint('Markers len: ${markerState.markers.length}');
+              debugPrint('Markers len: ${markerState.markers.length}');
 
-          for (final (idx, marker) in markerState.markers.indexed) {
-            debugPrint("$idx: ${marker.markerId}");
-          }
-        },
+              for (final (idx, marker) in markerState.markers.indexed) {
+                debugPrint("$idx: ${marker.markerId}");
+              }
+            },
+          ),
+
+          FloatingActionButton(
+            onPressed: () {
+              final travelState = Provider.of<RegisterTravelProvider>(
+                context,
+                listen: false,
+              );
+
+              debugPrint('Stops len: ${travelState.stops.length}');
+
+              for (final (idx, stop) in travelState.stops.indexed) {
+                debugPrint('$idx: $stop');
+              }
+            },
+          ),
+        ],
       ),
     );
   }
 }
-
-

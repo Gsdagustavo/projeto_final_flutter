@@ -496,8 +496,10 @@ Future<void> _showParticipantModal(
 
   if (result != null) {
     if (participant == null) {
+      debugPrint('add participant');
       await state.addParticipant(result);
     } else {
+      debugPrint('update participant');
       await state.updateParticipant(participant, result);
     }
   }
