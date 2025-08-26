@@ -899,15 +899,144 @@ class RegisteredStops extends StatelessWidget {
                 ),
               ],
             ),
+            // Padding(padding: EdgeInsets.all(26)),
+            Consumer<RegisterTravelProvider>(
+              builder: (context, state, child) {
+                final stops = state.stops;
+                if (stops.isEmpty) {
+                  return Column(
+                    children: [
+                      Icon(Icons.pin_drop, size: 42),
+                      Padding(padding: EdgeInsets.all(12)),
+                      Text(as.no_stops_registered, textAlign: TextAlign.center),
+                    ],
+                  );
+                } else {
+                  return ListView.builder(
+                    itemCount: stops.length,
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      final stop = state.stops[index];
 
-            Padding(padding: EdgeInsets.all(26)),
+                      return Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Row(
+                            children: [
+                              Builder(
+                                builder: (context) {
+                                  if (index == 0) {
+                                    /// First stop
+                                    return CircleAvatar(
+                                      backgroundColor: Theme.of(context)
+                                          .elevatedButtonTheme
+                                          .style!
+                                          .backgroundColor!
+                                          .resolve({}),
+                                      child: Center(
+                                        child: Icon(
+                                          FontAwesomeIcons.paperPlane,
+                                        ),
+                                      ),
+                                    );
+                                  } else if (index == stops.length - 1) {
+                                    /// Last stop
+                                    return CircleAvatar(
+                                      backgroundColor: Theme.of(context)
+                                          .elevatedButtonTheme
+                                          .style!
+                                          .backgroundColor!
+                                          .resolve({}),
+                                      child: Center(
+                                        child: Icon(FontAwesomeIcons.flag),
+                                      ),
+                                    );
+                                  } else {
+                                    /// Waypoint
+                                    return CircleAvatar(
+                                      backgroundColor: Theme.of(context)
+                                          .elevatedButtonTheme
+                                          .style!
+                                          .backgroundColor!
+                                          .resolve({}),
+                                      child: Center(
+                                        child: Icon(Icons.location_on),
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                              Padding(padding: EdgeInsets.all(6)),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    spacing: 10,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        stop.place.city!,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodyLarge,
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 2,
+                                          horizontal: 8,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            16,
+                                          ),
+                                          color: Theme.of(
+                                            context,
+                                          ).highlightColor.withOpacity(0.25),
+                                        ),
 
-            Column(
-              children: [
-                Icon(Icons.pin_drop, size: 42),
-                Padding(padding: EdgeInsets.all(12)),
-                Text(as.no_stops_registered, textAlign: TextAlign.center),
-              ],
+                                        child: Builder(
+                                          builder: (context) {
+                                            var text = '';
+
+                                            /// TODO: intl
+                                            if (index == 0) {
+                                              text = 'Starting Point';
+                                            } else if (index ==
+                                                stops.length - 1) {
+                                              text = 'Destination';
+                                            } else {
+                                              text = 'Waypoint';
+                                            }
+
+                                            return Text(
+                                              text,
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.labelSmall,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                    '${stop.place.city!}, ${stop.place.country!}',
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
             ),
           ],
         ),
