@@ -10,9 +10,11 @@ import 'package:provider/provider.dart';
 
 import '../../../domain/entities/enums.dart';
 import '../../../domain/entities/participant.dart';
+import '../../../domain/entities/travel_stop.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../services/file_service.dart';
 import '../../extensions/enums_extensions.dart';
+import '../../providers/map_markers_provider.dart';
 import '../../providers/register_travel_provider.dart';
 import '../../util/app_routes.dart';
 import '../../widgets/custom_dialog.dart';
@@ -162,7 +164,8 @@ class _DateRangePickerRowState extends State<DateRangePickerRow> {
   static const int _maxYear = 2100;
   final DateFormat _dateFormat = DateFormat('MM/dd/yyyy');
 
-  String _formatDate(DateTime date) {
+  String _formatDate(DateTime? date) {
+    if (date == null) return '';
     return _dateFormat.format(date);
   }
 
@@ -213,6 +216,14 @@ class _DateRangePickerRowState extends State<DateRangePickerRow> {
         }
       });
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final state = context.read<RegisterTravelProvider>();
+    _startController.text = _formatDate(state.startDate);
+    _endController.text = _formatDate(state.endDate);
   }
 
   @override
@@ -868,8 +879,54 @@ class RoutePlanning extends StatelessWidget {
   }
 }
 
-class RegisteredStops extends StatelessWidget {
+class RegisteredStops extends StatefulWidget {
   const RegisteredStops({super.key});
+
+  @override
+  State<RegisteredStops> createState() => _RegisteredStopsState();
+}
+
+class _RegisteredStopsState extends State<RegisteredStops> {
+  void onStopRemoved(TravelStop stop) async {
+    final travelState = Provider.of<RegisterTravelProvider>(
+      context,
+      listen: false,
+    );
+    final markersState = Provider.of<MapMarkersProvider>(
+      context,
+      listen: false,
+    );
+
+    final as = AppLocalizations.of(context)!;
+
+    final remove = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          /// TODO: intl
+          title: Text('Remove Stop'),
+          content: Text('Do you really want to remove this stop?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(as.no),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(as.yes),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (remove != null && remove) {
+      travelState.removeTravelStop(stop);
+      markersState.removeMarker(stop);
+    }
+
+    // Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -912,131 +969,82 @@ class RegisteredStops extends StatelessWidget {
                     ],
                   );
                 } else {
-                  return ListView.builder(
+                  return ListView.separated(
                     itemCount: stops.length,
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
+                    separatorBuilder: (context, index) {
+                      return Padding(padding: EdgeInsets.all(12));
+                    },
                     itemBuilder: (context, index) {
                       final stop = state.stops[index];
-
-                      return Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Row(
-                            children: [
-                              Builder(
-                                builder: (context) {
-                                  if (index == 0) {
-                                    /// First stop
-                                    return CircleAvatar(
-                                      backgroundColor: Theme.of(context)
-                                          .elevatedButtonTheme
-                                          .style!
-                                          .backgroundColor!
-                                          .resolve({}),
-                                      child: Center(
-                                        child: Icon(
-                                          FontAwesomeIcons.paperPlane,
-                                        ),
-                                      ),
-                                    );
-                                  } else if (index == stops.length - 1) {
-                                    /// Last stop
-                                    return CircleAvatar(
-                                      backgroundColor: Theme.of(context)
-                                          .elevatedButtonTheme
-                                          .style!
-                                          .backgroundColor!
-                                          .resolve({}),
-                                      child: Center(
-                                        child: Icon(FontAwesomeIcons.flag),
-                                      ),
-                                    );
-                                  } else {
-                                    /// Waypoint
-                                    return CircleAvatar(
-                                      backgroundColor: Theme.of(context)
-                                          .elevatedButtonTheme
-                                          .style!
-                                          .backgroundColor!
-                                          .resolve({}),
-                                      child: Center(
-                                        child: Icon(Icons.location_on),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-                              Padding(padding: EdgeInsets.all(6)),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    spacing: 10,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        stop.place.city!,
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.bodyLarge,
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 2,
-                                          horizontal: 8,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            16,
-                                          ),
-                                          color: Theme.of(
-                                            context,
-                                          ).highlightColor.withOpacity(0.25),
-                                        ),
-
-                                        child: Builder(
-                                          builder: (context) {
-                                            var text = '';
-
-                                            /// TODO: intl
-                                            if (index == 0) {
-                                              text = 'Starting Point';
-                                            } else if (index ==
-                                                stops.length - 1) {
-                                              text = 'Destination';
-                                            } else {
-                                              text = 'Waypoint';
-                                            }
-
-                                            return Text(
-                                              text,
-                                              style: Theme.of(
-                                                context,
-                                              ).textTheme.labelSmall,
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    '${stop.place.city!}, ${stop.place.country!}',
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.bodyMedium,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                      return ListTile(
+                        shape: Theme.of(context).cardTheme.shape,
+                        leading: Builder(
+                          builder: (context) {
+                            if (index == 0) {
+                              /// First stop
+                              return CircleAvatar(
+                                backgroundColor: Theme.of(context)
+                                    .elevatedButtonTheme
+                                    .style!
+                                    .backgroundColor!
+                                    .resolve({}),
+                                child: Center(
+                                  child: Icon(FontAwesomeIcons.paperPlane),
+                                ),
+                              );
+                            } else if (index == stops.length - 1) {
+                              /// Last stop
+                              return CircleAvatar(
+                                backgroundColor: Theme.of(context)
+                                    .elevatedButtonTheme
+                                    .style!
+                                    .backgroundColor!
+                                    .resolve({}),
+                                child: Center(
+                                  child: Icon(FontAwesomeIcons.flag),
+                                ),
+                              );
+                            } else {
+                              /// Waypoint
+                              return CircleAvatar(
+                                backgroundColor: Theme.of(context)
+                                    .elevatedButtonTheme
+                                    .style!
+                                    .backgroundColor!
+                                    .resolve({}),
+                                child: Center(child: Icon(Icons.location_on)),
+                              );
+                            }
+                          },
+                        ),
+                        title: Text(stop.place.city!),
+                        subtitle: Text(
+                          '${stop.place.city!}, ${stop.place.country!}',
+                        ),
+                        trailing: IconButton(
+                          onPressed: () => onStopRemoved(stop),
+                          icon: Icon(FontAwesomeIcons.remove),
                         ),
                       );
                     },
                   );
                 }
               },
+            ),
+            Padding(padding: const EdgeInsets.all(8.0)),
+            Divider(),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Center(
+                /// TODO: intl
+                child: Text(
+                  'Use the map to modify your route or to add more waypoints',
+                  style: Theme.of(context).textTheme.bodySmall,
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ),
           ],
         ),
