@@ -120,6 +120,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get experience_contact_with_nature => 'Contact With Nature';
 
   @override
+  String get experience_social_events => 'Social Events';
+
+  @override
   String get other => 'Other';
 
   @override

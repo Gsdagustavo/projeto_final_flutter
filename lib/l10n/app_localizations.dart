@@ -319,6 +319,12 @@ abstract class AppLocalizations {
   /// **'Contact With Nature'**
   String get experience_contact_with_nature;
 
+  /// No description provided for @experience_social_events.
+  ///
+  /// In en, this message translates to:
+  /// **'Social Events'**
+  String get experience_social_events;
+
   /// No description provided for @other.
   ///
   /// In en, this message translates to:
