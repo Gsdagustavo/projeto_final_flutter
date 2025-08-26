@@ -963,7 +963,10 @@ class _RegisteredStopsState extends State<RegisteredStops> {
                 if (stops.isEmpty) {
                   return Column(
                     children: [
-                      Icon(Icons.pin_drop, size: 42),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 42),
+                        child: Icon(Icons.pin_drop, size: 42),
+                      ),
                       Padding(padding: EdgeInsets.all(12)),
                       Text(as.no_stops_registered, textAlign: TextAlign.center),
                     ],
