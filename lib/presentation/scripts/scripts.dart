@@ -96,15 +96,45 @@ class _TravelStopModalState extends State<_TravelStopModal> {
   final _arriveDateController = TextEditingController();
   final _leaveDateController = TextEditingController();
 
-  void onStopRemoved() {
+  void onStopRemoved() async {
     final travelState = Provider.of<RegisterTravelProvider>(
       context,
       listen: false,
     );
+    final markersState = Provider.of<MapMarkersProvider>(
+      context,
+      listen: false,
+    );
 
-    /// TODO: add confirmation message
+    final as = AppLocalizations.of(context)!;
 
-    travelState.removeTravelStop(widget.stop!);
+    final remove = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          /// TODO: intl
+          title: Text('Remove Stop'),
+          content: Text('Do you really want to remove this stop?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(as.no),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(as.yes),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (remove != null && remove) {
+      travelState.removeTravelStop(widget.stop!);
+      markersState.removeMarker(widget.stop!);
+    }
+
+    Navigator.of(context).pop();
   }
 
   @override
