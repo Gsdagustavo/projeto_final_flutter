@@ -14,7 +14,10 @@ import '../pages/travel/register_travel_page.dart';
 import 'app_routes.dart';
 
 class AppRouter {
+  static final navigatorKey = GlobalKey<NavigatorState>();
+
   static final router = GoRouter(
+    navigatorKey: navigatorKey,
     initialLocation: Routes.splash,
     routes: [
       StatefulShellRoute.indexedStack(

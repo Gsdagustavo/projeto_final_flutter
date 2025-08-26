@@ -15,7 +15,7 @@ class TravelStop {
   TravelStopType type;
 
   /// Travel Stop experiences
-  final List<Experience>? experiences;
+  List<Experience>? experiences;
 
   final Place place;
 
@@ -58,6 +58,17 @@ class TravelStop {
 
     return stop;
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is TravelStop &&
+              runtimeType == other.runtimeType &&
+              travelStopId == other.travelStopId;
+
+  @override
+  int get hashCode => travelStopId.hashCode;
+
 
   @override
   String toString() {

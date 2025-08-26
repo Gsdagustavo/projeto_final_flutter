@@ -146,14 +146,21 @@ class RegisterTravelProvider with ChangeNotifier {
     required TravelStop oldStop,
     required TravelStop newStop,
   }) {
+    debugPrint('Old travel stop: $oldStop');
+    debugPrint('New travel stop: $newStop');
+
     debugPrint('Travel stops len: ${_stops.length}');
 
     debugPrint('Old stops: $_stops');
 
     final idx = _stops.indexOf(oldStop);
 
-    _stops.removeAt(idx);
-    _stops.insert(idx, newStop);
+    if (idx == -1) {
+      debugPrint('Error: old stop not found in list');
+      return;
+    }
+
+    _stops[idx] = newStop;
 
     debugPrint('New stops: $_stops');
 

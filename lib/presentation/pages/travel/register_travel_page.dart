@@ -1022,7 +1022,7 @@ class _RegisteredStopsState extends State<RegisteredStops> {
                             }
                           },
                         ),
-                        title: Text(stop.place.city!),
+                        title: Text('${stop.place.city!}, ${stop.arriveDate}'),
                         subtitle: Text(
                           '${stop.place.city!}, ${stop.place.country!}',
                         ),

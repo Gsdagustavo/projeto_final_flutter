@@ -4,7 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../core/extensions/travel_stop_extensions.dart';
 import '../../domain/entities/travel_stop.dart';
-import '../scripts/scripts.dart';
+import '../pages/travel/map_page.dart';
 
 class MapMarkersProvider with ChangeNotifier {
   final _markers = <Marker>{};
@@ -17,16 +17,14 @@ class MapMarkersProvider with ChangeNotifier {
 
     if (stops != null && stops.isNotEmpty) {
       for (final stop in stops) {
+        final pos = LatLng(stop.place.latitude, stop.place.longitude);
+
         _markers.add(
           Marker(
             markerId: stop.toMarkerId(),
             infoWindow: InfoWindow(title: stop.place.toString()),
-            position: LatLng(stop.place.latitude, stop.place.longitude),
-            onTap: () => onMarkerTap(
-              stop,
-              LatLng(stop.place.latitude, stop.place.longitude),
-              context,
-            ),
+            position: pos,
+            onTap: () async => await showTravelStopModal(pos),
           ),
         );
       }
