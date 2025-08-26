@@ -13,7 +13,7 @@ import '../../extensions/enums_extensions.dart';
 import '../../providers/review_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
-import '../../widgets/fab_app_bar.dart';
+import '../../widgets/fab_page.dart';
 import '../util/form_validations.dart';
 
 /// The Home Page of the app
@@ -33,40 +33,32 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          FabAppBar(title: as.title_home),
-          Consumer<TravelListProvider>(
-            builder: (context, travelListProvider, child) {
-              if (travelListProvider.isLoading) {
-                return const SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              }
+    return FabPage(
+      title: as.title_home,
+      body: Consumer<TravelListProvider>(
+        builder: (context, travelListProvider, child) {
+          if (travelListProvider.isLoading) {
+            return Center(child: CircularProgressIndicator());
+          }
 
-              final travels = travelListProvider.travels;
+          final travels = travelListProvider.travels;
 
-              if (travels.isEmpty) {
-                return SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Center(
-                    child: Lottie.asset('assets/animations/traveler.json'),
-                  ),
-                );
-              }
+          if (travels.isEmpty) {
+            return Center(
+              child: Lottie.asset('assets/animations/traveler.json'),
+            );
+          }
 
-              return SliverList.separated(
-                itemCount: travels.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 26),
-                itemBuilder: (context, index) {
-                  return _TravelWidget(travel: travels[index]);
-                },
-              );
+          return ListView.separated(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: travels.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 26),
+            itemBuilder: (context, index) {
+              return _TravelWidget(travel: travels[index]);
             },
-          ),
-        ],
+          );
+        },
       ),
     );
   }

@@ -18,7 +18,7 @@ import '../../providers/map_markers_provider.dart';
 import '../../providers/register_travel_provider.dart';
 import '../../util/app_routes.dart';
 import '../../widgets/custom_dialog.dart';
-import '../../widgets/fab_app_bar.dart';
+import '../../widgets/fab_page.dart';
 import '../util/form_validations.dart';
 
 const double cardPadding = 16;
@@ -48,176 +48,155 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
 
-    return GestureDetector(
-      onTap: FocusScope.of(context).unfocus,
-      child: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            FabAppBar(title: as.title_register_travel),
-
-            SliverToBoxAdapter(
+    return FabPage(
+      title: as.title_register_travel,
+      body: Column(
+        spacing: 8,
+        children: [
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(cardPadding),
               child: Column(
-                spacing: 8,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(cardPadding),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            as.travel_details,
-                            style: Theme.of(context).textTheme.displaySmall,
-                          ),
-                          Padding(padding: EdgeInsets.all(26)),
-                          Text(
-                            as.travel_title_label,
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          Padding(padding: EdgeInsets.all(2)),
-                          Form(
-                            key: _travelTitleFormKey,
-                            child: TextFormField(
-                              onTapOutside: (_) =>
-                                  FocusScope.of(context).unfocus(),
-                              controller: _travelTitleController,
-                              decoration: InputDecoration(
-                                hintText: as.enter_travel_title,
-                              ),
-                            ),
-                          ),
-                          Padding(padding: EdgeInsets.all(12)),
-                          Text(
-                            as.transport_type_label,
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          Padding(padding: EdgeInsets.all(2)),
-                          DropdownButtonFormField<TransportType>(
-                            borderRadius: BorderRadius.circular(12),
-                            value: _selectedTransportType,
-                            icon: Icon(Icons.keyboard_arrow_down),
-                            isExpanded: true,
-                            items: [
-                              for (final entry in _transportTypesIcons.entries)
-                                DropdownMenuItem<TransportType>(
-                                  value: entry.key,
-                                  child: Row(
-                                    children: [
-                                      Icon(entry.value),
-                                      Padding(padding: EdgeInsets.all(6)),
-                                      Text(
-                                        entry.key.getIntlTransportType(context),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                            ],
-
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedTransportType =
-                                    value ?? TransportType.values.first;
-                              });
-                            },
-                          ),
-                          Padding(padding: EdgeInsets.all(12)),
-                          DateRangePickerRow(),
-                        ],
+                  Text(
+                    as.travel_details,
+                    style: Theme.of(context).textTheme.displaySmall,
+                  ),
+                  Padding(padding: EdgeInsets.all(26)),
+                  Text(
+                    as.travel_title_label,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  Padding(padding: EdgeInsets.all(2)),
+                  Form(
+                    key: _travelTitleFormKey,
+                    child: TextFormField(
+                      onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                      controller: _travelTitleController,
+                      decoration: InputDecoration(
+                        hintText: as.enter_travel_title,
                       ),
                     ),
                   ),
-
-                  AddParticipant(),
-
-                  RoutePlanning(),
-
-                  RegisteredStops(),
-
-                  Padding(
-                    padding: const EdgeInsets.all(cardPadding),
-                    child: Consumer<RegisterTravelProvider>(
-                      builder: (_, state, __) {
-                        final isTravelValid = state.isTravelValid;
-                        debugPrint('Is travel valid: $isTravelValid');
-
-                        final baseColor = Theme.of(context)
-                            .elevatedButtonTheme
-                            .style!
-                            .backgroundColor!
-                            .resolve({})!;
-
-                        return SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: isTravelValid
-                                  ? baseColor
-                                  : baseColor.withOpacity(0.3),
-                            ),
-                            onPressed: () async {
-                              if (isTravelValid) {
-                                final state = context
-                                    .read<RegisterTravelProvider>();
-
-                                if (!_travelTitleFormKey.currentState!
-                                    .validate()) {
-                                  await showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return CustomDialog(
-                                        title: as.warning,
-                                        content: Text('Invalid travel title'),
-                                        isError: true,
-                                      );
-                                    },
-                                  );
-
-                                  return;
-                                }
-
-                                await state.registerTravel(
-                                  _travelTitleController.text,
-                                );
-
-                                if (state.hasError) {
-                                  await showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return CustomDialog(
-                                        title: as.warning,
-                                        content: Text(state.error!),
-                                        isError: true,
-                                      );
-                                    },
-                                  );
-
-                                  return;
-                                }
-
-                                await showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return CustomDialog(
-                                      title: as.title_register_travel,
-                                      content: Text(
-                                        as.travel_registered_successfully,
-                                      ),
-                                    );
-                                  },
-                                );
-                              }
-                            },
-                            child: Text(as.title_register_travel),
-                          ),
-                        );
-                      },
-                    ),
+                  Padding(padding: EdgeInsets.all(12)),
+                  Text(
+                    as.transport_type_label,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
+                  Padding(padding: EdgeInsets.all(2)),
+                  DropdownButtonFormField<TransportType>(
+                    borderRadius: BorderRadius.circular(12),
+                    value: _selectedTransportType,
+                    icon: Icon(Icons.keyboard_arrow_down),
+                    isExpanded: true,
+                    items: [
+                      for (final entry in _transportTypesIcons.entries)
+                        DropdownMenuItem<TransportType>(
+                          value: entry.key,
+                          child: Row(
+                            children: [
+                              Icon(entry.value),
+                              Padding(padding: EdgeInsets.all(6)),
+                              Text(entry.key.getIntlTransportType(context)),
+                            ],
+                          ),
+                        ),
+                    ],
+
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedTransportType =
+                            value ?? TransportType.values.first;
+                      });
+                    },
+                  ),
+                  Padding(padding: EdgeInsets.all(12)),
+                  DateRangePickerRow(),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+
+          AddParticipant(),
+
+          RoutePlanning(),
+
+          RegisteredStops(),
+
+          Padding(
+            padding: const EdgeInsets.all(cardPadding),
+            child: Consumer<RegisterTravelProvider>(
+              builder: (_, state, __) {
+                final isTravelValid = state.isTravelValid;
+                debugPrint('Is travel valid: $isTravelValid');
+
+                final baseColor = Theme.of(
+                  context,
+                ).elevatedButtonTheme.style!.backgroundColor!.resolve({})!;
+
+                return SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: isTravelValid
+                          ? baseColor
+                          : baseColor.withOpacity(0.3),
+                    ),
+                    onPressed: () async {
+                      if (isTravelValid) {
+                        final state = context.read<RegisterTravelProvider>();
+
+                        if (!_travelTitleFormKey.currentState!.validate()) {
+                          await showDialog(
+                            context: context,
+                            builder: (context) {
+                              return CustomDialog(
+                                title: as.warning,
+                                content: Text('Invalid travel title'),
+                                isError: true,
+                              );
+                            },
+                          );
+
+                          return;
+                        }
+
+                        await state.registerTravel(_travelTitleController.text);
+
+                        if (state.hasError) {
+                          await showDialog(
+                            context: context,
+                            builder: (context) {
+                              return CustomDialog(
+                                title: as.warning,
+                                content: Text(state.error!),
+                                isError: true,
+                              );
+                            },
+                          );
+
+                          return;
+                        }
+
+                        await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return CustomDialog(
+                              title: as.title_register_travel,
+                              content: Text(as.travel_registered_successfully),
+                            );
+                          },
+                        );
+                      }
+                    },
+                    child: Text(as.title_register_travel),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -712,24 +691,24 @@ class _ParticipantModalState extends State<_ParticipantModal> {
 
                       const Padding(padding: EdgeInsets.all(16)),
 
-                      /// 'Cancel' / 'Register' buttons
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          /// 'Cancel' button
-                          TextButton(
-                            onPressed: () => context.pop(),
-                            child: Text(as.cancel),
-                          ),
+                      /// Cancel / Register buttons
+                      Consumer<RegisterTravelProvider>(
+                        builder: (_, state, __) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              /// Cancel button
+                              TextButton(
+                                onPressed: () => context.pop(),
+                                child: Text(as.cancel),
+                              ),
 
-                          Builder(
-                            builder: (context) {
-                              debugPrint('${widget.participant == null}');
+                              Builder(
+                                builder: (context) {
+                                  debugPrint('${widget.participant == null}');
 
-                              /// Register participant
-                              if (widget.participant == null) {
-                                return Consumer<RegisterTravelProvider>(
-                                  builder: (_, travelState, __) {
+                                  /// Register participant
+                                  if (widget.participant == null) {
                                     return ElevatedButton(
                                       onPressed: () async {
                                         if (!_formKey.currentState!
@@ -775,13 +754,9 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                                       },
                                       child: Text(as.add),
                                     );
-                                  },
-                                );
-                              }
+                                  }
 
-                              /// Update participant
-                              return Consumer<RegisterTravelProvider>(
-                                builder: (_, travelState, __) {
+                                  /// Update participant
                                   return ElevatedButton(
                                     onPressed: () async {
                                       if (!_formKey.currentState!.validate()) {
@@ -827,10 +802,10 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                                     child: Text(as.update_participant),
                                   );
                                 },
-                              );
-                            },
-                          ),
-                        ],
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ],
                   ),

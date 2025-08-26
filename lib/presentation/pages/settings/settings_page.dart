@@ -11,7 +11,7 @@ import '../../../services/user_preferences_service.dart';
 import '../../providers/login_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../util/app_routes.dart';
-import '../../widgets/fab_app_bar.dart';
+import '../../widgets/fab_page.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -51,165 +51,159 @@ class _SettingsPageState extends State<SettingsPage> {
         ? creationTime.getFormattedDateWithYear(locale)
         : 'N/A';
 
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          FabAppBar(title: as.title_settings),
+    return FabPage(
+      title: as.title_settings,
+      body: Column(
+        children: [
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        radius: 32,
+                        backgroundImage: backgroundImage,
+                      ),
+                      InkWell(
+                        onTap: () async {
+                          final image = await FileService().pickImage();
 
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        Stack(
-                          alignment: Alignment.bottomRight,
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              radius: 32,
-                              backgroundImage: backgroundImage,
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                final image = await FileService().pickImage();
+                          if (image == null) return;
 
-                                if (image == null) return;
-
-                                await UserPreferencesService()
-                                    .saveProfilePicture(image);
-                                setState(() => _profilePicture = image);
-                              },
-                              child: CircleAvatar(
-                                radius: 14,
-                                child: Icon(Icons.camera_alt, size: 16),
-                              ),
-                            ),
-                          ],
+                          await UserPreferencesService().saveProfilePicture(
+                            image,
+                          );
+                          setState(() => _profilePicture = image);
+                        },
+                        child: CircleAvatar(
+                          radius: 14,
+                          child: Icon(Icons.camera_alt, size: 16),
                         ),
-                        Padding(padding: EdgeInsets.all(16)),
-                        Text(user.email!),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ),
-                Padding(padding: EdgeInsets.all(16)),
+                  Padding(padding: EdgeInsets.all(16)),
+                  Text(user.email!),
+                ],
+              ),
+            ),
+          ),
+          Padding(padding: EdgeInsets.all(16)),
 
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          as.account,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        Column(
-                          children: [
-                            ListTile(
-                              leading: const Icon(Icons.email),
-                              title: Text(as.email),
-                              subtitle: Text(user.email ?? 'N/A'),
-                            ),
-                          ],
-                        ),
-                        const Divider(color: Colors.grey),
-                        Column(
-                          children: [
-                            ListTile(
-                              leading: const Icon(Icons.date_range),
-                              title: Text(as.account_creation),
-                              subtitle: Text(formattedCreationTime),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    as.account,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
-                ),
-                Padding(padding: EdgeInsets.all(16)),
+                  Column(
+                    children: [
+                      ListTile(
+                        leading: const Icon(Icons.email),
+                        title: Text(as.email),
+                        subtitle: Text(user.email ?? 'N/A'),
+                      ),
+                    ],
+                  ),
+                  const Divider(color: Colors.grey),
+                  Column(
+                    children: [
+                      ListTile(
+                        leading: const Icon(Icons.date_range),
+                        title: Text(as.account_creation),
+                        subtitle: Text(formattedCreationTime),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Padding(padding: EdgeInsets.all(16)),
 
-                Card(
-                  child: ListTile(
-                    leading: const Icon(Icons.language),
-                    title: Text(as.language),
-                    subtitle: Text(
-                      languageGetters[Localizations.localeOf(
-                        context,
-                      ).languageCode]!(as),
-                    ),
-                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (context) => LanguageSelectionSheet(),
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.language),
+              title: Text(as.language),
+              subtitle: Text(
+                languageGetters[Localizations.localeOf(context).languageCode]!(
+                  as,
+                ),
+              ),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) => LanguageSelectionSheet(),
+                );
+              },
+            ),
+          ),
+          Padding(padding: EdgeInsets.all(16)),
+
+          SizedBox(
+            width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: () async {
+                  final logout = await showDialog<bool>(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text(as.logout),
+                        content: Text(as.logout_confirmation),
+                        actionsAlignment: MainAxisAlignment.spaceBetween,
+                        actions: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(false);
+                            },
+                            child: Text(as.no),
+                          ),
+
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(true);
+                            },
+                            child: Text(as.yes),
+                          ),
+                        ],
                       );
                     },
-                  ),
+                  );
+
+                  if (logout ?? false) {
+                    context.go(Routes.auth);
+                    await loginProvider.signOut();
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                Padding(padding: EdgeInsets.all(16)),
-
-                SizedBox(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        final logout = await showDialog<bool>(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text(as.logout),
-                              content: Text(as.logout_confirmation),
-                              actionsAlignment: MainAxisAlignment.spaceBetween,
-                              actions: [
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop(false);
-                                  },
-                                  child: Text(as.no),
-                                ),
-
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop(true);
-                                  },
-                                  child: Text(as.yes),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-
-                        if (logout ?? false) {
-                          context.go(Routes.auth);
-                          await loginProvider.signOut();
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                      ),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 32),
-                              child: const Icon(Icons.logout),
-                            ),
-                          ),
-                          Text(as.logout),
-                        ],
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 32),
+                        child: const Icon(Icons.logout),
                       ),
                     ),
-                  ),
+                    Text(as.logout),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ],
