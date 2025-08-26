@@ -135,9 +135,82 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
 
                   Padding(
                     padding: const EdgeInsets.all(cardPadding),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: RegisterTravelButton(),
+                    child: Consumer<RegisterTravelProvider>(
+                      builder: (_, state, __) {
+                        final isTravelValid = state.isTravelValid;
+                        debugPrint('Is travel valid: $isTravelValid');
+
+                        final baseColor = Theme.of(context)
+                            .elevatedButtonTheme
+                            .style!
+                            .backgroundColor!
+                            .resolve({})!;
+
+                        return SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: isTravelValid
+                                  ? baseColor
+                                  : baseColor.withOpacity(0.3),
+                            ),
+                            onPressed: () async {
+                              if (isTravelValid) {
+                                final state = context
+                                    .read<RegisterTravelProvider>();
+
+                                if (!_travelTitleFormKey.currentState!
+                                    .validate()) {
+                                  await showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return CustomDialog(
+                                        title: as.warning,
+                                        content: Text('Invalid travel title'),
+                                        isError: true,
+                                      );
+                                    },
+                                  );
+
+                                  return;
+                                }
+
+                                await state.registerTravel(
+                                  _travelTitleController.text,
+                                );
+
+                                if (state.hasError) {
+                                  await showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return CustomDialog(
+                                        title: as.warning,
+                                        content: Text(state.error!),
+                                        isError: true,
+                                      );
+                                    },
+                                  );
+
+                                  return;
+                                }
+
+                                await showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return CustomDialog(
+                                      title: as.title_register_travel,
+                                      content: Text(
+                                        as.travel_registered_successfully,
+                                      ),
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                            child: Text(as.title_register_travel),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -1022,7 +1095,7 @@ class _RegisteredStopsState extends State<RegisteredStops> {
                             }
                           },
                         ),
-                        title: Text('${stop.place.city!}, ${stop.arriveDate}'),
+                        title: Text('${stop.place.city!}'),
                         subtitle: Text(
                           '${stop.place.city!}, ${stop.place.country!}',
                         ),
@@ -1052,77 +1125,6 @@ class _RegisteredStopsState extends State<RegisteredStops> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class RegisterTravelButton extends StatefulWidget {
-  const RegisterTravelButton({super.key});
-
-  @override
-  State<RegisterTravelButton> createState() => _RegisterTravelButtonState();
-}
-
-class _RegisterTravelButtonState extends State<RegisterTravelButton> {
-  bool _isTravelValid = false;
-
-  @override
-  void initState() {
-    super.initState();
-    final state = context.read<RegisterTravelProvider>();
-    _isTravelValid = state.isTravelValid;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
-    final state = context.watch<RegisterTravelProvider>();
-
-    _isTravelValid = state.isTravelValid;
-    debugPrint('Is travel valid: $_isTravelValid');
-
-    final baseColor = Theme.of(
-      context,
-    ).elevatedButtonTheme.style!.backgroundColor!.resolve({})!;
-
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: _isTravelValid
-            ? baseColor
-            : baseColor.withOpacity(0.3),
-      ),
-      onPressed: () async {
-        if (_isTravelValid) {
-          final state = context.read<RegisterTravelProvider>();
-          await state.registerTravel();
-
-          if (state.hasError) {
-            await showDialog(
-              context: context,
-              builder: (context) {
-                return CustomDialog(
-                  title: as.warning,
-                  content: Text(state.error!),
-                  isError: true,
-                );
-              },
-            );
-
-            return;
-          }
-
-          await showDialog(
-            context: context,
-            builder: (context) {
-              return CustomDialog(
-                title: as.title_register_travel,
-                content: Text(as.travel_registered_successfully),
-              );
-            },
-          );
-        }
-      },
-      child: Text(as.title_register_travel),
     );
   }
 }

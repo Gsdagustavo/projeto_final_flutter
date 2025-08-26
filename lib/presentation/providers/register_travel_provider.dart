@@ -20,10 +20,7 @@ class RegisterTravelProvider with ChangeNotifier {
   final fileService = FileService();
 
   /// TODO: make form keys private and add getters to access them
-
-  /// Form key for travel title validation
-  final travelTitleFormKey = GlobalKey<FormState>();
-
+  ///
   /// Default constructor
   RegisterTravelProvider(this._travelUseCases);
 
@@ -31,9 +28,6 @@ class RegisterTravelProvider with ChangeNotifier {
 
   DateTime? _startDate = DateTime.now();
   DateTime? _endDate = DateTime.now().add(Duration(days: 30));
-
-  /// A [TextEditingController] to be assigned to the travel title
-  final _travelTitleController = TextEditingController();
 
   /// The selected travel [TransportType]
   var _transportType = TransportType.values.first;
@@ -60,15 +54,9 @@ class RegisterTravelProvider with ChangeNotifier {
   ///
   /// Currently, it is not working 100%, since there is no way of registering
   /// a travel stop, so it is generated automatically
-  Future<void> registerTravel() async {
+  Future<void> registerTravel(String travelTitle) async {
     _isLoading = true;
     notifyListeners();
-
-    if (!travelTitleFormKey.currentState!.validate()) {
-      _errorMsg = 'Invalid Travel Title';
-      notifyListeners();
-      return;
-    }
 
     if (!isTravelValid) {
       _errorMsg = 'Invalid Travel Info. Verify the data and try again';
@@ -88,7 +76,7 @@ class RegisterTravelProvider with ChangeNotifier {
 
     /// Instantiates a new travel with the given inputs
     final travel = Travel(
-      travelTitle: _travelTitleController.text,
+      travelTitle: travelTitle,
       participants: participants,
       startDate: _startDate,
       endDate: _endDate,
@@ -175,8 +163,6 @@ class RegisterTravelProvider with ChangeNotifier {
     _startDate = null;
     _endDate = null;
 
-    _travelTitleController.clear();
-
     _participants.clear();
 
     _errorMsg = null;
@@ -233,9 +219,6 @@ class RegisterTravelProvider with ChangeNotifier {
     final travels = await _travelUseCases.getAllTravels();
     debugPrint('Listing all travels:\n$travels');
   }
-
-  /// Returns the [TextEditingController] for the travel title
-  TextEditingController get travelTitleController => _travelTitleController;
 
   /// Returns the number of registered participants
   int get numParticipants => _participants.length;
