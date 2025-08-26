@@ -134,7 +134,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
       markersState.removeMarker(widget.stop!);
     }
 
-    Navigator.of(context).pop();
+    // Navigator.of(context).pop();
   }
 
   void onStopAdded() async {
