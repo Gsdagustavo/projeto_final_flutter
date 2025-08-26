@@ -29,8 +29,8 @@ class RegisterTravelProvider with ChangeNotifier {
 
   bool _areStopsValid = false;
 
-  DateTime? _startDate;
-  DateTime? _endDate;
+  DateTime? _startDate = DateTime.now();
+  DateTime? _endDate = DateTime.now().add(Duration(days: 30));
 
   /// A [TextEditingController] to be assigned to the travel title
   final _travelTitleController = TextEditingController();
