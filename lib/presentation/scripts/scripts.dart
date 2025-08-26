@@ -137,6 +137,50 @@ class _TravelStopModalState extends State<_TravelStopModal> {
     Navigator.of(context).pop();
   }
 
+  void onStopAdded() async {
+    final stop = TravelStop(
+      place: widget.place,
+      experiences: _selectedExperiences.toExperiencesList(),
+      leaveDate: _leaveDate,
+      arriveDate: _arriveDate,
+    );
+
+    final pos = LatLng(stop.place.latitude, stop.place.longitude);
+
+    final marker = Marker(
+      markerId: stop.toMarkerId(),
+      infoWindow: InfoWindow(title: stop.place.toString()),
+      position: pos,
+      onTap: () => onMarkerTap(stop, pos, context),
+    );
+
+    final state = context.read<MapMarkersProvider>();
+    state.addMarker(marker);
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Stop added successfully!'),
+          icon: Icon(Icons.check, color: Colors.green),
+        );
+      },
+    );
+
+    Navigator.of(context).pop(stop);
+  }
+
+  void onStopUpdated() async {
+    final stop = TravelStop(
+      place: widget.place,
+      experiences: _selectedExperiences.toExperiencesList(),
+      leaveDate: _leaveDate,
+      arriveDate: _arriveDate,
+    );
+
+    Navigator.of(context).pop(stop);
+  }
+
   @override
   Widget build(BuildContext context) {
     final travelState = Provider.of<RegisterTravelProvider>(
@@ -275,44 +319,12 @@ class _TravelStopModalState extends State<_TravelStopModal> {
           const Padding(padding: EdgeInsets.all(12)),
 
           if (useStop == null) ...[
-            ElevatedButton(
-              onPressed: () {
-                final stop = TravelStop(
-                  place: widget.place,
-                  experiences: _selectedExperiences.toExperiencesList(),
-                  leaveDate: _leaveDate,
-                  arriveDate: _arriveDate,
-                );
-
-                final pos = LatLng(stop.place.latitude, stop.place.longitude);
-
-                final marker = Marker(
-                  markerId: stop.toMarkerId(),
-                  infoWindow: InfoWindow(title: stop.place.toString()),
-                  position: pos,
-                  onTap: () => onMarkerTap(stop, pos, context),
-                );
-
-                final state = context.read<MapMarkersProvider>();
-                state.addMarker(marker);
-
-                Navigator.of(context).pop(stop);
-              },
-              child: Text('Add Stop'),
-            ),
+            /// TODO: intl
+            ElevatedButton(onPressed: onStopAdded, child: Text('Add Stop')),
           ] else ...[
             ElevatedButton(
-              onPressed: () {
-                final stop = TravelStop(
-                  place: widget.place,
-                  experiences: _selectedExperiences.toExperiencesList(),
-                  leaveDate: _leaveDate,
-                  arriveDate: _arriveDate,
-                );
-
-                Navigator.of(context).pop(stop);
-              },
-              child: Text('Update Stop'),
+              onPressed: onStopUpdated,
+              child: Text(as.update_stop),
             ),
           ],
         ],
