@@ -16,7 +16,6 @@ import '../../../services/file_service.dart';
 import '../../extensions/enums_extensions.dart';
 import '../../providers/map_markers_provider.dart';
 import '../../providers/register_travel_provider.dart';
-import '../../providers/travel_list_provider.dart';
 import '../../util/app_routes.dart';
 import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_page.dart';
@@ -275,8 +274,36 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
   }
 
   Future<void> onTravelRegistered() async {
-    context.read<RegisterTravelProvider>().registerTravel(
-      _travelTitleController.text,
+    final as = AppLocalizations.of(context)!;
+
+    final state = context.read<RegisterTravelProvider>();
+    await state.registerTravel(_travelTitleController.text);
+
+    if (state.hasError) {
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return CustomDialog(
+            title: as.warning,
+            isError: true,
+
+            /// TODO: intl
+            content: Text('An error occurred while registering the travel'),
+          );
+        },
+      );
+
+      return;
+    }
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return CustomDialog(
+          title: as.travel_registered_successfully,
+          content: SizedBox.shrink(),
+        );
+      },
     );
   }
 
@@ -478,7 +505,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                           return SizeFadeTransition(
                             animation: animation,
                             child: Card(
-                              margin: EdgeInsets.symmetric(
+                              margin: const EdgeInsets.symmetric(
                                 horizontal: 6,
                                 vertical: 16,
                               ),
@@ -544,7 +571,6 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                     child: Consumer<RegisterTravelProvider>(
                       builder: (_, state, __) {
                         return ElevatedButton(
-                          /// TODO: go to map page
                           onPressed: () {
                             context.push(Routes.travelMap);
                           },
@@ -597,7 +623,6 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                       ),
                     ],
                   ),
-                  // Padding(padding: EdgeInsets.all(26)),
                   Consumer<RegisterTravelProvider>(
                     builder: (context, state, child) {
                       final stops = state.stops;
@@ -716,6 +741,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
+                        /// TODO: intl
                         'Travel Photos',
                         style: Theme.of(context).textTheme.displaySmall,
                       ),
@@ -742,14 +768,17 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                             children: [
                               const Icon(Icons.camera_alt, size: 42),
                               Text(
+                                /// TODO: intl
                                 'Add Travel Photos',
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
                               Text(
+                                /// TODO: intl
                                 'Tap to select photos',
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                               Text(
+                                /// TODO: intl
                                 '${state.travelPhotos.length} of 5 photos added',
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
@@ -760,6 +789,8 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                                   child: Row(
                                     children: [
                                       const Icon(Icons.file_upload_outlined),
+
+                                      /// TODO: intl
                                       Text('Choose Photos'),
                                     ],
                                   ),
@@ -808,6 +839,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                   ),
 
                   Center(
+                    /// TODO: intl
                     child: Text(
                       'Add photos to make your travel more memorable and visually appealing',
                       style: Theme.of(context).textTheme.bodySmall,
@@ -839,10 +871,12 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                           : baseColor.withOpacity(0.3),
                     ),
                     onPressed: () async {
+                      debugPrint('register travel button pressed');
                       await onTravelRegistered();
                       _travelTitleController.clear();
                       _startDateController.clear();
                       _endDateController.clear();
+                      debugPrint('controllers cleansed in ui');
                     },
                     child: Text(as.title_register_travel),
                   ),

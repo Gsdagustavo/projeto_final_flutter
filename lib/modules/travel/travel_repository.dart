@@ -100,8 +100,6 @@ class TravelRepositoryImpl implements TravelRepository {
 
       if (travelModel.photos.isNotEmpty) {
         for (final photoData in travelModel.photos) {
-          final bytes = photoData.readAsBytesSync();
-          debugPrint('$bytes');
           final photoMap = {PhotosTable.photo: photoData.readAsBytesSync()};
 
           final photoId = await txn.insert(PhotosTable.tableName, photoMap);
@@ -185,6 +183,7 @@ class TravelRepositoryImpl implements TravelRepository {
 
   @override
   Future<List<Travel>> getAllTravels() async {
+    debugPrint('GET ALL TRAVELS METHOD REPOSITORY CALLED');
     final db = await _db;
 
     final travels = <TravelModel>[];
@@ -277,7 +276,7 @@ class TravelRepositoryImpl implements TravelRepository {
         /// Photos
         final photos = <File>[];
 
-        final travelPhotosData = await db.query(
+        final travelPhotosData = await txn.query(
           TravelPhotosTable.tableName,
           where: '${TravelPhotosTable.travelId} = ?',
           whereArgs: [travelId],
