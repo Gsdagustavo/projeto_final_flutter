@@ -125,6 +125,8 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
 
           RegisteredStops(),
 
+          _TravelPhotos(),
+
           Padding(
             padding: const EdgeInsets.all(cardPadding),
             child: Consumer<RegisterTravelProvider>(
@@ -1097,6 +1099,87 @@ class _RegisteredStopsState extends State<RegisteredStops> {
                   style: Theme.of(context).textTheme.bodySmall,
                   textAlign: TextAlign.center,
                 ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TravelPhotos extends StatelessWidget {
+  const _TravelPhotos({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.all(cardPadding),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          spacing: 12,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'Travel Photos',
+                  style: Theme.of(context).textTheme.displaySmall,
+                ),
+              ],
+            ),
+            Padding(padding: EdgeInsets.all(16)),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(vertical: 48),
+                decoration: BoxDecoration(
+                  border: BoxBorder.all(
+                    color: Theme.of(context).iconTheme.color!,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  spacing: 6,
+                  children: [
+                    Icon(Icons.camera_alt, size: 42),
+                    Text(
+                      'Add Travel Photos',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    Text(
+                      'Tap to select photos',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    Text(
+                      '0 of 5 photos added',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    Padding(padding: EdgeInsets.all(2)),
+                    UnconstrainedBox(
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        child: Row(
+                          children: [
+                            Icon(Icons.file_upload_outlined),
+                            Text('Choose Photos'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Center(
+              child: Text(
+                'Add photos to make your travel more memorable and visually appealing',
+                style: Theme.of(context).textTheme.bodySmall,
+                textAlign: TextAlign.center,
               ),
             ),
           ],
