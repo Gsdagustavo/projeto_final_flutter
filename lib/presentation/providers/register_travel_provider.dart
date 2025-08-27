@@ -28,8 +28,8 @@ class RegisterTravelProvider with ChangeNotifier {
 
   bool _areStopsValid = false;
 
-  DateTime? _startDate = DateTime.now();
-  DateTime? _endDate = DateTime.now().add(Duration(days: 30));
+  DateTime? _startDate;
+  DateTime? _endDate;
 
   final _travelPhotos = <File>[];
 
@@ -45,7 +45,7 @@ class RegisterTravelProvider with ChangeNotifier {
   /// The error message (obtained via exception.message on try-catch structures)
   String? _errorMsg;
 
-  /// Whether there are any asynchronous methods being processed
+  /// Whether there are any asynchronous methods being processed or not
   bool _isLoading = false;
 
   /// Tries to register a new [Travel] with the given inputs using
@@ -62,13 +62,17 @@ class RegisterTravelProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
+    debugPrint('Registering travel with title $travelTitle');
+
     if (!isTravelValid) {
+      debugPrint('Travel is not valid');
       _errorMsg = 'Invalid Travel Info. Verify the data and try again';
       notifyListeners();
       return;
     }
 
     if (!_areStopsValid) {
+      debugPrint('Stops are not valid');
       _errorMsg = 'At least 2 stops must be registered';
       _isLoading = false;
       notifyListeners();
@@ -86,7 +90,10 @@ class RegisterTravelProvider with ChangeNotifier {
       endDate: _endDate,
       transportType: _transportType,
       stops: _stops,
+      photos: _travelPhotos,
     );
+
+    debugPrint('Travel that will be inserted: $travel');
 
     try {
       await _travelUseCases.registerTravel(travel);
@@ -173,6 +180,8 @@ class RegisterTravelProvider with ChangeNotifier {
     _isLoading = false;
 
     _stops.clear();
+
+    _travelPhotos.clear();
 
     notifyListeners();
   }

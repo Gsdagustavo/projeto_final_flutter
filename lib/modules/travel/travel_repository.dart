@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../data/local/database/database.dart';
 import '../../data/local/database/tables/experiences_table.dart';
 import '../../data/local/database/tables/participants_table.dart';
+import '../../data/local/database/tables/photos_table.dart';
 import '../../data/local/database/tables/places_table.dart';
 import '../../data/local/database/tables/travel_participants_table.dart';
+import '../../data/local/database/tables/travel_photos_table.dart';
 import '../../data/local/database/tables/travel_stop_experiences_table.dart';
 import '../../data/local/database/tables/travel_stop_table.dart';
 import '../../data/local/database/tables/travel_table.dart';
@@ -55,6 +59,7 @@ class TravelRepositoryImpl implements TravelRepository {
           .map(ParticipantModel.fromEntity)
           .toList(),
       stops: travel.stops.map(TravelStopModel.fromEntity).toList(),
+      photos: travel.photos,
     );
 
     debugPrint('Inserting Travel ${travelModel.toString()}');
@@ -91,6 +96,23 @@ class TravelRepositoryImpl implements TravelRepository {
           TravelParticipantsTable.tableName,
           _toTravelParticipantsMap(participantId, travelId),
         );
+      }
+
+      if (travelModel.photos.isNotEmpty) {
+        for (final photoData in travelModel.photos) {
+          final bytes = photoData.readAsBytesSync();
+          debugPrint('$bytes');
+          final photoMap = {PhotosTable.photo: photoData.readAsBytesSync()};
+
+          final photoId = await txn.insert(PhotosTable.tableName, photoMap);
+
+          final travelPhotoMap = {
+            TravelPhotosTable.travelId: travelId,
+            TravelPhotosTable.photoId: photoId,
+          };
+
+          await txn.insert(TravelPhotosTable.tableName, travelPhotoMap);
+        }
       }
     });
   }
@@ -252,11 +274,25 @@ class TravelRepositoryImpl implements TravelRepository {
           stops.add(travelStopModel);
         }
 
+        /// Photos
+        final photos = <File>[];
+
+        final travelPhotosData = await db.query(
+          TravelPhotosTable.tableName,
+          where: '${TravelPhotosTable.travelId} = ?',
+          whereArgs: [travelId],
+        );
+
+        for (final photoData in travelPhotosData) {
+          debugPrint('Photo data: $photoData');
+        }
+
         travels.add(
           TravelModel.fromMap(
             travelResult,
             participants: participants,
             stops: stops,
+            photos: photos,
           ),
         );
       }

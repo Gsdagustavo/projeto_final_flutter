@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/travel.dart';
 import '../local/database/tables/travel_table.dart';
@@ -13,6 +15,7 @@ class TravelModel {
   final List<ParticipantModel> participants;
   final List<TravelStopModel> stops;
   final TravelStatus status;
+  final List<File> photos;
 
   TravelModel({
     this.travelId,
@@ -22,6 +25,7 @@ class TravelModel {
     required this.transportType,
     required this.participants,
     required this.stops,
+    required this.photos,
     this.status = TravelStatus.upcoming,
   });
 
@@ -30,6 +34,7 @@ class TravelModel {
     Map<String, dynamic> map, {
     required List<ParticipantModel> participants,
     required List<TravelStopModel> stops,
+    required List<File> photos,
   }) {
     return TravelModel(
       travelId: map[TravelTable.travelId],
@@ -41,9 +46,10 @@ class TravelModel {
         map[TravelTable.endDate] as int,
       ),
       transportType: TransportType.values[map[TravelTable.transportType]],
+      status: TravelStatus.values[map[TravelTable.status]],
       participants: participants,
       stops: stops,
-      status: TravelStatus.values[map[TravelTable.status]],
+      photos: photos,
     );
   }
 
@@ -72,6 +78,7 @@ class TravelModel {
           .map(ParticipantModel.fromEntity)
           .toList(),
       stops: travel.stops.map(TravelStopModel.fromEntity).toList(),
+      photos: travel.photos,
       status: travel.status,
     );
   }
@@ -86,12 +93,8 @@ class TravelModel {
       participants: participants.map((p) => p.toEntity()).toList(),
       stops: stops.map((s) => s.toEntity()).toList(),
       status: status,
+      photos: photos,
     );
-  }
-
-  @override
-  String toString() {
-    return 'TravelModel{travelId: $travelId, travelTitle: $travelTitle, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: $stops, status: $status}';
   }
 
   TravelModel copyWith({
@@ -103,6 +106,7 @@ class TravelModel {
     List<ParticipantModel>? participants,
     List<TravelStopModel>? stops,
     TravelStatus? status,
+    List<File>? photos,
   }) {
     return TravelModel(
       travelId: travelId ?? this.travelId,
@@ -113,6 +117,12 @@ class TravelModel {
       participants: participants ?? this.participants,
       stops: stops ?? this.stops,
       status: status ?? this.status,
+      photos: photos ?? this.photos,
     );
+  }
+
+  @override
+  String toString() {
+    return 'TravelModel{travelId: $travelId, travelTitle: $travelTitle, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: $stops, status: $status, photos: $photos}';
   }
 }

@@ -32,11 +32,14 @@ class RegisterTravelPage extends StatefulWidget {
 }
 
 class _RegisterTravelPageState extends State<RegisterTravelPage> {
+  /// Travel title
   final _travelTitleController = TextEditingController();
   final _travelTitleFormKey = GlobalKey<FormState>();
 
+  /// Transport type
   var _selectedTransportType = TransportType.values.first;
 
+  /// Transport types and its icons
   static const _transportTypesIcons = {
     TransportType.bike: Icons.directions_bike,
     TransportType.car: Icons.directions_car,
@@ -45,298 +48,14 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
     TransportType.cruise: FontAwesomeIcons.ship,
   };
 
-  @override
-  Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
-
-    return FabPage(
-      title: as.title_register_travel,
-      body: Column(
-        spacing: 8,
-        children: [
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(cardPadding),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    as.travel_details,
-                    style: Theme.of(context).textTheme.displaySmall,
-                  ),
-                  const Padding(padding: EdgeInsets.all(26)),
-                  Text(
-                    as.travel_title_label,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const Padding(padding: EdgeInsets.all(2)),
-                  Form(
-                    key: _travelTitleFormKey,
-                    child: TextFormField(
-                      onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                      controller: _travelTitleController,
-                      decoration: InputDecoration(
-                        hintText: as.enter_travel_title,
-                      ),
-                    ),
-                  ),
-                  const Padding(padding: EdgeInsets.all(12)),
-                  Text(
-                    as.transport_type_label,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const Padding(padding: EdgeInsets.all(2)),
-                  DropdownButtonFormField<TransportType>(
-                    borderRadius: BorderRadius.circular(12),
-                    value: _selectedTransportType,
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    isExpanded: true,
-                    items: [
-                      for (final entry in _transportTypesIcons.entries)
-                        DropdownMenuItem<TransportType>(
-                          value: entry.key,
-                          child: Row(
-                            children: [
-                              Icon(entry.value),
-                              const Padding(padding: EdgeInsets.all(6)),
-                              Text(entry.key.getIntlTransportType(context)),
-                            ],
-                          ),
-                        ),
-                    ],
-
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedTransportType =
-                            value ?? TransportType.values.first;
-                      });
-                    },
-                  ),
-                  const Padding(padding: EdgeInsets.all(12)),
-                  const DateRangePickerRow(),
-                ],
-              ),
-            ),
-          ),
-
-          AddParticipant(),
-
-          RoutePlanning(),
-
-          RegisteredStops(),
-
-          _TravelPhotos(),
-
-          Padding(
-            padding: const EdgeInsets.all(cardPadding),
-            child: Consumer<RegisterTravelProvider>(
-              builder: (_, state, __) {
-                final isTravelValid = state.isTravelValid;
-                debugPrint('Is travel valid: $isTravelValid');
-
-                final baseColor = Theme.of(
-                  context,
-                ).elevatedButtonTheme.style!.backgroundColor!.resolve({})!;
-
-                return SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: isTravelValid
-                          ? baseColor
-                          : baseColor.withOpacity(0.3),
-                    ),
-                    onPressed: () async {
-                      if (isTravelValid) {
-                        final state = context.read<RegisterTravelProvider>();
-
-                        if (!_travelTitleFormKey.currentState!.validate()) {
-                          await showDialog(
-                            context: context,
-                            builder: (context) {
-                              return CustomDialog(
-                                title: as.warning,
-
-                                /// TODO: intl
-                                content: Text('Invalid travel title'),
-                                isError: true,
-                              );
-                            },
-                          );
-
-                          return;
-                        }
-
-                        await state.registerTravel(_travelTitleController.text);
-                        await context.read<TravelListProvider>().update();
-
-                        if (state.hasError) {
-                          await showDialog(
-                            context: context,
-                            builder: (context) {
-                              return CustomDialog(
-                                title: as.warning,
-                                content: Text(state.error!),
-                                isError: true,
-                              );
-                            },
-                          );
-
-                          return;
-                        }
-
-                        await showDialog(
-                          context: context,
-                          builder: (context) {
-                            return CustomDialog(
-                              title: as.title_register_travel,
-                              content: Text(as.travel_registered_successfully),
-                            );
-                          },
-                        );
-                      }
-                    },
-                    child: Text(as.title_register_travel),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class DateRangePickerRow extends StatefulWidget {
-  const DateRangePickerRow({super.key});
-
-  @override
-  State<DateRangePickerRow> createState() => _DateRangePickerRowState();
-}
-
-class _DateRangePickerRowState extends State<DateRangePickerRow> {
-  final _startController = TextEditingController();
-  final _endController = TextEditingController();
+  final _startDateController = TextEditingController();
+  final _endDateController = TextEditingController();
 
   static const int _maxYear = 2100;
   final DateFormat _dateFormat = DateFormat('MM/dd/yyyy');
 
-  String _formatDate(DateTime? date) {
-    if (date == null) return '';
-    return _dateFormat.format(date);
-  }
-
-  Future<void> _pickDate({required bool isStart}) async {
-    final state = context.read<RegisterTravelProvider>();
-
-    final initialDate = DateTime.now();
-    var firstDate = DateTime.now();
-    var lastDate = DateTime(_maxYear);
-
-    if (isStart && state.endDate != null) {
-      lastDate = state.endDate!;
-    } else if (!isStart && state.startDate != null) {
-      firstDate = state.startDate!;
-    }
-
-    DateTime pickInitialDate;
-    if (isStart) {
-      pickInitialDate = state.startDate ?? initialDate;
-      if (pickInitialDate.isAfter(lastDate)) pickInitialDate = lastDate;
-      if (pickInitialDate.isBefore(firstDate)) pickInitialDate = firstDate;
-    } else {
-      pickInitialDate = state.endDate ?? initialDate;
-      if (pickInitialDate.isAfter(lastDate)) pickInitialDate = lastDate;
-      if (pickInitialDate.isBefore(firstDate)) pickInitialDate = firstDate;
-    }
-
-    final newDate = await showDatePicker(
-      context: context,
-      initialDate: pickInitialDate,
-      firstDate: firstDate,
-      lastDate: lastDate,
-    );
-
-    if (newDate != null) {
-      setState(() {
-        if (isStart) {
-          state.startDate = newDate;
-          _startController.text = _formatDate(newDate);
-
-          if (state.endDate?.isBefore(newDate) == true) {
-            state.endDate = null;
-            _endController.clear();
-          }
-        } else {
-          state.endDate = newDate;
-          _endController.text = _formatDate(newDate);
-        }
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    final state = context.read<RegisterTravelProvider>();
-    _startController.text = _formatDate(state.startDate);
-    _endController.text = _formatDate(state.endDate);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
-
-    return Row(
-      children: [
-        Expanded(
-          child: TextFormField(
-            onTapOutside: (_) => FocusScope.of(context).unfocus(),
-            controller: _startController,
-            decoration: InputDecoration(
-              labelText: as.start_date,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              suffixIcon: const Icon(Icons.calendar_today),
-            ),
-            readOnly: true,
-            onTap: () => _pickDate(isStart: true),
-          ),
-        ),
-        Padding(padding: EdgeInsets.all(6)),
-        Expanded(
-          child: TextFormField(
-            onTapOutside: (_) => FocusScope.of(context).unfocus(),
-            controller: _endController,
-            decoration: InputDecoration(
-              labelText: as.end_date,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              suffixIcon: const Icon(Icons.calendar_today),
-            ),
-            readOnly: true,
-            onTap: () => _pickDate(isStart: false),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class AddParticipant extends StatefulWidget {
-  const AddParticipant({super.key});
-
-  @override
-  State<AddParticipant> createState() => _AddParticipantState();
-}
-
-class _AddParticipantState extends State<AddParticipant>
-    with SingleTickerProviderStateMixin {
-  final participantNameController = TextEditingController();
-  final participantAgeController = TextEditingController();
+  final _participantNameController = TextEditingController();
+  final _participantAgeController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -360,13 +79,13 @@ class _AddParticipantState extends State<AddParticipant>
     final state = context.read<RegisterTravelProvider>();
 
     final participant = Participant(
-      name: participantNameController.text,
-      age: int.parse(participantAgeController.text),
+      name: _participantNameController.text,
+      age: int.parse(_participantAgeController.text),
       profilePicture: await FileService().getDefaultProfilePictureFile(),
     );
 
-    participantNameController.clear();
-    participantAgeController.clear();
+    _participantNameController.clear();
+    _participantAgeController.clear();
 
     await state.addParticipant(participant);
 
@@ -443,10 +162,136 @@ class _AddParticipantState extends State<AddParticipant>
     }
   }
 
+  String _formatDate(DateTime? date) {
+    if (date == null) return '';
+    return _dateFormat.format(date);
+  }
+
+  Future<void> _pickDate({required bool isStart}) async {
+    final state = context.read<RegisterTravelProvider>();
+
+    final initialDate = DateTime.now();
+    var firstDate = DateTime.now();
+    var lastDate = DateTime(_maxYear);
+
+    if (isStart && state.endDate != null) {
+      lastDate = state.endDate!;
+    } else if (!isStart && state.startDate != null) {
+      firstDate = state.startDate!;
+    }
+
+    DateTime pickInitialDate;
+    if (isStart) {
+      pickInitialDate = state.startDate ?? initialDate;
+      if (pickInitialDate.isAfter(lastDate)) pickInitialDate = lastDate;
+      if (pickInitialDate.isBefore(firstDate)) pickInitialDate = firstDate;
+    } else {
+      pickInitialDate = state.endDate ?? initialDate;
+      if (pickInitialDate.isAfter(lastDate)) pickInitialDate = lastDate;
+      if (pickInitialDate.isBefore(firstDate)) pickInitialDate = firstDate;
+    }
+
+    final newDate = await showDatePicker(
+      context: context,
+      initialDate: pickInitialDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+    );
+
+    if (newDate != null) {
+      setState(() {
+        if (isStart) {
+          state.startDate = newDate;
+          _startDateController.text = _formatDate(newDate);
+
+          if (state.endDate?.isBefore(newDate) == true) {
+            state.endDate = null;
+            _endDateController.clear();
+          }
+        } else {
+          state.endDate = newDate;
+          _endDateController.text = _formatDate(newDate);
+        }
+      });
+    }
+  }
+
+  void onStopRemoved(TravelStop stop) async {
+    final travelState = Provider.of<RegisterTravelProvider>(
+      context,
+      listen: false,
+    );
+    final markersState = Provider.of<MapMarkersProvider>(
+      context,
+      listen: false,
+    );
+
+    final as = AppLocalizations.of(context)!;
+
+    final remove = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          /// TODO: intl
+          title: Text('Remove Stop'),
+          content: Text('Do you really want to remove this stop?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(as.no),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(as.yes),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (remove != null && remove) {
+      travelState.removeTravelStop(stop);
+      markersState.removeMarker(stop);
+    }
+
+    // Navigator.of(context).pop();
+  }
+
+  void onImagePicked() async {
+    final fileService = FileService();
+
+    final file = await fileService.pickImage();
+
+    final state = context.read<RegisterTravelProvider>();
+
+    if (file == null || state.travelPhotos.length >= 5) return;
+
+    state.addTravelPhoto(file);
+  }
+
+  void onImageRemoved(File image) async {
+    final state = context.read<RegisterTravelProvider>();
+    state.removeTravelPhoto(image);
+  }
+
+  Future<void> onTravelRegistered() async {
+    context.read<RegisterTravelProvider>().registerTravel(
+      _travelTitleController.text,
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final state = context.read<RegisterTravelProvider>();
+    _startDateController.text = _formatDate(state.startDate);
+    _endDateController.text = _formatDate(state.endDate);
+  }
+
   @override
   void dispose() {
-    participantNameController.dispose();
-    participantAgeController.dispose();
+    _participantNameController.dispose();
+    _participantAgeController.dispose();
     super.dispose();
   }
 
@@ -454,95 +299,559 @@ class _AddParticipantState extends State<AddParticipant>
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(cardPadding),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Consumer<RegisterTravelProvider>(
-                  builder: (_, state, __) {
-                    return Text(
-                      '${as.participants} (${state.participants.length})',
-                      style: Theme.of(context).textTheme.displaySmall,
-                    );
-                  },
-                ),
-                const Padding(padding: EdgeInsets.all(12)),
-                Flexible(
-                  child: ElevatedButton(
-                    onPressed: () => _showParticipantModal(context),
-                    child: Text(as.add),
-                  ),
-                ),
-              ],
-            ),
-            Consumer<RegisterTravelProvider>(
-              builder: (_, state, __) {
-                return ImplicitlyAnimatedList<Participant>(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  items: state.participants,
-                  areItemsTheSame: (oldItem, newItem) {
-                    return oldItem.hashCode == newItem.hashCode;
-                  },
-                  removeItemBuilder: (context, animation, participant) {
-                    return SizeFadeTransition(
-                      curve: Curves.easeInOut,
-                      animation: animation,
-                      child: Card(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 16,
-                        ),
-                        child: ListTile(
-                          title: Text(participant.name),
-                          subtitle: Text('${as.age}: ${participant.age}'),
-                        ),
-                      ),
-                    );
-                  },
+    final baseColor = Theme.of(
+      context,
+    ).elevatedButtonTheme.style!.backgroundColor!.resolve({})!;
 
-                  itemBuilder: (context, animation, participant, i) {
-                    return SizeFadeTransition(
-                      animation: animation,
-                      child: Card(
-                        margin: EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 16,
+    return FabPage(
+      title: as.title_register_travel,
+      body: Column(
+        spacing: 8,
+        children: [
+          /// Travel info card
+          ///
+          /// contains: travel title, transport type and dates
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(cardPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    as.travel_details,
+                    style: Theme.of(context).textTheme.displaySmall,
+                  ),
+                  const Padding(padding: EdgeInsets.all(26)),
+                  Text(
+                    as.travel_title_label,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const Padding(padding: EdgeInsets.all(2)),
+                  Form(
+                    key: _travelTitleFormKey,
+
+                    /// Travel title field
+                    child: TextFormField(
+                      textCapitalization: TextCapitalization.words,
+                      onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                      controller: _travelTitleController,
+                      decoration: InputDecoration(
+                        hintText: as.enter_travel_title,
+                      ),
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.all(12)),
+                  Text(
+                    as.transport_type_label,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const Padding(padding: EdgeInsets.all(2)),
+
+                  /// Transport types dropdown button
+                  DropdownButtonFormField<TransportType>(
+                    borderRadius: BorderRadius.circular(12),
+                    value: _selectedTransportType,
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    isExpanded: true,
+                    items: [
+                      for (final entry in _transportTypesIcons.entries)
+                        DropdownMenuItem<TransportType>(
+                          value: entry.key,
+                          child: Row(
+                            children: [
+                              Icon(entry.value),
+                              const Padding(padding: EdgeInsets.all(6)),
+                              Text(entry.key.getIntlTransportType(context)),
+                            ],
+                          ),
                         ),
-                        child: ListTile(
-                          onTap: () => _showParticipantModal(
-                            context,
-                            participant: participant,
-                          ),
-                          leading: CircleAvatar(
-                            backgroundImage: FileImage(
-                              participant.profilePicture,
+                    ],
+
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedTransportType =
+                            value ?? TransportType.values.first;
+                      });
+                    },
+                  ),
+                  const Padding(padding: EdgeInsets.all(12)),
+                  Row(
+                    children: [
+                      Expanded(
+                        /// Travel start date field
+                        child: TextFormField(
+                          onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                          controller: _startDateController,
+                          decoration: InputDecoration(
+                            labelText: as.start_date,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            backgroundColor: Colors.transparent,
-                            foregroundColor: Colors.transparent,
+                            suffixIcon: const Icon(Icons.calendar_today),
                           ),
-                          title: Text(participant.name),
-                          trailing: IconButton(
-                            onPressed: () =>
-                                onParticipantRemovePress(participant),
-                            icon: const Icon(FontAwesomeIcons.remove),
-                          ),
-                          subtitle: Text(
-                            '${as.age}: ${participant.age.toString()}',
-                          ),
+                          readOnly: true,
+                          onTap: () => _pickDate(isStart: true),
                         ),
                       ),
-                    );
-                  },
+                      Padding(padding: EdgeInsets.all(6)),
+                      Expanded(
+                        /// Travel end date field
+                        child: TextFormField(
+                          onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                          controller: _endDateController,
+                          decoration: InputDecoration(
+                            labelText: as.end_date,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            suffixIcon: const Icon(Icons.calendar_today),
+                          ),
+                          readOnly: true,
+                          onTap: () => _pickDate(isStart: false),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          /// Participant info card
+          ///
+          /// contains: a button to add a participant and the list of
+          /// participants
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(cardPadding),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Consumer<RegisterTravelProvider>(
+                        builder: (_, state, __) {
+                          return Text(
+                            '${as.participants} (${state.participants.length})',
+                            style: Theme.of(context).textTheme.displaySmall,
+                          );
+                        },
+                      ),
+                      const Padding(padding: EdgeInsets.all(12)),
+                      Flexible(
+                        /// Add participant button
+                        child: ElevatedButton(
+                          onPressed: () => _showParticipantModal(context),
+                          child: Text(as.add),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Consumer<RegisterTravelProvider>(
+                    builder: (_, state, __) {
+                      /// Participants list
+                      return ImplicitlyAnimatedList<Participant>(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        items: state.participants,
+                        areItemsTheSame: (oldItem, newItem) {
+                          return oldItem.hashCode == newItem.hashCode;
+                        },
+                        removeItemBuilder: (context, animation, participant) {
+                          return SizeFadeTransition(
+                            curve: Curves.easeInOut,
+                            animation: animation,
+                            child: Card(
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 16,
+                              ),
+                              child: ListTile(
+                                title: Text(participant.name),
+                                subtitle: Text('${as.age}: ${participant.age}'),
+                              ),
+                            ),
+                          );
+                        },
+
+                        itemBuilder: (context, animation, participant, i) {
+                          return SizeFadeTransition(
+                            animation: animation,
+                            child: Card(
+                              margin: EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 16,
+                              ),
+                              child: ListTile(
+                                onTap: () => _showParticipantModal(
+                                  context,
+                                  participant: participant,
+                                ),
+                                leading: CircleAvatar(
+                                  backgroundImage: FileImage(
+                                    participant.profilePicture,
+                                  ),
+                                  backgroundColor: Colors.transparent,
+                                  foregroundColor: Colors.transparent,
+                                ),
+                                title: Text(participant.name),
+                                trailing: IconButton(
+                                  onPressed: () =>
+                                      onParticipantRemovePress(participant),
+                                  icon: const Icon(FontAwesomeIcons.remove),
+                                ),
+                                subtitle: Text(
+                                  '${as.age}: ${participant.age.toString()}',
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          /// Route planning card
+          ///
+          /// contains some text and a button to go to the map page to add
+          /// stops for the travel
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(cardPadding),
+              child: Row(
+                spacing: 12,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 12,
+                      children: [
+                        Text(
+                          as.route_planning,
+                          style: Theme.of(context).textTheme.displaySmall,
+                        ),
+                        Text(as.route_planning_label),
+                      ],
+                    ),
+                  ),
+
+                  Expanded(
+                    child: Consumer<RegisterTravelProvider>(
+                      builder: (_, state, __) {
+                        return ElevatedButton(
+                          /// TODO: go to map page
+                          onPressed: () {
+                            context.push(Routes.travelMap);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                state.startDate != null && state.endDate != null
+                                ? baseColor
+                                : baseColor.withOpacity(0.3),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.location_on),
+                              Text(as.open_map),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          /// Travel stops card
+          ///
+          /// contains info about all stops added to the travel
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(cardPadding),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        as.registered_stops,
+                        style: Theme.of(context).textTheme.displaySmall,
+                      ),
+                      Consumer<RegisterTravelProvider>(
+                        builder: (_, state, __) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text('${state.stops.length} ${as.stops}'),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  // Padding(padding: EdgeInsets.all(26)),
+                  Consumer<RegisterTravelProvider>(
+                    builder: (context, state, child) {
+                      final stops = state.stops;
+                      if (stops.isEmpty) {
+                        return Column(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(top: 42),
+                              child: Icon(Icons.location_on, size: 42),
+                            ),
+                            const Padding(padding: EdgeInsets.all(12)),
+                            Text(
+                              as.no_stops_registered,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        );
+                      } else {
+                        return ListView.separated(
+                          itemCount: stops.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          separatorBuilder: (context, index) {
+                            return const Padding(padding: EdgeInsets.all(12));
+                          },
+                          itemBuilder: (context, index) {
+                            final stop = state.stops[index];
+                            return ListTile(
+                              shape: Theme.of(context).cardTheme.shape,
+                              leading: Builder(
+                                builder: (context) {
+                                  if (index == 0) {
+                                    /// First stop
+                                    return CircleAvatar(
+                                      backgroundColor: Theme.of(context)
+                                          .elevatedButtonTheme
+                                          .style!
+                                          .backgroundColor!
+                                          .resolve({}),
+                                      child: const Center(
+                                        child: Icon(
+                                          FontAwesomeIcons.paperPlane,
+                                        ),
+                                      ),
+                                    );
+                                  } else if (index == stops.length - 1) {
+                                    /// Last stop
+                                    return CircleAvatar(
+                                      backgroundColor: Theme.of(context)
+                                          .elevatedButtonTheme
+                                          .style!
+                                          .backgroundColor!
+                                          .resolve({}),
+                                      child: const Center(
+                                        child: Icon(FontAwesomeIcons.flag),
+                                      ),
+                                    );
+                                  } else {
+                                    /// Waypoint
+                                    return CircleAvatar(
+                                      backgroundColor: Theme.of(context)
+                                          .elevatedButtonTheme
+                                          .style!
+                                          .backgroundColor!
+                                          .resolve({}),
+                                      child: const Center(
+                                        child: Icon(Icons.location_on),
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                              title: Text('${stop.place.city!}'),
+                              subtitle: Text(
+                                '${stop.place.city!}, ${stop.place.country!}',
+                              ),
+                              trailing: IconButton(
+                                onPressed: () => onStopRemoved(stop),
+                                icon: const Icon(FontAwesomeIcons.remove),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    },
+                  ),
+                  const Padding(padding: EdgeInsets.all(8.0)),
+                  const Divider(),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Center(
+                      /// TODO: intl
+                      child: Text(
+                        'Use the map to modify your route or to add more waypoints',
+                        style: Theme.of(context).textTheme.bodySmall,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          /// Travel photos card
+          ///
+          /// contains all photos added to the travel and a button to add photos
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(cardPadding),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: 12,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Travel Photos',
+                        style: Theme.of(context).textTheme.displaySmall,
+                      ),
+                    ],
+                  ),
+                  const Padding(padding: EdgeInsets.all(16)),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 48),
+                      decoration: BoxDecoration(
+                        border: BoxBorder.all(
+                          color: Theme.of(context).iconTheme.color!,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Consumer<RegisterTravelProvider>(
+                        builder: (_, state, __) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            spacing: 6,
+                            children: [
+                              const Icon(Icons.camera_alt, size: 42),
+                              Text(
+                                'Add Travel Photos',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                              Text(
+                                'Tap to select photos',
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                              Text(
+                                '${state.travelPhotos.length} of 5 photos added',
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                              const Padding(padding: EdgeInsets.all(2)),
+                              UnconstrainedBox(
+                                child: ElevatedButton(
+                                  onPressed: onImagePicked,
+                                  child: Row(
+                                    children: [
+                                      const Icon(Icons.file_upload_outlined),
+                                      Text('Choose Photos'),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+
+                  Consumer<RegisterTravelProvider>(
+                    builder: (_, state, __) {
+                      return GridView.builder(
+                        shrinkWrap: true,
+                        itemCount: state.travelPhotos.length,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 1,
+                              crossAxisSpacing: 8,
+                              mainAxisSpacing: 8,
+                            ),
+                        itemBuilder: (context, index) {
+                          final image = state.travelPhotos[index];
+                          return GridTile(
+                            child: Stack(
+                              children: [
+                                Image(image: FileImage(image)),
+                                Positioned(
+                                  left: 0,
+                                  top: 0,
+                                  child: IconButton(
+                                    onPressed: () => onImageRemoved(image),
+                                    icon: const Icon(FontAwesomeIcons.remove),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+
+                  Center(
+                    child: Text(
+                      'Add photos to make your travel more memorable and visually appealing',
+                      style: Theme.of(context).textTheme.bodySmall,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.all(cardPadding),
+            child: Consumer<RegisterTravelProvider>(
+              builder: (_, state, __) {
+                final isTravelValid = state.isTravelValid;
+                debugPrint('Is travel valid: $isTravelValid');
+
+                final baseColor = Theme.of(
+                  context,
+                ).elevatedButtonTheme.style!.backgroundColor!.resolve({})!;
+
+                return SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: isTravelValid
+                          ? baseColor
+                          : baseColor.withOpacity(0.3),
+                    ),
+                    onPressed: () async {
+                      await onTravelRegistered();
+                      _travelTitleController.clear();
+                      _startDateController.clear();
+                      _endDateController.clear();
+                    },
+                    child: Text(as.title_register_travel),
+                  ),
                 );
               },
             ),
-          ],
-        ),
+          ),
+          const Padding(padding: EdgeInsets.all(12)),
+        ],
       ),
     );
   }
@@ -868,386 +1177,6 @@ class _ParticipantModalState extends State<_ParticipantModal> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class RoutePlanning extends StatelessWidget {
-  const RoutePlanning({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
-
-    final baseColor = Theme.of(
-      context,
-    ).elevatedButtonTheme.style!.backgroundColor!.resolve({})!;
-
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(cardPadding),
-        child: Row(
-          spacing: 12,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 12,
-                children: [
-                  Text(
-                    as.route_planning,
-                    style: Theme.of(context).textTheme.displaySmall,
-                  ),
-                  Text(as.route_planning_label),
-                ],
-              ),
-            ),
-
-            Expanded(
-              child: Consumer<RegisterTravelProvider>(
-                builder: (_, state, __) {
-                  return ElevatedButton(
-                    /// TODO: go to map page
-                    onPressed: () {
-                      context.push(Routes.travelMap);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          state.startDate != null && state.endDate != null
-                          ? baseColor
-                          : baseColor.withOpacity(0.3),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.location_on),
-                        Text(as.open_map),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class RegisteredStops extends StatefulWidget {
-  const RegisteredStops({super.key});
-
-  @override
-  State<RegisteredStops> createState() => _RegisteredStopsState();
-}
-
-class _RegisteredStopsState extends State<RegisteredStops> {
-  void onStopRemoved(TravelStop stop) async {
-    final travelState = Provider.of<RegisterTravelProvider>(
-      context,
-      listen: false,
-    );
-    final markersState = Provider.of<MapMarkersProvider>(
-      context,
-      listen: false,
-    );
-
-    final as = AppLocalizations.of(context)!;
-
-    final remove = await showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          /// TODO: intl
-          title: Text('Remove Stop'),
-          content: Text('Do you really want to remove this stop?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(as.no),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(as.yes),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (remove != null && remove) {
-      travelState.removeTravelStop(stop);
-      markersState.removeMarker(stop);
-    }
-
-    // Navigator.of(context).pop();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
-
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(cardPadding),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  as.registered_stops,
-                  style: Theme.of(context).textTheme.displaySmall,
-                ),
-                Consumer<RegisterTravelProvider>(
-                  builder: (_, state, __) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text('${state.stops.length} ${as.stops}'),
-                    );
-                  },
-                ),
-              ],
-            ),
-            // Padding(padding: EdgeInsets.all(26)),
-            Consumer<RegisterTravelProvider>(
-              builder: (context, state, child) {
-                final stops = state.stops;
-                if (stops.isEmpty) {
-                  return Column(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(top: 42),
-                        child: Icon(Icons.location_on, size: 42),
-                      ),
-                      const Padding(padding: EdgeInsets.all(12)),
-                      Text(as.no_stops_registered, textAlign: TextAlign.center),
-                    ],
-                  );
-                } else {
-                  return ListView.separated(
-                    itemCount: stops.length,
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    separatorBuilder: (context, index) {
-                      return const Padding(padding: EdgeInsets.all(12));
-                    },
-                    itemBuilder: (context, index) {
-                      final stop = state.stops[index];
-                      return ListTile(
-                        shape: Theme.of(context).cardTheme.shape,
-                        leading: Builder(
-                          builder: (context) {
-                            if (index == 0) {
-                              /// First stop
-                              return CircleAvatar(
-                                backgroundColor: Theme.of(context)
-                                    .elevatedButtonTheme
-                                    .style!
-                                    .backgroundColor!
-                                    .resolve({}),
-                                child: const Center(
-                                  child: Icon(FontAwesomeIcons.paperPlane),
-                                ),
-                              );
-                            } else if (index == stops.length - 1) {
-                              /// Last stop
-                              return CircleAvatar(
-                                backgroundColor: Theme.of(context)
-                                    .elevatedButtonTheme
-                                    .style!
-                                    .backgroundColor!
-                                    .resolve({}),
-                                child: const Center(
-                                  child: Icon(FontAwesomeIcons.flag),
-                                ),
-                              );
-                            } else {
-                              /// Waypoint
-                              return CircleAvatar(
-                                backgroundColor: Theme.of(context)
-                                    .elevatedButtonTheme
-                                    .style!
-                                    .backgroundColor!
-                                    .resolve({}),
-                                child: const Center(
-                                  child: Icon(Icons.location_on),
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                        title: Text('${stop.place.city!}'),
-                        subtitle: Text(
-                          '${stop.place.city!}, ${stop.place.country!}',
-                        ),
-                        trailing: IconButton(
-                          onPressed: () => onStopRemoved(stop),
-                          icon: const Icon(FontAwesomeIcons.remove),
-                        ),
-                      );
-                    },
-                  );
-                }
-              },
-            ),
-            const Padding(padding: EdgeInsets.all(8.0)),
-            const Divider(),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Center(
-                /// TODO: intl
-                child: Text(
-                  'Use the map to modify your route or to add more waypoints',
-                  style: Theme.of(context).textTheme.bodySmall,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _TravelPhotos extends StatefulWidget {
-  const _TravelPhotos({super.key});
-
-  @override
-  State<_TravelPhotos> createState() => _TravelPhotosState();
-}
-
-class _TravelPhotosState extends State<_TravelPhotos> {
-  void onImagePicked() async {
-    final fileService = FileService();
-
-    final file = await fileService.pickImage();
-
-    if (file == null) return;
-
-    final state = context.read<RegisterTravelProvider>();
-    state.addTravelPhoto(file);
-  }
-
-  void onImageRemoved(File image) async {
-    final state = context.read<RegisterTravelProvider>();
-    state.removeTravelPhoto(image);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(cardPadding),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          spacing: 12,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  'Travel Photos',
-                  style: Theme.of(context).textTheme.displaySmall,
-                ),
-              ],
-            ),
-            const Padding(padding: EdgeInsets.all(16)),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 48),
-                decoration: BoxDecoration(
-                  border: BoxBorder.all(
-                    color: Theme.of(context).iconTheme.color!,
-                    width: 1,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Consumer<RegisterTravelProvider>(
-                  builder: (_, state, __) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      spacing: 6,
-                      children: [
-                        const Icon(Icons.camera_alt, size: 42),
-                        Text(
-                          'Add Travel Photos',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        Text(
-                          'Tap to select photos',
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                        Text(
-                          '0 of 5 photos added',
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                        const Padding(padding: EdgeInsets.all(2)),
-                        UnconstrainedBox(
-                          child: ElevatedButton(
-                            onPressed: onImagePicked,
-                            child: Row(
-                              children: [
-                                const Icon(Icons.file_upload_outlined),
-                                Text('Choose Photos'),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ),
-            ),
-
-            Consumer<RegisterTravelProvider>(
-              builder: (_, state, __) {
-                return GridView.builder(
-                  shrinkWrap: true,
-                  itemCount: state.travelPhotos.length,
-                  physics: NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                  ),
-                  itemBuilder: (context, index) {
-                    final image = state.travelPhotos[index];
-                    return GridTile(
-                      child: Stack(
-                        children: [
-                          Image(image: FileImage(image)),
-                          IconButton(
-                            onPressed: () => onImageRemoved(image),
-                            icon: Icon(FontAwesomeIcons.remove),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-
-            Center(
-              child: Text(
-                'Add photos to make your travel more memorable and visually appealing',
-                style: Theme.of(context).textTheme.bodySmall,
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

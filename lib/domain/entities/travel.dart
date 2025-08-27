@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'enums.dart';
 import 'participant.dart';
 import 'travel_stop.dart';
@@ -27,25 +29,22 @@ class Travel {
 
   final TravelStatus status;
 
-  /// Named constructor for the Travel
+  final List<File> photos;
+
   Travel({
     this.travelId,
     required this.travelTitle,
-    required this.participants,
     required this.startDate,
     required this.endDate,
     required this.transportType,
+    required this.participants,
     required this.stops,
+    required this.photos,
     this.status = TravelStatus.upcoming,
   });
 
   /// Returns a [Duration] that represents the total duration of the travel
   Duration get totalDuration => endDate!.difference(startDate!);
-
-  @override
-  String toString() {
-    return 'Travel{travelId: $travelId, travelTitle: $travelTitle, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: $stops, status: $status}';
-  }
 
   Travel copyWith({
     int? travelId,
@@ -56,6 +55,7 @@ class Travel {
     List<Participant>? participants,
     List<TravelStop>? stops,
     TravelStatus? status,
+    List<File>? photos,
   }) {
     return Travel(
       travelId: travelId ?? this.travelId,
@@ -66,6 +66,12 @@ class Travel {
       participants: participants ?? this.participants,
       stops: stops ?? this.stops,
       status: status ?? this.status,
+      photos: photos ?? this.photos,
     );
+  }
+
+  @override
+  String toString() {
+    return 'Travel{travelId: $travelId, travelTitle: $travelTitle, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: $stops, status: $status, photos: $photos}';
   }
 }
