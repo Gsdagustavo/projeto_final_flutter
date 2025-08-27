@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
@@ -100,7 +101,7 @@ class TravelRepositoryImpl implements TravelRepository {
 
       if (travelModel.photos.isNotEmpty) {
         for (final photoData in travelModel.photos) {
-          final photoMap = {PhotosTable.photo: photoData.readAsBytesSync()};
+          final photoMap = {PhotosTable.photo: photoData?.readAsBytesSync()};
 
           final photoId = await txn.insert(PhotosTable.tableName, photoMap);
 
@@ -282,8 +283,25 @@ class TravelRepositoryImpl implements TravelRepository {
           whereArgs: [travelId],
         );
 
-        for (final photoData in travelPhotosData) {
-          debugPrint('Photo data: $photoData');
+        for (final travelPhotoData in travelPhotosData) {
+          final photoId = travelPhotoData[TravelPhotosTable.photoId] as int;
+
+          final photoData = await txn.query(
+            PhotosTable.tableName,
+            where: '${PhotosTable.photoId} = ?',
+            whereArgs: [photoId],
+          );
+
+          if (photoData.isEmpty || photoData.first.isEmpty) continue;
+
+          final bytes = photoData.first[PhotosTable.photo] as Uint8List;
+
+          debugPrint(bytes.toString());
+
+          final filename = '${photoData.first[PhotosTable.photoId]}.png';
+          final file = File('${Directory.systemTemp.path}/$filename');
+          file.writeAsBytesSync(bytes);
+          photos.add(file);
         }
 
         travels.add(
@@ -297,13 +315,13 @@ class TravelRepositoryImpl implements TravelRepository {
       }
     });
 
-    for (final travel in travels) {
-      debugPrint('Travel: $travel');
-
-      for (final travelStop in travel.stops) {
-        debugPrint('Stop: ${travelStop.toString()}');
-      }
-    }
+    // for (final travel in travels) {
+    //   debugPrint('Travel: $travel');
+    //
+    //   for (final travelStop in travel.stops) {
+    //     debugPrint('Stop: ${travelStop.toString()}');
+    //   }
+    // }
     return travels.map((e) => e.toEntity()).toList();
   }
 

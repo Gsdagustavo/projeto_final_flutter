@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating/flutter_rating.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/extensions/date_extensions.dart';
@@ -47,11 +46,12 @@ class _HomePageState extends State<HomePage> {
 
           final travels = travelListProvider.travels;
 
-          if (travels.isEmpty) {
-            return Center(
-              child: Lottie.asset('assets/animations/traveler.json'),
-            );
-          }
+          /// TODO:
+          // if (travels.isEmpty) {
+          //   return Center(
+          //     child: Lottie.asset('assets/animations/traveler.json'),
+          //   );
+          // }
 
           return ListView.separated(
             shrinkWrap: true,
@@ -112,16 +112,20 @@ class _TravelWidget extends StatelessWidget {
           children: [
             Stack(
               children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(12),
-                  ),
-                  child: Image.asset(
-                    /// TODO: add actual travel image
-                    'assets/images/tokyo.jpg',
-                    fit: BoxFit.cover,
-                  ),
+                Builder(
+                  builder: (context) {
+                    if (travel.photos.isEmpty) {
+                      return Image.asset('assets/images/placeholder.png');
+                    }
+
+                    return ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        topRight: Radius.circular(12),
+                      ),
+                      child: Image.file(travel.photos.first!),
+                    );
+                  },
                 ),
 
                 Positioned(
