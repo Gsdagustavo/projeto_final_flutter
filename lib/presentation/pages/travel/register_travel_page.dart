@@ -914,7 +914,7 @@ class RoutePlanning extends StatelessWidget {
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [Icon(Icons.pin_drop), Text(as.open_map)],
+                      children: [Icon(Icons.location_on), Text(as.open_map)],
                     ),
                   );
                 },
@@ -1013,7 +1013,7 @@ class _RegisteredStopsState extends State<RegisteredStops> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(top: 42),
-                        child: Icon(Icons.pin_drop, size: 42),
+                        child: Icon(Icons.location_on, size: 42),
                       ),
                       Padding(padding: EdgeInsets.all(12)),
                       Text(as.no_stops_registered, textAlign: TextAlign.center),

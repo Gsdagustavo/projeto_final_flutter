@@ -154,7 +154,7 @@ class _TravelWidget extends StatelessWidget {
                   Text(travel.travelTitle, style: TextStyle(fontSize: 18)),
                   Row(
                     children: [
-                      Icon(Icons.pin_drop),
+                      Icon(Icons.location_on),
                       Padding(padding: EdgeInsets.all(4)),
                       Builder(
                         builder: (context) {
