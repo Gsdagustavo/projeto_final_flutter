@@ -15,7 +15,7 @@ class TravelModel {
   final List<ParticipantModel> participants;
   final List<TravelStopModel> stops;
   final TravelStatus status;
-  final List<File> photos;
+  final List<File?> photos;
 
   TravelModel({
     this.travelId,

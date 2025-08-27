@@ -29,7 +29,7 @@ class Travel {
 
   final TravelStatus status;
 
-  final List<File> photos;
+  final List<File?> photos;
 
   Travel({
     this.travelId,
