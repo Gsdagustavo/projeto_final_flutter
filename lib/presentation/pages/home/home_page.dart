@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
       body: Consumer<TravelListProvider>(
         builder: (context, travelListProvider, child) {
           if (travelListProvider.isLoading) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           final travels = travelListProvider.travels;
@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
 
           return ListView.separated(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: travels.length,
             separatorBuilder: (_, __) => const SizedBox(height: 26),
             itemBuilder: (context, index) {
@@ -113,7 +113,7 @@ class _TravelWidget extends StatelessWidget {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(12),
                     topRight: Radius.circular(12),
                   ),
@@ -147,7 +147,7 @@ class _TravelWidget extends StatelessWidget {
                 ),
               ],
             ),
-            Padding(padding: EdgeInsets.all(8)),
+            const Padding(padding: EdgeInsets.all(8)),
 
             Padding(
               padding: const EdgeInsets.all(12.0),
@@ -155,11 +155,12 @@ class _TravelWidget extends StatelessWidget {
                 spacing: 16,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  /// TODO: theme
                   Text(travel.travelTitle, style: TextStyle(fontSize: 18)),
                   Row(
                     children: [
-                      Icon(Icons.location_on),
-                      Padding(padding: EdgeInsets.all(4)),
+                      const Icon(Icons.location_on),
+                      const Padding(padding: EdgeInsets.all(4)),
                       Builder(
                         builder: (context) {
                           if (travel.stops.last.place.city! !=
@@ -167,10 +168,8 @@ class _TravelWidget extends StatelessWidget {
                             return Row(
                               children: [
                                 Text(travel.stops.first.place.city!),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 5,
-                                  ),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
                                   child: Icon(Icons.arrow_forward, size: 12),
                                 ),
                                 Text(travel.stops.last.place.city!),
@@ -188,8 +187,8 @@ class _TravelWidget extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.calendar_today),
-                          Padding(padding: EdgeInsets.all(4)),
+                          const Icon(Icons.calendar_today),
+                          const Padding(padding: EdgeInsets.all(4)),
                           Consumer<UserPreferencesProvider>(
                             builder: (_, state, __) {
                               return Text.rich(
@@ -217,7 +216,7 @@ class _TravelWidget extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerRight,
                         child: Container(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                             vertical: 4,
                             horizontal: 8,
                           ),
@@ -297,7 +296,7 @@ class _ReviewModalState extends State<ReviewModal> {
     final validations = FormValidations(as);
 
     return SingleChildScrollView(
-      physics: BouncingScrollPhysics(
+      physics: const BouncingScrollPhysics(
         decelerationRate: ScrollDecelerationRate.normal,
       ),
       child: Padding(
@@ -311,7 +310,7 @@ class _ReviewModalState extends State<ReviewModal> {
                   onPressed: () {
                     context.pop();
                   },
-                  icon: Icon(Icons.close),
+                  icon: const Icon(Icons.close),
                 ),
                 Text(
                   as.give_a_review,
@@ -319,7 +318,7 @@ class _ReviewModalState extends State<ReviewModal> {
                 ),
               ],
             ),
-            Padding(padding: EdgeInsets.all(16)),
+            const Padding(padding: EdgeInsets.all(16)),
             Consumer<ReviewProvider>(
               builder: (_, reviewState, __) {
                 return StarRating(
@@ -332,7 +331,7 @@ class _ReviewModalState extends State<ReviewModal> {
                 );
               },
             ),
-            Padding(padding: EdgeInsets.all(16)),
+            const Padding(padding: EdgeInsets.all(16)),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -340,7 +339,7 @@ class _ReviewModalState extends State<ReviewModal> {
                   as.detail_review,
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
-                Padding(padding: EdgeInsets.all(6)),
+                const Padding(padding: EdgeInsets.all(6)),
                 Consumer<ReviewProvider>(
                   builder: (_, reviewState, __) {
                     return Form(
@@ -365,7 +364,7 @@ class _ReviewModalState extends State<ReviewModal> {
                 ),
               ],
             ),
-            Padding(padding: EdgeInsets.all(16)),
+            const Padding(padding: EdgeInsets.all(16)),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -396,7 +395,7 @@ class _ReviewModalState extends State<ReviewModal> {
                           border: BoxBorder.all(color: Colors.black, width: 1),
                           borderRadius: BorderRadius.circular(32),
                         ),
-                        padding: EdgeInsets.all(24),
+                        padding: const EdgeInsets.all(24),
                         child: Column(
                           children: [
                             Icon(
@@ -414,7 +413,7 @@ class _ReviewModalState extends State<ReviewModal> {
               ],
             ),
 
-            Padding(padding: EdgeInsets.all(16)),
+            const Padding(padding: EdgeInsets.all(16)),
             Consumer<ReviewProvider>(
               builder: (_, reviewState, __) {
                 return InkWell(

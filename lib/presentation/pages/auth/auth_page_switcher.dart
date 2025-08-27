@@ -45,13 +45,13 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
 
     return Stack(
       children: [
-        Positioned(right: 22, child: ThemeToggleButton()),
+        const Positioned(right: 22, child: ThemeToggleButton()),
 
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildSwitcherOption(as.login, 0),
-            Padding(padding: EdgeInsets.all(12)),
+            const Padding(padding: EdgeInsets.all(12)),
             _buildSwitcherOption(AppLocalizations.of(context)!.register, 1),
           ],
         ),
@@ -99,9 +99,9 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
     return Scaffold(
       body: Column(
         children: [
-          Padding(padding: const EdgeInsets.all(30)),
+          const Padding(padding: EdgeInsets.all(30)),
           _buildSwitcherBar(),
-          Padding(padding: const EdgeInsets.all(22)),
+          const Padding(padding: EdgeInsets.all(22)),
           Expanded(
             child: PageView(
               controller: _pageController,

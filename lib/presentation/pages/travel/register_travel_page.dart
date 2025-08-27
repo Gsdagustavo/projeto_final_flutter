@@ -64,12 +64,12 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                     as.travel_details,
                     style: Theme.of(context).textTheme.displaySmall,
                   ),
-                  Padding(padding: EdgeInsets.all(26)),
+                  const Padding(padding: EdgeInsets.all(26)),
                   Text(
                     as.travel_title_label,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  Padding(padding: EdgeInsets.all(2)),
+                  const Padding(padding: EdgeInsets.all(2)),
                   Form(
                     key: _travelTitleFormKey,
                     child: TextFormField(
@@ -80,16 +80,16 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                       ),
                     ),
                   ),
-                  Padding(padding: EdgeInsets.all(12)),
+                  const Padding(padding: EdgeInsets.all(12)),
                   Text(
                     as.transport_type_label,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  Padding(padding: EdgeInsets.all(2)),
+                  const Padding(padding: EdgeInsets.all(2)),
                   DropdownButtonFormField<TransportType>(
                     borderRadius: BorderRadius.circular(12),
                     value: _selectedTransportType,
-                    icon: Icon(Icons.keyboard_arrow_down),
+                    icon: const Icon(Icons.keyboard_arrow_down),
                     isExpanded: true,
                     items: [
                       for (final entry in _transportTypesIcons.entries)
@@ -98,7 +98,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                           child: Row(
                             children: [
                               Icon(entry.value),
-                              Padding(padding: EdgeInsets.all(6)),
+                              const Padding(padding: EdgeInsets.all(6)),
                               Text(entry.key.getIntlTransportType(context)),
                             ],
                           ),
@@ -112,8 +112,8 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                       });
                     },
                   ),
-                  Padding(padding: EdgeInsets.all(12)),
-                  DateRangePickerRow(),
+                  const Padding(padding: EdgeInsets.all(12)),
+                  const DateRangePickerRow(),
                 ],
               ),
             ),
@@ -156,6 +156,8 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                             builder: (context) {
                               return CustomDialog(
                                 title: as.warning,
+
+                                /// TODO: intl
                                 content: Text('Invalid travel title'),
                                 isError: true,
                               );
@@ -387,7 +389,7 @@ class _AddParticipantState extends State<AddParticipant>
       builder: (context) {
         return AlertDialog(
           title: Text(as.participant_added),
-          icon: Icon(Icons.check, color: Colors.green),
+          icon: const Icon(Icons.check, color: Colors.green),
         );
       },
     );
@@ -468,7 +470,7 @@ class _AddParticipantState extends State<AddParticipant>
                     );
                   },
                 ),
-                Padding(padding: EdgeInsets.all(12)),
+                const Padding(padding: EdgeInsets.all(12)),
                 Flexible(
                   child: ElevatedButton(
                     onPressed: () => _showParticipantModal(context),
@@ -481,7 +483,7 @@ class _AddParticipantState extends State<AddParticipant>
               builder: (_, state, __) {
                 return ImplicitlyAnimatedList<Participant>(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   items: state.participants,
                   areItemsTheSame: (oldItem, newItem) {
                     return oldItem.hashCode == newItem.hashCode;
@@ -491,7 +493,7 @@ class _AddParticipantState extends State<AddParticipant>
                       curve: Curves.easeInOut,
                       animation: animation,
                       child: Card(
-                        margin: EdgeInsets.symmetric(
+                        margin: const EdgeInsets.symmetric(
                           horizontal: 6,
                           vertical: 16,
                         ),
@@ -527,7 +529,7 @@ class _AddParticipantState extends State<AddParticipant>
                           trailing: IconButton(
                             onPressed: () =>
                                 onParticipantRemovePress(participant),
-                            icon: Icon(FontAwesomeIcons.remove),
+                            icon: const Icon(FontAwesomeIcons.remove),
                           ),
                           subtitle: Text(
                             '${as.age}: ${participant.age.toString()}',
@@ -616,7 +618,7 @@ class _ParticipantModalState extends State<_ParticipantModal> {
       clipBehavior: Clip.none,
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(32),
             topRight: Radius.circular(32),
           ),
@@ -639,7 +641,7 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                         child: Container(
                           width: 132,
                           height: 132,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.black,
                           ),
@@ -856,7 +858,7 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                       radius: 20,
                       child: CircleAvatar(
                         radius: 20,
-                        child: Center(child: Icon(Icons.edit, size: 32)),
+                        child: const Center(child: Icon(Icons.edit, size: 32)),
                       ),
                     );
                   },
@@ -883,7 +885,7 @@ class RoutePlanning extends StatelessWidget {
 
     return Card(
       child: Padding(
-        padding: EdgeInsets.all(cardPadding),
+        padding: const EdgeInsets.all(cardPadding),
         child: Row(
           spacing: 12,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -918,7 +920,10 @@ class RoutePlanning extends StatelessWidget {
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [Icon(Icons.location_on), Text(as.open_map)],
+                      children: [
+                        const Icon(Icons.location_on),
+                        Text(as.open_map),
+                      ],
                     ),
                   );
                 },
@@ -986,7 +991,7 @@ class _RegisteredStopsState extends State<RegisteredStops> {
 
     return Card(
       child: Padding(
-        padding: EdgeInsets.all(cardPadding),
+        padding: const EdgeInsets.all(cardPadding),
         child: Column(
           children: [
             Row(
@@ -1015,21 +1020,21 @@ class _RegisteredStopsState extends State<RegisteredStops> {
                 if (stops.isEmpty) {
                   return Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 42),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 42),
                         child: Icon(Icons.location_on, size: 42),
                       ),
-                      Padding(padding: EdgeInsets.all(12)),
+                      const Padding(padding: EdgeInsets.all(12)),
                       Text(as.no_stops_registered, textAlign: TextAlign.center),
                     ],
                   );
                 } else {
                   return ListView.separated(
                     itemCount: stops.length,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     separatorBuilder: (context, index) {
-                      return Padding(padding: EdgeInsets.all(12));
+                      return const Padding(padding: EdgeInsets.all(12));
                     },
                     itemBuilder: (context, index) {
                       final stop = state.stops[index];
@@ -1045,7 +1050,7 @@ class _RegisteredStopsState extends State<RegisteredStops> {
                                     .style!
                                     .backgroundColor!
                                     .resolve({}),
-                                child: Center(
+                                child: const Center(
                                   child: Icon(FontAwesomeIcons.paperPlane),
                                 ),
                               );
@@ -1057,7 +1062,7 @@ class _RegisteredStopsState extends State<RegisteredStops> {
                                     .style!
                                     .backgroundColor!
                                     .resolve({}),
-                                child: Center(
+                                child: const Center(
                                   child: Icon(FontAwesomeIcons.flag),
                                 ),
                               );
@@ -1069,7 +1074,9 @@ class _RegisteredStopsState extends State<RegisteredStops> {
                                     .style!
                                     .backgroundColor!
                                     .resolve({}),
-                                child: Center(child: Icon(Icons.location_on)),
+                                child: const Center(
+                                  child: Icon(Icons.location_on),
+                                ),
                               );
                             }
                           },
@@ -1080,7 +1087,7 @@ class _RegisteredStopsState extends State<RegisteredStops> {
                         ),
                         trailing: IconButton(
                           onPressed: () => onStopRemoved(stop),
-                          icon: Icon(FontAwesomeIcons.remove),
+                          icon: const Icon(FontAwesomeIcons.remove),
                         ),
                       );
                     },
@@ -1088,8 +1095,8 @@ class _RegisteredStopsState extends State<RegisteredStops> {
                 }
               },
             ),
-            Padding(padding: const EdgeInsets.all(8.0)),
-            Divider(),
+            const Padding(padding: EdgeInsets.all(8.0)),
+            const Divider(),
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Center(
@@ -1115,7 +1122,7 @@ class _TravelPhotos extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: EdgeInsets.all(cardPadding),
+        padding: const EdgeInsets.all(cardPadding),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: 12,
@@ -1159,13 +1166,13 @@ class _TravelPhotos extends StatelessWidget {
                       '0 of 5 photos added',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
-                    Padding(padding: EdgeInsets.all(2)),
+                    const Padding(padding: EdgeInsets.all(2)),
                     UnconstrainedBox(
                       child: ElevatedButton(
                         onPressed: () {},
                         child: Row(
                           children: [
-                            Icon(Icons.file_upload_outlined),
+                            const Icon(Icons.file_upload_outlined),
                             Text('Choose Photos'),
                           ],
                         ),

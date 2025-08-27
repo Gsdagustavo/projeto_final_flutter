@@ -107,7 +107,8 @@ class _TravelMapState extends State<TravelMap> {
 
       body: Builder(
         builder: (context) {
-          if (_isCreatingMap) return Center(child: CircularProgressIndicator());
+          if (_isCreatingMap)
+            return const Center(child: CircularProgressIndicator());
 
           return Stack(
             children: [
@@ -126,9 +127,7 @@ class _TravelMapState extends State<TravelMap> {
                     .map(
                       (marker) => marker.copyWith(
                         onTapParam: () async {
-                          final stop = marker
-                              .markerId
-                              .value;
+                          final stop = marker.markerId.value;
                           final travelStop = context
                               .read<RegisterTravelProvider>()
                               .stops
@@ -162,7 +161,7 @@ class _TravelMapState extends State<TravelMap> {
                         borderRadius: BorderRadius.circular(12),
                         color: Colors.grey.withOpacity(0.75),
                       ),
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         vertical: 10,
                         horizontal: 14,
                       ),
@@ -171,7 +170,7 @@ class _TravelMapState extends State<TravelMap> {
                           return Row(
                             spacing: 12,
                             children: [
-                              Icon(Icons.route, size: 18),
+                              const Icon(Icons.route, size: 18),
                               Text('${state.stops.length} stop(s)'),
                             ],
                           );
@@ -205,7 +204,7 @@ class _TravelMapState extends State<TravelMap> {
                       bottom: 30,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                             vertical: 16,
                             horizontal: 64,
                           ),
@@ -223,7 +222,7 @@ class _TravelMapState extends State<TravelMap> {
                     );
                   }
 
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 },
               ),
             ],
@@ -411,7 +410,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
         return AlertDialog(
           /// TODO: intl
           title: Text('Stop added successfully!'),
-          icon: Icon(Icons.check, color: Colors.green),
+          icon: const Icon(Icons.check, color: Colors.green),
         );
       },
     );
@@ -552,16 +551,10 @@ class _TravelStopModalState extends State<_TravelStopModal> {
 
   @override
   Widget build(BuildContext context) {
-    final travelState = Provider.of<RegisterTravelProvider>(
-      context,
-      listen: false,
-    );
-
     debugPrint('Travel stop modal build called. Stop passed: ${widget.stop}');
 
     final as = AppLocalizations.of(context)!;
     final placeInfo = widget.place.toString();
-    final useStop = widget.stop;
 
     final locale = Provider.of<UserPreferencesProvider>(
       context,
@@ -588,9 +581,9 @@ class _TravelStopModalState extends State<_TravelStopModal> {
                 ),
               ],
             ),
-            Padding(padding: EdgeInsets.all(4)),
+            const Padding(padding: EdgeInsets.all(4)),
             Text(placeInfo, style: Theme.of(context).textTheme.displaySmall),
-            Padding(padding: EdgeInsets.all(4)),
+            const Padding(padding: EdgeInsets.all(4)),
             Row(
               children: [
                 Expanded(
@@ -604,9 +597,6 @@ class _TravelStopModalState extends State<_TravelStopModal> {
                         decoration: InputDecoration(
                           /// TODO: intl
                           hintText: 'dd/mm/aaaa',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
                           suffixIcon: const Icon(Icons.calendar_today),
                         ),
                         readOnly: true,
@@ -627,9 +617,6 @@ class _TravelStopModalState extends State<_TravelStopModal> {
                         decoration: InputDecoration(
                           /// TODO: intl
                           hintText: 'dd/mm/aaaa',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
                           suffixIcon: const Icon(Icons.calendar_today),
                         ),
                         readOnly: true,
@@ -648,7 +635,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
               style: Theme.of(context).textTheme.displaySmall,
             ),
             ListView.separated(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 final experience = Experience.values[index];
@@ -683,14 +670,14 @@ class _TravelStopModalState extends State<_TravelStopModal> {
                         ),
                       ),
                       trailing: _selectedExperiences[experience] == true
-                          ? Icon(Icons.check, color: Colors.green)
-                          : SizedBox.shrink(),
+                          ? const Icon(Icons.check, color: Colors.green)
+                          : const SizedBox.shrink(),
                     );
                   },
                 );
               },
               separatorBuilder: (context, index) {
-                return Padding(padding: EdgeInsets.all(8));
+                return const Padding(padding: EdgeInsets.all(8));
               },
               itemCount: Experience.values.length,
             ),

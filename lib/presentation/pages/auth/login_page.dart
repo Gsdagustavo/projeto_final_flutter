@@ -104,15 +104,17 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               Text(
                 as.login,
-                style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 48,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
 
               const Padding(padding: EdgeInsets.all(12)),
 
-              Center(
+              const Center(
                 child: FabAuthAnimation(
-                  asset:
-                      'assets/animations/traveler.json',
+                  asset: 'assets/animations/traveler.json',
                   height: 300,
                 ),
               ),

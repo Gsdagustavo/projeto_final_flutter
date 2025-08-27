@@ -79,20 +79,20 @@ class _SettingsPageState extends State<SettingsPage> {
                           );
                           setState(() => _profilePicture = image);
                         },
-                        child: CircleAvatar(
+                        child: const CircleAvatar(
                           radius: 14,
                           child: Icon(Icons.camera_alt, size: 16),
                         ),
                       ),
                     ],
                   ),
-                  Padding(padding: EdgeInsets.all(16)),
+                  const Padding(padding: EdgeInsets.all(16)),
                   Text(user.email!),
                 ],
               ),
             ),
           ),
-          Padding(padding: EdgeInsets.all(16)),
+          const     Padding(padding: EdgeInsets.all(16)),
 
           Card(
             child: Padding(
@@ -127,7 +127,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
           ),
-          Padding(padding: EdgeInsets.all(16)),
+          const Padding(padding: EdgeInsets.all(16)),
 
           Card(
             child: ListTile(
@@ -147,7 +147,7 @@ class _SettingsPageState extends State<SettingsPage> {
               },
             ),
           ),
-          Padding(padding: EdgeInsets.all(16)),
+          const   Padding(padding: EdgeInsets.all(16)),
 
           SizedBox(
             width: double.infinity,
@@ -195,9 +195,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   children: [
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 32),
-                        child: const Icon(Icons.logout),
+                      child: const Padding(
+                        padding:  EdgeInsets.only(left: 32),
+                        child:  Icon(Icons.logout),
                       ),
                     ),
                     Text(as.logout),

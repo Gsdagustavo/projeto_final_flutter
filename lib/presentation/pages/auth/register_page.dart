@@ -155,13 +155,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-
               const Padding(padding: EdgeInsets.all(12)),
-
-              FabAuthAnimation(asset: 'assets/animations/road_trip.json'),
-
+              const FabAuthAnimation(asset: 'assets/animations/road_trip.json'),
               const Padding(padding: EdgeInsets.all(12)),
-
               Form(
                 key: _formKey,
                 child: Column(
