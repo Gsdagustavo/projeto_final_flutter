@@ -16,6 +16,7 @@ import '../../../services/file_service.dart';
 import '../../extensions/enums_extensions.dart';
 import '../../providers/map_markers_provider.dart';
 import '../../providers/register_travel_provider.dart';
+import '../../providers/travel_list_provider.dart';
 import '../../util/app_routes.dart';
 import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_page.dart';
@@ -163,6 +164,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                         }
 
                         await state.registerTravel(_travelTitleController.text);
+                        await context.read<TravelListProvider>().update();
 
                         if (state.hasError) {
                           await showDialog(

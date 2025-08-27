@@ -35,6 +35,10 @@ class _HomePageState extends State<HomePage> {
 
     return FabPage(
       title: as.title_home,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async =>
+            await context.read<TravelListProvider>().update(),
+      ),
       body: Consumer<TravelListProvider>(
         builder: (context, travelListProvider, child) {
           if (travelListProvider.isLoading) {
