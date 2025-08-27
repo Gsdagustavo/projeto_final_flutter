@@ -1115,8 +1115,29 @@ class _RegisteredStopsState extends State<RegisteredStops> {
   }
 }
 
-class _TravelPhotos extends StatelessWidget {
+class _TravelPhotos extends StatefulWidget {
   const _TravelPhotos({super.key});
+
+  @override
+  State<_TravelPhotos> createState() => _TravelPhotosState();
+}
+
+class _TravelPhotosState extends State<_TravelPhotos> {
+  void onImagePicked() async {
+    final fileService = FileService();
+
+    final file = await fileService.pickImage();
+
+    if (file == null) return;
+
+    final state = context.read<RegisterTravelProvider>();
+    state.addTravelPhoto(file);
+  }
+
+  void onImageRemoved(File image) async {
+    final state = context.read<RegisterTravelProvider>();
+    state.removeTravelPhoto(image);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1136,12 +1157,12 @@ class _TravelPhotos extends StatelessWidget {
                 ),
               ],
             ),
-            Padding(padding: EdgeInsets.all(16)),
+            const Padding(padding: EdgeInsets.all(16)),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 width: double.infinity,
-                padding: EdgeInsets.symmetric(vertical: 48),
+                padding: const EdgeInsets.symmetric(vertical: 48),
                 decoration: BoxDecoration(
                   border: BoxBorder.all(
                     color: Theme.of(context).iconTheme.color!,
@@ -1149,39 +1170,74 @@ class _TravelPhotos extends StatelessWidget {
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  spacing: 6,
-                  children: [
-                    Icon(Icons.camera_alt, size: 42),
-                    Text(
-                      'Add Travel Photos',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    Text(
-                      'Tap to select photos',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    Text(
-                      '0 of 5 photos added',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    const Padding(padding: EdgeInsets.all(2)),
-                    UnconstrainedBox(
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: Row(
-                          children: [
-                            const Icon(Icons.file_upload_outlined),
-                            Text('Choose Photos'),
-                          ],
+                child: Consumer<RegisterTravelProvider>(
+                  builder: (_, state, __) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      spacing: 6,
+                      children: [
+                        const Icon(Icons.camera_alt, size: 42),
+                        Text(
+                          'Add Travel Photos',
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
-                      ),
-                    ),
-                  ],
+                        Text(
+                          'Tap to select photos',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        Text(
+                          '0 of 5 photos added',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        const Padding(padding: EdgeInsets.all(2)),
+                        UnconstrainedBox(
+                          child: ElevatedButton(
+                            onPressed: onImagePicked,
+                            child: Row(
+                              children: [
+                                const Icon(Icons.file_upload_outlined),
+                                Text('Choose Photos'),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
             ),
+
+            Consumer<RegisterTravelProvider>(
+              builder: (_, state, __) {
+                return GridView.builder(
+                  shrinkWrap: true,
+                  itemCount: state.travelPhotos.length,
+                  physics: NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                  ),
+                  itemBuilder: (context, index) {
+                    final image = state.travelPhotos[index];
+                    return GridTile(
+                      child: Stack(
+                        children: [
+                          Image(image: FileImage(image)),
+                          IconButton(
+                            onPressed: () => onImageRemoved(image),
+                            icon: Icon(FontAwesomeIcons.remove),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+
             Center(
               child: Text(
                 'Add photos to make your travel more memorable and visually appealing',

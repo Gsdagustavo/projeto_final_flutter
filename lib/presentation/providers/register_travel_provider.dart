@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/enums.dart';
@@ -28,6 +30,8 @@ class RegisterTravelProvider with ChangeNotifier {
 
   DateTime? _startDate = DateTime.now();
   DateTime? _endDate = DateTime.now().add(Duration(days: 30));
+
+  final _travelPhotos = <File>[];
 
   /// The selected travel [TransportType]
   var _transportType = TransportType.values.first;
@@ -215,6 +219,17 @@ class RegisterTravelProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void addTravelPhoto(File file) {
+    _travelPhotos.add(file);
+    notifyListeners();
+  }
+
+  void removeTravelPhoto(File file) {
+    if (!_travelPhotos.contains(file)) return;
+    _travelPhotos.removeWhere((element) => element == file);
+    notifyListeners();
+  }
+
   Future<void> select() async {
     final travels = await _travelUseCases.getAllTravels();
     debugPrint('Listing all travels:\n$travels');
@@ -287,4 +302,6 @@ class RegisterTravelProvider with ChangeNotifier {
   set startDate(DateTime? value) {
     _startDate = value;
   }
+
+  List<File> get travelPhotos => _travelPhotos;
 }
