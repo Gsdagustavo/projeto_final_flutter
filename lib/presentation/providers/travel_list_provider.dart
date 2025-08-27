@@ -2,17 +2,16 @@ import 'package:flutter/cupertino.dart';
 
 import '../../domain/entities/travel.dart';
 import '../../modules/travel/travel_use_cases.dart';
-import '../pages/util/mock_travel_data.dart';
 
 class TravelListProvider with ChangeNotifier {
-  final List<Travel> _travels = mockTravels;
+  final _travels = <Travel>[];
 
   bool _isLoading = false;
 
   final TravelUseCasesImpl _travelUseCases;
 
   TravelListProvider(this._travelUseCases) {
-    // update();
+    update();
   }
 
   Future<void> finishTravel(Travel travel) async {
@@ -20,7 +19,7 @@ class TravelListProvider with ChangeNotifier {
     notifyListeners();
 
     await _travelUseCases.finishTravel(travel);
-    // await update();
+    await update();
 
     _isLoading = false;
     notifyListeners();
