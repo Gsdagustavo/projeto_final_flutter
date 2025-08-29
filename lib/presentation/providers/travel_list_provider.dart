@@ -8,6 +8,8 @@ class TravelListProvider with ChangeNotifier {
 
   bool _isLoading = false;
 
+  String? errorMessage;
+
   final TravelUseCasesImpl _travelUseCases;
 
   TravelListProvider(this._travelUseCases) {
@@ -18,10 +20,16 @@ class TravelListProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    await _travelUseCases.finishTravel(travel);
+    try {
+      await _travelUseCases.finishTravel(travel);
+    } on Exception catch (e) {
+      errorMessage = e.toString();
+      notifyListeners();
+    }
     await update();
 
     _isLoading = false;
+    errorMessage = null;
     notifyListeners();
   }
 
@@ -39,4 +47,6 @@ class TravelListProvider with ChangeNotifier {
   List<Travel> get travels => _travels;
 
   bool get isLoading => _isLoading;
+
+  bool get hasError => errorMessage != null;
 }
