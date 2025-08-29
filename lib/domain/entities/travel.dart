@@ -70,6 +70,30 @@ class Travel {
     );
   }
 
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is Travel && runtimeType == other.runtimeType &&
+              travelId == other.travelId && travelTitle == other.travelTitle &&
+              startDate == other.startDate && endDate == other.endDate &&
+              transportType == other.transportType &&
+              participants == other.participants && stops == other.stops &&
+              status == other.status && photos == other.photos;
+
+  @override
+  int get hashCode =>
+      Object.hash(
+          travelId,
+          travelTitle,
+          startDate,
+          endDate,
+          transportType,
+          participants,
+          stops,
+          status,
+          photos);
+
   @override
   String toString() {
     return 'Travel{travelId: $travelId, travelTitle: $travelTitle, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: $stops, status: $status, photos: $photos}';
