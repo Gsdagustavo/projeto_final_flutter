@@ -197,7 +197,7 @@ class RegisterTravelProvider with ChangeNotifier {
   ///
   /// [profilePictureUrl]: An optional argument that represents the path of the
   /// profile picture of the participant
-  Future<void> addParticipant(Participant participant) async {
+  void addParticipant(Participant participant) {
     _participants.add(participant);
 
     debugPrint('Participant $participant added');
@@ -210,10 +210,10 @@ class RegisterTravelProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateParticipant(
+  void updateParticipant(
     Participant oldParticipant,
     Participant newParticipant,
-  ) async {
+  ) {
     debugPrint('Participants len: ${_participants.length}');
 
     debugPrint('Old participants: $_participants');

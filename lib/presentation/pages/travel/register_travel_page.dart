@@ -57,63 +57,6 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
   final _participantNameController = TextEditingController();
   final _participantAgeController = TextEditingController();
 
-  final _formKey = GlobalKey<FormState>();
-
-  Future<void> onSubmit() async {
-    final as = AppLocalizations.of(context)!;
-
-    if (!_formKey.currentState!.validate()) {
-      await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(as.warning),
-            content: Text(as.err_invalid_participant_data),
-          );
-        },
-      );
-
-      return;
-    }
-
-    final state = context.read<RegisterTravelProvider>();
-
-    final participant = Participant(
-      name: _participantNameController.text,
-      age: int.parse(_participantAgeController.text),
-      profilePicture: await FileService().getDefaultProfilePictureFile(),
-    );
-
-    _participantNameController.clear();
-    _participantAgeController.clear();
-
-    await state.addParticipant(participant);
-
-    if (state.hasError) {
-      await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(as.warning),
-            content: Text(state.error!),
-          );
-        },
-      );
-
-      return;
-    }
-
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(as.participant_added),
-          icon: const Icon(Icons.check, color: Colors.green),
-        );
-      },
-    );
-  }
-
   Future<void> onParticipantRemovePress(Participant participant) async {
     final as = AppLocalizations.of(context)!;
 
@@ -697,9 +640,9 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                                   }
                                 },
                               ),
-                              title: Text('${stop.place.city!}'),
+                              title: Text(stop.place.city ?? ''),
                               subtitle: Text(
-                                '${stop.place.city!}, ${stop.place.country!}',
+                                '${stop.place.city ?? ''}, ${stop.place.country ?? ''}',
                               ),
                               trailing: IconButton(
                                 onPressed: () => onStopRemoved(stop),
@@ -911,10 +854,10 @@ Future<void> _showParticipantModal(
   if (result != null) {
     if (participant == null) {
       debugPrint('add participant');
-      await state.addParticipant(result);
+      state.addParticipant(result);
     } else {
       debugPrint('update participant');
-      await state.updateParticipant(participant, result);
+      state.updateParticipant(participant, result);
     }
   }
 }
