@@ -67,6 +67,7 @@ class RegisterTravelProvider with ChangeNotifier {
     if (!isTravelValid) {
       debugPrint('Travel is not valid');
       _errorMsg = 'Invalid Travel Info. Verify the data and try again';
+      _isLoading = false;
       notifyListeners();
       return;
     }

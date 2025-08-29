@@ -517,7 +517,10 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                       builder: (_, state, __) {
                         return ElevatedButton(
                           onPressed: () {
-                            context.push(Routes.travelMap);
+                            if (state.startDate != null &&
+                                state.endDate != null) {
+                              context.push(Routes.travelMap);
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
@@ -817,6 +820,9 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                     ),
                     onPressed: () async {
                       debugPrint('register travel button pressed');
+                      if (!state.isTravelValid) {
+                        return;
+                      }
                       await onTravelRegistered();
                       _travelTitleController.clear();
                       _startDateController.clear();
