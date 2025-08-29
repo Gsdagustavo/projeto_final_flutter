@@ -150,7 +150,31 @@ class _TravelWidgetState extends State<_TravelWidget> {
     }
   }
 
-  Future<void> onTravelStarted() async {}
+  Future<void> onTravelStarted() async {
+    final result = await showOkCancelDialog(
+      context,
+      title: Text('Start travel ${widget.travel.travelTitle}?'),
+    );
+
+    if (result == null || !result) {
+      return;
+    }
+
+    final state = context.read<TravelListProvider>();
+
+    await state.startTravel(widget.travel);
+
+    if (state.hasError) {
+      await showDialog(
+        context: context,
+        builder: (context) => CustomDialog(
+          isError: true,
+          title: 'Warning',
+          content: Text('Error: ${state.errorMessage}'),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -224,6 +248,16 @@ class _TravelWidgetState extends State<_TravelWidget> {
                                 onTap: onTravelFinished,
                               ),
                             ),
+
+                            PopupMenuItem(
+                              child: ListTile(
+                                leading: const Icon(FontAwesomeIcons.play),
+
+                                /// TODO: intl
+                                title: const Text('Start Travel'),
+                                onTap: onTravelStarted,
+                              ),
+                            ),
                           ],
                         );
                       },
@@ -233,7 +267,6 @@ class _TravelWidgetState extends State<_TravelWidget> {
               ],
             ),
             const Padding(padding: EdgeInsets.all(8)),
-
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(

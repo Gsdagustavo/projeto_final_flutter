@@ -13,10 +13,10 @@ class Travel {
   final String travelTitle;
 
   /// Travel start date
-  final DateTime? startDate;
+  DateTime startDate;
 
   /// Travel end date
-  final DateTime? endDate;
+  DateTime endDate;
 
   /// Travel transport type
   final TransportType transportType;
@@ -27,7 +27,7 @@ class Travel {
   /// Travel stops
   final List<TravelStop> stops;
 
-  final TravelStatus status;
+  TravelStatus status;
 
   final List<File?> photos;
 
@@ -70,29 +70,33 @@ class Travel {
     );
   }
 
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is Travel && runtimeType == other.runtimeType &&
-              travelId == other.travelId && travelTitle == other.travelTitle &&
-              startDate == other.startDate && endDate == other.endDate &&
-              transportType == other.transportType &&
-              participants == other.participants && stops == other.stops &&
-              status == other.status && photos == other.photos;
+      other is Travel &&
+          runtimeType == other.runtimeType &&
+          travelId == other.travelId &&
+          travelTitle == other.travelTitle &&
+          startDate == other.startDate &&
+          endDate == other.endDate &&
+          transportType == other.transportType &&
+          participants == other.participants &&
+          stops == other.stops &&
+          status == other.status &&
+          photos == other.photos;
 
   @override
-  int get hashCode =>
-      Object.hash(
-          travelId,
-          travelTitle,
-          startDate,
-          endDate,
-          transportType,
-          participants,
-          stops,
-          status,
-          photos);
+  int get hashCode => Object.hash(
+    travelId,
+    travelTitle,
+    startDate,
+    endDate,
+    transportType,
+    participants,
+    stops,
+    status,
+    photos,
+  );
 
   @override
   String toString() {

@@ -32,6 +32,8 @@ abstract class TravelRepository {
   /// Returns a [List] of [Travel] containing all registered travels
   Future<List<Travel>> getAllTravels();
 
+  Future<void> startTravel(Travel travel);
+
   Future<void> finishTravel(Travel travel);
 }
 
@@ -117,27 +119,31 @@ class TravelRepositoryImpl implements TravelRepository {
   }
 
   @override
+  Future<void> startTravel(Travel travel) async {
+    final db = await _db;
+
+    await db.transaction((txn) async {
+      final travelModel = TravelModel.fromEntity(travel);
+
+      await txn.update(
+        TravelTable.tableName,
+        travelModel.toMap(),
+        where: '${TravelTable.travelId} = ?',
+        whereArgs: [travelModel.travelId],
+      );
+    });
+  }
+
+  @override
   Future<void> finishTravel(Travel travel) async {
     final db = await _db;
 
     await db.transaction((txn) async {
-      final now = DateTime.now();
-
       final travelModel = TravelModel.fromEntity(travel);
-      final newStops = travelModel.stops;
-      newStops.last.leaveDate = now;
-
-      final newTravel = travelModel.copyWith(
-        endDate: now,
-        stops: travelModel.stops,
-        status: TravelStatus.finished,
-      );
-
-      debugPrint('New travel: $newTravel');
 
       await txn.update(
         TravelTable.tableName,
-        newTravel.toMap(),
+        travelModel.toMap(),
         where: '${TravelTable.travelId} = ?',
         whereArgs: [travelModel.travelId],
       );

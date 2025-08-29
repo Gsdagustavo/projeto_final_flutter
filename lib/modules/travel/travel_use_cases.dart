@@ -8,7 +8,7 @@ import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';
 import 'travel_repository.dart';
 
-/// Interface that defines all use cases related to the travels
+/// Ine that defines all use cases related to the travels
 abstract class TravelUseCases {
   /// Register a new travel
   ///
@@ -19,6 +19,8 @@ abstract class TravelUseCases {
 
   /// Returns a [List] of [Travel] containing all registered travels
   Future<List<Travel>> getAllTravels();
+
+  Future<void> startTravel(Travel travel);
 
   Future<void> finishTravel(Travel travel);
 }
@@ -114,6 +116,30 @@ class TravelUseCasesImpl implements TravelUseCases {
   }
 
   @override
+  Future<void> startTravel(Travel travel) async {
+    final now = DateTime.now();
+
+    if (travel.status == TravelStatus.finished ||
+        travel.endDate!.isBefore(now)) {
+      throw Exception('Travel has already been finished');
+    }
+
+    if (travel.status == TravelStatus.ongoing ||
+        travel.startDate!.isBefore(now)) {
+      throw Exception('Travel has already started');
+    }
+
+    if (travel.status == TravelStatus.ongoing) {
+      throw Exception('Travel has already started');
+    }
+
+    travel.startDate = now;
+    travel.status = TravelStatus.ongoing;
+
+    await travelRepository.startTravel(travel);
+  }
+
+  @override
   Future<void> finishTravel(Travel travel) async {
     final now = DateTime.now();
 
@@ -124,12 +150,13 @@ class TravelUseCasesImpl implements TravelUseCases {
 
     if (travel.status == TravelStatus.finished) {
       /// TODO: intl
-      throw Exception('Travel is already finished');
+      throw Exception('Travel has already finished');
     }
 
-    await travelRepository.finishTravel(
-      travel.copyWith(endDate: now, status: TravelStatus.finished),
-    );
+    travel.endDate = now;
+    travel.status = TravelStatus.finished;
+
+    await travelRepository.finishTravel(travel);
   }
 }
 

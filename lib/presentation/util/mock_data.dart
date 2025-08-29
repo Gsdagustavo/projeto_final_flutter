@@ -12,8 +12,8 @@ Future<List<Travel>> generateSampleTravels() async {
     Travel(
       photos: [],
       travelTitle: 'Exploring Rio de Janeiro',
-      startDate: DateTime(2025, 1, 10),
-      endDate: DateTime(2025, 1, 20),
+      startDate: DateTime(2025, 8, 30),
+      endDate: DateTime(2025, 9, 1),
       transportType: TransportType.plane,
       status: TravelStatus.finished,
       participants: [
@@ -49,8 +49,8 @@ Future<List<Travel>> generateSampleTravels() async {
     Travel(
       photos: [],
       travelTitle: 'Discovering Paris',
-      startDate: DateTime(2025, 3, 5),
-      endDate: DateTime(2025, 3, 15),
+      startDate: DateTime(2026, 3, 5),
+      endDate: DateTime(2026, 3, 15),
       transportType: TransportType.plane,
       status: TravelStatus.upcoming,
       participants: [

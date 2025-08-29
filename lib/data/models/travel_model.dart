@@ -9,8 +9,8 @@ import 'travel_stop_model.dart';
 class TravelModel {
   int? travelId;
   final String travelTitle;
-  final DateTime? startDate;
-  final DateTime? endDate;
+  final DateTime startDate;
+  final DateTime endDate;
   final TransportType transportType;
   final List<ParticipantModel> participants;
   final List<TravelStopModel> stops;

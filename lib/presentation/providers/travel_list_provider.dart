@@ -16,6 +16,25 @@ class TravelListProvider with ChangeNotifier {
     update();
   }
 
+  Future<void> startTravel(Travel travel) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      await _travelUseCases.startTravel(travel);
+    } on Exception catch (e) {
+      errorMessage = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return;
+    }
+    await update();
+
+    _isLoading = false;
+    errorMessage = null;
+    notifyListeners();
+  }
+
   Future<void> finishTravel(Travel travel) async {
     _isLoading = true;
     notifyListeners();
@@ -24,7 +43,9 @@ class TravelListProvider with ChangeNotifier {
       await _travelUseCases.finishTravel(travel);
     } on Exception catch (e) {
       errorMessage = e.toString();
+      _isLoading = false;
       notifyListeners();
+      return;
     }
     await update();
 

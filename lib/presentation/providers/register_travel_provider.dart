@@ -86,8 +86,8 @@ class RegisterTravelProvider with ChangeNotifier {
     final travel = Travel(
       travelTitle: travelTitle,
       participants: participants,
-      startDate: _startDate,
-      endDate: _endDate,
+      startDate: _startDate!,
+      endDate: _endDate!,
       transportType: _transportType,
       stops: _stops,
       photos: _travelPhotos,
@@ -266,7 +266,10 @@ class RegisterTravelProvider with ChangeNotifier {
 
   bool get isTravelValid {
     final isValid =
-        _areStopsValid && _travelUseCases.isParticipantInfoValid(participants);
+        _areStopsValid &&
+        _travelUseCases.isParticipantInfoValid(participants) &&
+        _startDate != null &&
+        _endDate != null;
 
     return isValid;
   }
