@@ -44,7 +44,7 @@ class Travel {
   });
 
   /// Returns a [Duration] that represents the total duration of the travel
-  Duration get totalDuration => endDate!.difference(startDate!);
+  Duration get totalDuration => endDate.difference(startDate);
 
   Travel copyWith({
     int? travelId,

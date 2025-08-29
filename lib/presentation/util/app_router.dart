@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../domain/entities/travel.dart';
 import '../../l10n/app_localizations.dart';
 import '../pages/auth/auth_page_switcher.dart';
 import '../pages/auth/forgot_password_page.dart';
@@ -11,6 +12,7 @@ import '../pages/home/home_page.dart';
 import '../pages/settings/settings_page.dart';
 import '../pages/travel/map_page.dart';
 import '../pages/travel/register_travel_page.dart';
+import '../pages/travel/travel_route_page.dart';
 import 'app_routes.dart';
 
 class AppRouter {
@@ -58,6 +60,14 @@ class AppRouter {
       GoRoute(
         path: Routes.travelMap,
         pageBuilder: (context, state) => NoTransitionPage(child: TravelMap()),
+      ),
+
+      GoRoute(
+        path: Routes.travelRoute,
+        pageBuilder: (context, state) {
+          final travel = state.extra as Travel;
+          return NoTransitionPage(child: TravelRoutePage(travel: travel));
+        },
       ),
 
       GoRoute(

@@ -58,8 +58,8 @@ class TravelModel {
     final map = {
       TravelTable.travelId: travelId,
       TravelTable.travelTitle: travelTitle,
-      TravelTable.startDate: startDate?.millisecondsSinceEpoch,
-      TravelTable.endDate: endDate?.millisecondsSinceEpoch,
+      TravelTable.startDate: startDate.millisecondsSinceEpoch,
+      TravelTable.endDate: endDate.millisecondsSinceEpoch,
       TravelTable.transportType: transportType.index,
       TravelTable.status: status.index,
     };

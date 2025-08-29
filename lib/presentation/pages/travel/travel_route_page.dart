@@ -3,25 +3,19 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../../../domain/entities/travel_stop.dart';
+import '../../../domain/entities/travel.dart';
 import '../../widgets/my_app_bar.dart';
 
 class TravelRoutePage extends StatefulWidget {
-  const TravelRoutePage({
-    super.key,
-    required this.stops,
-    required this.travelTitle,
-  });
+  const TravelRoutePage({super.key, required this.travel});
 
-  final List<TravelStop> stops;
-  final String travelTitle;
+  final Travel travel;
 
   @override
   State<TravelRoutePage> createState() => _TravelRoutePageState();
 }
 
 class _TravelRoutePageState extends State<TravelRoutePage> {
-
   var _polylines = <Polyline>{};
 
   PolylinePoints polylinePoints = PolylinePoints(
@@ -29,7 +23,7 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
   );
 
   Set<Marker> calculateMarkers() {
-    final stops = widget.stops;
+    final stops = widget.travel.stops;
 
     return stops.map((stop) {
       final lat = stop.place.latitude;
@@ -44,7 +38,7 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
   }
 
   Future<List<LatLng>> calculatePolylines() async {
-    final stops = widget.stops;
+    final stops = widget.travel.stops;
 
     final origin = PointLatLng(
       stops.first.place.latitude,
@@ -89,14 +83,16 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
   }
 
   LatLng getInitialPosition() {
-    final stops = widget.stops;
+    final stops = widget.travel.stops;
     return LatLng(stops.first.place.latitude, stops.first.place.longitude);
   }
 
   @override
   void initState() {
     super.initState();
-    widget.stops.sort((a, b) => a.travelStopId!.compareTo(b.travelStopId!));
+    widget.travel.stops.sort(
+      (a, b) => a.travelStopId!.compareTo(b.travelStopId!),
+    );
     generatePolyline();
   }
 
@@ -104,14 +100,13 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(
-        title: widget.travelTitle,
+        title: widget.travel.travelTitle,
         automaticallyImplyLeading: true,
       ),
 
       body: GoogleMap(
         onMapCreated: (controller) {
-          setState(() {
-          });
+          setState(() {});
         },
 
         initialCameraPosition: CameraPosition(

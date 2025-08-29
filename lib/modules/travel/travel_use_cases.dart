@@ -48,7 +48,7 @@ class TravelUseCasesImpl implements TravelUseCases {
     }
 
     /// No stops
-    if (travel.stops.isEmpty) {
+    if (travel.stops.isEmpty || travel.stops.length < 2) {
       throw TravelRegisterException('Travel must contain at least 2 stops');
     }
 

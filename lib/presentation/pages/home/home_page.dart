@@ -16,6 +16,7 @@ import '../../extensions/enums_extensions.dart';
 import '../../providers/review_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
+import '../../util/app_routes.dart';
 import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
@@ -190,6 +191,15 @@ class _TravelWidgetState extends State<_TravelWidget> {
     }
   }
 
+  Future<void> onTravelDeleted() async {
+    final state = context.read<TravelListProvider>();
+    await state.deleteTravel(widget.travel);
+  }
+
+  void goToTravelRoute() {
+    context.push(Routes.travelRoute, extra: widget.travel);
+  }
+
   @override
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
@@ -198,22 +208,7 @@ class _TravelWidgetState extends State<_TravelWidget> {
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
 
-        /// TODO: navigate to travel details when on tap
-        onTap: () async {
-          await showReviewModal(context);
-          debugPrint('Travel widget clicked');
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) {
-          //       return TravelRoutePage(
-          //         stops: travel.stops,
-          //         travelTitle: travel.travelTitle,
-          //       );
-          //     },
-          //   ),
-          // );
-        },
+        onTap: goToTravelRoute,
         child: Column(
           children: [
             Stack(
@@ -253,25 +248,28 @@ class _TravelWidgetState extends State<_TravelWidget> {
                         return PopupMenuButton(
                           icon: Icon(Icons.more_vert),
                           itemBuilder: (context) => <PopupMenuEntry>[
-                            PopupMenuItem(
-                              child: ListTile(
-                                leading: const Icon(FontAwesomeIcons.play),
+                            if (widget.travel.status ==
+                                TravelStatus.upcoming) ...[
+                              PopupMenuItem(
+                                child: ListTile(
+                                  leading: const Icon(FontAwesomeIcons.play),
 
-                                /// TODO: intl
-                                title: const Text('Start Travel'),
-                                onTap: onTravelStarted,
+                                  /// TODO: intl
+                                  title: const Text('Start Travel'),
+                                  onTap: onTravelStarted,
+                                ),
                               ),
-                            ),
+                            ] else ...[
+                              PopupMenuItem(
+                                child: ListTile(
+                                  leading: const Icon(FontAwesomeIcons.flag),
 
-                            PopupMenuItem(
-                              child: ListTile(
-                                leading: const Icon(FontAwesomeIcons.flag),
-
-                                /// TODO: intl
-                                title: const Text('Finish Travel'),
-                                onTap: onTravelFinished,
+                                  /// TODO: intl
+                                  title: const Text('Finish Travel'),
+                                  onTap: onTravelFinished,
+                                ),
                               ),
-                            ),
+                            ],
 
                             PopupMenuItem(
                               child: ListTile(
@@ -281,9 +279,17 @@ class _TravelWidgetState extends State<_TravelWidget> {
 
                                 /// TODO: intl
                                 title: const Text('Delete Travel'),
-                                onTap: () async {
-                                  await state.deleteTravel(widget.travel);
-                                },
+                                onTap: onTravelDeleted,
+                              ),
+                            ),
+
+                            PopupMenuItem(
+                              child: ListTile(
+                                leading: const Icon(FontAwesomeIcons.route),
+
+                                /// TODO: intl
+                                title: const Text('View Travel Route'),
+                                onTap: goToTravelRoute,
                               ),
                             ),
                           ],
@@ -344,12 +350,13 @@ class _TravelWidgetState extends State<_TravelWidget> {
                                 TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: widget.travel.startDate!
-                                          .getMonthDay(state.languageCode),
+                                      text: widget.travel.startDate.getMonthDay(
+                                        state.languageCode,
+                                      ),
                                     ),
                                     const TextSpan(text: ' - '),
                                     TextSpan(
-                                      text: widget.travel.endDate!.getMonthDay(
+                                      text: widget.travel.endDate.getMonthDay(
                                         state.languageCode,
                                       ),
                                     ),

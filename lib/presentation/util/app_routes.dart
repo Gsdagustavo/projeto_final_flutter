@@ -4,6 +4,7 @@ class Routes {
 
   static const registerTravel = '/registerTravel';
   static const travelMap = '/travelMap';
+  static const travelRoute = '/travelRoute';
   static const settings = '/settings';
 
   static const auth = '/auth';

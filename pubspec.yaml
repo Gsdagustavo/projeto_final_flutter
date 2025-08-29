@@ -34,6 +34,7 @@ dependencies:
   animation_list: ^3.1.0
   animated_list_plus: ^0.5.2
   implicitly_animated_list: ^2.3.0
+  carousel_slider: ^5.1.1
 
 dev_dependencies:
   flutter_test:
