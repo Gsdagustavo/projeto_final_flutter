@@ -16,6 +16,7 @@ import 'presentation/providers/register_travel_provider.dart';
 import 'presentation/providers/review_provider.dart';
 import 'presentation/providers/travel_list_provider.dart';
 import 'presentation/providers/user_preferences_provider.dart';
+import 'presentation/util/mock_data.dart';
 import 'presentation/widgets/my_app.dart';
 import 'services/file_service.dart';
 
@@ -34,6 +35,12 @@ Future<void> main() async {
 
   final reviewRepository = ReviewRepositoryImpl();
   final reviewUseCases = ReviewUseCasesImpl(reviewRepository);
+
+  final travels = await generateSampleTravels();
+
+  for (final travel in travels) {
+    await travelUseCases.registerTravel(travel);
+  }
 
   /// Build App
   runApp(
