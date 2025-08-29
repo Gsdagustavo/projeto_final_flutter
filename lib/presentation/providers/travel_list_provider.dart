@@ -26,12 +26,13 @@ class TravelListProvider with ChangeNotifier {
   }
 
   Future<void> update() async {
-    debugPrint('Travel list provider update method called');
+    _isLoading = true;
+    notifyListeners();
+
     _travels.clear();
     _travels.addAll(await _travelUseCases.getAllTravels());
 
-    debugPrint('TRAVELS:\n$_travels');
-
+    _isLoading = false;
     notifyListeners();
   }
 
