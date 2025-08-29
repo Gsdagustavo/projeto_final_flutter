@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/extensions/date_extensions.dart';
+import '../../../data/local/database/database.dart';
 import '../../../domain/entities/enums.dart';
 import '../../../domain/entities/review.dart';
 import '../../../domain/entities/travel.dart';
@@ -39,9 +40,22 @@ class _HomePageState extends State<HomePage> {
 
     return FabPage(
       title: as.title_home,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async =>
-            await context.read<TravelListProvider>().update(),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: () async =>
+                await context.read<TravelListProvider>().update(),
+          ),
+
+          FloatingActionButton(
+            onPressed: () async {
+              await DBConnection().printAllTables(
+                await DBConnection().getDatabase(),
+              );
+            },
+          ),
+        ],
       ),
       body: Consumer<TravelListProvider>(
         builder: (context, travelListProvider, child) {
@@ -241,6 +255,16 @@ class _TravelWidgetState extends State<_TravelWidget> {
                           itemBuilder: (context) => <PopupMenuEntry>[
                             PopupMenuItem(
                               child: ListTile(
+                                leading: const Icon(FontAwesomeIcons.play),
+
+                                /// TODO: intl
+                                title: const Text('Start Travel'),
+                                onTap: onTravelStarted,
+                              ),
+                            ),
+
+                            PopupMenuItem(
+                              child: ListTile(
                                 leading: const Icon(FontAwesomeIcons.flag),
 
                                 /// TODO: intl
@@ -251,11 +275,15 @@ class _TravelWidgetState extends State<_TravelWidget> {
 
                             PopupMenuItem(
                               child: ListTile(
-                                leading: const Icon(FontAwesomeIcons.play),
+                                leading: const Icon(
+                                  FontAwesomeIcons.deleteLeft,
+                                ),
 
                                 /// TODO: intl
-                                title: const Text('Start Travel'),
-                                onTap: onTravelStarted,
+                                title: const Text('Delete Travel'),
+                                onTap: () async {
+                                  await state.deleteTravel(widget.travel);
+                                },
                               ),
                             ),
                           ],

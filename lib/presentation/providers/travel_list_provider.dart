@@ -54,6 +54,26 @@ class TravelListProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteTravel(Travel travel) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      await _travelUseCases.deleteTravel(travel);
+    } on Exception catch (e) {
+      errorMessage = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return;
+    }
+    await update();
+
+    _isLoading = false;
+    errorMessage = null;
+    notifyListeners();
+  }
+
+
   Future<void> update() async {
     _isLoading = true;
     notifyListeners();

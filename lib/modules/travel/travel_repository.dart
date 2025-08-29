@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../data/local/database/database.dart';
@@ -9,8 +8,7 @@ import '../../data/local/database/tables/experiences_table.dart';
 import '../../data/local/database/tables/participants_table.dart';
 import '../../data/local/database/tables/photos_table.dart';
 import '../../data/local/database/tables/places_table.dart';
-import '../../data/local/database/tables/travel_participants_table.dart';
-import '../../data/local/database/tables/travel_photos_table.dart';
+import '../../data/local/database/tables/reviews_table.dart';
 import '../../data/local/database/tables/travel_stop_experiences_table.dart';
 import '../../data/local/database/tables/travel_stop_table.dart';
 import '../../data/local/database/tables/travel_table.dart';
@@ -28,6 +26,8 @@ abstract class TravelRepository {
   ///
   /// [travel]: The travel which will be registered
   Future<void> registerTravel({required Travel travel});
+
+  Future<void> deleteTravel(Travel travel);
 
   /// Returns a [List] of [Travel] containing all registered travels
   Future<List<Travel>> getAllTravels();
@@ -50,7 +50,7 @@ class TravelRepositoryImpl implements TravelRepository {
     final db = await _db;
 
     for (final (index, stop) in travel.stops.indexed) {
-      debugPrint('$index: $stop');
+      // debugPrint('$index: $stop');
     }
 
     final travelModel = TravelModel(
@@ -65,7 +65,7 @@ class TravelRepositoryImpl implements TravelRepository {
       photos: travel.photos,
     );
 
-    debugPrint('Inserting Travel ${travelModel.toString()}');
+    // debugPrint('Inserting Travel ${travelModel.toString()}');
 
     await db.transaction((txn) async {
       final travelId = await txn.insert(
@@ -85,36 +85,78 @@ class TravelRepositoryImpl implements TravelRepository {
         await _insertStop(txn, stop, travelId);
       }
 
-      /// Insert participants into [ParticipantsTable] and
-      /// [TravelParticipantsTable]
+      /// Insert participants into [ParticipantsTable]
       for (final participant in travelModel.participants) {
-        final participantId = await txn.insert(
-          ParticipantsTable.tableName,
-          await participant.toMap(),
-        );
-
-        participant.id = participantId;
-
-        await txn.insert(
-          TravelParticipantsTable.tableName,
-          _toTravelParticipantsMap(participantId, travelId),
-        );
+        final participantData = await participant.toMap();
+        participantData.addAll({ParticipantsTable.travelId: travelId});
+        await txn.insert(ParticipantsTable.tableName, participantData);
       }
 
       if (travelModel.photos.isNotEmpty) {
         for (final photoData in travelModel.photos) {
-          final photoMap = {PhotosTable.photo: photoData?.readAsBytesSync()};
-
-          final photoId = await txn.insert(PhotosTable.tableName, photoMap);
-
-          final travelPhotoMap = {
-            TravelPhotosTable.travelId: travelId,
-            TravelPhotosTable.photoId: photoId,
+          final photoMap = {
+            PhotosTable.photo: photoData?.readAsBytesSync(),
+            PhotosTable.travelId: travelId,
           };
 
-          await txn.insert(TravelPhotosTable.tableName, travelPhotoMap);
+          await txn.insert(PhotosTable.tableName, photoMap);
         }
       }
+    });
+  }
+
+  @override
+  Future<void> deleteTravel(Travel travel) async {
+    final db = await _db;
+
+    await db.transaction((txn) async {
+      final travelModel = TravelModel.fromEntity(travel);
+
+      /// Delete from [Travels] table
+      await txn.delete(
+        TravelTable.tableName,
+        where: '${TravelTable.travelId} = ?',
+        whereArgs: [travelModel.travelId],
+      );
+
+      /// Delete from [Participants] table
+      await txn.delete(
+        ParticipantsTable.tableName,
+        where: '${ParticipantsTable.travelId} = ?',
+        whereArgs: [travelModel.travelId],
+      );
+
+      /// Delete from [TravelStops] table
+      await txn.delete(
+        TravelStopTable.tableName,
+        where: '${TravelStopTable.travelId} = ?',
+        whereArgs: [travelModel.travelId],
+      );
+
+      /// Delete from [Reviews] table
+      for (final stop in travelModel.stops) {
+        if (stop.reviews != null && stop.reviews!.isNotEmpty) {
+          await txn.delete(
+            ReviewsTable.tableName,
+            where: '${ReviewsTable.travelStopId} = ?',
+            whereArgs: [stop.travelStopId],
+          );
+        }
+      }
+
+      /// Delete from [TravelStopExperiences] table
+      await txn.delete(
+        TravelStopExperiencesTable.tableName,
+        where: '${TravelStopExperiencesTable.travelStopId} = ?',
+        whereArgs: [travelModel.travelId],
+      );
+
+      /// Delete from [Photos] table
+      await txn.delete(
+        PhotosTable.tableName,
+        where: '${PhotosTable.travelId} = ?',
+        whereArgs: [travelModel.travelId],
+      );
     });
   }
 
@@ -157,14 +199,14 @@ class TravelRepositoryImpl implements TravelRepository {
   ) async {
     final placeMap = stop.place.toMap();
 
-    debugPrint('Place map: $placeMap');
+    // debugPrint('Place map: $placeMap');
 
     /// Insert into [PlacesTable]
     await txn.insert(PlacesTable.tableName, placeMap);
 
     final stopMap = stop.toMap();
 
-    debugPrint('Stop map: $stopMap');
+    // debugPrint('Stop map: $stopMap');
 
     stopMap[TravelStopTable.travelId] = travelId;
     stopMap[TravelStopTable.placeId] = stop.place.id;
@@ -173,7 +215,7 @@ class TravelRepositoryImpl implements TravelRepository {
     final stopId = await txn.insert(TravelStopTable.tableName, stopMap);
     stop.travelStopId = stopId;
 
-    debugPrint('Stop ID: $stopId');
+    // debugPrint('Stop ID: $stopId');
 
     /// Insert experiences into [TravelStopExperiencesTable]
     if (stop.experiences != null && stop.experiences!.isNotEmpty) {
@@ -185,12 +227,12 @@ class TravelRepositoryImpl implements TravelRepository {
       }
     }
 
-    debugPrint('Travel stop $stop added to database');
+    // debugPrint('Travel stop $stop added to database');
   }
 
   @override
   Future<List<Travel>> getAllTravels() async {
-    debugPrint('GET ALL TRAVELS METHOD REPOSITORY CALLED');
+    // debugPrint('GET ALL TRAVELS METHOD REPOSITORY CALLED');
     final db = await _db;
 
     final travels = <TravelModel>[];
@@ -213,24 +255,15 @@ class TravelRepositoryImpl implements TravelRepository {
         /// Participants
         final participants = <ParticipantModel>[];
 
-        final travelParticipants = await txn.query(
-          TravelParticipantsTable.tableName,
-          where: '${TravelParticipantsTable.travelId} = ?',
+        final participantsData = await txn.query(
+          ParticipantsTable.tableName,
+          where: '${ParticipantsTable.travelId} = ?',
           whereArgs: [travelId],
         );
 
-        for (final tp in travelParticipants) {
-          final participantId = tp[ParticipantsTable.participantId] as int;
-
-          final participantData = await txn.query(
-            ParticipantsTable.tableName,
-            where: '${ParticipantsTable.participantId} = ?',
-            whereArgs: [participantId],
-          );
-
-          if (participantData.isNotEmpty) {
-            participants.add(ParticipantModel.fromMap(participantData.first));
-          }
+        for (final participantData in participantsData) {
+          final participant = ParticipantModel.fromMap(participantData);
+          participants.add(participant);
         }
 
         /// Stops
@@ -284,27 +317,17 @@ class TravelRepositoryImpl implements TravelRepository {
         final photos = <File>[];
 
         final travelPhotosData = await txn.query(
-          TravelPhotosTable.tableName,
-          where: '${TravelPhotosTable.travelId} = ?',
+          PhotosTable.tableName,
+          where: '${PhotosTable.travelId} = ?',
           whereArgs: [travelId],
         );
 
-        for (final travelPhotoData in travelPhotosData) {
-          final photoId = travelPhotoData[TravelPhotosTable.photoId] as int;
+        for (final photoData in travelPhotosData) {
+          final bytes = photoData[PhotosTable.photo] as Uint8List;
 
-          final photoData = await txn.query(
-            PhotosTable.tableName,
-            where: '${PhotosTable.photoId} = ?',
-            whereArgs: [photoId],
-          );
+          // debugPrint(bytes.toString());
 
-          if (photoData.isEmpty || photoData.first.isEmpty) continue;
-
-          final bytes = photoData.first[PhotosTable.photo] as Uint8List;
-
-          debugPrint(bytes.toString());
-
-          final filename = '${photoData.first[PhotosTable.photoId]}.png';
+          final filename = '${photoData[PhotosTable.photoId]}.png';
           final file = File('${Directory.systemTemp.path}/$filename');
           file.writeAsBytesSync(bytes);
           photos.add(file);
@@ -329,17 +352,5 @@ class TravelRepositoryImpl implements TravelRepository {
     //   }
     // }
     return travels.map((e) => e.toEntity()).toList();
-  }
-
-  /// Auxiliary method that returns a Map from the given [participantId]
-  /// and [travelId]
-  static Map<String, dynamic> _toTravelParticipantsMap(
-    int participantId,
-    int travelId,
-  ) {
-    return {
-      TravelParticipantsTable.travelId: travelId,
-      TravelParticipantsTable.participantId: participantId,
-    };
   }
 }

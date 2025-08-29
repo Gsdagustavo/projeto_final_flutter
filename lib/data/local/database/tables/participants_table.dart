@@ -1,3 +1,5 @@
+import 'travel_table.dart';
+
 /// SQLite table schema and constants for the `participants` table.
 ///
 /// This class defines the column names and the SQL statement to create
@@ -10,6 +12,7 @@ abstract final class ParticipantsTable {
   ///
   /// `INTEGER PRIMARY KEY AUTOINCREMENT`
   static const String participantId = 'participantId';
+  static const String travelId = 'travelId';
 
   /// Column name for the participant's name
   ///
@@ -31,9 +34,12 @@ abstract final class ParticipantsTable {
       '''
     CREATE TABLE $tableName (
       $participantId INTEGER PRIMARY KEY AUTOINCREMENT,
+      $travelId INTEGER NOT NULL,
       $name TEXT NOT NULL,
       $age INTEGER NOT NULL,
-      $profilePicture BLOB
+      $profilePicture BLOB,
+      
+      FOREIGN KEY ($travelId) REFERENCES ${TravelTable.tableName}(${TravelTable.travelId})
     );
   ''';
 }

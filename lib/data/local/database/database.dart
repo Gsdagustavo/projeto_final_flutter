@@ -8,8 +8,6 @@ import 'tables/photos_table.dart';
 import 'tables/places_table.dart';
 import 'tables/reviews_table.dart';
 import 'tables/transport_types_table.dart';
-import 'tables/travel_participants_table.dart';
-import 'tables/travel_photos_table.dart';
 import 'tables/travel_stop_experiences_table.dart';
 import 'tables/travel_stop_table.dart';
 import 'tables/travel_table.dart';
@@ -45,10 +43,8 @@ class DBConnection {
     await _insertDefaultValuesIntoTables(db);
 
     await db.execute(PhotosTable.createTable);
-    await db.execute(TravelPhotosTable.createTable);
     await db.execute(PlacesTable.createTable);
     await db.execute(TravelTable.createTable);
-    await db.execute(TravelParticipantsTable.createTable);
     await db.execute(TravelStopTable.createTable);
     await db.execute(TravelStopExperiencesTable.createTable);
     await db.execute(ParticipantsTable.createTable);
@@ -83,6 +79,23 @@ class DBConnection {
     for (var table in tables) {
       final tableName = table['name'] as String;
       await db.execute('DROP TABLE IF EXISTS $tableName');
+    }
+  }
+
+  Future<void> printAllTables(Database db) async {
+    final tables = await db.rawQuery(
+      "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';",
+    );
+
+    for (var table in tables) {
+      final tableName = table['name'] as String;
+
+      final rows = await db.rawQuery('SELECT * FROM $tableName');
+
+      print('--- Table: $tableName ---');
+      for (var row in rows) {
+        print(row);
+      }
     }
   }
 }

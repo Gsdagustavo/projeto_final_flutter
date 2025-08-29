@@ -17,6 +17,8 @@ abstract class TravelUseCases {
   /// Throws a [TravelRegisterException] if any travel data is invalid
   Future<void> registerTravel(Travel travel);
 
+  Future<void> deleteTravel(Travel travel);
+
   /// Returns a [List] of [Travel] containing all registered travels
   Future<List<Travel>> getAllTravels();
 
@@ -45,16 +47,6 @@ class TravelUseCasesImpl implements TravelUseCases {
       throw TravelRegisterException('Invalid travel name');
     }
 
-    /// Invalid start date
-    if (travel.startDate == null) {
-      throw TravelRegisterException('Invalid travel start date');
-    }
-
-    /// Invalid end date
-    if (travel.endDate == null) {
-      throw TravelRegisterException('Invalid travel end date');
-    }
-
     /// No stops
     if (travel.stops.isEmpty) {
       throw TravelRegisterException('Travel must contain at least 2 stops');
@@ -78,6 +70,11 @@ class TravelUseCasesImpl implements TravelUseCases {
 
     /// Register travel
     await travelRepository.registerTravel(travel: finalTravel);
+  }
+
+  @override
+  Future<void> deleteTravel(Travel travel) async {
+    await travelRepository.deleteTravel(travel);
   }
 
   @override
@@ -120,12 +117,12 @@ class TravelUseCasesImpl implements TravelUseCases {
     final now = DateTime.now();
 
     if (travel.status == TravelStatus.finished ||
-        travel.endDate!.isBefore(now)) {
+        travel.endDate.isBefore(now)) {
       throw Exception('Travel has already been finished');
     }
 
     if (travel.status == TravelStatus.ongoing ||
-        travel.startDate!.isBefore(now)) {
+        travel.startDate.isBefore(now)) {
       throw Exception('Travel has already started');
     }
 
@@ -143,7 +140,7 @@ class TravelUseCasesImpl implements TravelUseCases {
   Future<void> finishTravel(Travel travel) async {
     final now = DateTime.now();
 
-    if (travel.startDate!.isAfter(now)) {
+    if (travel.startDate.isAfter(now)) {
       /// TODO: intl
       throw Exception('Cannot finish a travel that has not started yet');
     }
