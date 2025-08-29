@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating/flutter_rating.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/extensions/date_extensions.dart';
@@ -13,6 +16,7 @@ import '../../providers/review_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../widgets/fab_page.dart';
+import '../../widgets/loading_dialog.dart';
 import '../util/form_validations.dart';
 
 /// The Home Page of the app
@@ -41,7 +45,7 @@ class _HomePageState extends State<HomePage> {
       body: Consumer<TravelListProvider>(
         builder: (context, travelListProvider, child) {
           if (travelListProvider.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: LoadingDialog());
           }
 
           final travels = travelListProvider.travels;
