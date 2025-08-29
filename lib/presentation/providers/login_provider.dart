@@ -14,6 +14,8 @@ class LoginProvider with ChangeNotifier {
   /// The current logged [User]
   late User? _loggedUser;
 
+  bool _isLoading = true;
+
   /// The error message (obtained via exception.message on try-catch structures)
   String? _errorMsg;
 
@@ -26,11 +28,15 @@ class LoginProvider with ChangeNotifier {
   /// logged user in [FirebaseAuth]
   void _init() {
     _loggedUser = _authService.currentUser;
+    _isLoading = false;
     notifyListeners();
   }
 
   /// Tries to sign out from [FirebaseAuth]
   Future<void> signOut() async {
+    _isLoading = true;
+    notifyListeners();
+
     try {
       await _authService.signOut();
       _loggedUser = null;
@@ -41,6 +47,7 @@ class LoginProvider with ChangeNotifier {
       return;
     }
 
+    _isLoading = false;
     _errorMsg = null;
     notifyListeners();
   }
@@ -55,6 +62,9 @@ class LoginProvider with ChangeNotifier {
     required String email,
     required String password,
   }) async {
+    _isLoading = true;
+    notifyListeners();
+
     try {
       _loggedUser = await _authService.signInWithEmailAndPassword(
         email: email,
@@ -69,6 +79,7 @@ class LoginProvider with ChangeNotifier {
       return;
     }
 
+    _isLoading = false;
     _errorMsg = null;
     notifyListeners();
   }
@@ -83,6 +94,9 @@ class LoginProvider with ChangeNotifier {
     required String email,
     required String password,
   }) async {
+    _isLoading = true;
+    notifyListeners();
+
     try {
       _loggedUser = await _authService.createUserWithEmailAndPassword(
         email: email,
@@ -97,6 +111,7 @@ class LoginProvider with ChangeNotifier {
       return;
     }
 
+    _isLoading = false;
     _errorMsg = null;
     notifyListeners();
   }
@@ -108,6 +123,9 @@ class LoginProvider with ChangeNotifier {
   ///
   /// Otherwise, [_errorMsg] is set to [Null]
   Future<void> sendPasswordResetEmail({required String email}) async {
+    _isLoading = true;
+    notifyListeners();
+
     try {
       await _authService.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
@@ -117,6 +135,7 @@ class LoginProvider with ChangeNotifier {
       return;
     }
 
+    _isLoading = false;
     _errorMsg = null;
     notifyListeners();
   }
@@ -129,4 +148,6 @@ class LoginProvider with ChangeNotifier {
 
   /// Returns the error message
   String get errorMsg => _errorMsg!;
+
+  bool get isLoading => _isLoading;
 }
