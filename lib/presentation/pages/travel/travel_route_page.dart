@@ -18,9 +18,7 @@ class TravelRoutePage extends StatefulWidget {
 class _TravelRoutePageState extends State<TravelRoutePage> {
   var _polylines = <Polyline>{};
 
-  PolylinePoints polylinePoints = PolylinePoints(
-    apiKey: dotenv.env['MAPS_API_KEY']!,
-  );
+  final polylinePoints = PolylinePoints(apiKey: dotenv.env['MAPS_API_KEY']!);
 
   Set<Marker> calculateMarkers() {
     final stops = widget.travel.stops;
@@ -40,6 +38,8 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
   Future<List<LatLng>> calculatePolylines() async {
     final stops = widget.travel.stops;
 
+    if (stops.length < 2) return [];
+
     final origin = PointLatLng(
       stops.first.place.latitude,
       stops.first.place.longitude,
@@ -50,11 +50,18 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
       stops.last.place.longitude,
     );
 
+    final waypoints = stops.sublist(1, stops.length - 1).map((stop) {
+      return PolylineWayPoint(
+        location: '${stop.place.latitude},${stop.place.longitude}',
+      );
+    }).toList();
+
     final result = await polylinePoints.getRouteBetweenCoordinates(
       request: PolylineRequest(
         origin: origin,
         destination: destination,
         mode: TravelMode.driving,
+        wayPoints: waypoints,
       ),
     );
 
