@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating/flutter_rating.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/extensions/date_extensions.dart';
@@ -15,6 +15,7 @@ import '../../extensions/enums_extensions.dart';
 import '../../providers/review_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
+import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
 import '../util/form_validations.dart';
@@ -72,21 +73,84 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class _TravelWidget extends StatelessWidget {
+class _TravelWidget extends StatefulWidget {
   const _TravelWidget({required this.travel});
 
   final Travel travel;
 
+  @override
+  State<_TravelWidget> createState() => _TravelWidgetState();
+}
+
+class _TravelWidgetState extends State<_TravelWidget> {
   Future<Review?> showReviewModal(BuildContext context) async {
     await showModalBottomSheet<Review>(
       context: context,
       builder: (context) {
-        return ReviewModal(travel: travel);
+        return ReviewModal(travel: widget.travel);
       },
     );
 
     return null;
   }
+
+  Future<void> onTravelFinished() async {
+    if (widget.travel.status == TravelStatus.upcoming) {
+      await showDialog(
+        context: context,
+        builder: (context) => CustomDialog(
+          isError: true,
+          title: 'Warning',
+          content: Text(
+            'The travel ${widget.travel.travelTitle} has not started yet',
+          ),
+        ),
+      );
+
+      return;
+    }
+
+    if (widget.travel.status == TravelStatus.finished) {
+      await showDialog(
+        context: context,
+        builder: (context) => CustomDialog(
+          isError: true,
+          title: 'Warning',
+          content: Text(
+            'The travel ${widget.travel.travelTitle} has already been finished',
+          ),
+        ),
+      );
+
+      return;
+    }
+
+    final result = await showOkCancelDialog(
+      context,
+      title: Text('Finish travel ${widget.travel.travelTitle}?'),
+    );
+
+    if (result == null || !result) {
+      return;
+    }
+
+    final state = context.read<TravelListProvider>();
+
+    await state.finishTravel(widget.travel);
+
+    if (state.hasError) {
+      await showDialog(
+        context: context,
+        builder: (context) => CustomDialog(
+          isError: true,
+          title: 'Warning',
+          content: Text('Error: ${state.errorMessage}'),
+        ),
+      );
+    }
+  }
+
+  Future<void> onTravelStarted() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +182,7 @@ class _TravelWidget extends StatelessWidget {
               children: [
                 Builder(
                   builder: (context) {
-                    if (travel.photos.isEmpty) {
+                    if (widget.travel.photos.isEmpty) {
                       return Image.asset('assets/images/placeholder.png');
                     }
 
@@ -127,7 +191,7 @@ class _TravelWidget extends StatelessWidget {
                         topLeft: Radius.circular(12),
                         topRight: Radius.circular(12),
                       ),
-                      child: Image.file(travel.photos.first!),
+                      child: Image.file(widget.travel.photos.first!),
                     );
                   },
                 ),
@@ -135,7 +199,7 @@ class _TravelWidget extends StatelessWidget {
                 Positioned(
                   top: 12,
                   left: 12,
-                  child: _TravelStatusWidget(status: travel.status),
+                  child: _TravelStatusWidget(status: widget.travel.status),
                 ),
 
                 Positioned(
@@ -146,10 +210,23 @@ class _TravelWidget extends StatelessWidget {
                       color: Theme.of(context).cardColor.withOpacity(0.7),
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: IconButton(
-                      /// TODO: implement onPressed
-                      onPressed: () {},
-                      icon: Icon(Icons.more_vert),
+                    child: Consumer<TravelListProvider>(
+                      builder: (_, state, __) {
+                        return PopupMenuButton(
+                          icon: Icon(Icons.more_vert),
+                          itemBuilder: (context) => <PopupMenuEntry>[
+                            PopupMenuItem(
+                              child: ListTile(
+                                leading: const Icon(FontAwesomeIcons.flag),
+
+                                /// TODO: intl
+                                title: const Text('Finish Travel'),
+                                onTap: onTravelFinished,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -164,28 +241,31 @@ class _TravelWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   /// TODO: theme
-                  Text(travel.travelTitle, style: TextStyle(fontSize: 18)),
+                  Text(
+                    widget.travel.travelTitle,
+                    style: TextStyle(fontSize: 18),
+                  ),
                   Row(
                     children: [
                       const Icon(Icons.location_on),
                       const Padding(padding: EdgeInsets.all(4)),
                       Builder(
                         builder: (context) {
-                          if (travel.stops.last.place.city! !=
-                              travel.stops.first.place.city!) {
+                          if (widget.travel.stops.last.place.city! !=
+                              widget.travel.stops.first.place.city!) {
                             return Row(
                               children: [
-                                Text(travel.stops.first.place.city!),
+                                Text(widget.travel.stops.first.place.city!),
                                 const Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 5),
                                   child: Icon(Icons.arrow_forward, size: 12),
                                 ),
-                                Text(travel.stops.last.place.city!),
+                                Text(widget.travel.stops.last.place.city!),
                               ],
                             );
                           }
 
-                          return Text(travel.stops.first.place.city!);
+                          return Text(widget.travel.stops.first.place.city!);
                         },
                       ),
                     ],
@@ -203,13 +283,12 @@ class _TravelWidget extends StatelessWidget {
                                 TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: travel.startDate!.getMonthDay(
-                                        state.languageCode,
-                                      ),
+                                      text: widget.travel.startDate!
+                                          .getMonthDay(state.languageCode),
                                     ),
                                     const TextSpan(text: ' - '),
                                     TextSpan(
-                                      text: travel.endDate!.getMonthDay(
+                                      text: widget.travel.endDate!.getMonthDay(
                                         state.languageCode,
                                       ),
                                     ),
@@ -236,7 +315,9 @@ class _TravelWidget extends StatelessWidget {
                               width: 1,
                             ),
                           ),
-                          child: Text('${travel.stops.length} ${as.stops}'),
+                          child: Text(
+                            '${widget.travel.stops.length} ${as.stops}',
+                          ),
                         ),
                       ),
                     ],
@@ -454,6 +535,58 @@ class _ReviewModalState extends State<ReviewModal> {
           ],
         ),
       ),
+    );
+  }
+}
+
+Future<bool?> showOkCancelDialog(
+  BuildContext context, {
+  required Widget title,
+  Widget? content,
+}) async {
+  return await showDialog<bool>(
+    context: context,
+    builder: (context) {
+      return OkCancelDialog(title: title, content: content);
+    },
+  );
+}
+
+class OkCancelDialog extends StatelessWidget {
+  const OkCancelDialog({
+    super.key,
+    required this.title,
+    this.content,
+    this.cancelText = 'Cancel',
+    this.okText = 'Ok',
+  });
+
+  final Widget title;
+  final Widget? content;
+  final String cancelText;
+  final String okText;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: title,
+      content: content,
+      actionsAlignment: MainAxisAlignment.spaceBetween,
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop(false);
+          },
+          child: Text(cancelText),
+        ),
+
+        ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).pop(true);
+          },
+          child: Text(okText),
+        ),
+      ],
     );
   }
 }
