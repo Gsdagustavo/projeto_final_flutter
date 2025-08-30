@@ -53,10 +53,6 @@ class TravelRepositoryImpl implements TravelRepository {
   Future<void> registerTravel({required Travel travel}) async {
     final db = await _db;
 
-    for (final (index, stop) in travel.stops.indexed) {
-      // debugPrint('$index: $stop');
-    }
-
     final travelModel = TravelModel(
       travelTitle: travel.travelTitle,
       startDate: travel.startDate,
@@ -68,8 +64,6 @@ class TravelRepositoryImpl implements TravelRepository {
       stops: travel.stops.map(TravelStopModel.fromEntity).toList(),
       photos: travel.photos,
     );
-
-    // debugPrint('Inserting Travel ${travelModel.toString()}');
 
     await db.transaction((txn) async {
       final travelId = travelModel.id;
@@ -93,6 +87,7 @@ class TravelRepositoryImpl implements TravelRepository {
         await txn.insert(ParticipantsTable.tableName, participantData);
       }
 
+      /// Insert into [Photos] table
       if (travelModel.photos.isNotEmpty) {
         for (final photoData in travelModel.photos) {
           final photoMap = {
@@ -103,6 +98,12 @@ class TravelRepositoryImpl implements TravelRepository {
           await txn.insert(PhotosTable.tableName, photoMap);
         }
       }
+
+      /// Insert into [TravelTravelStatus] table
+      await txn.insert(TravelTravelStatusTable.tableName, {
+        TravelTravelStatusTable.travelStatusIndex: travel.status.index,
+        TravelTravelStatusTable.travelId: travel.id,
+      });
     });
   }
 
@@ -181,6 +182,13 @@ class TravelRepositoryImpl implements TravelRepository {
         where: '${TravelTable.travelId} = ?',
         whereArgs: [travelModel.id],
       );
+
+      await txn.update(
+        TravelTravelStatusTable.tableName,
+        _toTravelTravelStatusMap(travelModel.id, travel.status.index),
+        where: '${TravelTravelStatusTable.travelId} = ?',
+        whereArgs: [travelModel.id],
+      );
     });
   }
 
@@ -195,6 +203,13 @@ class TravelRepositoryImpl implements TravelRepository {
         TravelTable.tableName,
         travelModel.toMap(),
         where: '${TravelTable.travelId} = ?',
+        whereArgs: [travelModel.id],
+      );
+
+      await txn.update(
+        TravelTravelStatusTable.tableName,
+        _toTravelTravelStatusMap(travelModel.id, travel.status.index),
+        where: '${TravelTravelStatusTable.travelId} = ?',
         whereArgs: [travelModel.id],
       );
     });
@@ -214,6 +229,16 @@ class TravelRepositoryImpl implements TravelRepository {
         whereArgs: [travelModel.id],
       );
     });
+  }
+
+  Map<String, dynamic> _toTravelTravelStatusMap(
+    String travelId,
+    int statusIndex,
+  ) {
+    return {
+      TravelTravelStatusTable.travelId: travelId,
+      TravelTravelStatusTable.travelStatusIndex: statusIndex,
+    };
   }
 
   Future<void> _insertStop(

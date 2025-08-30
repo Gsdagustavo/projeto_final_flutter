@@ -13,6 +13,7 @@ import 'tables/travel_status_table.dart';
 import 'tables/travel_stop_experiences_table.dart';
 import 'tables/travel_stop_table.dart';
 import 'tables/travel_table.dart';
+import 'tables/travel_travel_status_table.dart';
 
 /// Contains util methods to manipulate the database
 class DBConnection {
@@ -48,6 +49,7 @@ class DBConnection {
     await _insertDefaultValuesIntoTables(db);
 
     await db.execute(TravelTable.createTable);
+    await db.execute(TravelTravelStatusTable.createTable);
     await db.execute(PhotosTable.createTable);
     await db.execute(PlacesTable.createTable);
     await db.execute(TravelStopTable.createTable);

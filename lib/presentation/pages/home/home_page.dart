@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/extensions/date_extensions.dart';
-import '../../../data/local/database/database.dart';
 import '../../../domain/entities/enums.dart';
 import '../../../domain/entities/review.dart';
 import '../../../domain/entities/travel.dart';
@@ -263,24 +262,6 @@ class _TravelWidgetState extends State<_TravelWidget> {
                                   onTap: onTravelFinished,
                                 ),
                               ),
-                            ] else ...[
-                              PopupMenuItem(
-                                child: ListTile(
-                                  leading: const Icon(
-                                    FontAwesomeIcons.deleteLeft,
-                                  ),
-
-                                  /// TODO: intl
-                                  title: const Text('Delete Travel'),
-                                  onTap: () {
-                                    onTravelDeleted(
-                                      context,
-                                      widget.travel,
-                                      popContext: false,
-                                    );
-                                  },
-                                ),
-                              ),
                             ],
 
                             PopupMenuItem(
@@ -295,6 +276,20 @@ class _TravelWidgetState extends State<_TravelWidget> {
                                     extra: widget.travel,
                                   );
                                 },
+                              ),
+                            ),
+
+                            PopupMenuItem(
+                              child: ListTile(
+                                leading: const Icon(Icons.delete),
+
+                                /// TODO: intl
+                                title: const Text('Delete Travel'),
+                                onTap: () async => onTravelDeleted(
+                                  context,
+                                  widget.travel,
+                                  popContext: false,
+                                ),
                               ),
                             ),
                           ],
