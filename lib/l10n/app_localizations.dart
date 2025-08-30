@@ -337,6 +337,60 @@ abstract class AppLocalizations {
   /// **'My Travels'**
   String get my_travels;
 
+  /// No description provided for @start_travel.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Travel'**
+  String get start_travel;
+
+  /// No description provided for @finish_travel.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish Travel'**
+  String get finish_travel;
+
+  /// No description provided for @finish_travel_confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish Travel?'**
+  String get finish_travel_confirm;
+
+  /// No description provided for @delete_travel.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Travel'**
+  String get delete_travel;
+
+  /// No description provided for @view_travel_route.
+  ///
+  /// In en, this message translates to:
+  /// **'View Travel Route'**
+  String get view_travel_route;
+
+  /// No description provided for @upcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get upcoming;
+
+  /// No description provided for @ongoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Ongoing'**
+  String get ongoing;
+
+  /// No description provided for @finished.
+  ///
+  /// In en, this message translates to:
+  /// **'Finished'**
+  String get finished;
+
+  /// No description provided for @stops.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop(s)'**
+  String get stops;
+
   /// No description provided for @review.
   ///
   /// In en, this message translates to:
@@ -366,42 +420,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add Photo'**
   String get add_photo;
-
-  /// No description provided for @finish_travel.
-  ///
-  /// In en, this message translates to:
-  /// **'Finish Travel'**
-  String get finish_travel;
-
-  /// No description provided for @finish_travel_confirm.
-  ///
-  /// In en, this message translates to:
-  /// **'Finish Travel?'**
-  String get finish_travel_confirm;
-
-  /// No description provided for @upcoming.
-  ///
-  /// In en, this message translates to:
-  /// **'Upcoming'**
-  String get upcoming;
-
-  /// No description provided for @ongoing.
-  ///
-  /// In en, this message translates to:
-  /// **'Ongoing'**
-  String get ongoing;
-
-  /// No description provided for @finished.
-  ///
-  /// In en, this message translates to:
-  /// **'Finished'**
-  String get finished;
-
-  /// No description provided for @stops.
-  ///
-  /// In en, this message translates to:
-  /// **'Stop(s)'**
-  String get stops;
 
   /// No description provided for @title_home.
   ///

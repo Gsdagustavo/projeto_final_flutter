@@ -245,9 +245,7 @@ class _TravelWidgetState extends State<_TravelWidget> {
                               PopupMenuItem(
                                 child: ListTile(
                                   leading: const Icon(FontAwesomeIcons.play),
-
-                                  /// TODO: intl
-                                  title: const Text('Start Travel'),
+                                  title: Text(as.start_travel),
                                   onTap: onTravelStarted,
                                 ),
                               ),
@@ -256,9 +254,7 @@ class _TravelWidgetState extends State<_TravelWidget> {
                               PopupMenuItem(
                                 child: ListTile(
                                   leading: const Icon(FontAwesomeIcons.flag),
-
-                                  /// TODO: intl
-                                  title: const Text('Finish Travel'),
+                                  title: Text(as.finish_travel),
                                   onTap: onTravelFinished,
                                 ),
                               ),
@@ -267,9 +263,7 @@ class _TravelWidgetState extends State<_TravelWidget> {
                             PopupMenuItem(
                               child: ListTile(
                                 leading: const Icon(FontAwesomeIcons.route),
-
-                                /// TODO: intl
-                                title: const Text('View Travel Route'),
+                                title: Text(as.view_travel_route),
                                 onTap: () {
                                   context.push(
                                     Routes.travelRoute,
@@ -282,9 +276,7 @@ class _TravelWidgetState extends State<_TravelWidget> {
                             PopupMenuItem(
                               child: ListTile(
                                 leading: const Icon(Icons.delete),
-
-                                /// TODO: intl
-                                title: const Text('Delete Travel'),
+                                title: Text(as.delete_travel),
                                 onTap: () async => onTravelDeleted(
                                   context,
                                   widget.travel,

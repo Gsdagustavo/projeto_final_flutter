@@ -129,6 +129,33 @@ class AppLocalizationsEs extends AppLocalizations {
   String get my_travels => 'Mis Viajes';
 
   @override
+  String get start_travel => 'Iniciar Viaje';
+
+  @override
+  String get finish_travel => 'Finalizar Viaje';
+
+  @override
+  String get finish_travel_confirm => '¿Finalizar Viaje?';
+
+  @override
+  String get delete_travel => 'Eliminar Viaje';
+
+  @override
+  String get view_travel_route => 'Ver Ruta del Viaje';
+
+  @override
+  String get upcoming => 'Próximo';
+
+  @override
+  String get ongoing => 'En curso';
+
+  @override
+  String get finished => 'Finalizado';
+
+  @override
+  String get stops => 'Parada(s)';
+
+  @override
   String get review => 'Reseña';
 
   @override
@@ -142,24 +169,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get add_photo => 'Agregar Foto';
-
-  @override
-  String get finish_travel => 'Finalizar Viaje';
-
-  @override
-  String get finish_travel_confirm => '¿Finalizar Viaje?';
-
-  @override
-  String get upcoming => 'Próximo';
-
-  @override
-  String get ongoing => 'En curso';
-
-  @override
-  String get finished => 'Finalizado';
-
-  @override
-  String get stops => 'Parada(s)';
 
   @override
   String get title_home => 'Inicio';
