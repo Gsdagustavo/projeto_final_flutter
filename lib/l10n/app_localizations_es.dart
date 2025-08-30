@@ -345,6 +345,36 @@ class AppLocalizationsEs extends AppLocalizations {
   String get finish => 'Finalizar';
 
   @override
+  String get duration => 'Duración';
+
+  @override
+  String get days => 'días';
+
+  @override
+  String get transport => 'Transporte';
+
+  @override
+  String get countries => 'Países';
+
+  @override
+  String get travel_dates => 'Fechas del Viaje';
+
+  @override
+  String get start => 'Inicio';
+
+  @override
+  String get end => 'Fin';
+
+  @override
+  String get travel_route => 'Ruta del Viaje';
+
+  @override
+  String get travel_title_updated => 'Título del viaje actualizado';
+
+  @override
+  String get travel_title => 'Título del Viaje';
+
+  @override
   String get yes => 'Sí';
 
   @override

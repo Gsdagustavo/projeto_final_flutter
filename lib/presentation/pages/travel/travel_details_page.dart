@@ -38,7 +38,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('Travel details page build called');
+    final as = AppLocalizations.of(context)!;
 
     return FabPage(
       title: widget.travel.travelTitle,
@@ -73,13 +73,13 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                           children: [
                             Icon(Icons.calendar_today, size: 16),
                             Text(
-                              'Duration',
+                              as.duration,
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ],
                         ),
                         Text(
-                          '${widget.travel.totalDuration} days',
+                          '${widget.travel.totalDuration} ${as.days.toLowerCase()}',
                           style: Theme.of(context).textTheme.labelLarge,
                         ),
                       ],
@@ -101,13 +101,13 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                           children: [
                             Icon(Icons.people, size: 16),
                             Text(
-                              'Participants',
+                              as.participants,
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ],
                         ),
                         Text(
-                          '${widget.travel.participants.length} participants',
+                          '${widget.travel.participants.length} ${as.participants.toLowerCase()}',
                           style: Theme.of(context).textTheme.labelLarge,
                         ),
                       ],
@@ -134,7 +134,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                           children: [
                             Icon(Icons.airplanemode_active, size: 16),
                             Text(
-                              'Transport',
+                              as.transport,
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ],
@@ -164,13 +164,13 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                           children: [
                             Icon(Icons.location_on, size: 16),
                             Text(
-                              'Countries',
+                              as.countries,
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ],
                         ),
                         Text(
-                          '${widget.travel.numCountries} countries',
+                          '${widget.travel.numCountries} ${as.countries.toLowerCase()}',
                           style: Theme.of(context).textTheme.labelLarge,
                         ),
                       ],
@@ -232,7 +232,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                     children: [
                       Icon(Icons.calendar_today),
                       Text(
-                        'Travel Dates',
+                        as.travel_dates,
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
                     ],
@@ -242,7 +242,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Start',
+                        as.start,
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
                       Text(
@@ -257,7 +257,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'End',
+                        as.end,
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
                       Text(
@@ -280,7 +280,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                     children: [
                       Icon(Icons.location_on),
                       Text(
-                        'Travel Route',
+                        as.travel_route,
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
                     ],
@@ -314,7 +314,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                         child: Icon(Icons.delete),
                       ),
                     ),
-                    Text('Delete Travel'),
+                    Text(as.delete_travel),
                   ],
                 ),
               ),
@@ -437,6 +437,8 @@ class _TravelTitleWidgetState extends State<_TravelTitleWidget> {
     final state = context.read<TravelListProvider>();
     await state.updateTravelTitle(widget.travel);
 
+    final as = AppLocalizations.of(context)!;
+
     await showDialog(
       context: context,
       builder: (context) {
@@ -444,7 +446,7 @@ class _TravelTitleWidgetState extends State<_TravelTitleWidget> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Travel Title Updated!'),
+              Text(as.travel_title_updated),
               Icon(Icons.check, color: Colors.green),
             ],
           ),
@@ -469,7 +471,7 @@ class _TravelTitleWidgetState extends State<_TravelTitleWidget> {
             child: TextFormField(
               decoration: InputDecoration(
                 constraints: BoxConstraints(maxWidth: 300, maxHeight: 100),
-                labelText: 'Travel Title',
+                labelText: as.travel_title,
               ),
               controller: travelTitleController,
               validator: validations.travelTitleValidator,

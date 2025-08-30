@@ -769,6 +769,66 @@ abstract class AppLocalizations {
   /// **'Finish'**
   String get finish;
 
+  /// No description provided for @duration.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get duration;
+
+  /// No description provided for @days.
+  ///
+  /// In en, this message translates to:
+  /// **'days'**
+  String get days;
+
+  /// No description provided for @transport.
+  ///
+  /// In en, this message translates to:
+  /// **'Transport'**
+  String get transport;
+
+  /// No description provided for @countries.
+  ///
+  /// In en, this message translates to:
+  /// **'Countries'**
+  String get countries;
+
+  /// No description provided for @travel_dates.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel Dates'**
+  String get travel_dates;
+
+  /// No description provided for @start.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get start;
+
+  /// No description provided for @end.
+  ///
+  /// In en, this message translates to:
+  /// **'End'**
+  String get end;
+
+  /// No description provided for @travel_route.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel Route'**
+  String get travel_route;
+
+  /// No description provided for @travel_title_updated.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel title updated'**
+  String get travel_title_updated;
+
+  /// No description provided for @travel_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel Title'**
+  String get travel_title;
+
   /// No description provided for @yes.
   ///
   /// In en, this message translates to:

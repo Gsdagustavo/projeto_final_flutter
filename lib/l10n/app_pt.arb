@@ -141,6 +141,18 @@
   "err_you_must_select_arrive_date_first": "Você deve selecionar a data de chegada primeiro!",
   "finish": "Finalizar",
 
+  "@@travel_details": {},
+  "duration": "Duração",
+  "days": "dias",
+  "transport": "Transporte",
+  "countries": "Países",
+  "travel_dates": "Datas da Viagem",
+  "start": "Início",
+  "end": "Fim",
+  "travel_route": "Rota da Viagem",
+  "travel_title_updated": "Título da viagem atualizado",
+  "travel_title": "Título da Viagem",
+
   "@@util": {},
   "yes": "Sim",
   "no": "Não",

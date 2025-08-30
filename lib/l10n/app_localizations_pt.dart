@@ -345,6 +345,36 @@ class AppLocalizationsPt extends AppLocalizations {
   String get finish => 'Finalizar';
 
   @override
+  String get duration => 'Duração';
+
+  @override
+  String get days => 'dias';
+
+  @override
+  String get transport => 'Transporte';
+
+  @override
+  String get countries => 'Países';
+
+  @override
+  String get travel_dates => 'Datas da Viagem';
+
+  @override
+  String get start => 'Início';
+
+  @override
+  String get end => 'Fim';
+
+  @override
+  String get travel_route => 'Rota da Viagem';
+
+  @override
+  String get travel_title_updated => 'Título da viagem atualizado';
+
+  @override
+  String get travel_title => 'Título da Viagem';
+
+  @override
   String get yes => 'Sim';
 
   @override

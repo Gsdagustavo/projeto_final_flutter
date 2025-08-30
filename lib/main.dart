@@ -24,8 +24,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   /// Resets the database
-  // final db = await DBConnection().getDatabase(reset: true);
-  // await DBConnection().printAllTables(db);
+  final db = await DBConnection().getDatabase(reset: true);
+  await DBConnection().printAllTables(db);
 
   /// Initialize Firebase App
   await Firebase.initializeApp();
@@ -37,11 +37,10 @@ Future<void> main() async {
   final reviewRepository = ReviewRepositoryImpl();
   final reviewUseCases = ReviewUseCasesImpl(reviewRepository);
 
-  // final travels = await generateSampleTravels();
-  //
-  // for (final travel in travels) {
-  //   await travelUseCases.registerTravel(travel);
-  // }
+  final travels = await generateSampleTravels();
+  for (final travel in travels) {
+    await travelUseCases.registerTravel(travel);
+  }
 
   /// Build App
   runApp(
