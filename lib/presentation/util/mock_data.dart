@@ -13,9 +13,9 @@ Future<List<Travel>> generateSampleTravels() async {
       photos: [],
       travelTitle: 'Exploring Rio de Janeiro',
       startDate: DateTime(2025, 8, 30),
-      endDate: DateTime(2025, 9, 1),
+      endDate: DateTime(2026, 9, 1),
       transportType: TransportType.plane,
-      status: TravelStatus.finished,
+      status: TravelStatus.upcoming,
       participants: [
         Participant(
           id: 1,
@@ -43,6 +43,8 @@ Future<List<Travel>> generateSampleTravels() async {
             longitude: -43.1729,
           ),
           type: TravelStopType.start,
+          arriveDate: DateTime(2025, 8, 30, 9, 0),
+          leaveDate: DateTime(2026, 8, 30, 18, 0),
         ),
         TravelStop(
           experiences: [Experience.visitLocalEstablishments],
@@ -56,6 +58,8 @@ Future<List<Travel>> generateSampleTravels() async {
             longitude: -43.1034,
           ),
           type: TravelStopType.stop,
+          arriveDate: DateTime(2025, 8, 31, 9, 0),
+          leaveDate: DateTime(2026, 8, 31, 17, 0),
         ),
         TravelStop(
           experiences: [Experience.alternativeCuisines],
@@ -69,6 +73,8 @@ Future<List<Travel>> generateSampleTravels() async {
             longitude: -44.3186,
           ),
           type: TravelStopType.end,
+          arriveDate: DateTime(2025, 9, 1, 10, 0),
+          leaveDate: DateTime(2026, 9, 1, 20, 0),
         ),
       ],
     ),
@@ -109,6 +115,8 @@ Future<List<Travel>> generateSampleTravels() async {
             longitude: 2.3522,
           ),
           type: TravelStopType.start,
+          arriveDate: DateTime(2026, 3, 5, 8, 0),
+          leaveDate: DateTime(2026, 3, 8, 20, 0),
         ),
         TravelStop(
           experiences: [Experience.cultureImmersion],
@@ -122,6 +130,8 @@ Future<List<Travel>> generateSampleTravels() async {
             longitude: 2.1204,
           ),
           type: TravelStopType.stop,
+          arriveDate: DateTime(2026, 3, 9, 9, 0),
+          leaveDate: DateTime(2026, 3, 11, 18, 0),
         ),
         TravelStop(
           experiences: [Experience.socialEvents],
@@ -135,6 +145,8 @@ Future<List<Travel>> generateSampleTravels() async {
             longitude: 4.8357,
           ),
           type: TravelStopType.end,
+          arriveDate: DateTime(2026, 3, 12, 10, 0),
+          leaveDate: DateTime(2026, 3, 15, 22, 0),
         ),
       ],
     ),
