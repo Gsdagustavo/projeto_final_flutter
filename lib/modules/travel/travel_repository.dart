@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../data/local/database/database.dart';
@@ -35,6 +36,8 @@ abstract class TravelRepository {
   Future<void> startTravel(Travel travel);
 
   Future<void> finishTravel(Travel travel);
+
+  Future<void> updateTravelTitle(Travel travel);
 }
 
 /// Concrete implementation of [TravelRepository], using local SQLite database
@@ -192,6 +195,22 @@ class TravelRepositoryImpl implements TravelRepository {
     });
   }
 
+  @override
+  Future<void> updateTravelTitle(Travel travel) async {
+    final db = await _db;
+
+    await db.transaction((txn) async {
+      final travelModel = TravelModel.fromEntity(travel);
+
+      await txn.update(
+        TravelTable.tableName,
+        travelModel.toMap(),
+        where: '${TravelTable.travelId} = ?',
+        whereArgs: [travelModel.travelId],
+      );
+    });
+  }
+
   Future<void> _insertStop(
     DatabaseExecutor txn,
     TravelStopModel stop,
@@ -222,7 +241,7 @@ class TravelRepositoryImpl implements TravelRepository {
       for (final experience in stop.experiences!) {
         await txn.insert(TravelStopExperiencesTable.tableName, {
           TravelStopExperiencesTable.travelStopId: stopId,
-          TravelStopExperiencesTable.experience: experience.name,
+          TravelStopExperiencesTable.experienceIndex: experience.index,
         });
       }
     }
@@ -289,8 +308,11 @@ class TravelRepositoryImpl implements TravelRepository {
           );
 
           for (final experienceMap in experiencesMap) {
-            final name = experienceMap[ExperiencesTable.experience] as String;
-            experiences.add(Experience.values.byName(name));
+            debugPrint(experienceMap.toString());
+
+            final experience = Experience
+                .values[experienceMap[ExperiencesTable.experienceIndex] as int];
+            experiences.add(experience);
           }
 
           final placeMap = await txn.query(

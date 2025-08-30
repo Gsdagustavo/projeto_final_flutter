@@ -28,11 +28,10 @@ class TravelListProvider with ChangeNotifier {
       notifyListeners();
       return;
     }
-    await update();
 
     _isLoading = false;
     errorMessage = null;
-    notifyListeners();
+    await update();
   }
 
   Future<void> finishTravel(Travel travel) async {
@@ -47,11 +46,9 @@ class TravelListProvider with ChangeNotifier {
       notifyListeners();
       return;
     }
-    await update();
-
     _isLoading = false;
     errorMessage = null;
-    notifyListeners();
+    await update();
   }
 
   Future<void> deleteTravel(Travel travel) async {
@@ -66,13 +63,16 @@ class TravelListProvider with ChangeNotifier {
       notifyListeners();
       return;
     }
-    await update();
 
     _isLoading = false;
     errorMessage = null;
-    notifyListeners();
+    await update();
   }
 
+  Future<void> updateTravelTitle(Travel travel) async {
+    await _travelUseCases.updateTravelTitle(travel);
+    await update();
+  }
 
   Future<void> update() async {
     _isLoading = true;

@@ -8,6 +8,7 @@ import 'tables/photos_table.dart';
 import 'tables/places_table.dart';
 import 'tables/reviews_table.dart';
 import 'tables/transport_types_table.dart';
+import 'tables/travel_status_table.dart';
 import 'tables/travel_stop_experiences_table.dart';
 import 'tables/travel_stop_table.dart';
 import 'tables/travel_table.dart';
@@ -64,7 +65,14 @@ class DBConnection {
     /// Insert values into experiences table
     Experience.values.map(
       (e) async => await db.insert(ExperiencesTable.tableName, {
-        ExperiencesTable.experience: e.name,
+        ExperiencesTable.experienceIndex: e.index,
+      }),
+    );
+
+    /// Insert values into travel status table
+    TravelStatus.values.map(
+      (s) async => await db.insert(TravelStatusTable.tableName, {
+        TravelStatusTable.travelStatusIndex: s.index,
       }),
     );
   }

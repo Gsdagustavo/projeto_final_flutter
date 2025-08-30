@@ -10,7 +10,7 @@ class Travel {
   int? travelId;
 
   /// Travel Title
-  final String travelTitle;
+  String travelTitle;
 
   /// Travel start date
   DateTime startDate;
@@ -44,7 +44,7 @@ class Travel {
   });
 
   /// Returns a [Duration] that represents the total duration of the travel
-  Duration get totalDuration => endDate.difference(startDate);
+  int get totalDuration => endDate.difference(startDate).inDays;
 
   Travel copyWith({
     int? travelId,
@@ -68,6 +68,14 @@ class Travel {
       status: status ?? this.status,
       photos: photos ?? this.photos,
     );
+  }
+
+  int get numCountries {
+    return stops.map((e) => e.place.country).toSet().length;
+  }
+
+  List<String?> get countries {
+    return stops.map((e) => e.place.country).toSet().toList();
   }
 
   @override

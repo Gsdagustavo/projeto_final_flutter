@@ -25,7 +25,7 @@ Future<void> main() async {
 
   /// Resets the database
   final db = await DBConnection().getDatabase(reset: true);
-  // await DBConnection().printAllTables(db);
+  await DBConnection().printAllTables(db);
 
   /// Initialize Firebase App
   await Firebase.initializeApp();
@@ -73,7 +73,7 @@ Future<void> main() async {
   // await reviewUseCases.addReviews(reviews: reviews);
   // await reviewUseCases.getReviews();
 
-  await DBConnection().printAllTables(db);
+  // await DBConnection().printAllTables(db);
 }
 
 Future<List<Review>> generateMockReviews() async {

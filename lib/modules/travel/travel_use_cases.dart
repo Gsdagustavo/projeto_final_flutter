@@ -25,6 +25,8 @@ abstract class TravelUseCases {
   Future<void> startTravel(Travel travel);
 
   Future<void> finishTravel(Travel travel);
+
+  Future<void> updateTravelTitle(Travel travel);
 }
 
 /// Concrete implementation of [TravelUseCases]
@@ -67,6 +69,8 @@ class TravelUseCasesImpl implements TravelUseCases {
     final finalTravel = travel.copyWith(
       participants: _validateParticipants(travel.participants),
     );
+
+    debugPrint('Travel that is going to be registered: $finalTravel');
 
     /// Register travel
     await travelRepository.registerTravel(travel: finalTravel);
@@ -114,20 +118,16 @@ class TravelUseCasesImpl implements TravelUseCases {
 
   @override
   Future<void> startTravel(Travel travel) async {
+    print('Travel that is going to be started: ${travel.status}');
+
     final now = DateTime.now();
-
-    if (travel.status == TravelStatus.finished ||
-        travel.endDate.isBefore(now)) {
-      throw Exception('Travel has already been finished');
-    }
-
-    if (travel.status == TravelStatus.ongoing ||
-        travel.startDate.isBefore(now)) {
-      throw Exception('Travel has already started');
-    }
 
     if (travel.status == TravelStatus.ongoing) {
       throw Exception('Travel has already started');
+    }
+
+    if (travel.status == TravelStatus.finished) {
+      throw Exception('Travel has already been finished');
     }
 
     travel.startDate = now;
@@ -138,9 +138,11 @@ class TravelUseCasesImpl implements TravelUseCases {
 
   @override
   Future<void> finishTravel(Travel travel) async {
+    debugPrint('Travel that is going to be finished: $travel');
+
     final now = DateTime.now();
 
-    if (travel.startDate.isAfter(now)) {
+    if (travel.status == TravelStatus.upcoming) {
       /// TODO: intl
       throw Exception('Cannot finish a travel that has not started yet');
     }
@@ -154,6 +156,26 @@ class TravelUseCasesImpl implements TravelUseCases {
     travel.status = TravelStatus.finished;
 
     await travelRepository.finishTravel(travel);
+  }
+
+  @override
+  Future<void> updateTravelTitle(Travel travel) async {
+    if (!_validateTravelTitle(travel.travelTitle)) {
+      throw Exception('Invalid travel name');
+    }
+
+    await travelRepository.updateTravelTitle(travel);
+  }
+
+  bool _validateTravelTitle(String title) {
+    if (title.trim().isEmpty) {
+      // throw TravelRegisterException('Invalid travel name');
+      return false;
+    }
+
+    /// TODO: add more validations
+
+    return true;
   }
 }
 

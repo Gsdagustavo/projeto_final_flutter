@@ -21,6 +21,7 @@ import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
 import '../util/form_validations.dart';
+import '../util/travel_utils.dart';
 
 /// The Home Page of the app
 class HomePage extends StatefulWidget {
@@ -191,15 +192,6 @@ class _TravelWidgetState extends State<_TravelWidget> {
     }
   }
 
-  Future<void> onTravelDeleted() async {
-    final state = context.read<TravelListProvider>();
-    await state.deleteTravel(widget.travel);
-  }
-
-  void goToTravelRoute() {
-    context.push(Routes.travelRoute, extra: widget.travel);
-  }
-
   @override
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
@@ -207,8 +199,9 @@ class _TravelWidgetState extends State<_TravelWidget> {
     return Card(
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-
-        onTap: goToTravelRoute,
+        onTap: () {
+          context.push(Routes.travelDetails, extra: widget.travel);
+        },
         child: Column(
           children: [
             Stack(
@@ -259,7 +252,8 @@ class _TravelWidgetState extends State<_TravelWidget> {
                                   onTap: onTravelStarted,
                                 ),
                               ),
-                            ] else ...[
+                            ] else if (widget.travel.status ==
+                                TravelStatus.ongoing) ...[
                               PopupMenuItem(
                                 child: ListTile(
                                   leading: const Icon(FontAwesomeIcons.flag),
@@ -269,19 +263,25 @@ class _TravelWidgetState extends State<_TravelWidget> {
                                   onTap: onTravelFinished,
                                 ),
                               ),
-                            ],
+                            ] else ...[
+                              PopupMenuItem(
+                                child: ListTile(
+                                  leading: const Icon(
+                                    FontAwesomeIcons.deleteLeft,
+                                  ),
 
-                            PopupMenuItem(
-                              child: ListTile(
-                                leading: const Icon(
-                                  FontAwesomeIcons.deleteLeft,
+                                  /// TODO: intl
+                                  title: const Text('Delete Travel'),
+                                  onTap: () async {
+                                    await onTravelDeleted(
+                                      context,
+                                      widget.travel,
+                                      popContext: false,
+                                    );
+                                  },
                                 ),
-
-                                /// TODO: intl
-                                title: const Text('Delete Travel'),
-                                onTap: onTravelDeleted,
                               ),
-                            ),
+                            ],
 
                             PopupMenuItem(
                               child: ListTile(
@@ -289,7 +289,12 @@ class _TravelWidgetState extends State<_TravelWidget> {
 
                                 /// TODO: intl
                                 title: const Text('View Travel Route'),
-                                onTap: goToTravelRoute,
+                                onTap: () {
+                                  context.push(
+                                    Routes.travelRoute,
+                                    extra: widget.travel,
+                                  );
+                                },
                               ),
                             ),
                           ],

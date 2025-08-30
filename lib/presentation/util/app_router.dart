@@ -12,6 +12,7 @@ import '../pages/home/home_page.dart';
 import '../pages/settings/settings_page.dart';
 import '../pages/travel/map_page.dart';
 import '../pages/travel/register_travel_page.dart';
+import '../pages/travel/travel_details_page.dart';
 import '../pages/travel/travel_route_page.dart';
 import 'app_routes.dart';
 
@@ -55,6 +56,14 @@ class AppRouter {
             ],
           ),
         ],
+      ),
+
+      GoRoute(
+        path: Routes.travelDetails,
+        pageBuilder: (context, state) {
+          final travel = state.extra as Travel;
+          return NoTransitionPage(child: TravelDetailsPage(travel: travel));
+        },
       ),
 
       GoRoute(

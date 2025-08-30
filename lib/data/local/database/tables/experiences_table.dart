@@ -9,14 +9,14 @@ abstract final class ExperiencesTable {
 
   /// Column name for the experience name
   ///
-  /// `TEXT PRIMARY KEY`
-  static const String experience = 'experience';
+  /// `INTEGER PRIMARY KEY`
+  static const String experienceIndex = 'experienceIndex';
 
   /// SQL command to create the experiences table
   static const String createTable =
       '''
     CREATE TABLE $tableName (
-      $experience TEXT PRIMARY KEY
+      $experienceIndex INTEGER PRIMARY KEY
     );
   ''';
 }
