@@ -270,6 +270,27 @@ class AppLocalizationsEs extends AppLocalizations {
   String get no_stops_registered => 'No hay paradas registradas aún. Usa el mapa para planificar tu ruta entre diferentes ciudades y países';
 
   @override
+  String get use_the_map_add_waypoints => 'Usa el mapa para modificar tu ruta o agregar más paradas';
+
+  @override
+  String get travel_photos => 'Fotos del Viaje';
+
+  @override
+  String get add_travel_photos => 'Agregar Fotos del Viaje';
+
+  @override
+  String get tap_select_photos => 'Toca para seleccionar fotos';
+
+  @override
+  String get photos_selected => 'fotos seleccionadas';
+
+  @override
+  String get choose_photos => 'Elegir Fotos';
+
+  @override
+  String get add_photos_label => 'Agrega fotos para hacer tu viaje más memorable y visualmente atractivo';
+
+  @override
   String get invalid_travel_data => '¡Datos de viaje no válidos!';
 
   @override

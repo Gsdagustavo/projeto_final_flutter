@@ -619,6 +619,48 @@ abstract class AppLocalizations {
   /// **'No stops registered yet. Use the map to plan your route across different cities and countries'**
   String get no_stops_registered;
 
+  /// No description provided for @use_the_map_add_waypoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the map to modify your route or to add more stops'**
+  String get use_the_map_add_waypoints;
+
+  /// No description provided for @travel_photos.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel Photos'**
+  String get travel_photos;
+
+  /// No description provided for @add_travel_photos.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Travel Photos'**
+  String get add_travel_photos;
+
+  /// No description provided for @tap_select_photos.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to select photos'**
+  String get tap_select_photos;
+
+  /// No description provided for @photos_selected.
+  ///
+  /// In en, this message translates to:
+  /// **'photos selected'**
+  String get photos_selected;
+
+  /// No description provided for @choose_photos.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Photos'**
+  String get choose_photos;
+
+  /// No description provided for @add_photos_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Add photos to make your travel more memorable and visually appealing'**
+  String get add_photos_label;
+
   /// No description provided for @invalid_travel_data.
   ///
   /// In en, this message translates to:

@@ -109,6 +109,13 @@
   "route_planning_label": "Plan your travel route and stops",
   "registered_stops": "Registered Stops",
   "no_stops_registered": "No stops registered yet. Use the map to plan your route across different cities and countries",
+  "use_the_map_add_waypoints": "Use the map to modify your route or to add more stops",
+  "travel_photos": "Travel Photos",
+  "add_travel_photos": "Add Travel Photos",
+  "tap_select_photos": "Tap to select photos",
+  "photos_selected": "photos selected",
+  "choose_photos": "Choose Photos",
+  "add_photos_label": "Add photos to make your travel more memorable and visually appealing",
   "invalid_travel_data": "Invalid Travel Data",
   "travel_registered_successfully": "Your Travel was successfully registered!",
 

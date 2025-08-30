@@ -662,9 +662,8 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Center(
-                      /// TODO: intl
                       child: Text(
-                        'Use the map to modify your route or to add more waypoints',
+                        as.use_the_map_add_waypoints,
                         style: Theme.of(context).textTheme.bodySmall,
                         textAlign: TextAlign.center,
                       ),
@@ -689,8 +688,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        /// TODO: intl
-                        'Travel Photos',
+                        as.travel_photos,
                         style: Theme.of(context).textTheme.displaySmall,
                       ),
                     ],
@@ -716,18 +714,15 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                             children: [
                               const Icon(Icons.camera_alt, size: 42),
                               Text(
-                                /// TODO: intl
-                                'Add Travel Photos',
+                                as.add_travel_photos,
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
                               Text(
-                                /// TODO: intl
-                                'Tap to select photos',
+                                as.tap_select_photos,
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                               Text(
-                                /// TODO: intl
-                                '${state.travelPhotos.length} of 5 photos added',
+                                '${state.travelPhotos.length} ${as.photos_selected}',
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                               const Padding(padding: EdgeInsets.all(2)),
@@ -737,9 +732,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                                   child: Row(
                                     children: [
                                       const Icon(Icons.file_upload_outlined),
-
-                                      /// TODO: intl
-                                      Text('Choose Photos'),
+                                      Text(as.choose_photos),
                                     ],
                                   ),
                                 ),
@@ -787,9 +780,8 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                   ),
 
                   Center(
-                    /// TODO: intl
                     child: Text(
-                      'Add photos to make your travel more memorable and visually appealing',
+                      as.add_photos_label,
                       style: Theme.of(context).textTheme.bodySmall,
                       textAlign: TextAlign.center,
                     ),
@@ -804,8 +796,6 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
             child: Consumer<RegisterTravelProvider>(
               builder: (_, state, __) {
                 final isTravelValid = state.isTravelValid;
-                debugPrint('Is travel valid: $isTravelValid');
-
                 final baseColor = Theme.of(
                   context,
                 ).elevatedButtonTheme.style!.backgroundColor!.resolve({})!;
@@ -819,7 +809,6 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                           : baseColor.withOpacity(0.3),
                     ),
                     onPressed: () async {
-                      debugPrint('register travel button pressed');
                       if (!state.isTravelValid) {
                         return;
                       }
@@ -827,7 +816,6 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                       _travelTitleController.clear();
                       _startDateController.clear();
                       _endDateController.clear();
-                      debugPrint('controllers cleansed in ui');
                     },
                     child: Text(as.title_register_travel),
                   ),

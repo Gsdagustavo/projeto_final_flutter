@@ -109,6 +109,13 @@
   "route_planning_label": "Planeje sua rota de viagem e paradas",
   "registered_stops": "Paradas Registradas",
   "no_stops_registered": "Nenhuma parada registrada ainda. Use o mapa para planejar sua rota entre diferentes cidades e países",
+  "use_the_map_add_waypoints": "Use o mapa para modificar sua rota ou adicionar mais paradas",
+  "travel_photos": "Fotos da Viagem",
+  "add_travel_photos": "Adicionar Fotos da Viagem",
+  "tap_select_photos": "Toque para selecionar fotos",
+  "photos_selected": "fotos selecionadas",
+  "choose_photos": "Escolher Fotos",
+  "add_photos_label": "Adicione fotos para tornar sua viagem mais memorável e visualmente atraente",
   "invalid_travel_data": "A viagem contém dados inválidos",
   "travel_registered_successfully": "Viagem registrada com sucesso",
 
