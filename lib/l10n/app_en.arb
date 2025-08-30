@@ -56,6 +56,11 @@
   "experience_social_events": "Social Events",
   "other": "Other",
 
+  "@@travel_status": {},
+  "upcoming": "Upcoming",
+  "ongoing": "Ongoing",
+  "finished": "Finished",
+
   "@@home_page": {},
   "my_travels": "My Travels",
   "start_travel": "Start Travel",
@@ -63,9 +68,6 @@
   "finish_travel_confirm": "Finish Travel?",
   "delete_travel": "Delete Travel",
   "view_travel_route": "View Travel Route",
-  "upcoming": "Upcoming",
-  "ongoing": "Ongoing",
-  "finished": "Finished",
   "stops": "Stop(s)",
 
   "@@review": {},

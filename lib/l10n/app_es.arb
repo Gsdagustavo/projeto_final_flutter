@@ -56,6 +56,11 @@
   "experience_social_events": "Eventos sociales",
   "other": "Otro",
 
+  "@@travel_status": {},
+  "upcoming": "Próximo",
+  "ongoing": "En curso",
+  "finished": "Finalizado",
+
   "@@home_page": {},
   "my_travels": "Mis Viajes",
   "start_travel": "Iniciar Viaje",
@@ -63,9 +68,6 @@
   "finish_travel_confirm": "¿Finalizar Viaje?",
   "delete_travel": "Eliminar Viaje",
   "view_travel_route": "Ver Ruta del Viaje",
-  "upcoming": "Próximo",
-  "ongoing": "En curso",
-  "finished": "Finalizado",
   "stops": "Parada(s)",
 
   "@@review": {},

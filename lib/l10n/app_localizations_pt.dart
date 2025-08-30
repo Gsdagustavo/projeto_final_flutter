@@ -126,6 +126,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get other => 'Outro';
 
   @override
+  String get upcoming => 'Futura';
+
+  @override
+  String get ongoing => 'Em andamento';
+
+  @override
+  String get finished => 'Concluída';
+
+  @override
   String get my_travels => 'Minhas Viagens';
 
   @override
@@ -142,15 +151,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get view_travel_route => 'Ver Rota da Viagem';
-
-  @override
-  String get upcoming => 'Futura';
-
-  @override
-  String get ongoing => 'Em andamento';
-
-  @override
-  String get finished => 'Concluída';
 
   @override
   String get stops => 'Parada(s)';

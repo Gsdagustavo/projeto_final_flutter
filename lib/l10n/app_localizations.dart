@@ -331,6 +331,24 @@ abstract class AppLocalizations {
   /// **'Other'**
   String get other;
 
+  /// No description provided for @upcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get upcoming;
+
+  /// No description provided for @ongoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Ongoing'**
+  String get ongoing;
+
+  /// No description provided for @finished.
+  ///
+  /// In en, this message translates to:
+  /// **'Finished'**
+  String get finished;
+
   /// No description provided for @my_travels.
   ///
   /// In en, this message translates to:
@@ -366,24 +384,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View Travel Route'**
   String get view_travel_route;
-
-  /// No description provided for @upcoming.
-  ///
-  /// In en, this message translates to:
-  /// **'Upcoming'**
-  String get upcoming;
-
-  /// No description provided for @ongoing.
-  ///
-  /// In en, this message translates to:
-  /// **'Ongoing'**
-  String get ongoing;
-
-  /// No description provided for @finished.
-  ///
-  /// In en, this message translates to:
-  /// **'Finished'**
-  String get finished;
 
   /// No description provided for @stops.
   ///
