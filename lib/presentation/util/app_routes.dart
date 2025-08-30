@@ -3,8 +3,9 @@ class Routes {
   static const home = '/home';
 
   static const registerTravel = '/registerTravel';
-  static const travelMap = '/travelMap';
   static const travelRoute = '/travelRoute';
+  static const travelDetails = '/travelDetails';
+  static const travelMap = '/travelMap';
   static const settings = '/settings';
 
   static const auth = '/auth';
