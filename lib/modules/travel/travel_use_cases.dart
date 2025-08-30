@@ -27,6 +27,8 @@ abstract class TravelUseCases {
   Future<void> finishTravel(Travel travel);
 
   Future<void> updateTravelTitle(Travel travel);
+
+  Future<List<Travel>> findTravelsByTitle(String title);
 }
 
 /// Concrete implementation of [TravelUseCases]
@@ -165,6 +167,16 @@ class TravelUseCasesImpl implements TravelUseCases {
     }
 
     await travelRepository.updateTravelTitle(travel);
+  }
+
+  @override
+  Future<List<Travel>> findTravelsByTitle(String title) async {
+    if (title.trim().isEmpty) {
+      return [];
+    }
+
+    final travels = await travelRepository.findTravelsByTitle(title);
+    return travels.map((e) => e.toEntity()).toList();
   }
 
   bool _validateTravelTitle(String title) {

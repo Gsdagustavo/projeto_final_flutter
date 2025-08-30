@@ -85,6 +85,19 @@ class TravelListProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> searchTravel(String title) async {
+    debugPrint('Search travel called in provider');
+    final searchResult = await _travelUseCases.findTravelsByTitle(title);
+    debugPrint('Search result: $searchResult');
+
+    if (searchResult.isEmpty) return;
+
+    _travels.clear();
+    _travels.addAll(searchResult);
+    notifyListeners();
+    debugPrint('Travels: $_travels');
+  }
+
   List<Travel> get travels => _travels;
 
   bool get isLoading => _isLoading;

@@ -19,6 +19,7 @@ import '../../util/app_routes.dart';
 import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
+import '../travel/register_travel_page.dart';
 import '../util/form_validations.dart';
 import '../util/travel_utils.dart';
 
@@ -59,12 +60,10 @@ class _HomePageState extends State<HomePage> {
       //   ],
       // ),
       body: Consumer<TravelListProvider>(
-        builder: (context, travelListProvider, child) {
+        builder: (_, travelListProvider, __) {
           if (travelListProvider.isLoading) {
             return Center(child: LoadingDialog());
           }
-
-          final travels = travelListProvider.travels;
 
           /// TODO:
           // if (travels.isEmpty) {
@@ -73,14 +72,37 @@ class _HomePageState extends State<HomePage> {
           //   );
           // }
 
-          return ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: travels.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 26),
-            itemBuilder: (context, index) {
-              return _TravelWidget(travel: travels[index]);
-            },
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(cardPadding),
+                child: TextField(
+                  onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                  controller: searchController,
+                  onChanged: (value) async {
+                    await travelListProvider.searchTravel(
+                      searchController.text,
+                    );
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Search...',
+                    prefixIcon: Icon(Icons.search),
+                  ),
+                ),
+              ),
+
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: travelListProvider.travels.length,
+                separatorBuilder: (_, __) => const SizedBox(height: 26),
+                itemBuilder: (context, index) {
+                  return _TravelWidget(
+                    travel: travelListProvider.travels[index],
+                  );
+                },
+              ),
+            ],
           );
         },
       ),
