@@ -25,7 +25,7 @@ abstract final class TravelTravelStatusTable {
       '''
     CREATE TABLE $tableName (
       $travelStatusIndex INTEGER NOT NULL,
-      $travelId INTEGER NOT NULL,
+      $travelId TEXT NOT NULL,
       FOREIGN KEY ($travelId) REFERENCES ${TravelTable.tableName} (${TravelTable.travelId}),
       FOREIGN KEY ($travelStatusIndex) REFERENCES ${TravelStatusTable.tableName} (${TravelStatusTable.travelStatusIndex}),
       PRIMARY KEY ($travelId, $travelStatusIndex)

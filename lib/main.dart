@@ -73,12 +73,11 @@ Future<void> main() async {
   // await reviewUseCases.addReviews(reviews: reviews);
   // await reviewUseCases.getReviews();
 
-  // await DBConnection().printAllTables(db);
+  await DBConnection().printAllTables(db);
 }
 
 Future<List<Review>> generateMockReviews() async {
   final mockAuthor1 = Participant(
-    id: 1,
     name: 'Alice',
     age: 15,
     profilePicture: await FileService().getDefaultProfilePictureFile(),

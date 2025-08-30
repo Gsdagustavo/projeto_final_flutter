@@ -1,10 +1,12 @@
+import 'package:uuid/uuid.dart';
+
 import 'enums.dart';
 import 'place.dart';
 import 'review.dart';
 
 class TravelStop {
   /// Travel Stop ID
-  int? travelStopId;
+  final String id;
 
   /// Travel Stop arrive date
   DateTime? arriveDate;
@@ -23,40 +25,33 @@ class TravelStop {
 
   /// Named constructor for the Travel Stop
   TravelStop({
+    String? id,
     required this.place,
-    this.travelStopId,
     this.type = TravelStopType.start,
     this.arriveDate,
     this.leaveDate,
     this.experiences,
     this.reviews,
-  });
+  }) : id = id ?? Uuid().v4() ;
 
   TravelStop copyWith({
+    String? id,
     Place? place,
-    int? travelStopId,
     DateTime? arriveDate,
     DateTime? leaveDate,
     TravelStopType? type,
     List<Experience>? experiences,
     List<Review>? reviews,
   }) {
-
-    print('Stop copywith called. old stop: $this');
-
-    final stop = TravelStop(
+    return TravelStop(
+      id: id ?? this.id,
       place: place ?? this.place,
-      travelStopId: travelStopId ?? this.travelStopId,
       arriveDate: arriveDate ?? this.arriveDate,
       leaveDate: leaveDate ?? this.leaveDate,
       type: type ?? this.type,
       experiences: experiences ?? this.experiences,
       reviews: reviews ?? this.reviews,
     );
-
-    print('Stop copywith called. new stop: $stop');
-
-    return stop;
   }
 
   @override
@@ -64,15 +59,15 @@ class TravelStop {
       identical(this, other) ||
           other is TravelStop &&
               runtimeType == other.runtimeType &&
-              travelStopId == other.travelStopId;
+              id == other.id;
 
   @override
-  int get hashCode => travelStopId.hashCode;
+  int get hashCode => id.hashCode;
 
 
   @override
   String toString() {
-    return 'TravelStop{travelStopId: $travelStopId, arriveDate: $arriveDate, '
+    return 'TravelStop{id: $id, arriveDate: $arriveDate, '
         'leaveDate: $leaveDate, type: $type, experiences: $experiences, '
         'place: $place}';
   }

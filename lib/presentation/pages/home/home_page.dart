@@ -42,23 +42,23 @@ class _HomePageState extends State<HomePage> {
 
     return FabPage(
       title: as.title_home,
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: () async =>
-                await context.read<TravelListProvider>().update(),
-          ),
-
-          FloatingActionButton(
-            onPressed: () async {
-              await DBConnection().printAllTables(
-                await DBConnection().getDatabase(),
-              );
-            },
-          ),
-        ],
-      ),
+      // floatingActionButton: Column(
+      //   mainAxisAlignment: MainAxisAlignment.end,
+      //   children: [
+      //     FloatingActionButton(
+      //       onPressed: () async =>
+      //           await context.read<TravelListProvider>().update(),
+      //     ),
+      //
+      //     FloatingActionButton(
+      //       onPressed: () async {
+      //         await DBConnection().printAllTables(
+      //           await DBConnection().getDatabase(),
+      //         );
+      //       },
+      //     ),
+      //   ],
+      // ),
       body: Consumer<TravelListProvider>(
         builder: (context, travelListProvider, child) {
           if (travelListProvider.isLoading) {
@@ -272,8 +272,8 @@ class _TravelWidgetState extends State<_TravelWidget> {
 
                                   /// TODO: intl
                                   title: const Text('Delete Travel'),
-                                  onTap: () async {
-                                    await onTravelDeleted(
+                                  onTap: () {
+                                    onTravelDeleted(
                                       context,
                                       widget.travel,
                                       popContext: false,

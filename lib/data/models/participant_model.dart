@@ -7,7 +7,7 @@ import '../local/database/tables/participants_table.dart';
 
 class ParticipantModel {
   /// Participant ID
-  int? id;
+  final String id;
 
   /// Participant Name
   final String name;
@@ -23,7 +23,7 @@ class ParticipantModel {
     required this.name,
     required this.age,
     required this.profilePicture,
-    this.id,
+    required this.id,
   });
 
   /// Returns a Participant from the given Map

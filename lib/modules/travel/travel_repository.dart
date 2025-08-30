@@ -13,6 +13,7 @@ import '../../data/local/database/tables/reviews_table.dart';
 import '../../data/local/database/tables/travel_stop_experiences_table.dart';
 import '../../data/local/database/tables/travel_stop_table.dart';
 import '../../data/local/database/tables/travel_table.dart';
+import '../../data/local/database/tables/travel_travel_status_table.dart';
 import '../../data/models/participant_model.dart';
 import '../../data/models/place_model.dart';
 import '../../data/models/travel_model.dart';
@@ -71,12 +72,9 @@ class TravelRepositoryImpl implements TravelRepository {
     // debugPrint('Inserting Travel ${travelModel.toString()}');
 
     await db.transaction((txn) async {
-      final travelId = await txn.insert(
-        TravelTable.tableName,
-        travelModel.toMap(),
-      );
+      final travelId = travelModel.id;
 
-      travelModel.travelId = travelId;
+      await txn.insert(TravelTable.tableName, travelModel.toMap());
 
       final stops = travelModel.stops;
 
@@ -119,21 +117,21 @@ class TravelRepositoryImpl implements TravelRepository {
       await txn.delete(
         TravelTable.tableName,
         where: '${TravelTable.travelId} = ?',
-        whereArgs: [travelModel.travelId],
+        whereArgs: [travelModel.id],
       );
 
       /// Delete from [Participants] table
       await txn.delete(
         ParticipantsTable.tableName,
         where: '${ParticipantsTable.travelId} = ?',
-        whereArgs: [travelModel.travelId],
+        whereArgs: [travelModel.id],
       );
 
       /// Delete from [TravelStops] table
       await txn.delete(
         TravelStopTable.tableName,
         where: '${TravelStopTable.travelId} = ?',
-        whereArgs: [travelModel.travelId],
+        whereArgs: [travelModel.id],
       );
 
       /// Delete from [Reviews] table
@@ -142,7 +140,7 @@ class TravelRepositoryImpl implements TravelRepository {
           await txn.delete(
             ReviewsTable.tableName,
             where: '${ReviewsTable.travelStopId} = ?',
-            whereArgs: [stop.travelStopId],
+            whereArgs: [stop.id],
           );
         }
       }
@@ -151,14 +149,21 @@ class TravelRepositoryImpl implements TravelRepository {
       await txn.delete(
         TravelStopExperiencesTable.tableName,
         where: '${TravelStopExperiencesTable.travelStopId} = ?',
-        whereArgs: [travelModel.travelId],
+        whereArgs: [travelModel.id],
       );
 
       /// Delete from [Photos] table
       await txn.delete(
         PhotosTable.tableName,
         where: '${PhotosTable.travelId} = ?',
-        whereArgs: [travelModel.travelId],
+        whereArgs: [travelModel.id],
+      );
+
+      /// Delete from [TravelTravelStatus] table
+      await txn.delete(
+        TravelTravelStatusTable.tableName,
+        where: '${TravelTravelStatusTable.travelId} = ?',
+        whereArgs: [travelModel.id],
       );
     });
   }
@@ -174,7 +179,7 @@ class TravelRepositoryImpl implements TravelRepository {
         TravelTable.tableName,
         travelModel.toMap(),
         where: '${TravelTable.travelId} = ?',
-        whereArgs: [travelModel.travelId],
+        whereArgs: [travelModel.id],
       );
     });
   }
@@ -190,7 +195,7 @@ class TravelRepositoryImpl implements TravelRepository {
         TravelTable.tableName,
         travelModel.toMap(),
         where: '${TravelTable.travelId} = ?',
-        whereArgs: [travelModel.travelId],
+        whereArgs: [travelModel.id],
       );
     });
   }
@@ -206,7 +211,7 @@ class TravelRepositoryImpl implements TravelRepository {
         TravelTable.tableName,
         travelModel.toMap(),
         where: '${TravelTable.travelId} = ?',
-        whereArgs: [travelModel.travelId],
+        whereArgs: [travelModel.id],
       );
     });
   }
@@ -214,7 +219,7 @@ class TravelRepositoryImpl implements TravelRepository {
   Future<void> _insertStop(
     DatabaseExecutor txn,
     TravelStopModel stop,
-    int travelId,
+    String travelId,
   ) async {
     final placeMap = stop.place.toMap();
 
@@ -231,8 +236,7 @@ class TravelRepositoryImpl implements TravelRepository {
     stopMap[TravelStopTable.placeId] = stop.place.id;
 
     /// Insert stop into [TravelStopsTable]
-    final stopId = await txn.insert(TravelStopTable.tableName, stopMap);
-    stop.travelStopId = stopId;
+    await txn.insert(TravelStopTable.tableName, stopMap);
 
     // debugPrint('Stop ID: $stopId');
 
@@ -240,7 +244,7 @@ class TravelRepositoryImpl implements TravelRepository {
     if (stop.experiences != null && stop.experiences!.isNotEmpty) {
       for (final experience in stop.experiences!) {
         await txn.insert(TravelStopExperiencesTable.tableName, {
-          TravelStopExperiencesTable.travelStopId: stopId,
+          TravelStopExperiencesTable.travelStopId: stop.id,
           TravelStopExperiencesTable.experienceIndex: experience.index,
         });
       }
@@ -269,7 +273,7 @@ class TravelRepositoryImpl implements TravelRepository {
       final travelsResult = await txn.query(TravelTable.tableName);
 
       for (final travelResult in travelsResult) {
-        final travelId = travelResult[TravelTable.travelId] as int;
+        final travelId = travelResult[TravelTable.travelId];
 
         /// Participants
         final participants = <ParticipantModel>[];

@@ -1,3 +1,5 @@
+import 'package:uuid/uuid.dart';
+
 class Place {
   final String id;
   final String? city;
@@ -7,18 +9,17 @@ class Place {
   final double latitude;
   final double longitude;
 
-  const Place({
-    required this.id,
+  Place({
+    String? id,
     this.city,
     this.state,
     this.country,
     this.countryCode,
     required this.latitude,
     required this.longitude,
-  });
+  }) : id = id ?? Uuid().v4();
 
   Place copyWith({
-    String? id,
     String? city,
     String? state,
     String? country,
@@ -27,7 +28,6 @@ class Place {
     double? longitude,
   }) {
     return Place(
-      id: id ?? this.id,
       city: city ?? this.city,
       state: state ?? this.state,
       country: country ?? this.country,

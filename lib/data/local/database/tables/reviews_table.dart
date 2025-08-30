@@ -14,12 +14,12 @@ abstract final class ReviewsTable {
   static const String createTable =
       '''
      CREATE TABLE $tableName(
-      $reviewId INTEGER PRIMARY KEY AUTOINCREMENT,
+      $reviewId TEXT PRIMARY KEY,
       $description TEXT NOT NULL,
       $reviewDate INTEGER NOT NULL,
       $travelStopId INTEGER NOT NULL,
       $stars INTEGER NOT NULL,
-      $participantId INTEGER NOT NULL,
+      $participantId TEXT NOT NULL,
       
       FOREIGN KEY ($travelStopId) REFERENCES ${TravelStopTable.tableName} (${TravelStopTable.travelStopId}),
       FOREIGN KEY ($participantId) REFERENCES ${ParticipantsTable.tableName} (${ParticipantsTable.participantId})

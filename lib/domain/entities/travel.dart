@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:uuid/uuid.dart';
+
 import 'enums.dart';
 import 'participant.dart';
 import 'travel_stop.dart';
@@ -7,7 +9,7 @@ import 'travel_stop.dart';
 /// Represents a Travel record in the application's database
 class Travel {
   /// Travel Id
-  int? travelId;
+  final String id;
 
   /// Travel Title
   String travelTitle;
@@ -32,7 +34,7 @@ class Travel {
   final List<File?> photos;
 
   Travel({
-    this.travelId,
+    String? id,
     required this.travelTitle,
     required this.startDate,
     required this.endDate,
@@ -41,13 +43,18 @@ class Travel {
     required this.stops,
     required this.photos,
     this.status = TravelStatus.upcoming,
-  });
+  }) : id = id ?? Uuid().v4();
 
   /// Returns a [Duration] that represents the total duration of the travel
-  int get totalDuration => endDate.difference(startDate).inDays;
+  int get totalDuration {
+    final diff = endDate.difference(startDate).inDays;
+
+    if (diff == 0) return 1;
+
+    return diff;
+  }
 
   Travel copyWith({
-    int? travelId,
     String? travelTitle,
     DateTime? startDate,
     DateTime? endDate,
@@ -58,7 +65,6 @@ class Travel {
     List<File>? photos,
   }) {
     return Travel(
-      travelId: travelId ?? this.travelId,
       travelTitle: travelTitle ?? this.travelTitle,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
@@ -83,7 +89,7 @@ class Travel {
       identical(this, other) ||
       other is Travel &&
           runtimeType == other.runtimeType &&
-          travelId == other.travelId &&
+          id == other.id &&
           travelTitle == other.travelTitle &&
           startDate == other.startDate &&
           endDate == other.endDate &&
@@ -95,7 +101,7 @@ class Travel {
 
   @override
   int get hashCode => Object.hash(
-    travelId,
+    id,
     travelTitle,
     startDate,
     endDate,
@@ -108,6 +114,6 @@ class Travel {
 
   @override
   String toString() {
-    return 'Travel{travelId: $travelId, travelTitle: $travelTitle, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: $stops, status: $status, photos: $photos}';
+    return 'Travel{travelId: $id, travelTitle: $travelTitle, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: $stops, status: $status, photos: $photos}';
   }
 }

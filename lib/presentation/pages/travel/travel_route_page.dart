@@ -97,9 +97,7 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
   @override
   void initState() {
     super.initState();
-    widget.travel.stops.sort(
-      (a, b) => a.travelStopId!.compareTo(b.travelStopId!),
-    );
+    widget.travel.stops.sort((a, b) => a.id.compareTo(b.id));
     generatePolyline();
   }
 

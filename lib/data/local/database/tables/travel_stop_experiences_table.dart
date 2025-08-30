@@ -24,7 +24,7 @@ abstract final class TravelStopExperiencesTable {
   static const String createTable =
       '''
     CREATE TABLE $tableName (
-      $travelStopId INTEGER NOT NULL,
+      $travelStopId TEXT NOT NULL,
       $experienceIndex INTEGER NOT NULL,
       FOREIGN KEY ($travelStopId) REFERENCES ${TravelStopTable.tableName} (${TravelStopTable.travelStopId}),
       FOREIGN KEY ($experienceIndex) REFERENCES ${ExperiencesTable.tableName} (${ExperiencesTable.experienceIndex}),

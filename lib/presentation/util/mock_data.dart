@@ -17,24 +17,13 @@ Future<List<Travel>> generateSampleTravels() async {
       transportType: TransportType.plane,
       status: TravelStatus.upcoming,
       participants: [
-        Participant(
-          id: 1,
-          name: 'Ana Silva',
-          age: 25,
-          profilePicture: defaultPfp,
-        ),
-        Participant(
-          id: 2,
-          name: 'João Souza',
-          age: 30,
-          profilePicture: defaultPfp,
-        ),
+        Participant(name: 'Ana Silva', age: 25, profilePicture: defaultPfp),
+        Participant(name: 'João Souza', age: 30, profilePicture: defaultPfp),
       ],
       stops: [
         TravelStop(
           experiences: [Experience.cultureImmersion, Experience.socialEvents],
           place: Place(
-            id: 'p1',
             city: 'Rio de Janeiro',
             state: 'RJ',
             country: 'Brazil',
@@ -49,7 +38,6 @@ Future<List<Travel>> generateSampleTravels() async {
         TravelStop(
           experiences: [Experience.visitLocalEstablishments],
           place: Place(
-            id: 'p2',
             city: 'Niterói',
             state: 'RJ',
             country: 'Brazil',
@@ -64,7 +52,6 @@ Future<List<Travel>> generateSampleTravels() async {
         TravelStop(
           experiences: [Experience.alternativeCuisines],
           place: Place(
-            id: 'p3',
             city: 'Angra dos Reis',
             state: 'RJ',
             country: 'Brazil',
@@ -86,18 +73,8 @@ Future<List<Travel>> generateSampleTravels() async {
       transportType: TransportType.plane,
       status: TravelStatus.upcoming,
       participants: [
-        Participant(
-          id: 3,
-          name: 'Marie Dupont',
-          age: 28,
-          profilePicture: defaultPfp,
-        ),
-        Participant(
-          id: 4,
-          name: 'Pierre Martin',
-          age: 35,
-          profilePicture: defaultPfp,
-        ),
+        Participant(name: 'Marie Dupont', age: 28, profilePicture: defaultPfp),
+        Participant(name: 'Pierre Martin', age: 35, profilePicture: defaultPfp),
       ],
       stops: [
         TravelStop(
@@ -106,7 +83,6 @@ Future<List<Travel>> generateSampleTravels() async {
             Experience.visitHistoricalPlaces,
           ],
           place: Place(
-            id: 'p4',
             city: 'Paris',
             state: 'Île-de-France',
             country: 'France',
@@ -121,7 +97,6 @@ Future<List<Travel>> generateSampleTravels() async {
         TravelStop(
           experiences: [Experience.cultureImmersion],
           place: Place(
-            id: 'p5',
             city: 'Versailles',
             state: 'Île-de-France',
             country: 'France',
@@ -136,7 +111,6 @@ Future<List<Travel>> generateSampleTravels() async {
         TravelStop(
           experiences: [Experience.socialEvents],
           place: Place(
-            id: 'p6',
             city: 'Lyon',
             state: 'Auvergne-Rhône-Alpes',
             country: 'France',

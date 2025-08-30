@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:uuid/uuid.dart';
+
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/travel.dart';
 import '../local/database/tables/travel_table.dart';
@@ -7,7 +9,7 @@ import 'participant_model.dart';
 import 'travel_stop_model.dart';
 
 class TravelModel {
-  int? travelId;
+  final String id;
   final String travelTitle;
   final DateTime startDate;
   final DateTime endDate;
@@ -18,7 +20,7 @@ class TravelModel {
   final List<File?> photos;
 
   TravelModel({
-    this.travelId,
+    String? id,
     required this.travelTitle,
     required this.startDate,
     required this.endDate,
@@ -27,7 +29,7 @@ class TravelModel {
     required this.stops,
     required this.photos,
     this.status = TravelStatus.upcoming,
-  });
+  }) : id = id ?? Uuid().v4();
 
   /// Factory to create a model from a Map (e.g. from database)
   factory TravelModel.fromMap(
@@ -37,7 +39,7 @@ class TravelModel {
     required List<File> photos,
   }) {
     return TravelModel(
-      travelId: map[TravelTable.travelId],
+      id: map[TravelTable.travelId],
       travelTitle: map[TravelTable.travelTitle] as String,
       startDate: DateTime.fromMillisecondsSinceEpoch(
         map[TravelTable.startDate] as int,
@@ -56,7 +58,7 @@ class TravelModel {
   /// Converts this model to a Map (e.g. for database storage)
   Map<String, dynamic> toMap() {
     final map = {
-      TravelTable.travelId: travelId,
+      TravelTable.travelId: id,
       TravelTable.travelTitle: travelTitle,
       TravelTable.startDate: startDate.millisecondsSinceEpoch,
       TravelTable.endDate: endDate.millisecondsSinceEpoch,
@@ -69,7 +71,7 @@ class TravelModel {
 
   factory TravelModel.fromEntity(Travel travel) {
     return TravelModel(
-      travelId: travel.travelId,
+      id: travel.id,
       travelTitle: travel.travelTitle,
       startDate: travel.startDate,
       endDate: travel.endDate,
@@ -85,7 +87,7 @@ class TravelModel {
 
   Travel toEntity() {
     return Travel(
-      travelId: travelId,
+      id: id,
       travelTitle: travelTitle,
       startDate: startDate,
       endDate: endDate,
@@ -98,7 +100,7 @@ class TravelModel {
   }
 
   TravelModel copyWith({
-    int? travelId,
+    String? id,
     String? travelTitle,
     DateTime? startDate,
     DateTime? endDate,
@@ -109,7 +111,7 @@ class TravelModel {
     List<File>? photos,
   }) {
     return TravelModel(
-      travelId: travelId ?? this.travelId,
+      id: id ?? this.id,
       travelTitle: travelTitle ?? this.travelTitle,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
@@ -123,6 +125,6 @@ class TravelModel {
 
   @override
   String toString() {
-    return 'TravelModel{travelId: $travelId, travelTitle: $travelTitle, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: $stops, status: $status, photos: $photos}';
+    return 'TravelModel{id: $id, travelTitle: $travelTitle, startDate: $startDate, endDate: $endDate, transportType: $transportType, participants: $participants, stops: $stops, status: $status, photos: $photos}';
   }
 }

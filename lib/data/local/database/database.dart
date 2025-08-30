@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -39,26 +40,33 @@ class DBConnection {
 
   /// Defines what to do when the database is created
   Future<void> _onCreate(Database db, int? version) async {
+    debugPrint('Database onCreate method called');
+
     await db.execute(TransportTypesTable.createTable);
     await db.execute(ExperiencesTable.createTable);
+    await db.execute(TravelStatusTable.createTable);
     await _insertDefaultValuesIntoTables(db);
 
+    await db.execute(TravelTable.createTable);
     await db.execute(PhotosTable.createTable);
     await db.execute(PlacesTable.createTable);
-    await db.execute(TravelTable.createTable);
     await db.execute(TravelStopTable.createTable);
     await db.execute(TravelStopExperiencesTable.createTable);
     await db.execute(ParticipantsTable.createTable);
     await db.execute(ReviewsTable.createTable);
+
+    debugPrint('Database onCreate method finished');
   }
 
   /// Insert default enums ([TransportType] and [Experience]) values
   /// into [TransportTypesTable] and [ExperiencesTable]
   Future<void> _insertDefaultValuesIntoTables(Database db) async {
+    debugPrint('_insertDefaultValuesIntoTables method called');
+
     /// Insert values into transport types table
     TransportType.values.map(
-      (e) async => await db.insert(TransportTypesTable.tableName, {
-        TransportTypesTable.tableName: e.index,
+      (t) async => await db.insert(TransportTypesTable.tableName, {
+        TransportTypesTable.tableName: t.index,
       }),
     );
 
@@ -75,10 +83,14 @@ class DBConnection {
         TravelStatusTable.travelStatusIndex: s.index,
       }),
     );
+
+    debugPrint('_insertDefaultValuesIntoTables method finished');
   }
 
   /// Cleans the database
   Future<void> clearDatabase(Database db) async {
+    debugPrint('Clear database method called');
+
     final tables = await db.rawQuery(
       "SELECT name FROM sqlite_master WHERE type='table' AND "
       "name NOT LIKE 'sqlite_%';",
@@ -88,6 +100,8 @@ class DBConnection {
       final tableName = table['name'] as String;
       await db.execute('DROP TABLE IF EXISTS $tableName');
     }
+
+    debugPrint('Database cleansed');
   }
 
   Future<void> printAllTables(Database db) async {
@@ -101,6 +115,7 @@ class DBConnection {
       final rows = await db.rawQuery('SELECT * FROM $tableName');
 
       print('--- Table: $tableName ---');
+      debugPrint('Rows: ${rows.length}');
       for (var row in rows) {
         print(row);
       }

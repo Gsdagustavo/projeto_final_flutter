@@ -39,7 +39,7 @@ abstract final class TravelTable {
   static const String createTable =
       '''
     CREATE TABLE $tableName (
-      $travelId INTEGER PRIMARY KEY AUTOINCREMENT,
+      $travelId TEXT PRIMARY KEY,
       $status INTEGER NOT NULL,
       $travelTitle TEXT NOT NULL,
       $startDate INTEGER NOT NULL,

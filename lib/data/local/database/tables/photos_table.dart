@@ -12,7 +12,7 @@ abstract final class PhotosTable {
       CREATE TABLE IF NOT EXISTS $tableName(
         $photoId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         $photo BLOB NOT NULL,
-        $travelId INT NOT NULL,
+        $travelId INTEGER NOT NULL,
         
         FOREIGN KEY ($travelId) REFERENCES ${TravelTable.tableName}(${TravelTable.travelId})
       )

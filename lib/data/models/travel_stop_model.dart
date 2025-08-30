@@ -7,7 +7,7 @@ import 'review_model.dart';
 
 class TravelStopModel {
   /// Travel Stop ID
-  int? travelStopId;
+  final String id;
 
   /// Travel Stop arrive date
   DateTime? arriveDate;
@@ -26,8 +26,8 @@ class TravelStopModel {
 
   /// Named constructor for the Travel Stop
   TravelStopModel({
+    required this.id,
     required this.place,
-    this.travelStopId,
     this.type = TravelStopType.start,
     this.arriveDate,
     this.leaveDate,
@@ -50,7 +50,7 @@ class TravelStopModel {
         : null;
 
     return TravelStopModel(
-      travelStopId: map[TravelStopTable.travelStopId],
+      id: map[TravelStopTable.travelStopId],
       arriveDate: arriveDate,
       leaveDate: leaveDate,
       type: TravelStopType.values.byName(map[TravelStopTable.type]),
@@ -63,7 +63,7 @@ class TravelStopModel {
   /// Returns a Map with Travel Stop data
   Map<String, dynamic> toMap() {
     return {
-      TravelStopTable.travelStopId: travelStopId,
+      TravelStopTable.travelStopId: id,
       TravelStopTable.type: type.name,
       TravelStopTable.arriveDate: arriveDate?.millisecondsSinceEpoch,
       TravelStopTable.leaveDate: leaveDate?.millisecondsSinceEpoch,
@@ -73,7 +73,7 @@ class TravelStopModel {
   factory TravelStopModel.fromEntity(TravelStop travelStop) {
     return TravelStopModel(
       place: PlaceModel.fromEntity(travelStop.place),
-      travelStopId: travelStop.travelStopId,
+      id: travelStop.id,
       type: travelStop.type,
       arriveDate: travelStop.arriveDate,
       leaveDate: travelStop.leaveDate,
@@ -85,7 +85,7 @@ class TravelStopModel {
   TravelStop toEntity() {
     return TravelStop(
       place: place.toEntity(),
-      travelStopId: travelStopId,
+      id: id,
       type: type,
       arriveDate: arriveDate,
       leaveDate: leaveDate,
@@ -96,7 +96,7 @@ class TravelStopModel {
 
   @override
   String toString() {
-    return 'TravelStopModel{travelStopId: $travelStopId, '
+    return 'TravelStopModel{id: $id, '
         'arriveDate: $arriveDate, leaveDate: $leaveDate, type: $type, '
         'experiences: $experiences, place: $place}';
   }

@@ -33,8 +33,8 @@ abstract final class ParticipantsTable {
   static const String createTable =
       '''
     CREATE TABLE $tableName (
-      $participantId INTEGER PRIMARY KEY AUTOINCREMENT,
-      $travelId INTEGER NOT NULL,
+      $participantId TEXT PRIMARY KEY,
+      $travelId TEXT NOT NULL,
       $name TEXT NOT NULL,
       $age INTEGER NOT NULL,
       $profilePicture BLOB,

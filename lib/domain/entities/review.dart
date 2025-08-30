@@ -1,24 +1,25 @@
+import 'package:uuid/uuid.dart';
+
 import 'participant.dart';
 
 class Review {
-  final int? reviewId;
+  final String id;
   final String description;
   final Participant author;
   final DateTime reviewDate;
   final int travelStopId;
   final int stars;
 
-  const Review({
-    this.reviewId,
+  Review({
+    String? id,
     required this.description,
     required this.author,
     required this.reviewDate,
     required this.travelStopId,
     required this.stars,
-  });
+  }) : id = id ?? Uuid().v4();
 
   Review copyWith({
-    int? reviewId,
     String? description,
     Participant? author,
     DateTime? reviewDate,
@@ -26,7 +27,6 @@ class Review {
     int? stars,
   }) {
     return Review(
-      reviewId: reviewId ?? this.reviewId,
       description: description ?? this.description,
       author: author ?? this.author,
       reviewDate: reviewDate ?? this.reviewDate,
@@ -35,10 +35,5 @@ class Review {
     );
   }
 
-  @override
-  String toString() {
-    return 'Review{reviewId: $reviewId, description: $description, '
-        'author: $author, reviewDate: $reviewDate, '
-        'travelStopId: $travelStopId, stars: $stars}';
-  }
+
 }
