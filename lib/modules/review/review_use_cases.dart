@@ -1,4 +1,5 @@
 import '../../domain/entities/review.dart';
+import '../../domain/entities/travel.dart';
 import 'review_repository.dart';
 
 abstract class ReviewUseCases {
@@ -7,6 +8,10 @@ abstract class ReviewUseCases {
   Future<void> addReviews({required List<Review> reviews});
 
   Future<List<Review>> getReviews();
+
+  Future<List<Review>> getReviewsByTravel(Travel travel);
+
+  Future<List<Review>> getReviewsByStopId(String stopId);
 }
 
 class ReviewUseCasesImpl implements ReviewUseCases {
@@ -27,5 +32,15 @@ class ReviewUseCasesImpl implements ReviewUseCases {
   @override
   Future<List<Review>> getReviews() async {
     return await _reviewRepository.getReviews();
+  }
+
+  @override
+  Future<List<Review>> getReviewsByTravel(Travel travel) async {
+    return await _reviewRepository.getReviewsByTravel(travel);
+  }
+
+  @override
+  Future<List<Review>> getReviewsByStopId(String stopId) async {
+    return await _reviewRepository.getReviewsByStopId(stopId);
   }
 }

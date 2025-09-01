@@ -39,9 +39,13 @@ class _SettingsPageState extends State<SettingsPage> {
     final user = loginProvider.loggedUser!;
 
     const defaultPfpPath = 'assets/images/default_profile_picture.png';
-    final backgroundImage = _profilePicture != null
-        ? FileImage(_profilePicture!)
-        : const AssetImage(defaultPfpPath) as ImageProvider;
+
+    final ImageProvider<Object> backgroundImage;
+    if (_profilePicture != null) {
+      backgroundImage = FileImage(_profilePicture!);
+    } else {
+      backgroundImage = const AssetImage(defaultPfpPath) as ImageProvider;
+    }
 
     final locale = Localizations.localeOf(context).toString();
 
@@ -92,7 +96,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
           ),
-          const     Padding(padding: EdgeInsets.all(16)),
+          const Padding(padding: EdgeInsets.all(16)),
 
           Card(
             child: Padding(
@@ -147,7 +151,7 @@ class _SettingsPageState extends State<SettingsPage> {
               },
             ),
           ),
-          const   Padding(padding: EdgeInsets.all(16)),
+          const Padding(padding: EdgeInsets.all(16)),
 
           SizedBox(
             width: double.infinity,
@@ -196,8 +200,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: const Padding(
-                        padding:  EdgeInsets.only(left: 32),
-                        child:  Icon(Icons.logout),
+                        padding: EdgeInsets.only(left: 32),
+                        child: Icon(Icons.logout),
                       ),
                     ),
                     Text(as.logout),

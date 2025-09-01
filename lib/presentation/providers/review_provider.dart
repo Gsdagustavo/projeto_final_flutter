@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../domain/entities/review.dart';
+import '../../domain/entities/travel.dart';
 import '../../modules/review/review_use_cases.dart';
 
 class ReviewProvider with ChangeNotifier {
@@ -24,6 +25,12 @@ class ReviewProvider with ChangeNotifier {
     notifyListeners();
 
     debugPrint('Reviews: $_reviews');
+  }
+
+  Future<void> getReviewsByTravel(Travel travel) async {
+    _reviews.clear();
+    _reviews.addAll(await _reviewUseCases.getReviewsByTravel(travel));
+    notifyListeners();
   }
 
   bool get hasError => _errorMessage != null;

@@ -21,8 +21,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   /// Resets the database
-  // final db = await DBConnection().getDatabase(reset: true);
-  // await DBConnection().printAllTables(db);
+  final db = await DBConnection().getDatabase(reset: true);
+  await DBConnection().printAllTables(db);
 
   /// Initialize Firebase App
   await Firebase.initializeApp();

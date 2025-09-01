@@ -1,18 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_rating/flutter_rating.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/extensions/date_extensions.dart';
 import '../../../domain/entities/enums.dart';
-import '../../../domain/entities/review.dart';
 import '../../../domain/entities/travel.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../extensions/enums_extensions.dart';
-import '../../providers/review_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../util/app_routes.dart';
@@ -20,7 +18,6 @@ import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
 import '../travel/register_travel_page.dart';
-import '../util/form_validations.dart';
 import '../util/travel_utils.dart';
 
 /// The Home Page of the app

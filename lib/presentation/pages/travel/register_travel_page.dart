@@ -5,6 +5,7 @@ import 'package:animated_list_plus/transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -745,27 +746,38 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                         physics: const NeverScrollableScrollPhysics(),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
+                              crossAxisCount: 3,
                               childAspectRatio: 1,
                               crossAxisSpacing: 8,
                               mainAxisSpacing: 8,
                             ),
                         itemBuilder: (context, index) {
                           final image = state.travelPhotos[index];
-                          return GridTile(
-                            child: Stack(
-                              children: [
-                                Image(image: FileImage(image)),
-                                Positioned(
-                                  left: 0,
-                                  top: 0,
+                          return Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadiusGeometry.circular(12),
+                                child: InstaImageViewer(
+                                  child: Image.file(image, fit: BoxFit.cover),
+                                ),
+                              ),
+                              Positioned(
+                                left: 4,
+                                top: 4,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.black54,
+                                    shape: BoxShape.circle,
+                                  ),
                                   child: IconButton(
                                     onPressed: () => onImageRemoved(image),
                                     icon: const Icon(FontAwesomeIcons.remove),
+                                    constraints: const BoxConstraints(),
+                                    padding: EdgeInsets.zero,
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           );
                         },
                       );
@@ -1107,13 +1119,17 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                 child: Consumer<RegisterTravelProvider>(
                   builder: (_, travelState, __) {
                     return CircleAvatar(
-                      backgroundImage: _profilePicture != null
-                          ? FileImage(_profilePicture!)
-                          : const AssetImage(
-                                  'assets/images/default_profile_picture.png',
-                                )
-                                as ImageProvider,
                       backgroundColor: Colors.transparent,
+                      foregroundColor: Colors.transparent,
+                      child: _profilePicture != null
+                          ? InstaImageViewer(
+                              child: Image.file(_profilePicture!),
+                            )
+                          : InstaImageViewer(
+                              child: Image.asset(
+                                'assets/images/default_profile_picture.png',
+                              ),
+                            ),
                     );
                   },
                 ),
@@ -1126,8 +1142,6 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                   builder: (_, travelState, __) {
                     return InkWell(
                       onTap: () async {
-                        /// TODO: show a modal to choose where the image is going
-                        /// to be picked from (camera, gallery, etc.)
                         await _pickImage();
                       },
                       radius: 20,

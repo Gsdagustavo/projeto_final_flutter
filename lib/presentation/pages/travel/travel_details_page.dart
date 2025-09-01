@@ -43,6 +43,8 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
       setState(() {
         locale = context.read<UserPreferencesProvider>().languageCode;
       });
+
+      await context.read<ReviewProvider>().getReviewsByTravel(widget.travel);
     });
   }
 
@@ -54,7 +56,9 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
       title: widget.travel.travelTitle,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await context.read<ReviewProvider>().update();
+          await context.read<ReviewProvider>().getReviewsByTravel(
+            widget.travel,
+          );
         },
       ),
       body: Column(
@@ -63,10 +67,14 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
           Builder(
             builder: (context) {
               if (widget.travel.photos.isEmpty) {
-                return Image.asset('assets/images/placeholder.png');
+                return InstaImageViewer(
+                  child: Image.asset('assets/images/placeholder.png'),
+                );
               }
 
-              return Image.file(widget.travel.photos.first!);
+              return InstaImageViewer(
+                child: Image.file(widget.travel.photos.first!),
+              );
             },
           ),
 
@@ -740,7 +748,7 @@ class _ReviewModalState extends State<ReviewModal> {
                 ),
               ],
             ),
-
+            Padding(padding: EdgeInsets.all(12)),
             Builder(
               builder: (_) {
                 if (_images.isEmpty) return SizedBox.shrink();
@@ -757,22 +765,37 @@ class _ReviewModalState extends State<ReviewModal> {
                   ),
                   itemBuilder: (context, index) {
                     final image = _images[index];
-                    return GridTile(
-                      child: Stack(
-                        children: [
-                          Image(image: FileImage(image)),
-                          Positioned(
-                            left: 0,
-                            top: 0,
-                            child: IconButton(
-                              onPressed: () async {
-                                await removeImage(image);
-                              },
-                              icon: const Icon(FontAwesomeIcons.remove),
+                    return Stack(
+                      children: [
+                        Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: InstaImageViewer(
+                                child: Image.file(image, fit: BoxFit.cover),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                            Positioned(
+                              left: 4,
+                              top: 4,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black54,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: IconButton(
+                                  onPressed: () async {
+                                    await removeImage(image);
+                                  },
+                                  icon: const Icon(FontAwesomeIcons.remove),
+                                  constraints: const BoxConstraints(),
+                                  padding: EdgeInsets.zero,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     );
                   },
                 );
@@ -922,7 +945,7 @@ class ReviewListItem extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Padding(padding: EdgeInsets.all(6)),
-                Spacer(),
+                const Spacer(),
                 StarRating(
                   starCount: 5,
                   rating: review.stars.toDouble(),
@@ -930,11 +953,37 @@ class ReviewListItem extends StatelessWidget {
                 ),
               ],
             ),
-            Padding(padding: EdgeInsets.all(8)),
+            Padding(padding: EdgeInsets.all(12)),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               child: Text(review.description),
             ),
+
+            if (review.images.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 100,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: review.images.length,
+                  separatorBuilder: (context, _) => const SizedBox(width: 8),
+                  itemBuilder: (context, index) {
+                    final photo = review.images[index];
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: InstaImageViewer(
+                        child: Image.file(
+                          photo,
+                          fit: BoxFit.cover,
+                          width: 100,
+                          height: 100,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ],
         ),
       ),

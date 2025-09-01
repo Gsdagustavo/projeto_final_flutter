@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../data/local/database/database.dart';
 import '../../data/local/database/tables/participants_table.dart';
@@ -10,6 +11,7 @@ import '../../data/local/database/tables/reviews_table.dart';
 import '../../data/models/participant_model.dart';
 import '../../data/models/review_model.dart';
 import '../../domain/entities/review.dart';
+import '../../domain/entities/travel.dart';
 
 abstract class ReviewRepository {
   Future<void> addReview({required Review review});
@@ -17,6 +19,10 @@ abstract class ReviewRepository {
   Future<void> addReviews({required List<Review> reviews});
 
   Future<List<Review>> getReviews();
+
+  Future<List<Review>> getReviewsByTravel(Travel travel);
+
+  Future<List<Review>> getReviewsByStopId(String stopId);
 }
 
 class ReviewRepositoryImpl implements ReviewRepository {
@@ -114,6 +120,80 @@ class ReviewRepositoryImpl implements ReviewRepository {
           file.writeAsBytesSync(bytes);
           photos.add(file);
           await file.delete();
+        }
+
+        final review = ReviewModel.fromMap(
+          reviewData,
+          participant,
+          photos,
+        ).toEntity();
+
+        reviews.add(review);
+
+        debugPrint('Review: $review');
+      }
+    });
+
+    return reviews;
+  }
+
+  @override
+  Future<List<Review>> getReviewsByTravel(Travel travel) async {
+    final reviews = <Review>[];
+
+    for (final stop in travel.stops) {
+      reviews.addAll(await getReviewsByStopId(stop.id));
+    }
+
+    return reviews;
+  }
+
+  @override
+  Future<List<Review>> getReviewsByStopId(String stopId) async {
+    final db = await _db;
+
+    final reviews = <Review>[];
+
+    await db.transaction((txn) async {
+      final reviewsData = await txn.query(
+        ReviewsTable.tableName,
+        where: '${ReviewsTable.travelStopId} = ?',
+        whereArgs: [stopId],
+      );
+
+      for (final reviewData in reviewsData) {
+        debugPrint('Review data: $reviewData');
+
+        final reviewId = reviewData[ReviewsTable.reviewId];
+
+        /// Get participant
+        final participantData = await txn.query(
+          ParticipantsTable.tableName,
+          where: '${ParticipantsTable.participantId} = ?',
+          whereArgs: [reviewData[ReviewsTable.participantId]],
+        );
+
+        final participant = ParticipantModel.fromMap(participantData.first);
+
+        /// Get photos
+        final photos = <File>[];
+
+        final reviewPhotosData = await txn.query(
+          ReviewsPhotosTable.tableName,
+          where: '${ReviewsPhotosTable.reviewId} = ?',
+          whereArgs: [reviewId],
+        );
+
+        for (final photoData in reviewPhotosData) {
+          final bytes = photoData[ReviewsPhotosTable.photo] as Uint8List;
+
+          debugPrint(bytes.toString());
+
+          final filename =
+              '${photoData[ReviewsPhotosTable.reviewId]}${Uuid().v4()}.png';
+          final file = File('${Directory.systemTemp.path}/$filename');
+          file.writeAsBytesSync(bytes);
+          photos.add(file);
         }
 
         final review = ReviewModel.fromMap(
