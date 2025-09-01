@@ -16,9 +16,31 @@ class TravelRoutePage extends StatefulWidget {
 }
 
 class _TravelRoutePageState extends State<TravelRoutePage> {
+  GoogleMapController? _controller;
+
   var _polylines = <Polyline>{};
 
   final polylinePoints = PolylinePoints(apiKey: dotenv.env['MAPS_API_KEY']!);
+
+  LatLngBounds calculateBounds(List<LatLng> points) {
+    var minLat = points.first.latitude;
+    var maxLat = points.first.latitude;
+    var minLon = points.first.longitude;
+    var maxLon = points.first.longitude;
+
+    for (final point in points) {
+      if (point.latitude < minLat) minLat = point.latitude;
+      if (point.latitude > maxLat) maxLat = point.latitude;
+
+      if (point.longitude < minLon) minLon = point.longitude;
+      if (point.longitude > maxLon) maxLon = point.longitude;
+    }
+
+    return LatLngBounds(
+      southwest: LatLng(minLat, minLon),
+      northeast: LatLng(maxLat, maxLon),
+    );
+  }
 
   Set<Marker> calculateMarkers() {
     final stops = widget.travel.stops;
@@ -87,11 +109,25 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
     setState(() {
       _polylines = {polyline};
     });
+
+    fitBounds();
   }
 
   LatLng getInitialPosition() {
     final stops = widget.travel.stops;
     return LatLng(stops.first.place.latitude, stops.first.place.longitude);
+  }
+
+  void fitBounds() {
+    final stops = widget.travel.stops
+        .map((e) => LatLng(e.place.latitude, e.place.longitude))
+        .toList();
+
+    if (stops.isEmpty) return;
+
+    final bounds = calculateBounds(stops);
+
+    _controller?.animateCamera(CameraUpdate.newLatLngBounds(bounds, 50));
   }
 
   @override
@@ -111,7 +147,10 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
 
       body: GoogleMap(
         onMapCreated: (controller) {
-          setState(() {});
+          setState(() {
+            _controller = controller;
+            fitBounds();
+          });
         },
 
         initialCameraPosition: CameraPosition(
