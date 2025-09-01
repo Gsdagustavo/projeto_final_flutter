@@ -252,8 +252,8 @@ class TravelRepositoryImpl implements TravelRepository {
     await db.transaction((txn) async {
       final result = await txn.query(
         TravelTable.tableName,
-        where: "${TravelTable.travelTitle} LIKE %?%",
-        whereArgs: [title],
+        where: '${TravelTable.travelTitle} LIKE ?',
+        whereArgs: ['%$title%'],
       );
 
       if (result.isEmpty) return;
