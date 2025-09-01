@@ -191,32 +191,37 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                   return SizedBox.shrink();
                 }
 
-                return Row(
-                  children: List.generate(countries.length, (index) {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Theme.of(context).colorScheme.outline,
-                          width: 1,
+                return SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    spacing: 16,
+                    children: List.generate(countries.length, (index) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
                         ),
-                        borderRadius: BorderRadius.circular(6),
-                        color: Colors.transparent,
-                      ),
-                      child: Text(
-                        countries[index]!,
-                        style: Theme.of(context).textTheme.labelMedium
-                            ?.copyWith(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
-                      ),
-                    );
-                  }),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Theme.of(context).colorScheme.outline,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(6),
+                          color: Colors.transparent,
+                        ),
+                        child: Text(
+                          countries[index]!,
+                          style: Theme.of(context).textTheme.labelMedium
+                              ?.copyWith(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                        ),
+                      );
+                    }),
+                  ),
                 );
               },
             ),
