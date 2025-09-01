@@ -68,6 +68,10 @@ class TravelUseCasesImpl implements TravelUseCases {
       throw TravelRegisterException('Invalid participant data');
     }
 
+    travel.stops.first.type = TravelStopType.start;
+    travel.stops.last.type = TravelStopType.end;
+    travel.stops.map((e) => e.type = TravelStopType.stop);
+
     final finalTravel = travel.copyWith(
       participants: _validateParticipants(travel.participants),
     );
