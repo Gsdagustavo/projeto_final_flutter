@@ -638,8 +638,7 @@ class _ReviewModalState extends State<ReviewModal> {
               alignment: Alignment.centerLeft,
               child: Consumer<ReviewProvider>(
                 builder: (_, state, __) {
-                  return DropdownButton<Participant>(
-                    underline: Container(color: Colors.transparent),
+                  return DropdownButtonFormField<Participant>(
                     icon: Icon(Icons.arrow_downward),
                     value: _author,
                     items: [
@@ -922,6 +921,7 @@ class ReviewListItem extends StatelessWidget {
                   review.author.name,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
+                Padding(padding: EdgeInsets.all(6)),
                 Spacer(),
                 StarRating(
                   starCount: 5,
