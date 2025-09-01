@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/extensions/date_extensions.dart';
@@ -84,6 +83,13 @@ class _HomePageState extends State<HomePage> {
                   decoration: InputDecoration(
                     hintText: 'Search...',
                     prefixIcon: Icon(Icons.search),
+                    suffixIcon: IconButton(
+                      onPressed: () async {
+                        await travelListProvider.clearSearch();
+                        searchController.clear();
+                      },
+                      icon: const Icon(FontAwesomeIcons.remove),
+                    ),
                   ),
                 ),
               ),
