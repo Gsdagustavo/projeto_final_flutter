@@ -7,7 +7,7 @@ class ReviewModel {
   final String description;
   final ParticipantModel author;
   final DateTime reviewDate;
-  final int travelStopId;
+  final String travelStopId;
   final int stars;
 
   const ReviewModel({
@@ -24,7 +24,7 @@ class ReviewModel {
     String? description,
     ParticipantModel? author,
     DateTime? reviewDate,
-    int? travelStopId,
+    String? travelStopId,
     int? stars,
   }) {
     return ReviewModel(
@@ -59,7 +59,7 @@ class ReviewModel {
       reviewDate: DateTime.fromMicrosecondsSinceEpoch(
         map[ReviewsTable.reviewDate] as int,
       ),
-      travelStopId: map[ReviewsTable.travelStopId] as int,
+      travelStopId: map[ReviewsTable.travelStopId] as String,
       stars: map[ReviewsTable.stars] as int,
     );
   }

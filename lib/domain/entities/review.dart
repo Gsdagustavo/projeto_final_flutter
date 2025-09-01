@@ -7,7 +7,7 @@ class Review {
   final String description;
   final Participant author;
   final DateTime reviewDate;
-  final int travelStopId;
+  final String travelStopId;
   final int stars;
 
   Review({
@@ -23,7 +23,7 @@ class Review {
     String? description,
     Participant? author,
     DateTime? reviewDate,
-    int? travelStopId,
+    String? travelStopId,
     int? stars,
   }) {
     return Review(

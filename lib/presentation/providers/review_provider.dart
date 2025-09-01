@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 
 import '../../domain/entities/participant.dart';
 import '../../domain/entities/review.dart';
+import '../../domain/entities/travel_stop.dart';
 import '../../modules/review/review_use_cases.dart';
 import '../../services/file_service.dart';
 
@@ -40,12 +41,12 @@ class ReviewProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addReview({required int travelStopId}) async {
+  Future<void> addReview(TravelStop stop) async {
     final review = Review(
       description: _reviewController.text,
       author: _author!,
       reviewDate: DateTime.now(),
-      travelStopId: travelStopId,
+      travelStopId: stop.id,
       stars: _reviewRate,
     );
 
@@ -53,7 +54,7 @@ class ReviewProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> submitReview({required int travelStopId}) async {
+  Future<void> submitReview(TravelStop stop) async {
     if (!_key.currentState!.validate()) {
       /// TODO: intl
       _errorMessage = 'Invalid review description';
@@ -61,7 +62,7 @@ class ReviewProvider with ChangeNotifier {
       return;
     }
 
-    await addReview(travelStopId: travelStopId);
+    await addReview(stop);
     notifyListeners();
   }
 

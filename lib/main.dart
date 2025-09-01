@@ -74,35 +74,35 @@ Future<void> main() async {
 
   // await DBConnection().printAllTables(db);
 }
-
-Future<List<Review>> generateMockReviews() async {
-  final mockAuthor1 = Participant(
-    name: 'Alice',
-    age: 15,
-    profilePicture: await FileService().getDefaultProfilePictureFile(),
-  );
-
-  return [
-    Review(
-      description: 'A fantastic place with beautiful views!',
-      author: mockAuthor1,
-      reviewDate: DateTime(2023, 10, 26),
-      travelStopId: 1,
-      stars: 5,
-    ),
-    Review(
-      description: 'The food was great, but the service was a bit slow.',
-      author: mockAuthor1,
-      reviewDate: DateTime(2023, 10, 25),
-      travelStopId: 2,
-      stars: 3,
-    ),
-    Review(
-      description: 'An unforgettable experience! Highly recommend.',
-      author: mockAuthor1,
-      reviewDate: DateTime(2023, 10, 24),
-      travelStopId: 2,
-      stars: 5,
-    ),
-  ];
-}
+//
+// Future<List<Review>> generateMockReviews() async {
+//   final mockAuthor1 = Participant(
+//     name: 'Alice',
+//     age: 15,
+//     profilePicture: await FileService().getDefaultProfilePictureFile(),
+//   );
+//
+//   return [
+//     Review(
+//       description: 'A fantastic place with beautiful views!',
+//       author: mockAuthor1,
+//       reviewDate: DateTime(2023, 10, 26),
+//       travelStopId: 1,
+//       stars: 5,
+//     ),
+//     Review(
+//       description: 'The food was great, but the service was a bit slow.',
+//       author: mockAuthor1,
+//       reviewDate: DateTime(2023, 10, 25),
+//       travelStopId: 2,
+//       stars: 3,
+//     ),
+//     Review(
+//       description: 'An unforgettable experience! Highly recommend.',
+//       author: mockAuthor1,
+//       reviewDate: DateTime(2023, 10, 24),
+//       travelStopId: 2,
+//       stars: 5,
+//     ),
+//   ];
+// }

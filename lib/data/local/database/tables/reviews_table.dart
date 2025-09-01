@@ -17,7 +17,7 @@ abstract final class ReviewsTable {
       $reviewId TEXT PRIMARY KEY,
       $description TEXT NOT NULL,
       $reviewDate INTEGER NOT NULL,
-      $travelStopId INTEGER NOT NULL,
+      $travelStopId TEXT NOT NULL,
       $stars INTEGER NOT NULL,
       $participantId TEXT NOT NULL,
       
