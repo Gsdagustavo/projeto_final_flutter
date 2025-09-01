@@ -433,15 +433,8 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                           return SizeFadeTransition(
                             curve: Curves.easeInOut,
                             animation: animation,
-                            child: Card(
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 6,
-                                vertical: 16,
-                              ),
-                              child: ListTile(
-                                title: Text(participant.name),
-                                subtitle: Text('${as.age}: ${participant.age}'),
-                              ),
+                            child: ParticipantListItem(
+                              participant: participant,
                             ),
                           );
                         },
@@ -1150,6 +1143,24 @@ class _ParticipantModalState extends State<_ParticipantModal> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class ParticipantListItem extends StatelessWidget {
+  const ParticipantListItem({super.key, required this.participant});
+
+  final Participant participant;
+
+  @override
+  Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 16),
+      child: ListTile(
+        title: Text(participant.name),
+        subtitle: Text('${as.age}: ${participant.age}'),
+      ),
     );
   }
 }

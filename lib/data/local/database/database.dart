@@ -7,6 +7,7 @@ import 'tables/experiences_table.dart';
 import 'tables/participants_table.dart';
 import 'tables/photos_table.dart';
 import 'tables/places_table.dart';
+import 'tables/reviews_photos.dart';
 import 'tables/reviews_table.dart';
 import 'tables/transport_types_table.dart';
 import 'tables/travel_status_table.dart';
@@ -56,6 +57,7 @@ class DBConnection {
     await db.execute(TravelStopExperiencesTable.createTable);
     await db.execute(ParticipantsTable.createTable);
     await db.execute(ReviewsTable.createTable);
+    await db.execute(ReviewsPhotosTable.createTable);
 
     debugPrint('Database onCreate method finished');
   }

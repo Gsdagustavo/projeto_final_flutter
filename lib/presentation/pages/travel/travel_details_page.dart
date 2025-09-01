@@ -1,17 +1,23 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating/flutter_rating.dart';
-import 'package:go_router/go_router.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/extensions/date_extensions.dart';
+import '../../../domain/entities/participant.dart';
 import '../../../domain/entities/review.dart';
 import '../../../domain/entities/travel.dart';
 import '../../../domain/entities/travel_stop.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../services/file_service.dart';
 import '../../extensions/enums_extensions.dart';
 import '../../providers/review_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
+import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_page.dart';
 import '../util/form_validations.dart';
 import '../util/travel_utils.dart';
@@ -295,9 +301,62 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                     ],
                   ),
 
-                  _StopStepperWidget(
-                    stops: widget.travel.stops,
-                    locale: locale,
+                  _StopStepperWidget(travel: widget.travel, locale: locale),
+                ],
+              ),
+            ),
+          ),
+
+          Card(
+            child: Padding(
+              padding: EdgeInsets.all(cardPadding),
+              child: Column(
+                children: [
+                  Row(
+                    spacing: 8,
+                    children: [
+                      Icon(Icons.reviews),
+                      Text('Reviews'),
+                      Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Consumer<ReviewProvider>(
+                          builder: (_, state, __) {
+                            return Text('${state.reviews.length}');
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  Consumer<ReviewProvider>(
+                    builder: (_, state, __) {
+                      if (state.reviews.isEmpty) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 24),
+                          child: Column(
+                            spacing: 12,
+                            children: [
+                              Icon(Icons.reviews, size: 42),
+                              Text('No reviews yet'),
+                            ],
+                          ),
+                        );
+                      }
+
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        child: ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: state.reviews.length,
+                          itemBuilder: (context, index) {
+                            debugPrint('$index');
+                            final review = state.reviews[index];
+                            return ReviewListItem(review: review);
+                          },
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -339,11 +398,11 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
 class _StopStepperWidget extends StatefulWidget {
   const _StopStepperWidget({
     super.key,
-    required this.stops,
     required this.locale,
+    required this.travel,
   });
 
-  final List<TravelStop> stops;
+  final Travel travel;
   final String locale;
 
   @override
@@ -355,7 +414,8 @@ class _StopStepperWidgetState extends State<_StopStepperWidget> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('Stops: ${widget.stops}');
+    final stops = widget.travel.stops;
+    debugPrint('Stops: ${widget.travel.stops}');
 
     return Stepper(
       stepIconHeight: 60,
@@ -368,7 +428,7 @@ class _StopStepperWidgetState extends State<_StopStepperWidget> {
         });
       },
       onStepContinue: () {
-        if (index != widget.stops.length - 1) {
+        if (index != stops.length - 1) {
           setState(() {
             index++;
           });
@@ -388,7 +448,7 @@ class _StopStepperWidgetState extends State<_StopStepperWidget> {
         }
 
         /// Last stop
-        if (stepIndex == widget.stops.length - 1) {
+        if (stepIndex == stops.length - 1) {
           return Icon(Icons.flag, color: Colors.grey);
         }
 
@@ -396,7 +456,7 @@ class _StopStepperWidgetState extends State<_StopStepperWidget> {
         return Icon(Icons.location_on, color: Colors.green);
       },
       steps: [
-        for (final stop in widget.stops)
+        for (final stop in stops)
           Step(
             subtitle: Text(stop.type.getIntlTravelStopType(context)),
             title: Text('${stop.place.country}, ${stop.place.city}'),
@@ -404,16 +464,15 @@ class _StopStepperWidgetState extends State<_StopStepperWidget> {
             content: Column(
               children: [
                 Row(
-                  spacing: 16,
+                  spacing: 8,
                   children: [
                     Icon(Icons.access_time_filled),
                     Text(
                       stop.arriveDate!.getFormattedDateWithYear(widget.locale),
                     ),
-                    Spacer(),
                     IconButton(
                       onPressed: () async {
-                        await showReviewModal(context, stop);
+                        await showReviewModal(context, widget.travel, stop);
                       },
                       icon: Icon(Icons.reviews),
                     ),
@@ -428,8 +487,9 @@ class _StopStepperWidgetState extends State<_StopStepperWidget> {
 }
 
 class ReviewModal extends StatefulWidget {
-  const ReviewModal({super.key, required this.stop});
+  const ReviewModal({super.key, required this.travel, required this.stop});
 
+  final Travel travel;
   final TravelStop stop;
 
   @override
@@ -437,6 +497,107 @@ class ReviewModal extends StatefulWidget {
 }
 
 class _ReviewModalState extends State<ReviewModal> {
+  final _formKey = GlobalKey<FormState>();
+  final _reviewController = TextEditingController();
+  double _reviewRate = 5;
+  final _images = <File>[];
+
+  Participant? _author;
+
+  Future<void> addImage() async {
+    final image = await FileService().pickImage();
+
+    if (image == null) return;
+
+    setState(() {
+      _images.add(image);
+    });
+  }
+
+  Future<void> removeImage(File image) async {
+    setState(() {
+      _images.removeWhere((element) => image == element);
+    });
+  }
+
+  Future<void> onSubmit() async {
+    final as = AppLocalizations.of(context)!;
+    debugPrint('submit button tap');
+
+    if (!_formKey.currentState!.validate()) {
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return CustomDialog(
+            title: as.warning,
+            content: Text('Invalid review data'),
+          );
+        },
+      );
+
+      return;
+    }
+
+    if (_author == null) {
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return CustomDialog(
+            title: as.warning,
+            content: Text('Invalid author'),
+          );
+        },
+      );
+
+      return;
+    }
+
+    final reviewState = context.read<ReviewProvider>();
+
+    final review = Review(
+      description: _reviewController.text,
+      author: _author!,
+      reviewDate: DateTime.now(),
+      travelStopId: widget.stop.id,
+      stars: _reviewRate.toInt(),
+    );
+
+    await reviewState.addReview(review);
+
+    if (reviewState.hasError) {
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return CustomDialog(
+            isError: true,
+            title: as.warning,
+            content: Text('Error: ${reviewState.errorMessage}'),
+          );
+        },
+      );
+
+      return;
+    }
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(title: Text('Review registered successfully!'));
+      },
+    );
+
+    Navigator.of(context).pop();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    setState(() {
+      _author = widget.travel.participants.first;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
@@ -455,7 +616,7 @@ class _ReviewModalState extends State<ReviewModal> {
               children: [
                 IconButton(
                   onPressed: () {
-                    context.pop();
+                    Navigator.of(context).pop();
                   },
                   icon: const Icon(Icons.close),
                 ),
@@ -466,14 +627,43 @@ class _ReviewModalState extends State<ReviewModal> {
               ],
             ),
             const Padding(padding: EdgeInsets.all(16)),
+
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Consumer<ReviewProvider>(
+                builder: (_, state, __) {
+                  return DropdownButton<Participant>(
+                    underline: Container(color: Colors.transparent),
+                    icon: Icon(Icons.arrow_downward),
+                    value: _author,
+                    items: [
+                      for (final participant in widget.travel.participants)
+                        DropdownMenuItem(
+                          value: participant,
+                          child: Text(participant.name),
+                        ),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _author = value;
+                      });
+                    },
+                  );
+                },
+              ),
+            ),
+
+            const Padding(padding: EdgeInsets.all(16)),
             Consumer<ReviewProvider>(
               builder: (_, reviewState, __) {
                 return StarRating(
                   size: 52,
                   color: Colors.yellow.shade800,
-                  rating: reviewState.reviewRate.toDouble(),
+                  rating: _reviewRate,
                   onRatingChanged: (r) {
-                    reviewState.reviewRate = r.toInt();
+                    setState(() {
+                      _reviewRate = r;
+                    });
                   },
                 );
               },
@@ -490,12 +680,12 @@ class _ReviewModalState extends State<ReviewModal> {
                 Consumer<ReviewProvider>(
                   builder: (_, reviewState, __) {
                     return Form(
-                      key: reviewState.key,
+                      key: _formKey,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       child: TextFormField(
                         textCapitalization: TextCapitalization.sentences,
                         validator: validations.reviewValidator,
-                        controller: reviewState.reviewController,
+                        controller: _reviewController,
                         onTapOutside: (_) => FocusScope.of(context).unfocus(),
                         maxLength: 500,
                         maxLines: 5,
@@ -516,25 +706,11 @@ class _ReviewModalState extends State<ReviewModal> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Builder(
-                //   builder: (context) {
-                //     print(
-                //       'reviewState.images.isEmpty:
-                //       ${reviewState.images.isEmpty}',
-                //     );
-                //
-                //     if (reviewState.images.isNotEmpty) {
-                //       return _PhotosWidget(photos: reviewState.images);
-                //     }
-                //
-                //     return Container();
-                //   },
-                // ),
                 Consumer<ReviewProvider>(
                   builder: (_, reviewState, __) {
                     return InkWell(
                       onTap: () async {
-                        await reviewState.pickReviewImage();
+                        await addImage();
                       },
                       borderRadius: BorderRadius.circular(32),
                       child: Container(
@@ -560,15 +736,51 @@ class _ReviewModalState extends State<ReviewModal> {
               ],
             ),
 
+            Builder(
+              builder: (_) {
+                if (_images.isEmpty) return SizedBox.shrink();
+
+                return GridView.builder(
+                  shrinkWrap: true,
+                  itemCount: _images.length,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 1,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                  ),
+                  itemBuilder: (context, index) {
+                    final image = _images[index];
+                    return GridTile(
+                      child: Stack(
+                        children: [
+                          Image(image: FileImage(image)),
+                          Positioned(
+                            left: 0,
+                            top: 0,
+                            child: IconButton(
+                              onPressed: () async {
+                                await removeImage(image);
+                              },
+                              icon: const Icon(FontAwesomeIcons.remove),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+
             const Padding(padding: EdgeInsets.all(16)),
             Consumer<ReviewProvider>(
               builder: (_, reviewState, __) {
                 return Container(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () async {
-                      await reviewState.submitReview(widget.stop);
-                    },
+                    onPressed: onSubmit,
                     child: Text(as.send_review),
                   ),
                 );
@@ -581,11 +793,15 @@ class _ReviewModalState extends State<ReviewModal> {
   }
 }
 
-Future<Review?> showReviewModal(BuildContext context, TravelStop stop) async {
+Future<Review?> showReviewModal(
+  BuildContext context,
+  Travel travel,
+  TravelStop stop,
+) async {
   await showModalBottomSheet<Review>(
     context: context,
     builder: (context) {
-      return ReviewModal(stop: stop);
+      return ReviewModal(travel: travel, stop: stop);
     },
   );
 
@@ -670,6 +886,51 @@ class _TravelTitleWidgetState extends State<_TravelTitleWidget> {
           ),
           IconButton(onPressed: onTravelTitleUpdated, icon: Icon(Icons.save)),
         ],
+      ),
+    );
+  }
+}
+
+class ReviewListItem extends StatelessWidget {
+  const ReviewListItem({super.key, required this.review});
+
+  final Review review;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(cardPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                CircleAvatar(
+                  child: InstaImageViewer(
+                    child: Image.file(review.author.profilePicture),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.all(6)),
+                Text(
+                  review.author.name,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                Spacer(),
+                StarRating(
+                  starCount: 5,
+                  rating: review.stars.toDouble(),
+                  size: 18,
+                ),
+              ],
+            ),
+            Padding(padding: EdgeInsets.all(8)),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              child: Text(review.description),
+            ),
+          ],
+        ),
       ),
     );
   }
