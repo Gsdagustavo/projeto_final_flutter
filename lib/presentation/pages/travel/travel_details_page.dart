@@ -52,6 +52,11 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
 
     return FabPage(
       title: widget.travel.travelTitle,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await context.read<ReviewProvider>().update();
+        },
+      ),
       body: Column(
         spacing: 8,
         children: [
@@ -560,6 +565,7 @@ class _ReviewModalState extends State<ReviewModal> {
       reviewDate: DateTime.now(),
       travelStopId: widget.stop.id,
       stars: _reviewRate.toInt(),
+      images: _images,
     );
 
     await reviewState.addReview(review);

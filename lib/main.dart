@@ -4,8 +4,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 import 'data/local/database/database.dart';
-import 'domain/entities/participant.dart';
-import 'domain/entities/review.dart';
 import 'modules/review/review_repository.dart';
 import 'modules/review/review_use_cases.dart';
 import 'modules/travel/travel_repository.dart';
@@ -18,14 +16,13 @@ import 'presentation/providers/travel_list_provider.dart';
 import 'presentation/providers/user_preferences_provider.dart';
 import 'presentation/util/mock_data.dart';
 import 'presentation/widgets/my_app.dart';
-import 'services/file_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   /// Resets the database
-  final db = await DBConnection().getDatabase(reset: true);
-  await DBConnection().printAllTables(db);
+  // final db = await DBConnection().getDatabase(reset: true);
+  // await DBConnection().printAllTables(db);
 
   /// Initialize Firebase App
   await Firebase.initializeApp();
@@ -74,6 +71,7 @@ Future<void> main() async {
 
   // await DBConnection().printAllTables(db);
 }
+
 //
 // Future<List<Review>> generateMockReviews() async {
 //   final mockAuthor1 = Participant(

@@ -9,7 +9,7 @@ abstract final class ReviewsPhotosTable {
   static const String createTable =
       '''
      CREATE TABLE $tableName(
-      $reviewId TEXT PRIMARY KEY,
+      $reviewId TEXT NOT NULL,
       $photo BLOB,
       
       FOREIGN KEY ($reviewId) REFERENCES ${ReviewsTable.tableName} (${ReviewsTable.reviewId})

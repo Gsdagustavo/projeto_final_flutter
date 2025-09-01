@@ -1,14 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 
 import '../../domain/entities/review.dart';
 import '../../modules/review/review_use_cases.dart';
-import '../../services/file_service.dart';
 
 class ReviewProvider with ChangeNotifier {
   final ReviewUseCases _reviewUseCases;
-  final _fileService = FileService();
 
   ReviewProvider(this._reviewUseCases);
 
@@ -17,9 +13,17 @@ class ReviewProvider with ChangeNotifier {
 
   Future<void> addReview(Review review) async {
     debugPrint('add review provider');
-    await _reviewUseCases.addReviews(reviews: [review]);
+    await _reviewUseCases.addReview(review: review);
     _reviews.add(review);
     notifyListeners();
+  }
+
+  Future<void> update() async {
+    _reviews.clear();
+    _reviews.addAll(await _reviewUseCases.getReviews());
+    notifyListeners();
+
+    debugPrint('Reviews: $_reviews');
   }
 
   bool get hasError => _errorMessage != null;
