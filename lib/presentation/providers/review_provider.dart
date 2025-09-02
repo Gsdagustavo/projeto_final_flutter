@@ -38,4 +38,11 @@ class ReviewProvider with ChangeNotifier {
   String? get errorMessage => _errorMessage!;
 
   List<Review> get reviews => _reviews;
+
+  double get rate {
+    return reviews.fold(0, (previousValue, element) {
+          return element.stars + previousValue;
+    }) /
+        reviews.length;
+  }
 }

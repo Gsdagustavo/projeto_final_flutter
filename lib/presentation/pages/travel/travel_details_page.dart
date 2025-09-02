@@ -358,24 +358,49 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
 
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12),
-                        child: ListView.separated(
-                          separatorBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              child: Divider(),
-                            );
-                          },
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: state.reviews.length,
-                          itemBuilder: (context, index) {
-                            debugPrint('$index');
-                            final review = state.reviews[index];
-                            return ReviewListItem(
-                              review: review,
-                              locale: locale,
-                            );
-                          },
+                        child: Column(
+                          children: [
+                            Row(
+                              spacing: 8,
+                              children: [
+                                StarRating(
+                                  starCount: 5,
+                                  rating: state.rate,
+                                  size: 22,
+                                ),
+                                Text(
+                                  state.rate.toStringAsFixed(2),
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                                Text(
+                                  'Based on ${state.reviews.length} reviews',
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                              ],
+                            ),
+
+                            ListView.separated(
+                              separatorBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8,
+                                  ),
+                                  child: Divider(),
+                                );
+                              },
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: state.reviews.length,
+                              itemBuilder: (context, index) {
+                                debugPrint('$index');
+                                final review = state.reviews[index];
+                                return ReviewListItem(
+                                  review: review,
+                                  locale: locale,
+                                );
+                              },
+                            ),
+                          ],
                         ),
                       );
                     },
@@ -957,6 +982,7 @@ class ReviewListItem extends StatelessWidget {
             physics: BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             child: Row(
+              spacing: 8,
               children: [
                 StarRating(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -965,12 +991,9 @@ class ReviewListItem extends StatelessWidget {
                   size: 18,
                 ),
                 Text(review.reviewDate.getMonthDay(locale)),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: Icon(Icons.circle, size: 4),
-                ),
+                Icon(Icons.circle, size: 4),
                 Icon(Icons.location_on, size: 12),
-                Padding(padding: EdgeInsets.all(2)),
+
                 /// TODO: add actual travel stop place
                 Text('place'),
               ],
@@ -1009,41 +1032,5 @@ class ReviewListItem extends StatelessWidget {
         ],
       ),
     );
-
-    // return Card(
-    //   child: Padding(
-    //     padding: const EdgeInsets.all(cardPadding),
-    //     child: Column(
-    //       crossAxisAlignment: CrossAxisAlignment.start,
-    //       children: [
-    //         Row(
-    //           children: [
-    //             CircleAvatar(
-    //               child: InstaImageViewer(
-    //                 child: Image.file(review.author.profilePicture),
-    //               ),
-    //             ),
-    //             Padding(padding: EdgeInsets.all(6)),
-    //             Text(
-    //               review.author.name,
-    //               style: Theme.of(context).textTheme.titleLarge,
-    //             ),
-    //           ],
-    //         ),
-    //         StarRating(
-    //           mainAxisAlignment: MainAxisAlignment.sta,
-    //           starCount: 5,
-    //           rating: review.stars.toDouble(),
-    //           size: 18,
-    //         ),
-    //         Padding(padding: EdgeInsets.all(12)),
-    //         Padding(
-    //           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-    //           child: Text(review.description),
-    //         ),
-    //
-
-    //   ),
-    // );
   }
 }
