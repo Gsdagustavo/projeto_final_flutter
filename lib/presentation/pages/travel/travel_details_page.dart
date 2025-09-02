@@ -358,14 +358,23 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
 
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12),
-                        child: ListView.builder(
+                        child: ListView.separated(
+                          separatorBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: Divider(),
+                            );
+                          },
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: state.reviews.length,
                           itemBuilder: (context, index) {
                             debugPrint('$index');
                             final review = state.reviews[index];
-                            return ReviewListItem(review: review);
+                            return ReviewListItem(
+                              review: review,
+                              locale: locale,
+                            );
                           },
                         ),
                       );
@@ -920,73 +929,121 @@ class _TravelTitleWidgetState extends State<_TravelTitleWidget> {
 }
 
 class ReviewListItem extends StatelessWidget {
-  const ReviewListItem({super.key, required this.review});
+  const ReviewListItem({super.key, required this.review, required this.locale});
 
   final Review review;
+  final String locale;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(cardPadding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+    return ListTile(
+      isThreeLine: true,
+      leading: CircleAvatar(
+        child: InstaImageViewer(
+          child: Image.file(review.author.profilePicture),
+        ),
+      ),
+
+      title: Text(
+        review.author.name,
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
+
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 8,
+        children: [
+          SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            child: Row(
               children: [
-                CircleAvatar(
-                  child: InstaImageViewer(
-                    child: Image.file(review.author.profilePicture),
-                  ),
-                ),
-                Padding(padding: EdgeInsets.all(6)),
-                Text(
-                  review.author.name,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                Padding(padding: EdgeInsets.all(6)),
-                const Spacer(),
                 StarRating(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   starCount: 5,
                   rating: review.stars.toDouble(),
                   size: 18,
                 ),
+                Text(review.reviewDate.getMonthDay(locale)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  child: Icon(Icons.circle, size: 4),
+                ),
+                Icon(Icons.location_on, size: 12),
+                Padding(padding: EdgeInsets.all(2)),
+                /// TODO: add actual travel stop place
+                Text('place'),
               ],
             ),
-            Padding(padding: EdgeInsets.all(12)),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              child: Text(review.description),
-            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            child: Text(review.description),
+          ),
 
-            if (review.images.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              SizedBox(
-                height: 100,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: review.images.length,
-                  separatorBuilder: (context, _) => const SizedBox(width: 8),
-                  itemBuilder: (context, index) {
-                    final photo = review.images[index];
-                    return ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: InstaImageViewer(
-                        child: Image.file(
-                          photo,
-                          fit: BoxFit.cover,
-                          width: 100,
-                          height: 100,
-                        ),
+          if (review.images.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            SizedBox(
+              height: 100,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: review.images.length,
+                separatorBuilder: (context, _) => const SizedBox(width: 8),
+                itemBuilder: (context, index) {
+                  final photo = review.images[index];
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: InstaImageViewer(
+                      child: Image.file(
+                        photo,
+                        fit: BoxFit.cover,
+                        width: 100,
+                        height: 100,
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
-            ],
+            ),
           ],
-        ),
+        ],
       ),
     );
+
+    // return Card(
+    //   child: Padding(
+    //     padding: const EdgeInsets.all(cardPadding),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         Row(
+    //           children: [
+    //             CircleAvatar(
+    //               child: InstaImageViewer(
+    //                 child: Image.file(review.author.profilePicture),
+    //               ),
+    //             ),
+    //             Padding(padding: EdgeInsets.all(6)),
+    //             Text(
+    //               review.author.name,
+    //               style: Theme.of(context).textTheme.titleLarge,
+    //             ),
+    //           ],
+    //         ),
+    //         StarRating(
+    //           mainAxisAlignment: MainAxisAlignment.sta,
+    //           starCount: 5,
+    //           rating: review.stars.toDouble(),
+    //           size: 18,
+    //         ),
+    //         Padding(padding: EdgeInsets.all(12)),
+    //         Padding(
+    //           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+    //           child: Text(review.description),
+    //         ),
+    //
+
+    //   ),
+    // );
   }
 }
