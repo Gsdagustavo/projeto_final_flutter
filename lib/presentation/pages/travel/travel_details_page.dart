@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating/flutter_rating.dart';
+import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:provider/provider.dart';
@@ -534,6 +535,96 @@ class _StopStepperWidgetState extends State<_StopStepperWidget> {
   }
 }
 
+class ReviewListItem extends StatelessWidget {
+  const ReviewListItem({super.key, required this.review, required this.locale});
+
+  final Review review;
+  final String locale;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      isThreeLine: true,
+      leading: FabCircleAvatar(
+        child: InstaImageViewer(
+          child: Image.file(review.author.profilePicture),
+        ),
+      ),
+
+      title: Text(
+        review.author.name,
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
+
+      trailing: IconButton(
+        onPressed: () {
+          /// TODO: remove review
+          debugPrint('Remove review');
+        },
+        icon: Icon(FontAwesomeIcons.remove),
+      ),
+
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 8,
+        children: [
+          SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              spacing: 8,
+              children: [
+                StarRating(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  starCount: 5,
+                  rating: review.stars.toDouble(),
+                  size: 18,
+                ),
+                Text(review.reviewDate.getMonthDay(locale)),
+                Icon(Icons.circle, size: 4),
+                Icon(Icons.location_on, size: 12),
+
+                /// TODO: add actual travel stop place
+                Text(review.travelStop.place.city ?? ''),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            child: Text(review.description),
+          ),
+
+          if (review.images.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            SizedBox(
+              height: 100,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: review.images.length,
+                separatorBuilder: (context, _) => const SizedBox(width: 8),
+                itemBuilder: (context, index) {
+                  final photo = review.images[index];
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: InstaImageViewer(
+                      child: Image.file(
+                        photo,
+                        fit: BoxFit.cover,
+                        width: 100,
+                        height: 100,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
 class ReviewModal extends StatefulWidget {
   const ReviewModal({super.key, required this.travel, required this.stop});
 
@@ -648,208 +739,220 @@ class _ReviewModalState extends State<ReviewModal> {
   }
 
   @override
+  void dispose() {
+    _reviewController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
     final validations = FormValidations(as);
 
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(
-        decelerationRate: ScrollDecelerationRate.normal,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(Icons.close),
-                ),
-                Text(
-                  as.give_a_review,
-                  style: Theme.of(context).textTheme.displaySmall,
-                ),
-              ],
-            ),
-            const Padding(padding: EdgeInsets.all(16)),
+    return Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(
+          decelerationRate: ScrollDecelerationRate.normal,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: const Icon(Icons.close),
+                  ),
+                  Text(
+                    as.give_a_review,
+                    style: Theme.of(context).textTheme.displaySmall,
+                  ),
+                ],
+              ),
+              const Padding(padding: EdgeInsets.all(16)),
 
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Consumer<ReviewProvider>(
-                builder: (_, state, __) {
-                  return DropdownButtonFormField<Participant>(
-                    icon: Icon(Icons.arrow_downward),
-                    value: _author,
-                    items: [
-                      for (final participant in widget.travel.participants)
-                        DropdownMenuItem(
-                          value: participant,
-                          child: Text(participant.name),
-                        ),
-                    ],
-                    onChanged: (value) {
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Consumer<ReviewProvider>(
+                  builder: (_, state, __) {
+                    return DropdownButtonFormField<Participant>(
+                      icon: Icon(Icons.arrow_downward),
+                      value: _author,
+                      items: [
+                        for (final participant in widget.travel.participants)
+                          DropdownMenuItem(
+                            value: participant,
+                            child: Text(participant.name),
+                          ),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          _author = value;
+                        });
+                      },
+                    );
+                  },
+                ),
+              ),
+
+              const Padding(padding: EdgeInsets.all(16)),
+              Consumer<ReviewProvider>(
+                builder: (_, reviewState, __) {
+                  return RatingStars(
+                    starCount: 5,
+                    value: _reviewRate,
+                    animationDuration: Duration(seconds: 1),
+                    starSize: 36,
+                    valueLabelVisibility: false,
+                    onValueChanged: (r) {
                       setState(() {
-                        _author = value;
+                        _reviewRate = r;
                       });
                     },
                   );
                 },
               ),
-            ),
-
-            const Padding(padding: EdgeInsets.all(16)),
-            Consumer<ReviewProvider>(
-              builder: (_, reviewState, __) {
-                return StarRating(
-                  size: 52,
-                  color: Colors.yellow.shade800,
-                  rating: _reviewRate,
-                  onRatingChanged: (r) {
-                    setState(() {
-                      _reviewRate = r;
-                    });
-                  },
-                );
-              },
-            ),
-            const Padding(padding: EdgeInsets.all(16)),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  as.detail_review,
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-                const Padding(padding: EdgeInsets.all(6)),
-                Consumer<ReviewProvider>(
-                  builder: (_, reviewState, __) {
-                    return Form(
-                      key: _formKey,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      child: TextFormField(
-                        textCapitalization: TextCapitalization.sentences,
-                        validator: validations.reviewValidator,
-                        controller: _reviewController,
-                        onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                        maxLength: 500,
-                        maxLines: 5,
-                        decoration: InputDecoration(
-                          hint: Text(
-                            as.review,
-                            style: Theme.of(context).textTheme.labelSmall,
+              const Padding(padding: EdgeInsets.all(16)),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    as.detail_review,
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                  const Padding(padding: EdgeInsets.all(6)),
+                  Consumer<ReviewProvider>(
+                    builder: (_, reviewState, __) {
+                      return Form(
+                        key: _formKey,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        child: TextFormField(
+                          textCapitalization: TextCapitalization.sentences,
+                          validator: validations.reviewValidator,
+                          controller: _reviewController,
+                          onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                          maxLength: 500,
+                          maxLines: 5,
+                          decoration: InputDecoration(
+                            hint: Text(
+                              as.review,
+                              style: Theme.of(context).textTheme.labelSmall,
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-            const Padding(padding: EdgeInsets.all(16)),
+                      );
+                    },
+                  ),
+                ],
+              ),
+              const Padding(padding: EdgeInsets.all(16)),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Consumer<ReviewProvider>(
-                  builder: (_, reviewState, __) {
-                    return InkWell(
-                      onTap: () async {
-                        await addImage();
-                      },
-                      borderRadius: BorderRadius.circular(32),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: BoxBorder.all(
-                            color: Theme.of(context).highlightColor,
-                            width: 1,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Consumer<ReviewProvider>(
+                    builder: (_, reviewState, __) {
+                      return InkWell(
+                        onTap: () async {
+                          await addImage();
+                        },
+                        borderRadius: BorderRadius.circular(32),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: BoxBorder.all(
+                              color: Theme.of(context).highlightColor,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(32),
                           ),
-                          borderRadius: BorderRadius.circular(32),
+                          padding: const EdgeInsets.all(24),
+                          child: Column(
+                            spacing: 16,
+                            children: [
+                              Icon(size: 42, Icons.camera_alt),
+                              Text(as.add_photo),
+                            ],
+                          ),
                         ),
-                        padding: const EdgeInsets.all(24),
-                        child: Column(
-                          spacing: 16,
-                          children: [
-                            Icon(size: 42, Icons.camera_alt),
-                            Text(as.add_photo),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-            Padding(padding: EdgeInsets.all(12)),
-            Builder(
-              builder: (_) {
-                if (_images.isEmpty) return SizedBox.shrink();
-
-                return GridView.builder(
-                  shrinkWrap: true,
-                  itemCount: _images.length,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 1,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
+                      );
+                    },
                   ),
-                  itemBuilder: (context, index) {
-                    final image = _images[index];
-                    return Stack(
-                      children: [
-                        Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: InstaImageViewer(
-                                child: Image.file(image, fit: BoxFit.cover),
-                              ),
-                            ),
-                            Positioned(
-                              left: 4,
-                              top: 4,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.black54,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: IconButton(
-                                  onPressed: () async {
-                                    await removeImage(image);
-                                  },
-                                  icon: const Icon(FontAwesomeIcons.remove),
-                                  constraints: const BoxConstraints(),
-                                  padding: EdgeInsets.zero,
+                ],
+              ),
+              Padding(padding: EdgeInsets.all(12)),
+              Builder(
+                builder: (_) {
+                  if (_images.isEmpty) return SizedBox.shrink();
+
+                  return GridView.builder(
+                    shrinkWrap: true,
+                    itemCount: _images.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          childAspectRatio: 1,
+                          crossAxisSpacing: 8,
+                          mainAxisSpacing: 8,
+                        ),
+                    itemBuilder: (context, index) {
+                      final image = _images[index];
+                      return Stack(
+                        children: [
+                          Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: InstaImageViewer(
+                                  child: Image.file(image, fit: BoxFit.cover),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-            ),
+                              Positioned(
+                                left: 4,
+                                top: 4,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.black54,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () async {
+                                      await removeImage(image);
+                                    },
+                                    icon: const Icon(FontAwesomeIcons.remove),
+                                    constraints: const BoxConstraints(),
+                                    padding: EdgeInsets.zero,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
 
-            const Padding(padding: EdgeInsets.all(16)),
-            Consumer<ReviewProvider>(
-              builder: (_, reviewState, __) {
-                return Container(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: onSubmit,
-                    child: Text(as.send_review),
-                  ),
-                );
-              },
-            ),
-          ],
+              const Padding(padding: EdgeInsets.all(16)),
+              Consumer<ReviewProvider>(
+                builder: (_, reviewState, __) {
+                  return Container(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: onSubmit,
+                      child: Text(as.send_review),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -863,6 +966,7 @@ Future<Review?> showReviewModal(
 ) async {
   await showModalBottomSheet<Review>(
     context: context,
+    isScrollControlled: true,
     builder: (context) {
       return ReviewModal(travel: travel, stop: stop);
     },
@@ -948,93 +1052,6 @@ class _TravelTitleWidgetState extends State<_TravelTitleWidget> {
             ),
           ),
           IconButton(onPressed: onTravelTitleUpdated, icon: Icon(Icons.save)),
-        ],
-      ),
-    );
-  }
-}
-
-class ReviewListItem extends StatelessWidget {
-  const ReviewListItem({super.key, required this.review, required this.locale});
-
-  final Review review;
-  final String locale;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      isThreeLine: true,
-      leading: FabCircleAvatar(
-        child: InstaImageViewer(
-          child: Image.file(review.author.profilePicture),
-        ),
-      ),
-
-      title: Text(
-        review.author.name,
-        style: Theme.of(context).textTheme.titleLarge,
-      ),
-
-      trailing: IconButton(
-        onPressed: () {},
-        icon: Icon(FontAwesomeIcons.remove),
-      ),
-
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 8,
-        children: [
-          SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              spacing: 8,
-              children: [
-                StarRating(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  starCount: 5,
-                  rating: review.stars.toDouble(),
-                  size: 18,
-                ),
-                Text(review.reviewDate.getMonthDay(locale)),
-                Icon(Icons.circle, size: 4),
-                Icon(Icons.location_on, size: 12),
-
-                /// TODO: add actual travel stop place
-                Text(review.travelStop.place.city ?? ''),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            child: Text(review.description),
-          ),
-
-          if (review.images.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            SizedBox(
-              height: 100,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: review.images.length,
-                separatorBuilder: (context, _) => const SizedBox(width: 8),
-                itemBuilder: (context, index) {
-                  final photo = review.images[index];
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: InstaImageViewer(
-                      child: Image.file(
-                        photo,
-                        fit: BoxFit.cover,
-                        width: 100,
-                        height: 100,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
         ],
       ),
     );

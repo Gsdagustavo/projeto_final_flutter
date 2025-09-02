@@ -885,8 +885,11 @@ class _ParticipantModalState extends State<_ParticipantModal> {
   }
 
   Future<void> _pickImage() async {
-    _profilePicture = await FileService().pickImage();
-    setState(() {});
+    setState(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        _profilePicture = await FileService().pickImage();
+      });
+    });
   }
 
   @override

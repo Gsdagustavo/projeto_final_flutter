@@ -42,7 +42,7 @@ class ReviewProvider with ChangeNotifier {
   double get rate {
     return reviews.fold(0, (previousValue, element) {
           return element.stars + previousValue;
-    }) /
+        }) /
         reviews.length;
   }
 }

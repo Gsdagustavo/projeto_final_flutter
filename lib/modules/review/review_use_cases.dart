@@ -10,6 +10,7 @@ abstract class ReviewUseCases {
   Future<List<Review>> getReviews();
 
   Future<List<Review>> getReviewsByTravel(Travel travel);
+
   Future<List<Review>> getReviewsByStopId(String stopId);
 }
 
