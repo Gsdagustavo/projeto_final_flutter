@@ -36,6 +36,7 @@ Future<void> main() async {
 
   final travels = await generateSampleTravels();
   await travelUseCases.registerTravel(travels.first);
+  await travelUseCases.registerTravel(travels.last);
 
   /// Build App
   runApp(

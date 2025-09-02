@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../domain/entities/travel.dart';
 import '../../providers/travel_list_provider.dart';
-import '../home/home_page.dart';
+import '../../widgets/ok_cancel_dialog.dart';
 
 Future<void> onTravelDeleted(
   BuildContext context,

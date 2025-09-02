@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:persistent_header_adaptive/persistent_header_adaptive.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/extensions/date_extensions.dart';
@@ -16,6 +17,7 @@ import '../../util/app_routes.dart';
 import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
+import '../../widgets/ok_cancel_dialog.dart';
 import '../travel/register_travel_page.dart';
 import '../util/travel_utils.dart';
 
@@ -28,6 +30,31 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+class Header extends StatelessWidget {
+  const Header({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      color: Colors.grey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text('line 1'),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: const [Text('line 2.1'), Text('line 2.2')],
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(onPressed: () {}, child: const Text('button')),
+        ],
+      ),
+    );
+  }
+}
+
 class _HomePageState extends State<HomePage> {
   final formKey = GlobalKey<FormState>();
   final searchController = TextEditingController();
@@ -38,28 +65,18 @@ class _HomePageState extends State<HomePage> {
 
     return FabPage(
       title: as.title_home,
-      // floatingActionButton: Column(
-      //   mainAxisAlignment: MainAxisAlignment.end,
-      //   children: [
-      //     FloatingActionButton(
-      //       onPressed: () async =>
-      //           await context.read<TravelListProvider>().update(),
-      //     ),
-      //
-      //     FloatingActionButton(
-      //       onPressed: () async {
-      //         await DBConnection().printAllTables(
-      //           await DBConnection().getDatabase(),
-      //         );
-      //       },
-      //     ),
-      //   ],
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async =>
+            await context.read<TravelListProvider>().update(),
+      ),
       body: Consumer<TravelListProvider>(
         builder: (_, travelListProvider, __) {
-          if (travelListProvider.isLoading) {
-            return Center(child: LoadingDialog());
-          }
+          // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+          //   await showLoadingModalBottomSheet(
+          //     context: context,
+          //     function: travelListProvider.update,
+          //   );
+          // });
 
           /// TODO:
           // if (travels.isEmpty) {
@@ -68,47 +85,54 @@ class _HomePageState extends State<HomePage> {
           //   );
           // }
 
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(cardPadding),
-                child: TextField(
-                  onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                  controller: searchController,
-                  onChanged: (value) async {
-                    await travelListProvider.searchTravel(
-                      searchController.text,
-                    );
-                  },
-                  decoration: InputDecoration(
-                    hintText: 'Search...',
-                    prefixIcon: Icon(Icons.search),
-                    suffixIcon: IconButton(
-                      onPressed: () async {
-                        await travelListProvider.clearSearch();
-                        searchController.clear();
-                      },
-                      icon: const Icon(FontAwesomeIcons.remove),
+          return ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: travelListProvider.travels.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 26),
+            itemBuilder: (context, index) {
+              return _TravelWidget(travel: travelListProvider.travels[index]);
+            },
+          );
+        },
+      ),
+
+      slivers: [
+        Consumer<TravelListProvider>(
+          builder: (_, travelListProvider, __) {
+            return AdaptiveHeightSliverPersistentHeader(
+              floating: true,
+              needRepaint: true,
+              child: Padding(
+                padding: EdgeInsets.only(top: 32),
+                child: Padding(
+                  padding: const EdgeInsets.all(cardPadding),
+                  child: TextField(
+                    onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                    controller: searchController,
+                    onChanged: (value) async {
+                      await travelListProvider.searchTravel(
+                        searchController.text,
+                      );
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Search...',
+                      prefixIcon: Icon(Icons.search),
+                      suffixIcon: IconButton(
+                        onPressed: () async {
+                          await travelListProvider.clearSearch();
+                          searchController.clear();
+                        },
+                        icon: const Icon(FontAwesomeIcons.remove),
+                      ),
                     ),
                   ),
                 ),
               ),
-
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: travelListProvider.travels.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 26),
-                itemBuilder: (context, index) {
-                  return _TravelWidget(
-                    travel: travelListProvider.travels[index],
-                  );
-                },
-              ),
-            ],
-          );
-        },
-      ),
+            );
+          },
+        ),
+      ],
     );
   }
 }
@@ -443,54 +467,30 @@ class _TravelStatusWidget extends StatelessWidget {
   }
 }
 
-Future<bool?> showOkCancelDialog(
-  BuildContext context, {
-  required Widget title,
-  Widget? content,
+Future<T> showLoadingModalBottomSheet<T>({
+  required BuildContext context,
+  required Future<T> Function() function,
 }) async {
-  return await showDialog<bool>(
+  await showModalBottomSheet(
+    isScrollControlled: true,
     context: context,
-    builder: (context) {
-      return OkCancelDialog(title: title, content: content);
+    builder: (_) {
+      return const Center(child: LoadingDialog());
     },
   );
-}
 
-class OkCancelDialog extends StatelessWidget {
-  const OkCancelDialog({
-    super.key,
-    required this.title,
-    this.content,
-    this.cancelText = 'Cancel',
-    this.okText = 'Ok',
-  });
+  // Added delay to allow the animation of  the bottom sheet to finish before
+  // starting the long running process
+  await Future.delayed(const Duration(milliseconds: 100));
 
-  final Widget title;
-  final Widget? content;
-  final String cancelText;
-  final String okText;
+  final item = await function();
 
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: title,
-      content: content,
-      actionsAlignment: MainAxisAlignment.spaceBetween,
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop(false);
-          },
-          child: Text(cancelText),
-        ),
+  Navigator.pop(context);
 
-        ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pop(true);
-          },
-          child: Text(okText),
-        ),
-      ],
-    );
+  // Check if for some reason the returned item is still a future
+  if (item is Future) {
+    return await item;
   }
+
+  return item;
 }
