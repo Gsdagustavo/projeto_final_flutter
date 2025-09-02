@@ -18,6 +18,7 @@ import '../../providers/review_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../widgets/custom_dialog.dart';
+import '../../widgets/fab_circle_avatar.dart';
 import '../../widgets/fab_page.dart';
 import '../util/form_validations.dart';
 import '../util/travel_utils.dart';
@@ -963,7 +964,7 @@ class ReviewListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       isThreeLine: true,
-      leading: CircleAvatar(
+      leading: FabCircleAvatar(
         child: InstaImageViewer(
           child: Image.file(review.author.profilePicture),
         ),
@@ -972,6 +973,11 @@ class ReviewListItem extends StatelessWidget {
       title: Text(
         review.author.name,
         style: Theme.of(context).textTheme.titleLarge,
+      ),
+
+      trailing: IconButton(
+        onPressed: () {},
+        icon: Icon(FontAwesomeIcons.remove),
       ),
 
       subtitle: Column(

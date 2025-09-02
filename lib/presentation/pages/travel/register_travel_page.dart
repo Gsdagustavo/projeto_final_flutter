@@ -20,6 +20,7 @@ import '../../providers/register_travel_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../util/app_routes.dart';
 import '../../widgets/custom_dialog.dart';
+import '../../widgets/fab_circle_avatar.dart';
 import '../../widgets/fab_page.dart';
 import '../util/form_validations.dart';
 
@@ -453,12 +454,10 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                                   context,
                                   participant: participant,
                                 ),
-                                leading: CircleAvatar(
+                                leading: FabCircleAvatar(
                                   backgroundImage: FileImage(
                                     participant.profilePicture,
                                   ),
-                                  backgroundColor: Colors.transparent,
-                                  foregroundColor: Colors.transparent,
                                 ),
                                 title: Text(participant.name),
                                 trailing: IconButton(
@@ -591,6 +590,12 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                             return const Padding(padding: EdgeInsets.all(12));
                           },
                           itemBuilder: (context, index) {
+                            final backgroundColor = Theme.of(context)
+                                .elevatedButtonTheme
+                                .style!
+                                .backgroundColor!
+                                .resolve({});
+
                             final stop = state.stops[index];
                             return ListTile(
                               shape: Theme.of(context).cardTheme.shape,
@@ -599,11 +604,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                                   if (index == 0) {
                                     /// First stop
                                     return CircleAvatar(
-                                      backgroundColor: Theme.of(context)
-                                          .elevatedButtonTheme
-                                          .style!
-                                          .backgroundColor!
-                                          .resolve({}),
+                                      backgroundColor: backgroundColor,
                                       child: const Center(
                                         child: Icon(
                                           FontAwesomeIcons.paperPlane,
@@ -613,11 +614,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                                   } else if (index == stops.length - 1) {
                                     /// Last stop
                                     return CircleAvatar(
-                                      backgroundColor: Theme.of(context)
-                                          .elevatedButtonTheme
-                                          .style!
-                                          .backgroundColor!
-                                          .resolve({}),
+                                      backgroundColor: backgroundColor,
                                       child: const Center(
                                         child: Icon(FontAwesomeIcons.flag),
                                       ),
@@ -625,11 +622,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                                   } else {
                                     /// Waypoint
                                     return CircleAvatar(
-                                      backgroundColor: Theme.of(context)
-                                          .elevatedButtonTheme
-                                          .style!
-                                          .backgroundColor!
-                                          .resolve({}),
+                                      backgroundColor: backgroundColor,
                                       child: const Center(
                                         child: Icon(Icons.location_on),
                                       ),
@@ -1118,9 +1111,7 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                 height: 128,
                 child: Consumer<RegisterTravelProvider>(
                   builder: (_, travelState, __) {
-                    return CircleAvatar(
-                      backgroundColor: Colors.transparent,
-                      foregroundColor: Colors.transparent,
+                    return FabCircleAvatar(
                       child: _profilePicture != null
                           ? InstaImageViewer(
                               child: Image.file(_profilePicture!),

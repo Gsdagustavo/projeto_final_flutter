@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/extensions/date_extensions.dart';
@@ -11,6 +12,7 @@ import '../../../services/user_preferences_service.dart';
 import '../../providers/login_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../util/app_routes.dart';
+import '../../widgets/fab_circle_avatar.dart';
 import '../../widgets/fab_page.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -40,11 +42,11 @@ class _SettingsPageState extends State<SettingsPage> {
 
     const defaultPfpPath = 'assets/images/default_profile_picture.png';
 
-    final ImageProvider<Object> backgroundImage;
+    final Widget backgroundImage;
     if (_profilePicture != null) {
-      backgroundImage = FileImage(_profilePicture!);
+      backgroundImage = Image.file(_profilePicture!);
     } else {
-      backgroundImage = const AssetImage(defaultPfpPath) as ImageProvider;
+      backgroundImage = Image.asset(defaultPfpPath);
     }
 
     final locale = Localizations.localeOf(context).toString();
@@ -67,10 +69,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   Stack(
                     alignment: Alignment.bottomRight,
                     children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.transparent,
+                      FabCircleAvatar(
                         radius: 32,
-                        backgroundImage: backgroundImage,
+                        child: InstaImageViewer(child: backgroundImage),
                       ),
                       InkWell(
                         onTap: () async {
