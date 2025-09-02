@@ -8,11 +8,15 @@ class FabPage extends StatelessWidget {
     required this.body,
     required this.title,
     this.floatingActionButton,
+    this.physics,
+    this.slivers,
   });
 
   final Widget body;
   final String title;
   final Widget? floatingActionButton;
+  final ScrollPhysics? physics;
+  final List<Widget>? slivers;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +27,7 @@ class FabPage extends StatelessWidget {
         body: CustomScrollView(
           slivers: [
             FabAppBar(title: title),
+            if (slivers != null && slivers!.isNotEmpty) ...slivers!,
             SliverToBoxAdapter(child: body),
           ],
         ),
