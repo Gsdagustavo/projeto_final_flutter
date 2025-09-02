@@ -138,10 +138,7 @@ class _SendRecoveryCodeButton extends StatelessWidget {
                 context: context,
                 builder: (context) => CustomDialog(
                   title: '',
-                  content: Text(
-                    '${as.recovery_code_sent_to} '
-                    '${emailController.text}',
-                  ),
+                  content: Text(as.recovery_code_sent_to(emailController.text)),
                 ),
               ),
             );

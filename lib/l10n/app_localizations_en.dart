@@ -48,7 +48,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get register_login => 'Would you want to login?';
 
   @override
-  String get recovery_code_sent_to => 'Recovery code sent to';
+  String recovery_code_sent_to(Object email) {
+    return 'Recovery code sent to $email';
+  }
 
   @override
   String get invalid_email => 'Invalid email';
@@ -150,25 +152,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete_travel => 'Delete Travel';
 
   @override
+  String delete_travel_confirmation(Object travel) {
+    return 'Do you really want to delete the travel $travel?';
+  }
+
+  @override
+  String get travel_deleted => 'Travel deleted successfully';
+
+  @override
   String get view_travel_route => 'View Travel Route';
 
   @override
   String get stops => 'Stop(s)';
-
-  @override
-  String get review => 'Review';
-
-  @override
-  String get detail_review => 'Detail Review';
-
-  @override
-  String get give_a_review => 'Give a Review';
-
-  @override
-  String get send_review => 'Send Review';
-
-  @override
-  String get add_photo => 'Add Photo';
 
   @override
   String get title_home => 'Home';
@@ -373,6 +368,56 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get travel_title => 'Travel Title';
+
+  @override
+  String get review => 'Review';
+
+  @override
+  String get reviews => 'Reviews';
+
+  @override
+  String get detail_review => 'Detail Review';
+
+  @override
+  String get give_a_review => 'Give a Review';
+
+  @override
+  String get send_review => 'Send Review';
+
+  @override
+  String get add_photo => 'Add Photo';
+
+  @override
+  String get no_reviews => 'No reviews yet!';
+
+  @override
+  String based_on_reviews(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Based on $count reviews',
+      one: 'Based on 1 review',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get error_review => 'An error has occurred while registering the review';
+
+  @override
+  String get remove_review => 'Remove review';
+
+  @override
+  String get remove_review_confirmation => 'Do you really want to remove this review?';
+
+  @override
+  String get err_invalid_review_data => 'Invalid review data';
+
+  @override
+  String get err_invalid_review_author => 'Invalid review author';
+
+  @override
+  String get review_registered => 'Review registered successfully!';
 
   @override
   String get yes => 'Yes';

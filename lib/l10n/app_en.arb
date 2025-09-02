@@ -21,7 +21,12 @@
   "logged_in_successfully": "Logged in successfully!",
   "account_created_successfully": "Account created successfully!",
   "register_login": "Would you want to login?",
-  "recovery_code_sent_to": "Recovery code sent to",
+  "recovery_code_sent_to": "Recovery code sent to {email}",
+  "@@recovery_code_sent_to": {
+    "placeholders": {
+      "email": {}
+    }
+  },
   "invalid_email": "Invalid email",
   "invalid_password": "Invalid password",
 
@@ -67,15 +72,17 @@
   "finish_travel": "Finish Travel",
   "finish_travel_confirm": "Finish Travel?",
   "delete_travel": "Delete Travel",
+  "delete_travel_confirmation": "Do you really want to delete the travel {travel}?",
+  "@@delete_travel_confirmation": {
+    "placeholders": {
+      "travel": {
+        "type": "String"
+      }
+    }
+  },
+  "travel_deleted": "Travel deleted successfully",
   "view_travel_route": "View Travel Route",
   "stops": "Stop(s)",
-
-  "@@review": {},
-  "review": "Review",
-  "detail_review": "Detail Review",
-  "give_a_review": "Give a Review",
-  "send_review": "Send Review",
-  "add_photo": "Add Photo",
 
   "@@pages_titles": {},
   "title_home": "Home",
@@ -152,6 +159,26 @@
   "travel_route": "Travel Route",
   "travel_title_updated": "Travel title updated",
   "travel_title": "Travel Title",
+  "review": "Review",
+  "reviews": "Reviews",
+  "detail_review": "Detail Review",
+  "give_a_review": "Give a Review",
+  "send_review": "Send Review",
+  "add_photo": "Add Photo",
+  "no_reviews": "No reviews yet!",
+  "based_on_reviews": "{count, plural, =1{Based on 1 review} other{Based on {count} reviews}}",
+  "@@based_on_reviews": {
+    "description": "Label showing the number of reviews",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "error_review": "An error has occurred while registering the review",
+  "remove_review": "Remove review",
+  "remove_review_confirmation": "Do you really want to remove this review?",
+  "err_invalid_review_data": "Invalid review data",
+  "err_invalid_review_author": "Invalid review author",
+  "review_registered": "Review registered successfully!",
 
   "@@util": {},
   "yes": "Yes",

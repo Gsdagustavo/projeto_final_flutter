@@ -178,8 +178,8 @@ abstract class AppLocalizations {
   /// No description provided for @recovery_code_sent_to.
   ///
   /// In en, this message translates to:
-  /// **'Recovery code sent to'**
-  String get recovery_code_sent_to;
+  /// **'Recovery code sent to {email}'**
+  String recovery_code_sent_to(Object email);
 
   /// No description provided for @invalid_email.
   ///
@@ -379,6 +379,18 @@ abstract class AppLocalizations {
   /// **'Delete Travel'**
   String get delete_travel;
 
+  /// No description provided for @delete_travel_confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you really want to delete the travel {travel}?'**
+  String delete_travel_confirmation(Object travel);
+
+  /// No description provided for @travel_deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel deleted successfully'**
+  String get travel_deleted;
+
   /// No description provided for @view_travel_route.
   ///
   /// In en, this message translates to:
@@ -390,36 +402,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Stop(s)'**
   String get stops;
-
-  /// No description provided for @review.
-  ///
-  /// In en, this message translates to:
-  /// **'Review'**
-  String get review;
-
-  /// No description provided for @detail_review.
-  ///
-  /// In en, this message translates to:
-  /// **'Detail Review'**
-  String get detail_review;
-
-  /// No description provided for @give_a_review.
-  ///
-  /// In en, this message translates to:
-  /// **'Give a Review'**
-  String get give_a_review;
-
-  /// No description provided for @send_review.
-  ///
-  /// In en, this message translates to:
-  /// **'Send Review'**
-  String get send_review;
-
-  /// No description provided for @add_photo.
-  ///
-  /// In en, this message translates to:
-  /// **'Add Photo'**
-  String get add_photo;
 
   /// No description provided for @title_home.
   ///
@@ -828,6 +810,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Travel Title'**
   String get travel_title;
+
+  /// No description provided for @review.
+  ///
+  /// In en, this message translates to:
+  /// **'Review'**
+  String get review;
+
+  /// No description provided for @reviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviews'**
+  String get reviews;
+
+  /// No description provided for @detail_review.
+  ///
+  /// In en, this message translates to:
+  /// **'Detail Review'**
+  String get detail_review;
+
+  /// No description provided for @give_a_review.
+  ///
+  /// In en, this message translates to:
+  /// **'Give a Review'**
+  String get give_a_review;
+
+  /// No description provided for @send_review.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Review'**
+  String get send_review;
+
+  /// No description provided for @add_photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Photo'**
+  String get add_photo;
+
+  /// No description provided for @no_reviews.
+  ///
+  /// In en, this message translates to:
+  /// **'No reviews yet!'**
+  String get no_reviews;
+
+  /// No description provided for @based_on_reviews.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Based on 1 review} other{Based on {count} reviews}}'**
+  String based_on_reviews(num count);
+
+  /// No description provided for @error_review.
+  ///
+  /// In en, this message translates to:
+  /// **'An error has occurred while registering the review'**
+  String get error_review;
+
+  /// No description provided for @remove_review.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove review'**
+  String get remove_review;
+
+  /// No description provided for @remove_review_confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you really want to remove this review?'**
+  String get remove_review_confirmation;
+
+  /// No description provided for @err_invalid_review_data.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid review data'**
+  String get err_invalid_review_data;
+
+  /// No description provided for @err_invalid_review_author.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid review author'**
+  String get err_invalid_review_author;
+
+  /// No description provided for @review_registered.
+  ///
+  /// In en, this message translates to:
+  /// **'Review registered successfully!'**
+  String get review_registered;
 
   /// No description provided for @yes.
   ///

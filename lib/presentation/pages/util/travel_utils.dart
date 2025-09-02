@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../domain/entities/travel.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../widgets/loading_dialog.dart';
 import '../../widgets/ok_cancel_dialog.dart';
@@ -12,10 +13,12 @@ Future<void> onTravelDeleted(
   Travel travel, {
   bool popContext = true,
 }) async {
+  final as = AppLocalizations.of(context)!;
+
   final result = await showOkCancelDialog(
     context,
     title: Text(
-      'Do you really want to delete the travel ${travel.travelTitle}?',
+      as.delete_travel_confirmation(travel.travelTitle)
     ),
   );
 
@@ -35,7 +38,7 @@ Future<void> onTravelDeleted(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Travel deleted successfully!'),
+            Text(as.travel_deleted),
             Icon(Icons.check, color: Colors.green),
           ],
         ),

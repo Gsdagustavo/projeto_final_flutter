@@ -21,7 +21,12 @@
   "logged_in_successfully": "¡Inicio de sesión exitoso!",
   "account_created_successfully": "¡Cuenta creada con éxito!",
   "register_login": "¿Deseas iniciar sesión?",
-  "recovery_code_sent_to": "Código de recuperación enviado a",
+  "recovery_code_sent_to": "Código de recuperación enviado a {email}",
+  "@@recovery_code_sent_to": {
+    "placeholders": {
+      "email": {}
+    }
+  },
   "invalid_email": "Correo electrónico inválido",
   "invalid_password": "Contraseña inválida",
 
@@ -67,15 +72,17 @@
   "finish_travel": "Finalizar Viaje",
   "finish_travel_confirm": "¿Finalizar Viaje?",
   "delete_travel": "Eliminar Viaje",
+  "delete_travel_confirmation": "¿Realmente deseas eliminar el viaje {travel}?",
+  "@@delete_travel_confirmation": {
+    "placeholders": {
+      "travel": {
+        "type": "String"
+      }
+    }
+  },
+  "travel_deleted": "Viaje eliminado con éxito",
   "view_travel_route": "Ver Ruta del Viaje",
   "stops": "Parada(s)",
-
-  "@@review": {},
-  "review": "Reseña",
-  "detail_review": "Detalles de la Reseña",
-  "give_a_review": "Dejar una Reseña",
-  "send_review": "Enviar Reseña",
-  "add_photo": "Agregar Foto",
 
   "@@pages_titles": {},
   "title_home": "Inicio",
@@ -152,6 +159,26 @@
   "travel_route": "Ruta del Viaje",
   "travel_title_updated": "Título del viaje actualizado",
   "travel_title": "Título del Viaje",
+  "review": "Reseña",
+  "reviews": "Reseñas",
+  "detail_review": "Detalle de la Reseña",
+  "give_a_review": "Dejar una Reseña",
+  "send_review": "Enviar Reseña",
+  "add_photo": "Agregar Foto",
+  "no_reviews": "¡Aún no hay reseñas!",
+  "based_on_reviews": "{count, plural, =1{Basado en 1 reseña} other{Basado en {count} reseñas}}",
+  "@based_on_reviews": {
+    "description": "Etiqueta que muestra la cantidad de reseñas",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "error_review": "Se ha producido un error al registrar la reseña",
+  "remove_review": "Eliminar reseña",
+  "remove_review_confirmation": "¿Realmente deseas eliminar esta reseña?",
+  "err_invalid_review_data": "Datos de la reseña inválidos",
+  "err_invalid_review_author": "Autor de la reseña inválido",
+  "review_registered": "¡Reseña registrada con éxito!",
 
   "@@util": {},
   "yes": "Sí",

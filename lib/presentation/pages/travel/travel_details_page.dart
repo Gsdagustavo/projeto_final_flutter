@@ -332,7 +332,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                     spacing: 8,
                     children: [
                       Icon(Icons.reviews),
-                      Text('Reviews'),
+                      Text(as.reviews),
                       Padding(
                         padding: EdgeInsets.all(8),
                         child: Consumer<ReviewProvider>(
@@ -353,7 +353,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                             spacing: 12,
                             children: [
                               Icon(Icons.reviews, size: 42),
-                              Text('No reviews yet'),
+                              Text(as.no_reviews),
                             ],
                           ),
                         );
@@ -376,7 +376,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                   style: Theme.of(context).textTheme.titleLarge,
                                 ),
                                 Text(
-                                  'Based on ${state.reviews.length} reviews',
+                                  as.based_on_reviews(state.reviews.length),
                                   style: Theme.of(context).textTheme.bodySmall,
                                 ),
                               ],
@@ -589,8 +589,6 @@ class ReviewListItem extends StatelessWidget {
                 Text(review.reviewDate.getMonthDay(locale)),
                 Icon(Icons.circle, size: 4),
                 Icon(Icons.location_on, size: 12),
-
-                /// TODO: add actual travel stop place
                 Text(review.travelStop.place.city ?? ''),
               ],
             ),
@@ -675,7 +673,7 @@ class _ReviewModalState extends State<ReviewModal> {
         builder: (context) {
           return CustomDialog(
             title: as.warning,
-            content: Text('Invalid review data'),
+            content: Text(as.err_invalid_review_data),
           );
         },
       );
@@ -689,7 +687,7 @@ class _ReviewModalState extends State<ReviewModal> {
         builder: (context) {
           return CustomDialog(
             title: as.warning,
-            content: Text('Invalid author'),
+            content: Text(as.err_invalid_review_author),
           );
         },
       );
@@ -720,7 +718,7 @@ class _ReviewModalState extends State<ReviewModal> {
           return CustomDialog(
             isError: true,
             title: as.warning,
-            content: Text('Error: ${reviewState.errorMessage}'),
+            content: Text('${as.error_review}: ${reviewState.errorMessage}'),
           );
         },
       );
@@ -731,7 +729,7 @@ class _ReviewModalState extends State<ReviewModal> {
     await showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(title: Text('Review registered successfully!'));
+        return AlertDialog(title: Text(as.review_registered));
       },
     );
 

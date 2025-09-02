@@ -48,7 +48,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get register_login => 'Deseja fazer login?';
 
   @override
-  String get recovery_code_sent_to => 'Código de recuperação enviado para';
+  String recovery_code_sent_to(Object email) {
+    return 'Código de recuperação enviado para $email';
+  }
 
   @override
   String get invalid_email => 'Email inválido';
@@ -150,25 +152,18 @@ class AppLocalizationsPt extends AppLocalizations {
   String get delete_travel => 'Excluir Viagem';
 
   @override
+  String delete_travel_confirmation(Object travel) {
+    return 'Você realmente quer exclurir a viagem $travel?';
+  }
+
+  @override
+  String get travel_deleted => 'Viagem deletada com sucesso';
+
+  @override
   String get view_travel_route => 'Ver Rota da Viagem';
 
   @override
   String get stops => 'Parada(s)';
-
-  @override
-  String get review => 'Avaliação';
-
-  @override
-  String get detail_review => 'Detalhes da Avaliação';
-
-  @override
-  String get give_a_review => 'Fazer uma Avaliação';
-
-  @override
-  String get send_review => 'Enviar Avaliação';
-
-  @override
-  String get add_photo => 'Adicionar Foto';
 
   @override
   String get title_home => 'Início';
@@ -373,6 +368,56 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get travel_title => 'Título da Viagem';
+
+  @override
+  String get review => 'Avaliação';
+
+  @override
+  String get reviews => 'Avaliações';
+
+  @override
+  String get detail_review => 'Detalhar Avaliação';
+
+  @override
+  String get give_a_review => 'Fazer uma Avaliação';
+
+  @override
+  String get send_review => 'Enviar Avaliação';
+
+  @override
+  String get add_photo => 'Adicionar Foto';
+
+  @override
+  String get no_reviews => 'Ainda não há avaliações!';
+
+  @override
+  String based_on_reviews(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Baseado em $count avaliações',
+      one: 'Baseado em 1 avaliação',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get error_review => 'Ocorreu um erro ao registrar a avaliação';
+
+  @override
+  String get remove_review => 'Remover avaliação';
+
+  @override
+  String get remove_review_confirmation => 'Você realmente quer remover esta avaliação?';
+
+  @override
+  String get err_invalid_review_data => 'Dados da avaliação inválidos';
+
+  @override
+  String get err_invalid_review_author => 'Autor da avaliação inválido';
+
+  @override
+  String get review_registered => 'Avaliação registrada com sucesso!';
 
   @override
   String get yes => 'Sim';
