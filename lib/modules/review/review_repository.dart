@@ -5,11 +5,18 @@ import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../data/local/database/database.dart';
+import '../../data/local/database/tables/experiences_table.dart';
 import '../../data/local/database/tables/participants_table.dart';
+import '../../data/local/database/tables/places_table.dart';
 import '../../data/local/database/tables/reviews_photos.dart';
 import '../../data/local/database/tables/reviews_table.dart';
+import '../../data/local/database/tables/travel_stop_experiences_table.dart';
+import '../../data/local/database/tables/travel_stop_table.dart';
 import '../../data/models/participant_model.dart';
+import '../../data/models/place_model.dart';
 import '../../data/models/review_model.dart';
+import '../../data/models/travel_stop_model.dart';
+import '../../domain/entities/enums.dart';
 import '../../domain/entities/review.dart';
 import '../../domain/entities/travel.dart';
 
@@ -101,6 +108,54 @@ class ReviewRepositoryImpl implements ReviewRepository {
 
         final participant = ParticipantModel.fromMap(participantData.first);
 
+        /// Get stop
+        final stopData = await txn.query(
+          TravelStopTable.tableName,
+          where: '${TravelStopTable.travelStopId} = ?',
+          whereArgs: [reviewData[ReviewsTable.travelStopId]],
+        );
+
+        if (stopData.isEmpty) continue;
+
+        final stop = stopData.first;
+
+        final stopId = stop[TravelStopTable.travelStopId];
+        final placeId = stop[TravelStopTable.placeId];
+
+        if (stopId == null || placeId == null) return;
+
+        final experiences = <Experience>[];
+        final experiencesMap = await txn.query(
+          TravelStopExperiencesTable.tableName,
+          where: '${TravelStopExperiencesTable.travelStopId} = ?',
+          whereArgs: [stopId],
+        );
+
+        for (final experienceMap in experiencesMap) {
+          debugPrint(experienceMap.toString());
+
+          final experience = Experience
+              .values[experienceMap[ExperiencesTable.experienceIndex] as int];
+          experiences.add(experience);
+        }
+
+        final placeMap = await txn.query(
+          PlacesTable.tableName,
+          where: '${PlacesTable.placeId} = ?',
+          whereArgs: [placeId],
+        );
+
+        if (placeMap.isEmpty) continue;
+
+        final placeModel = PlaceModel.fromMap(placeMap.first);
+
+        final travelStopModel = TravelStopModel.fromMap(
+          stop,
+          experiences,
+          [],
+          placeModel,
+        );
+
         /// Get photos
         final photos = <File>[];
 
@@ -125,6 +180,7 @@ class ReviewRepositoryImpl implements ReviewRepository {
         final review = ReviewModel.fromMap(
           reviewData,
           participant,
+          travelStopModel,
           photos,
         ).toEntity();
 
@@ -175,6 +231,54 @@ class ReviewRepositoryImpl implements ReviewRepository {
 
         final participant = ParticipantModel.fromMap(participantData.first);
 
+        /// Get stop
+        final stopData = await txn.query(
+          TravelStopTable.tableName,
+          where: '${TravelStopTable.travelStopId} = ?',
+          whereArgs: [reviewData[ReviewsTable.travelStopId]],
+        );
+
+        if (stopData.isEmpty) continue;
+
+        final stop = stopData.first;
+
+        final stopId = stop[TravelStopTable.travelStopId];
+        final placeId = stop[TravelStopTable.placeId];
+
+        if (stopId == null || placeId == null) return;
+
+        final experiences = <Experience>[];
+        final experiencesMap = await txn.query(
+          TravelStopExperiencesTable.tableName,
+          where: '${TravelStopExperiencesTable.travelStopId} = ?',
+          whereArgs: [stopId],
+        );
+
+        for (final experienceMap in experiencesMap) {
+          debugPrint(experienceMap.toString());
+
+          final experience = Experience
+              .values[experienceMap[ExperiencesTable.experienceIndex] as int];
+          experiences.add(experience);
+        }
+
+        final placeMap = await txn.query(
+          PlacesTable.tableName,
+          where: '${PlacesTable.placeId} = ?',
+          whereArgs: [placeId],
+        );
+
+        if (placeMap.isEmpty) continue;
+
+        final placeModel = PlaceModel.fromMap(placeMap.first);
+
+        final travelStopModel = TravelStopModel.fromMap(
+          stop,
+          experiences,
+          [],
+          placeModel,
+        );
+
         /// Get photos
         final photos = <File>[];
 
@@ -199,6 +303,7 @@ class ReviewRepositoryImpl implements ReviewRepository {
         final review = ReviewModel.fromMap(
           reviewData,
           participant,
+          travelStopModel,
           photos,
         ).toEntity();
 

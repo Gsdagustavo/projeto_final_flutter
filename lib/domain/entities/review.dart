@@ -3,13 +3,14 @@ import 'dart:io';
 import 'package:uuid/uuid.dart';
 
 import 'participant.dart';
+import 'travel_stop.dart';
 
 class Review {
   final String id;
   final String description;
   final Participant author;
   final DateTime reviewDate;
-  final String travelStopId;
+  final TravelStop travelStop;
   final int stars;
   final List<File> images;
 
@@ -18,7 +19,7 @@ class Review {
     required this.description,
     required this.author,
     required this.reviewDate,
-    required this.travelStopId,
+    required this.travelStop,
     required this.stars,
     required this.images,
   }) : id = id ?? Uuid().v4();
@@ -27,7 +28,7 @@ class Review {
     String? description,
     Participant? author,
     DateTime? reviewDate,
-    String? travelStopId,
+    TravelStop? travelStop,
     int? stars,
     List<File>? images,
   }) {
@@ -35,7 +36,7 @@ class Review {
       description: description ?? this.description,
       author: author ?? this.author,
       reviewDate: reviewDate ?? this.reviewDate,
-      travelStopId: travelStopId ?? this.travelStopId,
+      travelStop: travelStop ?? this.travelStop,
       stars: stars ?? this.stars,
       images: images ?? this.images,
     );
@@ -43,6 +44,6 @@ class Review {
 
   @override
   String toString() {
-    return 'Review{id: $id, description: $description, author: $author, reviewDate: $reviewDate, travelStopId: $travelStopId, stars: $stars, images: $images}';
+    return 'Review{id: $id, description: $description, author: $author, reviewDate: $reviewDate, travelStop: $travelStop, stars: $stars, images: $images}';
   }
 }

@@ -605,7 +605,7 @@ class _ReviewModalState extends State<ReviewModal> {
       description: _reviewController.text,
       author: _author!,
       reviewDate: DateTime.now(),
-      travelStopId: widget.stop.id,
+      travelStop: widget.stop,
       stars: _reviewRate.toInt(),
       images: _images,
     );
@@ -995,7 +995,7 @@ class ReviewListItem extends StatelessWidget {
                 Icon(Icons.location_on, size: 12),
 
                 /// TODO: add actual travel stop place
-                Text('place'),
+                Text(review.travelStop.place.city ?? ''),
               ],
             ),
           ),

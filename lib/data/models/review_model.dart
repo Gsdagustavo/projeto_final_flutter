@@ -3,13 +3,14 @@ import 'dart:io';
 import '../../domain/entities/review.dart';
 import '../local/database/tables/reviews_table.dart';
 import 'participant_model.dart';
+import 'travel_stop_model.dart';
 
 class ReviewModel {
   final String id;
   final String description;
   final ParticipantModel author;
   final DateTime reviewDate;
-  final String travelStopId;
+  final TravelStopModel travelStop;
   final int stars;
   final List<File> images;
 
@@ -18,7 +19,7 @@ class ReviewModel {
     required this.description,
     required this.author,
     required this.reviewDate,
-    required this.travelStopId,
+    required this.travelStop,
     required this.stars,
     required this.images,
   });
@@ -28,7 +29,7 @@ class ReviewModel {
     String? description,
     ParticipantModel? author,
     DateTime? reviewDate,
-    String? travelStopId,
+    TravelStopModel? travelStop,
     int? stars,
     List<File>? images,
   }) {
@@ -37,7 +38,7 @@ class ReviewModel {
       description: description ?? this.description,
       author: author ?? this.author,
       reviewDate: reviewDate ?? this.reviewDate,
-      travelStopId: travelStopId ?? this.travelStopId,
+      travelStop: travelStop ?? this.travelStop,
       stars: stars ?? this.stars,
       images: images ?? this.images,
     );
@@ -48,7 +49,7 @@ class ReviewModel {
       ReviewsTable.reviewId: id,
       ReviewsTable.description: description,
       ReviewsTable.reviewDate: reviewDate.millisecondsSinceEpoch,
-      ReviewsTable.travelStopId: travelStopId,
+      ReviewsTable.travelStopId: travelStop.id,
       ReviewsTable.stars: stars,
       ReviewsTable.participantId: author.id,
     };
@@ -57,6 +58,7 @@ class ReviewModel {
   factory ReviewModel.fromMap(
     Map<String, dynamic> map,
     ParticipantModel participant,
+    TravelStopModel travelStop,
     List<File> images,
   ) {
     return ReviewModel(
@@ -66,7 +68,7 @@ class ReviewModel {
       reviewDate: DateTime.fromMicrosecondsSinceEpoch(
         map[ReviewsTable.reviewDate] as int,
       ),
-      travelStopId: map[ReviewsTable.travelStopId] as String,
+      travelStop: travelStop,
       stars: map[ReviewsTable.stars] as int,
       images: images,
     );
@@ -77,7 +79,7 @@ class ReviewModel {
       description: description,
       author: author.toEntity(),
       reviewDate: reviewDate,
-      travelStopId: travelStopId,
+      travelStop: travelStop.toEntity(),
       stars: stars,
       images: images,
     );
@@ -89,7 +91,7 @@ class ReviewModel {
       description: review.description,
       author: ParticipantModel.fromEntity(review.author),
       reviewDate: review.reviewDate,
-      travelStopId: review.travelStopId,
+      travelStop: TravelStopModel.fromEntity(review.travelStop),
       stars: review.stars,
       images: review.images,
     );
@@ -98,7 +100,7 @@ class ReviewModel {
   @override
   String toString() {
     return 'Review{reviewId: $id, description: $description, '
-        'author: $author, reviewDate: $reviewDate, travelStopId: $travelStopId'
+        'author: $author, reviewDate: $reviewDate, travelStop: $travelStop'
         ', stars: $stars}';
   }
 }
