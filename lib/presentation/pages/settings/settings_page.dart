@@ -14,6 +14,7 @@ import '../../providers/user_preferences_provider.dart';
 import '../../util/app_routes.dart';
 import '../../widgets/fab_circle_avatar.dart';
 import '../../widgets/fab_page.dart';
+import '../../widgets/loading_dialog.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -38,7 +39,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
     final loginProvider = Provider.of<LoginProvider>(context);
-    final user = loginProvider.loggedUser!;
+    final user = loginProvider.loggedUser;
 
     const defaultPfpPath = 'assets/images/default_profile_picture.png';
 
@@ -51,9 +52,9 @@ class _SettingsPageState extends State<SettingsPage> {
 
     final locale = Localizations.localeOf(context).toString();
 
-    final creationTime = user.metadata.creationTime;
+    final creationTime = user?.metadata.creationTime ?? 'N/A';
 
-    final formattedCreationTime = creationTime != null
+    final formattedCreationTime = creationTime is DateTime
         ? creationTime.getFormattedDateWithYear(locale)
         : 'N/A';
 
@@ -92,7 +93,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ],
                   ),
                   const Padding(padding: EdgeInsets.all(16)),
-                  Text(user.email!),
+                  Text(user?.email ?? 'N/A'),
                 ],
               ),
             ),
@@ -114,7 +115,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ListTile(
                         leading: const Icon(Icons.email),
                         title: Text(as.email),
-                        subtitle: Text(user.email ?? 'N/A'),
+                        subtitle: Text(user?.email ?? 'N/A'),
                       ),
                     ],
                   ),
@@ -154,64 +155,80 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           const Padding(padding: EdgeInsets.all(16)),
 
-          SizedBox(
-            width: double.infinity,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                onPressed: () async {
-                  final logout = await showDialog<bool>(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text(as.logout),
-                        content: Text(as.logout_confirmation),
-                        actionsAlignment: MainAxisAlignment.spaceBetween,
-                        actions: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).pop(false);
-                            },
-                            child: Text(as.no),
-                          ),
+          const LogoutButton(),
+        ],
+      ),
+    );
+  }
+}
 
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop(true);
-                            },
-                            child: Text(as.yes),
-                          ),
-                        ],
-                      );
-                    },
-                  );
+class LogoutButton extends StatelessWidget {
+  const LogoutButton({super.key});
 
-                  if (logout ?? false) {
-                    context.go(Routes.auth);
-                    await loginProvider.signOut();
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: const Padding(
-                        padding: EdgeInsets.only(left: 32),
-                        child: Icon(Icons.logout),
-                      ),
+  @override
+  Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+
+    return SizedBox(
+      width: double.infinity,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ElevatedButton(
+          onPressed: () async {
+            final logout = await showDialog<bool>(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text(as.logout),
+                  content: Text(as.logout_confirmation),
+                  actionsAlignment: MainAxisAlignment.spaceBetween,
+                  actions: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                      },
+                      child: Text(as.no),
                     ),
-                    Text(as.logout),
+
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(true);
+                      },
+                      child: Text(as.yes),
+                    ),
                   ],
+                );
+              },
+            );
+
+            if (logout ?? false) {
+              await showLoadingDialog(
+                context: context,
+                function: () async {
+                  await context.read<LoginProvider>().signOut();
+                },
+              );
+              context.go(Routes.auth);
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.red,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: const Padding(
+                  padding: EdgeInsets.only(left: 32),
+                  child: Icon(Icons.logout),
                 ),
               ),
-            ),
+              Text(as.logout),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

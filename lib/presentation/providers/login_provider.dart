@@ -62,6 +62,8 @@ class LoginProvider with ChangeNotifier {
     required String email,
     required String password,
   }) async {
+    debugPrint('login method called in state');
+
     _isLoading = true;
     notifyListeners();
 
@@ -79,6 +81,7 @@ class LoginProvider with ChangeNotifier {
       return;
     }
 
+    debugPrint('login method called in ended');
     _isLoading = false;
     _errorMsg = null;
     notifyListeners();

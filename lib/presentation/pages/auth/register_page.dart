@@ -9,6 +9,8 @@ import '../../providers/login_provider.dart';
 import '../../util/app_routes.dart';
 import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_auth_animation.dart';
+import '../../widgets/loading_dialog.dart';
+import '../home/home_page.dart';
 import '../util/form_validations.dart';
 
 /// A [Register] page
@@ -44,9 +46,12 @@ class _RegisterPageState extends State<RegisterPage> {
     final loginProvider = Provider.of<LoginProvider>(context, listen: false);
 
     /// Try to create user
-    await loginProvider.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
+    await showLoadingDialog(
+      context: context,
+      function: () => loginProvider.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      ),
     );
 
     /// Check if any error has occurred while trying to create the user

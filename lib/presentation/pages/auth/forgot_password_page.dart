@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../providers/login_provider.dart';
 import '../../widgets/custom_dialog.dart';
+import '../../widgets/loading_dialog.dart';
 import '../../widgets/theme_toggle_button.dart';
 import '../util/form_validations.dart';
 
@@ -110,8 +111,11 @@ class _SendRecoveryCodeButton extends StatelessWidget {
           onPressed: () async {
             if (!formKey.currentState!.validate()) return;
 
-            await loginProvider.sendPasswordResetEmail(
-              email: emailController.text,
+            await showLoadingDialog(
+              context: context,
+              function: () => loginProvider.sendPasswordResetEmail(
+                email: emailController.text,
+              ),
             );
 
             if (loginProvider.hasError) {

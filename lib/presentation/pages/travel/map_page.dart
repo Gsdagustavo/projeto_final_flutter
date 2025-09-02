@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,7 @@ import '../../providers/register_travel_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../util/app_router.dart';
 import '../../widgets/custom_dialog.dart';
+import '../../widgets/loading_dialog.dart';
 
 class TravelMap extends StatefulWidget {
   /// Constant constructor
@@ -107,8 +109,9 @@ class _TravelMapState extends State<TravelMap> {
 
       body: Builder(
         builder: (context) {
-          if (_isCreatingMap)
-            return const Center(child: CircularProgressIndicator());
+          if (_isCreatingMap) {
+            return const Center(child: LoadingDialog());
+          }
 
           return Stack(
             children: [
@@ -281,7 +284,12 @@ Future<void> showTravelStopModal(LatLng position, [TravelStop? stop]) async {
   } else {
     /// Get the place from the given position
     try {
-      place = await LocationService().getPlaceByPosition(position);
+      place = await showLoadingDialog(
+        context: context,
+        function: () async {
+          return await LocationService().getPlaceByPosition(position);
+        },
+      );
     } on Exception catch (e) {
       await showDialog(
         context: context,
@@ -297,12 +305,9 @@ Future<void> showTravelStopModal(LatLng position, [TravelStop? stop]) async {
     }
   }
 
-  debugPrint('travel stop modal is being shown.\nstop: $stop');
-
   final result = await showDialog<TravelStop?>(
     context: context,
     builder: (context) {
-      print('Stop that will be passed to travel stop modal: $stop');
       return Dialog(
         child: _TravelStopModal(place: place, stop: stop),
       );

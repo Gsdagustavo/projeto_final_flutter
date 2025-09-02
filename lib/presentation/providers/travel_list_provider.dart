@@ -10,9 +10,9 @@ class TravelListProvider with ChangeNotifier {
 
   String? errorMessage;
 
-  final TravelUseCasesImpl _travelUseCases;
+  final TravelUseCasesImpl travelUseCases;
 
-  TravelListProvider(this._travelUseCases) {
+  TravelListProvider(this.travelUseCases) {
     update();
   }
 
@@ -21,7 +21,7 @@ class TravelListProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await _travelUseCases.startTravel(travel);
+      await travelUseCases.startTravel(travel);
     } on Exception catch (e) {
       errorMessage = e.toString();
       _isLoading = false;
@@ -39,7 +39,7 @@ class TravelListProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await _travelUseCases.finishTravel(travel);
+      await travelUseCases.finishTravel(travel);
     } on Exception catch (e) {
       errorMessage = e.toString();
       _isLoading = false;
@@ -56,7 +56,7 @@ class TravelListProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      await _travelUseCases.deleteTravel(travel);
+      await travelUseCases.deleteTravel(travel);
     } on Exception catch (e) {
       errorMessage = e.toString();
       _isLoading = false;
@@ -70,18 +70,18 @@ class TravelListProvider with ChangeNotifier {
   }
 
   Future<void> updateTravelTitle(Travel travel) async {
-    await _travelUseCases.updateTravelTitle(travel);
+    await travelUseCases.updateTravelTitle(travel);
     await update();
   }
 
   Future<void> update() async {
-    // _isLoading = true;
-    // notifyListeners();
+    _isLoading = true;
+    notifyListeners();
 
     _travels.clear();
-    _travels.addAll(await _travelUseCases.getAllTravels());
+    _travels.addAll(await travelUseCases.getAllTravels());
 
-    // _isLoading = false;
+    _isLoading = false;
     notifyListeners();
   }
 
@@ -92,7 +92,7 @@ class TravelListProvider with ChangeNotifier {
     }
 
     debugPrint('Search travel called in provider');
-    final searchResult = await _travelUseCases.findTravelsByTitle(title);
+    final searchResult = await travelUseCases.findTravelsByTitle(title);
     debugPrint('Search result: $searchResult');
 
     _travels

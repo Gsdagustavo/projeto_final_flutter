@@ -22,6 +22,7 @@ import '../../util/app_routes.dart';
 import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_circle_avatar.dart';
 import '../../widgets/fab_page.dart';
+import '../../widgets/loading_dialog.dart';
 import '../util/form_validations.dart';
 
 const double cardPadding = 16;
@@ -223,7 +224,14 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
     final as = AppLocalizations.of(context)!;
 
     final state = context.read<RegisterTravelProvider>();
-    await state.registerTravel(_travelTitleController.text);
+
+    await showLoadingDialog(
+      context: context,
+      function: () async {
+        await state.registerTravel(_travelTitleController.text);
+      },
+    );
+
     await context.read<TravelListProvider>().update();
 
     if (state.hasError) {
@@ -252,6 +260,12 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
         );
       },
     );
+
+    setState(() {
+      _travelTitleController.clear();
+      _startDateController.clear();
+      _endDateController.clear();
+    });
   }
 
   @override
@@ -286,6 +300,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
           ///
           /// contains: travel title, transport type and dates
           Card(
+            borderOnForeground: true,
             child: Padding(
               padding: const EdgeInsets.all(cardPadding),
               child: Column(
@@ -811,9 +826,6 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                         return;
                       }
                       await onTravelRegistered();
-                      _travelTitleController.clear();
-                      _startDateController.clear();
-                      _endDateController.clear();
                     },
                     child: Text(as.title_register_travel),
                   ),

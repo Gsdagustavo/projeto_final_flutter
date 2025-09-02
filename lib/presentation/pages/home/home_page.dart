@@ -63,44 +63,29 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
 
-    return FabPage(
-      title: as.title_home,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async =>
-            await context.read<TravelListProvider>().update(),
-      ),
-      body: Consumer<TravelListProvider>(
-        builder: (_, travelListProvider, __) {
-          // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-          //   await showLoadingModalBottomSheet(
-          //     context: context,
-          //     function: travelListProvider.update,
-          //   );
-          // });
+    return Consumer<TravelListProvider>(
+      builder: (_, state, __) {
+        if (state.isLoading) {
+          return Center(child: LoadingDialog());
+        }
 
-          /// TODO:
-          // if (travels.isEmpty) {
-          //   return Center(
-          //     child: Lottie.asset('assets/animations/traveler.json'),
-          //   );
-          // }
-
-          return ListView.separated(
+        return FabPage(
+          title: as.title_home,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async => await state.update(),
+          ),
+          body: ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: travelListProvider.travels.length,
+            itemCount: state.travels.length,
             separatorBuilder: (_, __) => const SizedBox(height: 26),
             itemBuilder: (context, index) {
-              return _TravelWidget(travel: travelListProvider.travels[index]);
+              return _TravelWidget(travel: state.travels[index]);
             },
-          );
-        },
-      ),
+          ),
 
-      slivers: [
-        Consumer<TravelListProvider>(
-          builder: (_, travelListProvider, __) {
-            return AdaptiveHeightSliverPersistentHeader(
+          slivers: [
+            AdaptiveHeightSliverPersistentHeader(
               floating: true,
               needRepaint: true,
               child: Padding(
@@ -111,16 +96,14 @@ class _HomePageState extends State<HomePage> {
                     onTapOutside: (_) => FocusScope.of(context).unfocus(),
                     controller: searchController,
                     onChanged: (value) async {
-                      await travelListProvider.searchTravel(
-                        searchController.text,
-                      );
+                      await state.searchTravel(searchController.text);
                     },
                     decoration: InputDecoration(
                       hintText: 'Search...',
                       prefixIcon: Icon(Icons.search),
                       suffixIcon: IconButton(
                         onPressed: () async {
-                          await travelListProvider.clearSearch();
+                          await state.clearSearch();
                           searchController.clear();
                         },
                         icon: const Icon(FontAwesomeIcons.remove),
@@ -129,10 +112,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-            );
-          },
-        ),
-      ],
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -189,7 +172,10 @@ class _TravelWidgetState extends State<_TravelWidget> {
 
     final state = context.read<TravelListProvider>();
 
-    await state.finishTravel(widget.travel);
+    // await showLoadingModalBottomSheet(
+    //   context: context,
+    //   function: state.finishTravel(widget.travel),
+    // );
 
     if (state.hasError) {
       await showDialog(
@@ -465,32 +451,4 @@ class _TravelStatusWidget extends StatelessWidget {
       ),
     );
   }
-}
-
-Future<T> showLoadingModalBottomSheet<T>({
-  required BuildContext context,
-  required Future<T> Function() function,
-}) async {
-  await showModalBottomSheet(
-    isScrollControlled: true,
-    context: context,
-    builder: (_) {
-      return const Center(child: LoadingDialog());
-    },
-  );
-
-  // Added delay to allow the animation of  the bottom sheet to finish before
-  // starting the long running process
-  await Future.delayed(const Duration(milliseconds: 100));
-
-  final item = await function();
-
-  Navigator.pop(context);
-
-  // Check if for some reason the returned item is still a future
-  if (item is Future) {
-    return await item;
-  }
-
-  return item;
 }

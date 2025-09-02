@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../domain/entities/travel.dart';
 import '../../providers/travel_list_provider.dart';
+import '../../widgets/loading_dialog.dart';
 import '../../widgets/ok_cancel_dialog.dart';
 
 Future<void> onTravelDeleted(
@@ -21,7 +22,11 @@ Future<void> onTravelDeleted(
   if (result == null || !result) return;
 
   final state = context.read<TravelListProvider>();
-  await state.deleteTravel(travel);
+
+  await showLoadingDialog(
+    context: context,
+    function: () async => await state.deleteTravel(travel),
+  );
 
   await showDialog(
     context: context,

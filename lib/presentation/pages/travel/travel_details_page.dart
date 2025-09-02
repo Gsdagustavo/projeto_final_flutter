@@ -21,6 +21,7 @@ import '../../providers/user_preferences_provider.dart';
 import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_circle_avatar.dart';
 import '../../widgets/fab_page.dart';
+import '../../widgets/loading_dialog.dart';
 import '../util/form_validations.dart';
 import '../util/travel_utils.dart';
 import 'register_travel_page.dart';
@@ -419,7 +420,12 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                 onPressed: () async {
-                  await onTravelDeleted(context, widget.travel);
+                  await showLoadingDialog(
+                    context: context,
+                    function: () async {
+                      await onTravelDeleted(context, widget.travel);
+                    },
+                  );
                 },
                 child: Stack(
                   alignment: Alignment.center,
@@ -702,7 +708,10 @@ class _ReviewModalState extends State<ReviewModal> {
       images: _images,
     );
 
-    await reviewState.addReview(review);
+    await showLoadingDialog(
+      context: context,
+      function: () async => await reviewState.addReview(review),
+    );
 
     if (reviewState.hasError) {
       await showDialog(

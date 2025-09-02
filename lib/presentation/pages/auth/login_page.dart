@@ -9,6 +9,7 @@ import '../../providers/login_provider.dart';
 import '../../util/app_routes.dart';
 import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_auth_animation.dart';
+import '../../widgets/loading_dialog.dart';
 import '../util/form_validations.dart';
 import 'forgot_password_page.dart';
 
@@ -36,6 +37,8 @@ class _LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
 
   void _login() async {
+    debugPrint('login method called in widget');
+
     if (!_formKey.currentState!.validate()) return;
 
     final as = AppLocalizations.of(context)!;
@@ -44,9 +47,13 @@ class _LoginPageState extends State<LoginPage> {
     final password = _passwordController.text;
 
     final loginProvider = Provider.of<LoginProvider>(context, listen: false);
-    await loginProvider.signInWithEmailAndPassword(
-      email: email,
-      password: password,
+
+    await showLoadingDialog(
+      context: context,
+      function: () => loginProvider.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      ),
     );
 
     if (!mounted) return;
@@ -73,6 +80,8 @@ class _LoginPageState extends State<LoginPage> {
         content: Text(as.logged_in_successfully),
       ),
     );
+
+    debugPrint('login method called in widget ended');
 
     context.go(Routes.home);
   }
