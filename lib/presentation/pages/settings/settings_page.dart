@@ -134,7 +134,6 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
           const Padding(padding: EdgeInsets.all(16)),
-
           Card(
             child: ListTile(
               leading: const Icon(Icons.language),
@@ -154,7 +153,6 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
           const Padding(padding: EdgeInsets.all(16)),
-
           const LogoutButton(),
         ],
       ),
@@ -178,6 +176,7 @@ class LogoutButton extends StatelessWidget {
             final logout = await showDialog<bool>(
               context: context,
               builder: (context) {
+                /// TODO: implement OkCancel dialog
                 return AlertDialog(
                   title: Text(as.logout),
                   content: Text(as.logout_confirmation),

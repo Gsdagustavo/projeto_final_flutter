@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -116,7 +115,10 @@ class _TravelMapState extends State<TravelMap> {
           return Stack(
             children: [
               GoogleMap(
-                minMaxZoomPreference: MinMaxZoomPreference(_minZoom, _maxZoom),
+                minMaxZoomPreference: const MinMaxZoomPreference(
+                  _minZoom,
+                  _maxZoom,
+                ),
                 onMapCreated: _onMapCreated,
                 onLongPress: _onLongPress,
                 myLocationEnabled: true,
@@ -134,11 +136,10 @@ class _TravelMapState extends State<TravelMap> {
                           final travelStop = context
                               .read<RegisterTravelProvider>()
                               .stops
-                              .firstWhere(
-                                (s) =>
-                                    s.toMarkerId().value ==
-                                    marker.markerId.value,
-                              );
+                              .firstWhere((s) {
+                                return s.toMarkerId().value ==
+                                    marker.markerId.value;
+                              });
 
                           await showTravelStopModal(
                             LatLng(
@@ -174,6 +175,7 @@ class _TravelMapState extends State<TravelMap> {
                             spacing: 12,
                             children: [
                               const Icon(Icons.route, size: 18),
+                              /// TODO: intl
                               Text('${state.stops.length} stop(s)'),
                             ],
                           );
@@ -234,6 +236,7 @@ class _TravelMapState extends State<TravelMap> {
       ),
 
       floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
             onPressed: () {
@@ -245,7 +248,7 @@ class _TravelMapState extends State<TravelMap> {
               debugPrint('Markers len: ${markerState.markers.length}');
 
               for (final (idx, marker) in markerState.markers.indexed) {
-                debugPrint("$idx: ${marker.markerId}");
+                debugPrint('$idx: ${marker.markerId}');
               }
             },
           ),
@@ -426,6 +429,8 @@ class _TravelStopModalState extends State<_TravelStopModal> {
     }
   }
 
+  /// TODO: Move this to the register travel provider to avoid calling
+  /// notifyListeners here
   void onStopUpdated() async {
     if (widget.stop == null) return;
 
@@ -513,6 +518,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
         builder: (context) {
           return CustomDialog(
             title: as.warning,
+            /// TODO: intl
             content: Text('Invalid leave date'),
             isError: true,
           );
@@ -578,7 +584,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
           children: [
             Row(
               children: [
-                Icon(Icons.location_on),
+                const Icon(Icons.location_on),
                 Text(
                   /// TODO: intl
                   'Add Travel Stop',

@@ -163,7 +163,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get view_travel_route => 'Ver Rota da Viagem';
 
   @override
-  String get stops => 'Parada(s)';
+  String stop(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Paradas',
+      one: 'Parada',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get title_home => 'Início';

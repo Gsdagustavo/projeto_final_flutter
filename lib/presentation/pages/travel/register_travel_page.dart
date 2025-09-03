@@ -215,9 +215,8 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
     state.addTravelPhoto(file);
   }
 
-  void onImageRemoved(File image) async {
-    final state = context.read<RegisterTravelProvider>();
-    state.removeTravelPhoto(image);
+  void onImageRemoved(File image) {
+    context.read<RegisterTravelProvider>().removeTravelPhoto(image);
   }
 
   Future<void> onTravelRegistered() async {
@@ -382,7 +381,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                           onTap: () => _pickDate(isStart: true),
                         ),
                       ),
-                      Padding(padding: EdgeInsets.all(6)),
+                      const Padding(padding: EdgeInsets.all(6)),
                       Expanded(
                         /// Travel end date field
                         child: TextFormField(
@@ -573,7 +572,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: Text('${state.stops.length} ${as.stops}'),
+                            child: Text(as.stop(state.stops.length)),
                           );
                         },
                       ),
@@ -764,7 +763,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                           return Stack(
                             children: [
                               ClipRRect(
-                                borderRadius: BorderRadiusGeometry.circular(12),
+                                borderRadius: BorderRadius.circular(12),
                                 child: InstaImageViewer(
                                   child: Image.file(image, fit: BoxFit.cover),
                                 ),
@@ -773,7 +772,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                                 left: 4,
                                 top: 4,
                                 child: Container(
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     color: Colors.black54,
                                     shape: BoxShape.circle,
                                   ),

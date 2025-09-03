@@ -97,7 +97,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                         Row(
                           spacing: 8,
                           children: [
-                            Icon(Icons.calendar_today, size: 16),
+                            const Icon(Icons.calendar_today, size: 16),
                             Text(
                               as.duration,
                               style: Theme.of(context).textTheme.bodyLarge,
@@ -125,7 +125,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                         Row(
                           spacing: 8,
                           children: [
-                            Icon(Icons.people, size: 16),
+                            const Icon(Icons.people, size: 16),
                             Text(
                               as.participants,
                               style: Theme.of(context).textTheme.bodyLarge,
@@ -158,7 +158,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                         Row(
                           spacing: 8,
                           children: [
-                            Icon(Icons.airplanemode_active, size: 16),
+                            const Icon(Icons.airplanemode_active, size: 16),
                             Text(
                               as.transport,
                               style: Theme.of(context).textTheme.bodyLarge,
@@ -188,7 +188,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                         Row(
                           spacing: 8,
                           children: [
-                            Icon(Icons.location_on, size: 16),
+                            const Icon(Icons.location_on, size: 16),
                             Text(
                               as.countries,
                               style: Theme.of(context).textTheme.bodyLarge,
@@ -214,7 +214,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                 final countries = widget.travel.countries;
 
                 if (countries.isEmpty) {
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 }
 
                 return SingleChildScrollView(
@@ -261,14 +261,14 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                   Row(
                     spacing: 8,
                     children: [
-                      Icon(Icons.calendar_today),
+                      const Icon(Icons.calendar_today),
                       Text(
                         as.travel_dates,
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
                     ],
                   ),
-                  Padding(padding: EdgeInsets.all(12)),
+                  const Padding(padding: EdgeInsets.all(12)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -283,7 +283,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                       ),
                     ],
                   ),
-                  Padding(padding: EdgeInsets.all(6)),
+                  const Padding(padding: EdgeInsets.all(6)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -303,13 +303,13 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
 
           Card(
             child: Padding(
-              padding: EdgeInsets.all(cardPadding),
+              padding: const EdgeInsets.all(cardPadding),
               child: Column(
                 children: [
                   Row(
                     spacing: 8,
                     children: [
-                      Icon(Icons.location_on),
+                      const Icon(Icons.location_on),
                       Text(
                         as.travel_route,
                         style: Theme.of(context).textTheme.bodyLarge,
@@ -325,13 +325,13 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
 
           Card(
             child: Padding(
-              padding: EdgeInsets.all(cardPadding),
+              padding: const EdgeInsets.all(cardPadding),
               child: Column(
                 children: [
                   Row(
                     spacing: 8,
                     children: [
-                      Icon(Icons.reviews),
+                      const Icon(Icons.reviews),
                       Text(as.reviews),
                       Padding(
                         padding: EdgeInsets.all(8),
@@ -352,7 +352,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                           child: Column(
                             spacing: 12,
                             children: [
-                              Icon(Icons.reviews, size: 42),
+                              const Icon(Icons.reviews, size: 42),
                               Text(as.no_reviews),
                             ],
                           ),
@@ -388,10 +388,10 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 8,
                                   ),
-                                  child: Divider(),
+                                  child: const Divider(),
                                 );
                               },
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: state.reviews.length,
                               itemBuilder: (context, index) {
@@ -443,7 +443,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
               ),
             ),
           ),
-          Padding(padding: EdgeInsetsGeometry.all(12)),
+          const Padding(padding: EdgeInsetsGeometry.all(12)),
         ],
       ),
     );
@@ -475,7 +475,7 @@ class _StopStepperWidgetState extends State<_StopStepperWidget> {
     return Stepper(
       stepIconHeight: 60,
       currentStep: index,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       type: StepperType.vertical,
       onStepTapped: (value) {
         setState(() {
@@ -499,29 +499,29 @@ class _StopStepperWidgetState extends State<_StopStepperWidget> {
       stepIconBuilder: (stepIndex, stepState) {
         /// First stop
         if (stepIndex == 0) {
-          return Icon(Icons.start, color: Colors.blueAccent);
+          return const Icon(Icons.start, color: Colors.blueAccent);
         }
 
         /// Last stop
         if (stepIndex == stops.length - 1) {
-          return Icon(Icons.flag, color: Colors.grey);
+          return const Icon(Icons.flag, color: Colors.grey);
         }
 
         /// Middle stop
-        return Icon(Icons.location_on, color: Colors.green);
+        return const Icon(Icons.location_on, color: Colors.green);
       },
       steps: [
         for (final stop in stops)
           Step(
             subtitle: Text(stop.type.getIntlTravelStopType(context)),
             title: Text('${stop.place.country}, ${stop.place.city}'),
-            label: Icon(Icons.reviews),
+            label: const Icon(Icons.reviews),
             content: Column(
               children: [
                 Row(
                   spacing: 8,
                   children: [
-                    Icon(Icons.access_time_filled),
+                    const Icon(Icons.access_time_filled),
                     Text(
                       stop.arriveDate!.getFormattedDateWithYear(widget.locale),
                     ),
@@ -529,7 +529,7 @@ class _StopStepperWidgetState extends State<_StopStepperWidget> {
                       onPressed: () async {
                         await showReviewModal(context, widget.travel, stop);
                       },
-                      icon: Icon(Icons.reviews),
+                      icon: const Icon(Icons.reviews),
                     ),
                   ],
                 ),
@@ -567,7 +567,7 @@ class ReviewListItem extends StatelessWidget {
           /// TODO: remove review
           debugPrint('Remove review');
         },
-        icon: Icon(FontAwesomeIcons.remove),
+        icon: const Icon(FontAwesomeIcons.remove),
       ),
 
       subtitle: Column(
@@ -575,7 +575,7 @@ class ReviewListItem extends StatelessWidget {
         spacing: 8,
         children: [
           SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             child: Row(
               spacing: 8,
@@ -587,8 +587,8 @@ class ReviewListItem extends StatelessWidget {
                   size: 18,
                 ),
                 Text(review.reviewDate.getMonthDay(locale)),
-                Icon(Icons.circle, size: 4),
-                Icon(Icons.location_on, size: 12),
+                const Icon(Icons.circle, size: 4),
+                const Icon(Icons.location_on, size: 12),
                 Text(review.travelStop.place.city ?? ''),
               ],
             ),
@@ -782,13 +782,12 @@ class _ReviewModalState extends State<ReviewModal> {
                 ],
               ),
               const Padding(padding: EdgeInsets.all(16)),
-
               Align(
                 alignment: Alignment.centerLeft,
                 child: Consumer<ReviewProvider>(
                   builder: (_, state, __) {
                     return DropdownButtonFormField<Participant>(
-                      icon: Icon(Icons.arrow_downward),
+                      icon: const Icon(Icons.arrow_downward),
                       value: _author,
                       items: [
                         for (final participant in widget.travel.participants)
@@ -858,7 +857,6 @@ class _ReviewModalState extends State<ReviewModal> {
                 ],
               ),
               const Padding(padding: EdgeInsets.all(16)),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -881,7 +879,7 @@ class _ReviewModalState extends State<ReviewModal> {
                           child: Column(
                             spacing: 16,
                             children: [
-                              Icon(size: 42, Icons.camera_alt),
+                              const Icon(size: 42, Icons.camera_alt),
                               Text(as.add_photo),
                             ],
                           ),
@@ -891,10 +889,10 @@ class _ReviewModalState extends State<ReviewModal> {
                   ),
                 ],
               ),
-              Padding(padding: EdgeInsets.all(12)),
+              const Padding(padding: EdgeInsets.all(12)),
               Builder(
                 builder: (_) {
-                  if (_images.isEmpty) return SizedBox.shrink();
+                  if (_images.isEmpty) return const SizedBox.shrink();
 
                   return GridView.builder(
                     shrinkWrap: true,
@@ -923,7 +921,7 @@ class _ReviewModalState extends State<ReviewModal> {
                                 left: 4,
                                 top: 4,
                                 child: Container(
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     color: Colors.black54,
                                     shape: BoxShape.circle,
                                   ),
@@ -945,7 +943,6 @@ class _ReviewModalState extends State<ReviewModal> {
                   );
                 },
               ),
-
               const Padding(padding: EdgeInsets.all(16)),
               Consumer<ReviewProvider>(
                 builder: (_, reviewState, __) {
@@ -1027,7 +1024,7 @@ class _TravelTitleWidgetState extends State<_TravelTitleWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(as.travel_title_updated),
-              Icon(Icons.check, color: Colors.green),
+              const Icon(Icons.check, color: Colors.green),
             ],
           ),
         );
@@ -1050,7 +1047,10 @@ class _TravelTitleWidgetState extends State<_TravelTitleWidget> {
             key: formKey,
             child: TextFormField(
               decoration: InputDecoration(
-                constraints: BoxConstraints(maxWidth: 300, maxHeight: 100),
+                constraints: const BoxConstraints(
+                  maxWidth: 300,
+                  maxHeight: 100,
+                ),
                 labelText: as.travel_title,
               ),
               controller: travelTitleController,
@@ -1058,7 +1058,10 @@ class _TravelTitleWidgetState extends State<_TravelTitleWidget> {
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ),
-          IconButton(onPressed: onTravelTitleUpdated, icon: Icon(Icons.save)),
+          IconButton(
+            onPressed: onTravelTitleUpdated,
+            icon: const Icon(Icons.save),
+          ),
         ],
       ),
     );

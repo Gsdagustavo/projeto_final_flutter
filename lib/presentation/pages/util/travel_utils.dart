@@ -39,7 +39,7 @@ Future<void> onTravelDeleted(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(as.travel_deleted),
-            Icon(Icons.check, color: Colors.green),
+            const Icon(Icons.check, color: Colors.green),
           ],
         ),
       );

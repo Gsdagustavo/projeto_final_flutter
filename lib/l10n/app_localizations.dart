@@ -397,11 +397,11 @@ abstract class AppLocalizations {
   /// **'View Travel Route'**
   String get view_travel_route;
 
-  /// No description provided for @stops.
+  /// No description provided for @stop.
   ///
   /// In en, this message translates to:
-  /// **'Stop(s)'**
-  String get stops;
+  /// **'{count, plural, =1{Stop} other{Stops}}'**
+  String stop(num count);
 
   /// No description provided for @title_home.
   ///

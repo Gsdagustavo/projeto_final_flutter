@@ -100,7 +100,7 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
     final polylineCoords = await calculatePolylines();
 
     final polyline = Polyline(
-      polylineId: PolylineId('Route'),
+      polylineId: const PolylineId('Route'),
       color: Colors.red,
       width: 5,
       points: polylineCoords,

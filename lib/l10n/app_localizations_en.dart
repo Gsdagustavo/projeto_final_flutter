@@ -163,7 +163,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get view_travel_route => 'View Travel Route';
 
   @override
-  String get stops => 'Stop(s)';
+  String stop(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Stops',
+      one: 'Stop',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get title_home => 'Home';

@@ -30,31 +30,6 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class Header extends StatelessWidget {
-  const Header({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      color: Colors.grey,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Text('line 1'),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const [Text('line 2.1'), Text('line 2.2')],
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(onPressed: () {}, child: const Text('button')),
-        ],
-      ),
-    );
-  }
-}
-
 class _HomePageState extends State<HomePage> {
   final formKey = GlobalKey<FormState>();
   final searchController = TextEditingController();
@@ -66,7 +41,7 @@ class _HomePageState extends State<HomePage> {
     return Consumer<TravelListProvider>(
       builder: (_, state, __) {
         if (state.isLoading) {
-          return Center(child: LoadingDialog());
+          return const Center(child: LoadingDialog());
         }
 
         return FabPage(
@@ -89,7 +64,7 @@ class _HomePageState extends State<HomePage> {
               floating: true,
               needRepaint: true,
               child: Padding(
-                padding: EdgeInsets.only(top: 32),
+                padding: const EdgeInsets.only(top: 32),
                 child: Padding(
                   padding: const EdgeInsets.all(cardPadding),
                   child: TextField(
@@ -99,8 +74,9 @@ class _HomePageState extends State<HomePage> {
                       await state.searchTravel(searchController.text);
                     },
                     decoration: InputDecoration(
+                      /// TODO: intl
                       hintText: 'Search...',
-                      prefixIcon: Icon(Icons.search),
+                      prefixIcon: const Icon(Icons.search),
                       suffixIcon: IconButton(
                         onPressed: () async {
                           await state.clearSearch();
@@ -136,8 +112,11 @@ class _TravelWidgetState extends State<_TravelWidget> {
         context: context,
         builder: (context) => CustomDialog(
           isError: true,
+
+          /// TODO: intl
           title: 'Warning',
           content: Text(
+            /// TODO: intl
             'The travel ${widget.travel.travelTitle} has not started yet',
           ),
         ),
@@ -151,8 +130,11 @@ class _TravelWidgetState extends State<_TravelWidget> {
         context: context,
         builder: (context) => CustomDialog(
           isError: true,
+
+          /// TODO: intl
           title: 'Warning',
           content: Text(
+            /// TODO: intl
             'The travel ${widget.travel.travelTitle} has already been finished',
           ),
         ),
@@ -163,6 +145,8 @@ class _TravelWidgetState extends State<_TravelWidget> {
 
     final result = await showOkCancelDialog(
       context,
+
+      /// TODO: intl
       title: Text('Finish travel ${widget.travel.travelTitle}?'),
     );
 
@@ -182,6 +166,8 @@ class _TravelWidgetState extends State<_TravelWidget> {
         context: context,
         builder: (context) => CustomDialog(
           isError: true,
+
+          /// TODO: intl
           title: 'Warning',
           content: Text('Error: ${state.errorMessage}'),
         ),
@@ -192,6 +178,8 @@ class _TravelWidgetState extends State<_TravelWidget> {
   Future<void> onTravelStarted() async {
     final result = await showOkCancelDialog(
       context,
+
+      /// TODO: intl
       title: Text('Start travel ${widget.travel.travelTitle}?'),
     );
 
@@ -208,6 +196,8 @@ class _TravelWidgetState extends State<_TravelWidget> {
         context: context,
         builder: (context) => CustomDialog(
           isError: true,
+
+          /// TODO: intl
           title: 'Warning',
           content: Text('Error: ${state.errorMessage}'),
         ),
@@ -262,7 +252,7 @@ class _TravelWidgetState extends State<_TravelWidget> {
                     child: Consumer<TravelListProvider>(
                       builder: (_, state, __) {
                         return PopupMenuButton(
-                          icon: Icon(Icons.more_vert),
+                          icon: const Icon(Icons.more_vert),
                           itemBuilder: (context) => <PopupMenuEntry>[
                             if (widget.travel.status ==
                                 TravelStatus.upcoming) ...[
@@ -399,9 +389,7 @@ class _TravelWidgetState extends State<_TravelWidget> {
                               width: 1,
                             ),
                           ),
-                          child: Text(
-                            '${widget.travel.stops.length} ${as.stops}',
-                          ),
+                          child: Text(as.stop(widget.travel.stops.length)),
                         ),
                       ),
                     ],
