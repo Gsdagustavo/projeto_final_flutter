@@ -119,7 +119,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
           ElevatedButton(
             onPressed: () {
-              context.go(Routes.home);
+              context.go(AppRoutes.home);
             },
             child: Text(as.yes),
           ),

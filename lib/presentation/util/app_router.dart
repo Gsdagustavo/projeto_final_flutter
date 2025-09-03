@@ -21,7 +21,7 @@ class AppRouter {
 
   static final router = GoRouter(
     navigatorKey: navigatorKey,
-    initialLocation: Routes.splash,
+    initialLocation: AppRoutes.splash,
     routes: [
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
@@ -31,7 +31,7 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: Routes.home,
+                path: AppRoutes.home,
                 pageBuilder: (context, state) =>
                     NoTransitionPage(child: const HomePage()),
               ),
@@ -40,7 +40,7 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: Routes.registerTravel,
+                path: AppRoutes.registerTravel,
                 pageBuilder: (context, state) =>
                     NoTransitionPage(child: const RegisterTravelPage()),
               ),
@@ -49,7 +49,7 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: Routes.settings,
+                path: AppRoutes.settings,
                 pageBuilder: (context, state) =>
                     NoTransitionPage(child: const SettingsPage()),
               ),
@@ -59,7 +59,7 @@ class AppRouter {
       ),
 
       GoRoute(
-        path: Routes.travelDetails,
+        path: AppRoutes.travelDetails,
         pageBuilder: (context, state) {
           final travel = state.extra as Travel;
           return NoTransitionPage(child: TravelDetailsPage(travel: travel));
@@ -67,12 +67,12 @@ class AppRouter {
       ),
 
       GoRoute(
-        path: Routes.travelMap,
+        path: AppRoutes.travelMap,
         pageBuilder: (context, state) => NoTransitionPage(child: TravelMap()),
       ),
 
       GoRoute(
-        path: Routes.travelRoute,
+        path: AppRoutes.travelRoute,
         pageBuilder: (context, state) {
           final travel = state.extra as Travel;
           return NoTransitionPage(child: TravelRoutePage(travel: travel));
@@ -80,22 +80,22 @@ class AppRouter {
       ),
 
       GoRoute(
-        path: Routes.auth,
+        path: AppRoutes.auth,
         pageBuilder: (context, state) =>
             NoTransitionPage(child: const AuthPageSwitcher()),
         routes: [
           GoRoute(
-            path: Routes.login,
+            path: AppRoutes.login,
             pageBuilder: (context, state) =>
                 NoTransitionPage(child: LoginPage()),
           ),
           GoRoute(
-            path: Routes.register,
+            path: AppRoutes.register,
             pageBuilder: (context, state) =>
                 NoTransitionPage(child: RegisterPage()),
           ),
           GoRoute(
-            path: Routes.forgotPassword,
+            path: AppRoutes.forgotPassword,
             pageBuilder: (context, state) =>
                 NoTransitionPage(child: ForgotPasswordPage()),
           ),
@@ -103,7 +103,7 @@ class AppRouter {
       ),
 
       GoRoute(
-        path: Routes.splash,
+        path: AppRoutes.splash,
         pageBuilder: (context, state) =>
             NoTransitionPage(child: const SplashScreen()),
       ),

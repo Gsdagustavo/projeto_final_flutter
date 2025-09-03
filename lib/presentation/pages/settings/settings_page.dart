@@ -207,7 +207,7 @@ class _LogoutButton extends StatelessWidget {
                   await context.read<LoginProvider>().signOut();
                 },
               );
-              context.go(Routes.auth);
+              context.go(AppRoutes.auth);
             }
           },
           style: ElevatedButton.styleFrom(

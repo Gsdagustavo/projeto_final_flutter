@@ -213,7 +213,7 @@ class _TravelWidgetState extends State<_TravelWidget> {
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () {
-          context.push(Routes.travelDetails, extra: widget.travel);
+          context.push(AppRoutes.travelDetails, extra: widget.travel);
         },
         child: Column(
           children: [
@@ -280,7 +280,7 @@ class _TravelWidgetState extends State<_TravelWidget> {
                                 title: Text(as.view_travel_route),
                                 onTap: () {
                                   context.push(
-                                    Routes.travelRoute,
+                                    AppRoutes.travelRoute,
                                     extra: widget.travel,
                                   );
                                 },

@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
 
     debugPrint('login method called in widget ended');
 
-    context.go(Routes.home);
+    context.go(AppRoutes.home);
   }
 
   void _togglePasswordVisibility() {
@@ -193,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
                   TextButton(
                     child: Text(as.forgot_your_password),
                     onPressed: () {
-                      context.push('${Routes.auth}${Routes.forgotPassword}');
+                      context.push('${AppRoutes.auth}${AppRoutes.forgotPassword}');
                     },
                   ),
                 ],

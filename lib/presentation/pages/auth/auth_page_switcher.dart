@@ -112,8 +112,8 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
               },
 
               children: const [
-                LoginPage(key: Key(Routes.login)),
-                RegisterPage(key: Key(Routes.register)),
+                LoginPage(key: Key(AppRoutes.login)),
+                RegisterPage(key: Key(AppRoutes.register)),
               ],
             ),
           ),

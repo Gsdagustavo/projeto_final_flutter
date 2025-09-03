@@ -525,7 +525,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                           onPressed: () {
                             if (state.startDate != null &&
                                 state.endDate != null) {
-                              context.push(Routes.travelMap);
+                              context.push(AppRoutes.travelMap);
                             }
                           },
                           style: ElevatedButton.styleFrom(
