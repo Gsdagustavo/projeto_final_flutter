@@ -26,8 +26,6 @@ import '../../widgets/loading_dialog.dart';
 import '../util/form_validations.dart';
 import '../util/ui_utils.dart';
 
-
-
 class RegisterTravelPage extends StatefulWidget {
   const RegisterTravelPage({super.key});
 

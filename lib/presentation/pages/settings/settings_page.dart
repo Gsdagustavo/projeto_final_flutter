@@ -139,7 +139,7 @@ class _SettingsPageState extends State<SettingsPage> {
               leading: const Icon(Icons.language),
               title: Text(as.language),
               subtitle: Text(
-                languageGetters[Localizations.localeOf(context).languageCode]!(
+                _languageGetters[Localizations.localeOf(context).languageCode]!(
                   as,
                 ),
               ),
@@ -147,21 +147,21 @@ class _SettingsPageState extends State<SettingsPage> {
               onTap: () {
                 showModalBottomSheet(
                   context: context,
-                  builder: (context) => LanguageSelectionSheet(),
+                  builder: (context) => _LanguageSelectionSheet(),
                 );
               },
             ),
           ),
           const Padding(padding: EdgeInsets.all(16)),
-          const LogoutButton(),
+          const _LogoutButton(),
         ],
       ),
     );
   }
 }
 
-class LogoutButton extends StatelessWidget {
-  const LogoutButton({super.key});
+class _LogoutButton extends StatelessWidget {
+  const _LogoutButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -233,7 +233,7 @@ class LogoutButton extends StatelessWidget {
   }
 }
 
-class LanguageSelectionSheet extends StatelessWidget {
+class _LanguageSelectionSheet extends StatelessWidget {
   final locales = AppLocalizations.supportedLocales;
 
   @override
@@ -246,7 +246,7 @@ class LanguageSelectionSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: locales.map((lang) {
           return ListTile(
-            title: Text(languageGetters[lang.languageCode]!(as)),
+            title: Text(_languageGetters[lang.languageCode]!(as)),
             onTap: () async {
               final newLocale = Locale(lang.languageCode);
               final userPreferencesState = Provider.of<UserPreferencesProvider>(
@@ -267,7 +267,7 @@ class LanguageSelectionSheet extends StatelessWidget {
   }
 }
 
-final Map<String, String Function(AppLocalizations)> languageGetters = {
+final Map<String, String Function(AppLocalizations)> _languageGetters = {
   'en': (loc) => loc.language_en,
   'pt': (loc) => loc.language_pt,
   'es': (loc) => loc.language_es,
