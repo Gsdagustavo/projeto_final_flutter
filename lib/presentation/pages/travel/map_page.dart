@@ -18,6 +18,7 @@ import '../../providers/user_preferences_provider.dart';
 import '../../util/app_router.dart';
 import '../../widgets/custom_dialog.dart';
 import '../../widgets/loading_dialog.dart';
+import '../util/ui_utils.dart';
 
 class TravelMap extends StatefulWidget {
   /// Constant constructor
@@ -175,6 +176,7 @@ class _TravelMapState extends State<TravelMap> {
                             spacing: 12,
                             children: [
                               const Icon(Icons.route, size: 18),
+
                               /// TODO: intl
                               Text('${state.stops.length} stop(s)'),
                             ],
@@ -308,12 +310,15 @@ Future<void> showTravelStopModal(LatLng position, [TravelStop? stop]) async {
     }
   }
 
-  final result = await showDialog<TravelStop?>(
+  final result = await showModalBottomSheet<TravelStop?>(
     context: context,
+    useSafeArea: true,
+    showDragHandle: true,
+    enableDrag: true,
+    isScrollControlled: true,
+    // constraints: BoxConstraints(minHeight: 200, maxHeight: 400),
     builder: (context) {
-      return Dialog(
-        child: _TravelStopModal(place: place, stop: stop),
-      );
+      return _TravelStopModal(place: place, stop: stop);
     },
   );
 
@@ -518,6 +523,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
         builder: (context) {
           return CustomDialog(
             title: as.warning,
+
             /// TODO: intl
             content: Text('Invalid leave date'),
             isError: true,
@@ -560,6 +566,9 @@ class _TravelStopModalState extends State<_TravelStopModal> {
     }
   }
 
+  final _controller = DraggableScrollableController();
+  final _listController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     debugPrint('Travel stop modal build called. Stop passed: ${widget.stop}');
@@ -575,174 +584,191 @@ class _TravelStopModalState extends State<_TravelStopModal> {
     _arriveDateController.text = _arriveDate?.getFormattedDate(locale) ?? '';
     _leaveDateController.text = _leaveDate?.getFormattedDate(locale) ?? '';
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 18,
-          children: [
-            Row(
+    return DraggableScrollableSheet(
+      controller: _controller,
+      expand: false,
+      maxChildSize: 1,
+      minChildSize: 0.20,
+      snapSizes: [0.25, 1],
+      builder: (context, scrollController) {
+        return SingleChildScrollView(
+          controller: scrollController,
+          child: Padding(
+            padding: const EdgeInsets.all(cardPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 18,
               children: [
-                const Icon(Icons.location_on),
+                Row(
+                  children: [
+                    const Icon(Icons.location_on),
+                    Text(
+                      /// TODO: intl
+                      'Add Travel Stop',
+                      style: Theme.of(context).textTheme.displaySmall,
+                    ),
+                  ],
+                ),
+                const Padding(padding: EdgeInsets.all(4)),
                 Text(
-                  /// TODO: intl
-                  'Add Travel Stop',
+                  placeInfo,
                   style: Theme.of(context).textTheme.displaySmall,
                 ),
-              ],
-            ),
-            const Padding(padding: EdgeInsets.all(4)),
-            Text(placeInfo, style: Theme.of(context).textTheme.displaySmall),
-            const Padding(padding: EdgeInsets.all(4)),
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(as.arrive_date),
-                      TextFormField(
-                        onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                        controller: _arriveDateController,
-                        decoration: InputDecoration(
-                          /// TODO: intl
-                          hintText: 'dd/mm/aaaa',
-                          suffixIcon: const Icon(Icons.calendar_today),
-                        ),
-                        readOnly: true,
-                        onTap: selectArriveDate,
+                const Padding(padding: EdgeInsets.all(4)),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(as.arrive_date),
+                          TextFormField(
+                            onTapOutside: (_) =>
+                                FocusScope.of(context).unfocus(),
+                            controller: _arriveDateController,
+                            decoration: InputDecoration(
+                              /// TODO: intl
+                              hintText: 'dd/mm/aaaa',
+                              suffixIcon: const Icon(Icons.calendar_today),
+                            ),
+                            readOnly: true,
+                            onTap: selectArriveDate,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    Padding(padding: EdgeInsets.all(6)),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(as.leave_date),
+                          TextFormField(
+                            onTapOutside: (_) =>
+                                FocusScope.of(context).unfocus(),
+                            controller: _leaveDateController,
+                            decoration: InputDecoration(
+                              /// TODO: intl
+                              hintText: 'dd/mm/aaaa',
+                              suffixIcon: const Icon(Icons.calendar_today),
+                            ),
+                            readOnly: true,
+                            onTap: selectLeaveDate,
+                            // onTap: () => _arriveDateController(isStart: false),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                Padding(padding: EdgeInsets.all(6)),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(as.leave_date),
-                      TextFormField(
-                        onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                        controller: _leaveDateController,
-                        decoration: InputDecoration(
-                          /// TODO: intl
-                          hintText: 'dd/mm/aaaa',
-                          suffixIcon: const Icon(Icons.calendar_today),
-                        ),
-                        readOnly: true,
-                        onTap: selectLeaveDate,
-                        // onTap: () => _arriveDateController(isStart: false),
-                      ),
-                    ],
-                  ),
+
+                /// TODO: intl
+                Text(
+                  'Planned Experiences',
+                  style: Theme.of(context).textTheme.displaySmall,
                 ),
-              ],
-            ),
+                ListView.separated(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    final experience = Experience.values[index];
+                    final experienceIcon = getExperiencesIcons()[experience];
+                    return Consumer<RegisterTravelProvider>(
+                      builder: (_, state, __) {
+                        final isExperienceSelected =
+                            _selectedExperiences[experience] == true;
 
-            /// TODO: intl
-            Text(
-              'Planned Experiences',
-              style: Theme.of(context).textTheme.displaySmall,
-            ),
-            ListView.separated(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                final experience = Experience.values[index];
-                final experienceIcon = getExperiencesIcons()[experience];
-                return Consumer<RegisterTravelProvider>(
-                  builder: (_, state, __) {
-                    final isExperienceSelected =
-                        _selectedExperiences[experience] == true;
-
-                    return ListTile(
-                      shape: Theme.of(context).cardTheme.shape,
-                      leading: Icon(
-                        experienceIcon,
-                        color: isExperienceSelected
-                            ? Colors.green
-                            : Theme.of(context).iconTheme.color,
-                      ),
-                      onTap: () {
-                        /// TODO: implement a travel stop provider to avoid
-                        /// rebuilding the whole widget when selecting an experience
-                        setState(() {
-                          _selectedExperiences[experience] =
-                              !_selectedExperiences[experience]!;
-                        });
+                        return ListTile(
+                          shape: Theme.of(context).cardTheme.shape,
+                          leading: Icon(
+                            experienceIcon,
+                            color: isExperienceSelected
+                                ? Colors.green
+                                : Theme.of(context).iconTheme.color,
+                          ),
+                          onTap: () {
+                            /// TODO: implement a travel stop provider to avoid
+                            /// rebuilding the whole widget when selecting an experience
+                            setState(() {
+                              _selectedExperiences[experience] =
+                                  !_selectedExperiences[experience]!;
+                            });
+                          },
+                          title: Text(
+                            experience.getIntlExperience(context),
+                            style: TextStyle(
+                              color: isExperienceSelected
+                                  ? Colors.green
+                                  : Theme.of(
+                                      context,
+                                    ).textTheme.bodyMedium!.color,
+                            ),
+                          ),
+                          trailing: _selectedExperiences[experience] == true
+                              ? const Icon(Icons.check, color: Colors.green)
+                              : const SizedBox.shrink(),
+                        );
                       },
-                      title: Text(
-                        experience.getIntlExperience(context),
-                        style: TextStyle(
-                          color: isExperienceSelected
-                              ? Colors.green
-                              : Theme.of(context).textTheme.bodyMedium!.color,
-                        ),
-                      ),
-                      trailing: _selectedExperiences[experience] == true
-                          ? const Icon(Icons.check, color: Colors.green)
-                          : const SizedBox.shrink(),
                     );
                   },
-                );
-              },
-              separatorBuilder: (context, index) {
-                return const Padding(padding: EdgeInsets.all(8));
-              },
-              itemCount: Experience.values.length,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-
-                    /// TODO: intl
-                    child: Text('Cancel'),
-                  ),
+                  separatorBuilder: (context, index) {
+                    return const Padding(padding: EdgeInsets.all(8));
+                  },
+                  itemCount: Experience.values.length,
                 ),
-
-                Expanded(
-                  child: Builder(
-                    builder: (context) {
-                      final baseColor = Theme.of(context)
-                          .elevatedButtonTheme
-                          .style!
-                          .backgroundColor!
-                          .resolve({})!;
-
-                      return ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: isStopValid
-                              ? baseColor
-                              : baseColor.withOpacity(0.3),
-                        ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
                         onPressed: () {
-                          if (isStopValid) {
-                            if (widget.stop == null) {
-                              onStopAdded();
-                            } else {
-                              onStopUpdated();
-                            }
-                          }
+                          Navigator.of(context).pop();
                         },
 
                         /// TODO: intl
-                        child: Text(
-                          widget.stop == null ? 'Add Stop' : 'Update Stop',
-                        ),
-                      );
-                    },
-                  ),
+                        child: Text('Cancel'),
+                      ),
+                    ),
+
+                    Expanded(
+                      child: Builder(
+                        builder: (context) {
+                          final baseColor = Theme.of(context)
+                              .elevatedButtonTheme
+                              .style!
+                              .backgroundColor!
+                              .resolve({})!;
+
+                          return ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: isStopValid
+                                  ? baseColor
+                                  : baseColor.withOpacity(0.3),
+                            ),
+                            onPressed: () {
+                              if (isStopValid) {
+                                if (widget.stop == null) {
+                                  onStopAdded();
+                                } else {
+                                  onStopUpdated();
+                                }
+                              }
+                            },
+
+                            /// TODO: intl
+                            child: Text(
+                              widget.stop == null ? 'Add Stop' : 'Update Stop',
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
