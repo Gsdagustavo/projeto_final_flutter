@@ -24,8 +24,9 @@ import '../../widgets/fab_circle_avatar.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
 import '../util/form_validations.dart';
+import '../util/ui_utils.dart';
 
-const double cardPadding = 16;
+
 
 class RegisterTravelPage extends StatefulWidget {
   const RegisterTravelPage({super.key});
@@ -449,7 +450,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                           return SizeFadeTransition(
                             curve: Curves.easeInOut,
                             animation: animation,
-                            child: ParticipantListItem(
+                            child: _ParticipantListItem(
                               participant: participant,
                             ),
                           );
@@ -1166,8 +1167,8 @@ class _ParticipantModalState extends State<_ParticipantModal> {
   }
 }
 
-class ParticipantListItem extends StatelessWidget {
-  const ParticipantListItem({super.key, required this.participant});
+class _ParticipantListItem extends StatelessWidget {
+  const _ParticipantListItem({super.key, required this.participant});
 
   final Participant participant;
 

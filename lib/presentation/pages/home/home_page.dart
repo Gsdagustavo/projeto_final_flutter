@@ -18,8 +18,8 @@ import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
 import '../../widgets/ok_cancel_dialog.dart';
-import '../travel/register_travel_page.dart';
 import '../util/travel_utils.dart';
+import '../util/ui_utils.dart';
 
 /// The Home Page of the app
 class HomePage extends StatefulWidget {

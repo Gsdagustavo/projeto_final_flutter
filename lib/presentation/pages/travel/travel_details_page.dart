@@ -24,6 +24,7 @@ import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
 import '../util/form_validations.dart';
 import '../util/travel_utils.dart';
+import '../util/ui_utils.dart';
 import 'register_travel_page.dart';
 
 class TravelDetailsPage extends StatefulWidget {
