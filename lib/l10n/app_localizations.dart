@@ -400,7 +400,7 @@ abstract class AppLocalizations {
   /// No description provided for @stop.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{Stop} other{Stops}}'**
+  /// **'{count, plural, =1{{count} Stop} other{{count} Stops}}'**
   String stop(num count);
 
   /// No description provided for @title_home.

@@ -82,7 +82,7 @@
   },
   "travel_deleted": "Viaje eliminado con éxito",
   "view_travel_route": "Ver Ruta del Viaje",
-  "stop": "{count, plural, =1{Parada} other{Paradas}}",
+  "stop": "{count, plural, =1{{count} Parada} other{{count} Paradas}}",
   "@@stop": {
     "placeholders": {
       "count": {}

@@ -82,7 +82,7 @@
   },
   "travel_deleted": "Travel deleted successfully",
   "view_travel_route": "View Travel Route",
-  "stop": "{count, plural, =1{Stop} other{Stops}}",
+  "stop": "{count, plural, =1{{count} Stop} other{{count} Stops}}",
   "@@stop": {
     "placeholders": {
       "count": {}
