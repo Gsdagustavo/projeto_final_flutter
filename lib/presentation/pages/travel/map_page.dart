@@ -100,6 +100,11 @@ class _TravelMapState extends State<TravelMap> {
       });
     }
 
+    if (_searchController.text.isEmpty) {
+      setState(_placeList.clear);
+      return;
+    }
+
     final places = await LocationService().getSuggestion(
       input: _searchController.text,
       sessionToken: _sessionToken,
@@ -109,6 +114,10 @@ class _TravelMapState extends State<TravelMap> {
       _placeList.clear();
       _placeList.addAll(places);
     });
+
+    if (_searchController.text.isEmpty) {
+      setState(_placeList.clear);
+    }
   }
 
   @override
@@ -222,6 +231,8 @@ class _TravelMapState extends State<TravelMap> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     TextField(
+                      focusNode: null,
+                      autofocus: false,
                       maxLines: 1,
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.search),
