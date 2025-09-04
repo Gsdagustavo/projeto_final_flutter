@@ -18,4 +18,10 @@ extension DateExtensions on DateTime {
     final formatted = formatter.format(this);
     return formatted[0].toUpperCase() + formatted.substring(1);
   }
+
+  String getFullDate(String locale) {
+    final formatter = DateFormat('EEEE, dd MMMM, yyyy', locale);
+    final formatted = formatter.format(this);
+    return formatted[0].toUpperCase() + formatted.substring(1);
+  }
 }
