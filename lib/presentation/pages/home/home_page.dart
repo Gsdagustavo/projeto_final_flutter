@@ -376,20 +376,53 @@ class _TravelWidgetState extends State<_TravelWidget> {
 
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 4,
-                            horizontal: 8,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            color: Theme.of(context).cardColor.withOpacity(0.7),
-                            border: BoxBorder.all(
-                              color: Theme.of(context).iconTheme.color!,
-                              width: 1,
+                        child: Row(
+                          spacing: 12,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 4,
+                                horizontal: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                color: Theme.of(
+                                  context,
+                                ).cardColor.withOpacity(0.7),
+                                border: BoxBorder.all(
+                                  color: Theme.of(context).iconTheme.color!,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                spacing: 4,
+                                children: [
+                                  Icon(Icons.people),
+                                  Text('${widget.travel.participants.length}'),
+                                ],
+                              ),
                             ),
-                          ),
-                          child: Text(as.stop(widget.travel.stops.length)),
+
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 4,
+                                horizontal: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                color: Theme.of(
+                                  context,
+                                ).cardColor.withOpacity(0.7),
+                                border: BoxBorder.all(
+                                  color: Theme.of(context).iconTheme.color!,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Text(as.stop(widget.travel.stops.length)),
+                            ),
+                          ],
                         ),
                       ),
                     ],
