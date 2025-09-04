@@ -176,7 +176,6 @@ class _TravelMapState extends State<TravelMap> {
                                 return s.toMarkerId().value ==
                                     marker.markerId.value;
                               });
-
                           await showTravelStopModal(
                             LatLng(
                               travelStop.place.latitude,
@@ -254,14 +253,44 @@ class _TravelMapState extends State<TravelMap> {
                       // mapsApiKey: _mapsApiKey,
                       controller: _searchController,
                     ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: _placeList.length,
-                      itemBuilder: (context, index) {
-                        final place = _placeList[index];
-                        debugPrint(place.toString());
-                        return Card(child: Text(place.toString()));
-                      },
+                    Container(
+                      color: _placeList.isEmpty
+                          ? Colors.transparent
+                          : Colors.white,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: _placeList.length,
+                        itemBuilder: (context, index) {
+                          final place = _placeList[index];
+                          return ListTile(
+                            onTap: () async {
+                              final p = await LocationService()
+                                  .getPositionByPlaceQuery(place.toString());
+
+                              debugPrint(p.toString());
+
+                              debugPrint('Place ${p.toString()} tapped');
+
+                              if (p != null) {
+                                _mapController?.animateCamera(
+                                  CameraUpdate.newLatLngZoom(
+                                    LatLng(p.latitude, p.longitude),
+                                    _defaultZoom,
+                                  ),
+                                );
+                              }
+                            },
+                            title: Text(
+                              place.toString(),
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            leading: Icon(
+                              Icons.location_on,
+                              color: Colors.black,
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -381,11 +410,12 @@ Future<void> showTravelStopModal(LatLng position, [TravelStop? stop]) async {
     showDragHandle: true,
     enableDrag: true,
     isScrollControlled: true,
-    // constraints: BoxConstraints(minHeight: 200, maxHeight: 400),
     builder: (context) {
       return _TravelStopModal(place: place, stop: stop);
     },
   );
+
+  FocusScope.of(context).unfocus();
 
   final state = context.read<RegisterTravelProvider>();
 
