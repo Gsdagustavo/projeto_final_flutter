@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
+import '../core/extensions/place_model_autocomplete.dart';
 import '../data/models/place_model.dart';
 import '../domain/entities/place.dart';
 
@@ -14,6 +15,8 @@ import '../domain/entities/place.dart';
 /// This class contains methods to get the current position of the device and
 /// convert the position (latitude/longitude) into an address
 class LocationService {
+  /// Get API Key from dotenv
+  static final String _mapsApiKey = dotenv.get('MAPS_API_KEY');
   static const String _apiUrl =
       'https://maps.googleapis.com/maps/api/geocode/json?';
 
@@ -60,14 +63,8 @@ class LocationService {
     final latitude = position.latitude;
     final longitude = position.longitude;
 
-    /// Ensure dotenv is initialized
-    if (!dotenv.isInitialized) await dotenv.load();
-
-    /// Get API Key from dotenv
-    final apiKey = dotenv.env['MAPS_API_KEY'];
-
     /// Build URL
-    final url = '$_apiUrl&latlng=$latitude,$longitude&key=$apiKey';
+    final url = '$_apiUrl&latlng=$latitude,$longitude&key=$_mapsApiKey';
 
     debugPrint('getPlaceByPosition called. URL: $url');
 
@@ -88,14 +85,36 @@ class LocationService {
     }
   }
 
-  // Future<List<Place>> searchForPlaces(String search) async {
-  //   /// Ensure dotenv is initialized
-  //   if (!dotenv.isInitialized) await dotenv.load();
-  //
-  //   /// Get API Key from dotenv
-  //   final apiKey = dotenv.env['MAPS_API_KEY'];
-  //
-  //   final url =
-  //       'https://maps.googleapis.com/maps/api/js?key=$apiKey&loading=async&libraries=places&callback=initMap';
-  // }
+  Future<List<Place>> getSuggestion({
+    required String input,
+    required String sessionToken,
+  }) async {
+    if (input.isEmpty) return [];
+
+    final places = <Place>[];
+
+    try {
+      final baseURL =
+          'https://maps.googleapis.com/maps/api/place/autocomplete/json';
+      final request =
+          '$baseURL?input=$input&key=$_mapsApiKey&sessiontoken=$sessionToken';
+      var response = await http.get(Uri.parse(request));
+
+      debugPrint('Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        for (final map in json.decode(response.body)['predictions']) {
+          places.add(
+            PlaceModelAutocomplete.fromAutocompleteJson(map).toEntity(),
+          );
+        }
+      } else {
+        throw Exception('Failed to load predictions');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    return places;
+  }
 }

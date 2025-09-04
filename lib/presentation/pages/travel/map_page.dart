@@ -1,17 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../core/extensions/date_extensions.dart';
 import '../../../core/extensions/experience_map_extension.dart';
-import '../../../core/extensions/place_model_autocomplete.dart';
 import '../../../core/extensions/travel_stop_extensions.dart';
 import '../../../domain/entities/enums.dart';
 import '../../../domain/entities/place.dart';
@@ -105,42 +100,15 @@ class _TravelMapState extends State<TravelMap> {
       });
     }
 
-    await getSuggestion(_searchController.text);
-  }
+    final places = await LocationService().getSuggestion(
+      input: _searchController.text,
+      sessionToken: _sessionToken,
+    );
 
-  Future<void> getSuggestion(String input) async {
-    final key = dotenv.get('MAPS_API_KEY');
-
-    debugPrint('Get suggestion called. Api key: $key');
-
-    setState(_placeList.clear);
-
-    if (input.isEmpty) return;
-
-    try {
-      final baseURL =
-          'https://maps.googleapis.com/maps/api/place/autocomplete/json';
-      final request =
-          '$baseURL?input=$input&key=$key&sessiontoken=$_sessionToken';
-      var response = await http.get(Uri.parse(request));
-
-      debugPrint('Body: ${response.body}');
-
-      if (response.statusCode == 200) {
-        setState(() {
-          for (final map in json.decode(response.body)['predictions']) {
-            final place = PlaceModelAutocomplete.fromAutocompleteJson(map);
-            _placeList.add(place.toEntity());
-          }
-
-          debugPrint('Place list: $_placeList');
-        });
-      } else {
-        throw Exception('Failed to load predictions');
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-    }
+    setState(() {
+      _placeList.clear();
+      _placeList.addAll(places);
+    });
   }
 
   @override
