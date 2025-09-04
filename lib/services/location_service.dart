@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -116,5 +117,32 @@ class LocationService {
     }
 
     return places;
+  }
+
+  Future<Place?> getPositionByPlaceQuery(String query) async {
+    debugPrint('Place query: $query');
+
+    try {
+      final baseURL = 'https://maps.googleapis.com/maps/api/geocoode/json';
+      var request = '$baseURL?address=$query&key=$_mapsApiKey';
+      var response = await http.get(Uri.parse(request));
+
+      if (response.statusCode == 200) {
+        final body = jsonDecode(response.body);
+        debugPrint('Body: $body');
+
+        if (body['results'] != null && body['results'].isNotEmpty) {
+          return PlaceModel.fromMap(body['results'][0]).toEntity();
+        } else {
+          throw Exception('Failed to load geocode');
+        }
+      } else {
+        throw Exception('Failed to load predictions');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    return null;
   }
 }
