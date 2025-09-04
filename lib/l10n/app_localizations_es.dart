@@ -137,38 +137,60 @@ class AppLocalizationsEs extends AppLocalizations {
   String get finished => 'Finalizado';
 
   @override
-  String get my_travels => 'Mis Viajes';
+  String get my_travels => 'Mis viajes';
 
   @override
-  String get start_travel => 'Iniciar Viaje';
+  String get start_travel => 'Iniciar viaje';
 
   @override
-  String get finish_travel => 'Finalizar Viaje';
+  String start_travel_confirmation(Object travel) {
+    return '¿Iniciar viaje $travel?';
+  }
 
   @override
-  String get finish_travel_confirm => '¿Finalizar Viaje?';
+  String travel_has_already_started(Object travel) {
+    return 'El viaje $travel ya ha comenzado';
+  }
 
   @override
-  String get delete_travel => 'Eliminar Viaje';
+  String get finish_travel => 'Finalizar viaje';
+
+  @override
+  String finish_travel_confirmation(Object travel) {
+    return '¿Finalizar viaje $travel?';
+  }
+
+  @override
+  String travel_has_already_finished(Object travel) {
+    return 'El viaje $travel ya ha terminado';
+  }
+
+  @override
+  String travel_not_stated_yet(Object travel) {
+    return 'The Travel $travel has not started yet';
+  }
+
+  @override
+  String get delete_travel => 'Eliminar viaje';
 
   @override
   String delete_travel_confirmation(Object travel) {
-    return '¿Realmente deseas eliminar el viaje $travel?';
+    return '¿Realmente desea eliminar el viaje $travel?';
   }
 
   @override
   String get travel_deleted => 'Viaje eliminado con éxito';
 
   @override
-  String get view_travel_route => 'Ver Ruta del Viaje';
+  String get view_travel_route => 'Ver ruta del viaje';
 
   @override
   String stop(num count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Paradas',
-      one: '$count Parada',
+      other: '$count paradas',
+      one: '$count parada',
     );
     return '$_temp0';
   }
@@ -262,6 +284,30 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get err_could_not_add_participant => 'No se pudo agregar participante';
+
+  @override
+  String get remove_stop => 'Eliminar parada';
+
+  @override
+  String get stop_added => '¡Parada agregada con éxito!';
+
+  @override
+  String get err_invalid_leave_date => 'Fecha de salida inválida';
+
+  @override
+  String get add_stop => 'Agregar parada';
+
+  @override
+  String get remove_stop_confirmation => '¿Realmente desea eliminar esta parada?';
+
+  @override
+  String get planned_experiences => 'Experiencias planificadas';
+
+  @override
+  String get err_register_travel_generic => 'Ocurrió un error al registrar el viaje';
+
+  @override
+  String get long_press_to_add_stops => 'Mantén presionado para agregar paradas';
 
   @override
   String get travel_map => 'Mapa del Viaje';
@@ -444,6 +490,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get cancel => 'Cancelar';
+
+  @override
+  String get error => 'Erro';
 
   @override
   String get unknown_error => 'Error desconocido';

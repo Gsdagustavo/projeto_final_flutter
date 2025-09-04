@@ -133,8 +133,7 @@ class _TravelMapState extends State<TravelMap> {
               style: Theme.of(context).textTheme.displaySmall,
             ),
             Text(
-              /// TODO: intl
-              'Long press to add stops',
+              as.long_press_to_add_stops,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ],
@@ -236,7 +235,7 @@ class _TravelMapState extends State<TravelMap> {
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.search),
                         suffixIcon: IconButton(
-                          icon: Icon(FontAwesomeIcons.remove),
+                          icon: Icon(FontAwesomeIcons.xmark),
                           onPressed: () {
                             setState(() {
                               _searchController.clear();
@@ -244,7 +243,7 @@ class _TravelMapState extends State<TravelMap> {
                             });
                           },
                         ),
-                        hintText: 'Search for places...',
+                        hintText: as.search_for_places,
                       ),
                       onTapOutside: (_) => FocusScope.of(context).unfocus(),
                       onChanged: (value) async {
@@ -313,8 +312,6 @@ class _TravelMapState extends State<TravelMap> {
                         onPressed: () {
                           context.pop();
                         },
-
-                        /// TODO: fix theme
                         child: Text(
                           as.finish,
                           style: Theme.of(context).textTheme.headlineMedium,
@@ -331,40 +328,40 @@ class _TravelMapState extends State<TravelMap> {
         },
       ),
 
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: () {
-              final markerState = Provider.of<MapMarkersProvider>(
-                context,
-                listen: false,
-              );
-
-              debugPrint('Markers len: ${markerState.markers.length}');
-
-              for (final (idx, marker) in markerState.markers.indexed) {
-                debugPrint('$idx: ${marker.markerId}');
-              }
-            },
-          ),
-
-          FloatingActionButton(
-            onPressed: () {
-              final travelState = Provider.of<RegisterTravelProvider>(
-                context,
-                listen: false,
-              );
-
-              debugPrint('Stops len: ${travelState.stops.length}');
-
-              for (final (idx, stop) in travelState.stops.indexed) {
-                debugPrint('$idx: $stop');
-              }
-            },
-          ),
-        ],
-      ),
+      // floatingActionButton: Column(
+      //   mainAxisAlignment: MainAxisAlignment.end,
+      //   children: [
+      //     FloatingActionButton(
+      //       onPressed: () {
+      //         final markerState = Provider.of<MapMarkersProvider>(
+      //           context,
+      //           listen: false,
+      //         );
+      //
+      //         debugPrint('Markers len: ${markerState.markers.length}');
+      //
+      //         for (final (idx, marker) in markerState.markers.indexed) {
+      //           debugPrint('$idx: ${marker.markerId}');
+      //         }
+      //       },
+      //     ),
+      //
+      //     FloatingActionButton(
+      //       onPressed: () {
+      //         final travelState = Provider.of<RegisterTravelProvider>(
+      //           context,
+      //           listen: false,
+      //         );
+      //
+      //         debugPrint('Stops len: ${travelState.stops.length}');
+      //
+      //         for (final (idx, stop) in travelState.stops.indexed) {
+      //           debugPrint('$idx: $stop');
+      //         }
+      //       },
+      //     ),
+      //   ],
+      // ),
     );
   }
 }
@@ -465,9 +462,8 @@ class _TravelStopModalState extends State<_TravelStopModal> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          /// TODO: intl
-          title: Text('Remove Stop'),
-          content: Text('Do you really want to remove this stop?'),
+          title: Text(as.remove_stop),
+          content: Text(as.remove_stop_confirmation),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
@@ -512,12 +508,13 @@ class _TravelStopModalState extends State<_TravelStopModal> {
       ),
     );
 
+    final as = AppLocalizations.of(context)!;
+
     await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          /// TODO: intl
-          title: Text('Stop added successfully!'),
+          title: Text(as.stop_added),
           icon: const Icon(Icons.check, color: Colors.green),
         );
       },
@@ -618,9 +615,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
         builder: (context) {
           return CustomDialog(
             title: as.warning,
-
-            /// TODO: intl
-            content: Text('Invalid leave date'),
+            content: Text(as.err_invalid_leave_date),
             isError: true,
           );
         },
@@ -662,12 +657,9 @@ class _TravelStopModalState extends State<_TravelStopModal> {
   }
 
   final _controller = DraggableScrollableController();
-  final _listController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('Travel stop modal build called. Stop passed: ${widget.stop}');
-
     final as = AppLocalizations.of(context)!;
     final placeInfo = widget.place.toString();
 
@@ -698,8 +690,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
                   children: [
                     const Icon(Icons.location_on),
                     Text(
-                      /// TODO: intl
-                      'Add Travel Stop',
+                      as.add_stop,
                       style: Theme.of(context).textTheme.displaySmall,
                     ),
                   ],
@@ -759,7 +750,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
 
                 /// TODO: intl
                 Text(
-                  'Planned Experiences',
+                  as.planned_experiences,
                   style: Theme.of(context).textTheme.displaySmall,
                 ),
                 ListView.separated(
@@ -818,9 +809,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-
-                        /// TODO: intl
-                        child: Text('Cancel'),
+                        child: Text(as.cancel),
                       ),
                     ),
 
@@ -851,7 +840,9 @@ class _TravelStopModalState extends State<_TravelStopModal> {
 
                             /// TODO: intl
                             child: Text(
-                              widget.stop == null ? 'Add Stop' : 'Update Stop',
+                              widget.stop == null
+                                  ? as.add_stop
+                                  : as.update_stop,
                             ),
                           );
                         },

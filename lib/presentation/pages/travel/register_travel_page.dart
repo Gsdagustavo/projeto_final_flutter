@@ -35,17 +35,17 @@ class RegisterTravelPage extends StatefulWidget {
 }
 
 class _RegisterTravelPageState extends State<RegisterTravelPage> {
-  /// Travel title
   final _travelTitleController = TextEditingController();
   final _travelTitleFormKey = GlobalKey<FormState>();
 
-  /// Transport type
   var _selectedTransportType = TransportType.values.first;
 
   final _startDateController = TextEditingController();
   final _endDateController = TextEditingController();
 
   static const int _maxYear = 2100;
+
+  /// TODO: intl
   final DateFormat _dateFormat = DateFormat('MM/dd/yyyy');
 
   final _participantNameController = TextEditingController();
@@ -471,7 +471,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                                 trailing: IconButton(
                                   onPressed: () =>
                                       onParticipantRemovePress(participant),
-                                  icon: const Icon(FontAwesomeIcons.remove),
+                                  icon: const Icon(FontAwesomeIcons.xmark),
                                 ),
                                 subtitle: Text(
                                   '${as.age}: ${participant.age.toString()}',
@@ -644,7 +644,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                               ),
                               trailing: IconButton(
                                 onPressed: () => onStopRemoved(stop),
-                                icon: const Icon(FontAwesomeIcons.remove),
+                                icon: const Icon(FontAwesomeIcons.xmark),
                               ),
                             );
                           },
@@ -772,7 +772,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                                   ),
                                   child: IconButton(
                                     onPressed: () => onImageRemoved(image),
-                                    icon: const Icon(FontAwesomeIcons.remove),
+                                    icon: const Icon(FontAwesomeIcons.xmark),
                                     constraints: const BoxConstraints(),
                                     padding: EdgeInsets.zero,
                                   ),
@@ -864,10 +864,8 @@ Future<void> _showParticipantModal(
 
   if (result != null) {
     if (participant == null) {
-      debugPrint('add participant');
       state.addParticipant(result);
     } else {
-      debugPrint('update participant');
       state.updateParticipant(participant, result);
     }
   }

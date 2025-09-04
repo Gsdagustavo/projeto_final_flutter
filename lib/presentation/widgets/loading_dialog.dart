@@ -39,8 +39,13 @@ Future<T> showLoadingDialog<T>({
 
   final item = await function();
 
-  if (Navigator.of(dialogContext, rootNavigator: true).canPop()) {
-    Navigator.of(dialogContext, rootNavigator: true).pop();
+  debugPrint('is loading dialog context mounted: ${dialogContext.mounted}');
+  debugPrint('is context mounted: ${context.mounted}');
+
+  if (!context.mounted) return item;
+
+  if (Navigator.of(context, rootNavigator: true).canPop()) {
+    Navigator.of(context, rootNavigator: true).pop();
   }
 
   return item;

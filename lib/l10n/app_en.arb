@@ -69,8 +69,47 @@
   "@@home_page": {},
   "my_travels": "My Travels",
   "start_travel": "Start Travel",
+  "start_travel_confirmation": "Start Travel {travel}?",
+  "@@start_travel_confirmation": {
+    "placeholders": {
+      "travel": {
+        "type": "String"
+      }
+    }
+  },
+  "travel_has_already_started": "The Travel {travel} has already been started",
+  "@@travel_has_already_started": {
+    "placeholders": {
+      "travel": {
+        "type": "String"
+      }
+    }
+  },
   "finish_travel": "Finish Travel",
-  "finish_travel_confirm": "Finish Travel?",
+  "finish_travel_confirmation": "Finish Travel {travel}?",
+  "@@finish_travel_confirmation": {
+    "placeholders": {
+      "travel": {
+        "type": "String"
+      }
+    }
+  },
+  "travel_has_already_finished": "The Travel {travel} has already been finished",
+  "@@travel_has_already_finished": {
+    "placeholders": {
+      "travel": {
+        "type": "String"
+      }
+    }
+  },
+  "travel_not_stated_yet": "The Travel {travel} has not started yet",
+  "@@travel_not_stated_yet": {
+    "placeholders": {
+      "travel": {
+        "type": "String"
+      }
+    }
+  },
   "delete_travel": "Delete Travel",
   "delete_travel_confirmation": "Do you really want to delete the travel {travel}?",
   "@@delete_travel_confirmation": {
@@ -122,6 +161,14 @@
   "participant_removed": "Participant removed",
   "participant_updated": "Participant updated",
   "err_could_not_add_participant": "Could not add participant",
+  "remove_stop": "Remove Travel Stop",
+  "stop_added": "Travel Stop added successfully!",
+  "err_invalid_leave_date": "Invalid leave date",
+  "add_stop": "Add Travel Stop",
+  "remove_stop_confirmation": "Do you really want to remove this stop?",
+  "planned_experiences": "Planned Experiences",
+  "err_register_travel_generic": "An error occurred while registering the travel",
+  "long_press_to_add_stops": "Long press to add stops",
   "travel_map": "Travel Map",
   "open_map": "Open Map",
   "route_planning": "Route Planning",
@@ -192,5 +239,6 @@
   "remove": "Remove",
   "warning": "Warning",
   "cancel": "Cancel",
+  "error": "Error",
   "unknown_error": "Unknown error"
 }

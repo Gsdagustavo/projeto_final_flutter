@@ -361,17 +361,41 @@ abstract class AppLocalizations {
   /// **'Start Travel'**
   String get start_travel;
 
+  /// No description provided for @start_travel_confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Travel {travel}?'**
+  String start_travel_confirmation(Object travel);
+
+  /// No description provided for @travel_has_already_started.
+  ///
+  /// In en, this message translates to:
+  /// **'The Travel {travel} has already been started'**
+  String travel_has_already_started(Object travel);
+
   /// No description provided for @finish_travel.
   ///
   /// In en, this message translates to:
   /// **'Finish Travel'**
   String get finish_travel;
 
-  /// No description provided for @finish_travel_confirm.
+  /// No description provided for @finish_travel_confirmation.
   ///
   /// In en, this message translates to:
-  /// **'Finish Travel?'**
-  String get finish_travel_confirm;
+  /// **'Finish Travel {travel}?'**
+  String finish_travel_confirmation(Object travel);
+
+  /// No description provided for @travel_has_already_finished.
+  ///
+  /// In en, this message translates to:
+  /// **'The Travel {travel} has already been finished'**
+  String travel_has_already_finished(Object travel);
+
+  /// No description provided for @travel_not_stated_yet.
+  ///
+  /// In en, this message translates to:
+  /// **'The Travel {travel} has not started yet'**
+  String travel_not_stated_yet(Object travel);
 
   /// No description provided for @delete_travel.
   ///
@@ -582,6 +606,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not add participant'**
   String get err_could_not_add_participant;
+
+  /// No description provided for @remove_stop.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Travel Stop'**
+  String get remove_stop;
+
+  /// No description provided for @stop_added.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel Stop added successfully!'**
+  String get stop_added;
+
+  /// No description provided for @err_invalid_leave_date.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid leave date'**
+  String get err_invalid_leave_date;
+
+  /// No description provided for @add_stop.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Travel Stop'**
+  String get add_stop;
+
+  /// No description provided for @remove_stop_confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you really want to remove this stop?'**
+  String get remove_stop_confirmation;
+
+  /// No description provided for @planned_experiences.
+  ///
+  /// In en, this message translates to:
+  /// **'Planned Experiences'**
+  String get planned_experiences;
+
+  /// No description provided for @err_register_travel_generic.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while registering the travel'**
+  String get err_register_travel_generic;
+
+  /// No description provided for @long_press_to_add_stops.
+  ///
+  /// In en, this message translates to:
+  /// **'Long press to add stops'**
+  String get long_press_to_add_stops;
 
   /// No description provided for @travel_map.
   ///
@@ -930,6 +1002,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
+
+  /// No description provided for @error.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get error;
 
   /// No description provided for @unknown_error.
   ///

@@ -68,11 +68,50 @@
 
   "@@home_page": {},
   "my_travels": "Minhas Viagens",
-  "start_travel": "Iniciar Viagem",
-  "finish_travel": "Finalizar Viagem",
-  "finish_travel_confirm": "Finalizar Viagem?",
-  "delete_travel": "Excluir Viagem",
-  "delete_travel_confirmation": "Você realmente quer exclurir a viagem {travel}?",
+  "start_travel": "Iniciar viagem",
+  "start_travel_confirmation": "Iniciar viagem {travel}?",
+  "@@start_travel_confirmation": {
+    "placeholders": {
+      "travel": {
+        "type": "String"
+      }
+    }
+  },
+  "travel_has_already_started": "A viagem {travel} já foi iniciada",
+  "@@travel_has_already_started": {
+    "placeholders": {
+      "travel": {
+        "type": "String"
+      }
+    }
+  },
+  "finish_travel": "Finalizar viagem",
+  "finish_travel_confirmation": "Finalizar viagem {travel}?",
+  "@@finish_travel_confirmation": {
+    "placeholders": {
+      "travel": {
+        "type": "String"
+      }
+    }
+  },
+  "travel_has_already_finished": "A viagem {travel} já foi finalizada",
+  "@@travel_has_already_finished": {
+    "placeholders": {
+      "travel": {
+        "type": "String"
+      }
+    }
+  },
+  "travel_not_started_yet": "A viagem {travel} ainda não começou",
+  "@@travel_not_started_yet": {
+    "placeholders": {
+      "travel": {
+        "type": "String"
+      }
+    }
+  },
+  "delete_travel": "Excluir viagem",
+  "delete_travel_confirmation": "Você realmente deseja excluir a viagem {travel}?",
   "@@delete_travel_confirmation": {
     "placeholders": {
       "travel": {
@@ -80,14 +119,15 @@
       }
     }
   },
-  "travel_deleted": "Viagem deletada com sucesso",
-  "view_travel_route": "Ver Rota da Viagem",
-  "stop": "{count, plural, =1{{count} Parada} other{{count} Paradas}}",
+  "travel_deleted": "Viagem excluída com sucesso",
+  "view_travel_route": "Ver rota da viagem",
+  "stop": "{count, plural, =1{{count} parada} other{{count} paradas}}",
   "@@stop": {
     "placeholders": {
       "count": {}
     }
   },
+
 
   "@@pages_titles": {},
   "title_home": "Início",
@@ -122,6 +162,14 @@
   "participant_removed": "Participante removido",
   "participant_updated": "Participante atualizado",
   "err_could_not_add_participant": "Não foi possível adicionar o participante",
+  "remove_stop": "Remove Travel Stop",
+  "stop_added": "Travel Stop added successfully!",
+  "err_invalid_leave_date": "Invalid leave date",
+  "add_stop": "Add Travel Stop",
+  "remove_stop_confirmation": "Do you really want to remove this stop?",
+  "planned_experiences": "Planned Experiences",
+  "err_register_travel_generic": "An error occurred while registering the travel",
+  "long_press_to_add_stops": "Pressione e segure para adicionar paradas",
   "travel_map": "Mapa da Viagem",
   "open_map": "Abrir Mapa",
   "route_planning": "Planejamento de Rota",
@@ -192,5 +240,6 @@
   "remove": "Remover",
   "warning": "Aviso",
   "cancel": "Cancelar",
+  "error": "Erro",
   "unknown_error": "Erro desconhecido"
 }

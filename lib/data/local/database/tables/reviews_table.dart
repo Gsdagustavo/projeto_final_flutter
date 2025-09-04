@@ -15,7 +15,7 @@ abstract final class ReviewsTable {
       '''
      CREATE TABLE $tableName(
       $reviewId TEXT PRIMARY KEY,
-      $description TEXT NOT NULL,
+      $description TEXT,
       $reviewDate INTEGER NOT NULL,
       $travelStopId TEXT NOT NULL,
       $stars INTEGER NOT NULL,

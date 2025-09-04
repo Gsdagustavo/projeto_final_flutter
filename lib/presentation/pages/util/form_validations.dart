@@ -67,13 +67,13 @@ class FormValidations {
   /// TODO: intl
   String? reviewValidator(String? review) {
     if (review == null) {
-      return 'Invalid review';
+      return as.err_invalid_review_data;
     }
 
-    if (review.trim().length < _minReviewCharacters &&
-        review.trim().isNotEmpty) {
-      return 'Review must have at least $_minReviewCharacters characters';
-    }
+    // if (review.trim().length < _minReviewCharacters &&
+    //     review.trim().isNotEmpty) {
+    //   return 'Review must have at least $_minReviewCharacters characters';
+    // }
 
     if (review.trim().length > _maxReviewCharacters) {
       return 'Review must have at most $_minReviewCharacters characters';

@@ -592,7 +592,7 @@ class ReviewListItem extends StatelessWidget {
           /// TODO: remove review
           debugPrint('Remove review');
         },
-        icon: const Icon(FontAwesomeIcons.remove),
+        icon: const Icon(FontAwesomeIcons.xmark),
       ),
 
       subtitle: Column(
@@ -618,9 +618,20 @@ class ReviewListItem extends StatelessWidget {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            child: Text(review.description),
+          Builder(
+            builder: (context) {
+              if (review.description.isEmpty) {
+                return SizedBox.shrink();
+              }
+
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                child: Text(review.description),
+              );
+            },
           ),
 
           if (review.images.isNotEmpty) ...[
@@ -809,43 +820,35 @@ class _ReviewModalState extends State<ReviewModal> {
               const Padding(padding: EdgeInsets.all(16)),
               Align(
                 alignment: Alignment.centerLeft,
-                child: Consumer<ReviewProvider>(
-                  builder: (_, state, __) {
-                    return DropdownButtonFormField<Participant>(
-                      icon: const Icon(Icons.arrow_downward),
-                      value: _author,
-                      items: [
-                        for (final participant in widget.travel.participants)
-                          DropdownMenuItem(
-                            value: participant,
-                            child: Text(participant.name),
-                          ),
-                      ],
-                      onChanged: (value) {
-                        setState(() {
-                          _author = value;
-                        });
-                      },
-                    );
+                child: DropdownButtonFormField<Participant>(
+                  icon: const Icon(Icons.arrow_downward),
+                  value: _author,
+                  items: [
+                    for (final participant in widget.travel.participants)
+                      DropdownMenuItem(
+                        value: participant,
+                        child: Text(participant.name),
+                      ),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      _author = value;
+                    });
                   },
                 ),
               ),
 
               const Padding(padding: EdgeInsets.all(16)),
-              Consumer<ReviewProvider>(
-                builder: (_, reviewState, __) {
-                  return RatingStars(
-                    starCount: 5,
-                    value: _reviewRate,
-                    animationDuration: Duration(seconds: 1),
-                    starSize: 36,
-                    valueLabelVisibility: false,
-                    onValueChanged: (r) {
-                      setState(() {
-                        _reviewRate = r;
-                      });
-                    },
-                  );
+              RatingStars(
+                starCount: 5,
+                value: _reviewRate,
+                animationDuration: Duration(seconds: 1),
+                starSize: 36,
+                valueLabelVisibility: false,
+                onValueChanged: (r) {
+                  setState(() {
+                    _reviewRate = r;
+                  });
                 },
               ),
               const Padding(padding: EdgeInsets.all(16)),
@@ -857,27 +860,23 @@ class _ReviewModalState extends State<ReviewModal> {
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
                   const Padding(padding: EdgeInsets.all(6)),
-                  Consumer<ReviewProvider>(
-                    builder: (_, reviewState, __) {
-                      return Form(
-                        key: _formKey,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        child: TextFormField(
-                          textCapitalization: TextCapitalization.sentences,
-                          validator: validations.reviewValidator,
-                          controller: _reviewController,
-                          onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                          maxLength: 500,
-                          maxLines: 5,
-                          decoration: InputDecoration(
-                            hint: Text(
-                              as.review,
-                              style: Theme.of(context).textTheme.labelSmall,
-                            ),
-                          ),
+                  Form(
+                    key: _formKey,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    child: TextFormField(
+                      textCapitalization: TextCapitalization.sentences,
+                      validator: validations.reviewValidator,
+                      controller: _reviewController,
+                      onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                      maxLength: 500,
+                      maxLines: 5,
+                      decoration: InputDecoration(
+                        hint: Text(
+                          as.review,
+                          style: Theme.of(context).textTheme.labelSmall,
                         ),
-                      );
-                    },
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -885,32 +884,28 @@ class _ReviewModalState extends State<ReviewModal> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Consumer<ReviewProvider>(
-                    builder: (_, reviewState, __) {
-                      return InkWell(
-                        onTap: () async {
-                          await addImage();
-                        },
-                        borderRadius: BorderRadius.circular(32),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: BoxBorder.all(
-                              color: Theme.of(context).highlightColor,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(32),
-                          ),
-                          padding: const EdgeInsets.all(24),
-                          child: Column(
-                            spacing: 16,
-                            children: [
-                              const Icon(size: 42, Icons.camera_alt),
-                              Text(as.add_photo),
-                            ],
-                          ),
-                        ),
-                      );
+                  InkWell(
+                    onTap: () async {
+                      await addImage();
                     },
+                    borderRadius: BorderRadius.circular(32),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: BoxBorder.all(
+                          color: Theme.of(context).highlightColor,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(32),
+                      ),
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        spacing: 16,
+                        children: [
+                          const Icon(size: 42, Icons.camera_alt),
+                          Text(as.add_photo),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -954,7 +949,7 @@ class _ReviewModalState extends State<ReviewModal> {
                                     onPressed: () async {
                                       await removeImage(image);
                                     },
-                                    icon: const Icon(FontAwesomeIcons.remove),
+                                    icon: const Icon(FontAwesomeIcons.xmark),
                                     constraints: const BoxConstraints(),
                                     padding: EdgeInsets.zero,
                                   ),
@@ -969,16 +964,12 @@ class _ReviewModalState extends State<ReviewModal> {
                 },
               ),
               const Padding(padding: EdgeInsets.all(16)),
-              Consumer<ReviewProvider>(
-                builder: (_, reviewState, __) {
-                  return Container(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: onSubmit,
-                      child: Text(as.send_review),
-                    ),
-                  );
-                },
+              Container(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: onSubmit,
+                  child: Text(as.send_review),
+                ),
               ),
             ],
           ),

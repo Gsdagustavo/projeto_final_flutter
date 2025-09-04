@@ -23,8 +23,6 @@ class RegisterTravelProvider with ChangeNotifier {
   /// Instance of [FileService]
   final fileService = FileService();
 
-  /// TODO: make form keys private and add getters to access them
-  ///
   /// Default constructor
   RegisterTravelProvider(this._travelUseCases);
 
@@ -44,7 +42,6 @@ class RegisterTravelProvider with ChangeNotifier {
   /// The stops of the travel
   final _stops = <TravelStop>[];
 
-  /// The error message (obtained via exception.message on try-catch structures)
   Failure<TravelRegisterError>? _failure;
 
   /// Whether there are any asynchronous methods being processed or not
@@ -86,18 +83,19 @@ class RegisterTravelProvider with ChangeNotifier {
     _notify();
   }
 
-  void handleFailure(Either<Failure<TravelRegisterError>, void> res, {
+  void handleFailure(
+    Either<Failure<TravelRegisterError>, void> res, {
     VoidCallback? onSuccess,
     VoidCallback? onFailure,
   }) {
     res.fold(
-          (failure) {
+      (failure) {
         _failure = failure;
         if (onFailure != null) {
           onFailure.call();
         }
       },
-          (r) {
+      (r) {
         _failure = null;
         if (onSuccess != null) {
           onSuccess.call();
@@ -202,8 +200,10 @@ class RegisterTravelProvider with ChangeNotifier {
     _notify();
   }
 
-  void updateParticipant(Participant oldParticipant,
-      Participant newParticipant,) {
+  void updateParticipant(
+    Participant oldParticipant,
+    Participant newParticipant,
+  ) {
     debugPrint('Participants len: ${_participants.length}');
 
     debugPrint('Old participants: $_participants');

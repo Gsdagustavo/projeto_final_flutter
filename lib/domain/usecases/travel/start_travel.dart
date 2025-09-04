@@ -13,12 +13,10 @@ class StartTravel {
 
     final now = DateTime.now();
 
-    /// TODO: create StartTravelException and use it here
     if (travel.status == TravelStatus.ongoing) {
       throw Exception('Travel has already started');
     }
 
-    /// TODO: create StartTravelException and use it here
     if (travel.status == TravelStatus.finished) {
       throw Exception('Travel has already been finished');
     }

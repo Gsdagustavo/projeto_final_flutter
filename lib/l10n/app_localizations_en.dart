@@ -143,10 +143,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get start_travel => 'Start Travel';
 
   @override
+  String start_travel_confirmation(Object travel) {
+    return 'Start Travel $travel?';
+  }
+
+  @override
+  String travel_has_already_started(Object travel) {
+    return 'The Travel $travel has already been started';
+  }
+
+  @override
   String get finish_travel => 'Finish Travel';
 
   @override
-  String get finish_travel_confirm => 'Finish Travel?';
+  String finish_travel_confirmation(Object travel) {
+    return 'Finish Travel $travel?';
+  }
+
+  @override
+  String travel_has_already_finished(Object travel) {
+    return 'The Travel $travel has already been finished';
+  }
+
+  @override
+  String travel_not_stated_yet(Object travel) {
+    return 'The Travel $travel has not started yet';
+  }
 
   @override
   String get delete_travel => 'Delete Travel';
@@ -262,6 +284,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get err_could_not_add_participant => 'Could not add participant';
+
+  @override
+  String get remove_stop => 'Remove Travel Stop';
+
+  @override
+  String get stop_added => 'Travel Stop added successfully!';
+
+  @override
+  String get err_invalid_leave_date => 'Invalid leave date';
+
+  @override
+  String get add_stop => 'Add Travel Stop';
+
+  @override
+  String get remove_stop_confirmation => 'Do you really want to remove this stop?';
+
+  @override
+  String get planned_experiences => 'Planned Experiences';
+
+  @override
+  String get err_register_travel_generic => 'An error occurred while registering the travel';
+
+  @override
+  String get long_press_to_add_stops => 'Long press to add stops';
 
   @override
   String get travel_map => 'Travel Map';
@@ -444,6 +490,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancel => 'Cancel';
+
+  @override
+  String get error => 'Error';
 
   @override
   String get unknown_error => 'Unknown error';

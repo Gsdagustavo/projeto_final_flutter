@@ -21,8 +21,6 @@ class UpdateTravelTitle {
       return false;
     }
 
-    /// TODO: add more validations
-
     return true;
   }
 }
