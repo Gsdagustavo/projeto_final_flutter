@@ -1,4 +1,4 @@
-import '../../../modules/review/review_repository.dart';
+import '../../repositories/review/review_repository.dart';
 import 'add_review.dart';
 import 'add_reviews.dart';
 import 'get_reviews.dart';

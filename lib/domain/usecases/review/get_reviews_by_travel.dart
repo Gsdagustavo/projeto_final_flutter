@@ -1,6 +1,6 @@
-import '../../../modules/review/review_repository.dart';
 import '../../entities/review.dart';
 import '../../entities/travel.dart';
+import '../../repositories/review/review_repository.dart';
 
 class GetReviewsByTravel {
   final ReviewRepository _reviewRepository;

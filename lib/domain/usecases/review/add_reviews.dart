@@ -1,5 +1,5 @@
-import '../../../modules/review/review_repository.dart';
 import '../../entities/review.dart';
+import '../../repositories/review/review_repository.dart';
 
 class AddReviews {
   final ReviewRepository _reviewRepository;

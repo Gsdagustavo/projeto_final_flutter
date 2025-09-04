@@ -4,10 +4,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 import 'data/local/database/database.dart';
+import 'data/repositories/review/review_repository_local.dart';
 import 'data/repositories/travel/travel_repository_local.dart';
 import 'domain/usecases/review/review_use_cases.dart';
 import 'domain/usecases/travel/travel_usecases.dart';
-import 'modules/review/review_repository.dart';
 import 'presentation/providers/login_provider.dart';
 import 'presentation/providers/map_markers_provider.dart';
 import 'presentation/providers/register_travel_provider.dart';

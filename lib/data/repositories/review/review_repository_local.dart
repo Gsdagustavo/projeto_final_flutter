@@ -1,36 +1,26 @@
 import 'dart:io';
+import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../data/local/database/database.dart';
-import '../../data/local/database/tables/experiences_table.dart';
-import '../../data/local/database/tables/participants_table.dart';
-import '../../data/local/database/tables/places_table.dart';
-import '../../data/local/database/tables/reviews_photos.dart';
-import '../../data/local/database/tables/reviews_table.dart';
-import '../../data/local/database/tables/travel_stop_experiences_table.dart';
-import '../../data/local/database/tables/travel_stop_table.dart';
-import '../../data/models/participant_model.dart';
-import '../../data/models/place_model.dart';
-import '../../data/models/review_model.dart';
-import '../../data/models/travel_stop_model.dart';
-import '../../domain/entities/enums.dart';
-import '../../domain/entities/review.dart';
-import '../../domain/entities/travel.dart';
-
-abstract class ReviewRepository {
-  Future<void> addReview({required Review review});
-
-  Future<void> addReviews({required List<Review> reviews});
-
-  Future<List<Review>> getReviews();
-
-  Future<List<Review>> getReviewsByTravel(Travel travel);
-
-  Future<List<Review>> getReviewsByStopId(String stopId);
-}
+import '../../../domain/entities/enums.dart';
+import '../../../domain/entities/review.dart';
+import '../../../domain/entities/travel.dart';
+import '../../../domain/repositories/review/review_repository.dart';
+import '../../local/database/database.dart';
+import '../../local/database/tables/experiences_table.dart';
+import '../../local/database/tables/participants_table.dart';
+import '../../local/database/tables/places_table.dart';
+import '../../local/database/tables/reviews_photos.dart';
+import '../../local/database/tables/reviews_table.dart';
+import '../../local/database/tables/travel_stop_experiences_table.dart';
+import '../../local/database/tables/travel_stop_table.dart';
+import '../../models/participant_model.dart';
+import '../../models/place_model.dart';
+import '../../models/review_model.dart';
+import '../../models/travel_stop_model.dart';
 
 class ReviewRepositoryImpl implements ReviewRepository {
   late final Future<Database> _db = DBConnection().getDatabase();
