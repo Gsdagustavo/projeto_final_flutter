@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 import '../../domain/entities/review.dart';
 import '../../domain/entities/travel.dart';
-import '../../modules/review/review_use_cases.dart';
+import '../../domain/usecases/review/review_use_cases.dart';
 
 class ReviewProvider with ChangeNotifier {
   final ReviewUseCases _reviewUseCases;

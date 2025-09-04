@@ -29,7 +29,7 @@ class FormValidations {
 
   String? travelTitleValidator(String? travelTitle) {
     if (travelTitle == null ||
-        travelTitle.isEmpty /* || travelTitle.length < 3 */ ) {
+        travelTitle.trim().isEmpty /* || travelTitle.length < 3 */ ) {
       return as.invalid_travel_title;
     }
 
