@@ -24,6 +24,7 @@ import '../../widgets/fab_circle_avatar.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
 import '../util/form_validations.dart';
+import '../util/transport_types_icons.dart';
 import '../util/ui_utils.dart';
 
 class RegisterTravelPage extends StatefulWidget {
@@ -40,15 +41,6 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
 
   /// Transport type
   var _selectedTransportType = TransportType.values.first;
-
-  /// Transport types and its icons
-  static const _transportTypesIcons = {
-    TransportType.bike: Icons.directions_bike,
-    TransportType.car: Icons.directions_car,
-    TransportType.bus: Icons.directions_bus,
-    TransportType.plane: FontAwesomeIcons.plane,
-    TransportType.cruise: FontAwesomeIcons.ship,
-  };
 
   final _startDateController = TextEditingController();
   final _endDateController = TextEditingController();
@@ -344,7 +336,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                     icon: const Icon(Icons.keyboard_arrow_down),
                     isExpanded: true,
                     items: [
-                      for (final entry in _transportTypesIcons.entries)
+                      for (final entry in transportTypesIcons.entries)
                         DropdownMenuItem<TransportType>(
                           value: entry.key,
                           child: Row(
