@@ -263,7 +263,7 @@ class AppTheme {
       ),
 
       // App bar theme
-      appBarTheme: const AppBarThemeData(
+      appBarTheme: const AppBarTheme(
         backgroundColor: Colors.white,
         foregroundColor: Color(0xFF252525),
         elevation: 0,
@@ -575,7 +575,7 @@ class AppTheme {
       ),
 
       // App bar theme
-      appBarTheme: const AppBarThemeData(
+      appBarTheme: const AppBarTheme(
         backgroundColor: Color(0xFF252525),
         foregroundColor: Color(0xFFFAFAFA),
         elevation: 0,

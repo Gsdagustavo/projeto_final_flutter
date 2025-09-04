@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import '../../core/exceptions/travel_register_exception.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';

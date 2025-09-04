@@ -2,6 +2,7 @@ import 'dart:core';
 
 import 'package:flutter/cupertino.dart';
 
+import '../../core/exceptions/travel_register_exception.dart';
 import '../../core/extensions/string_extensions.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/participant.dart';
@@ -193,13 +194,4 @@ class TravelUseCasesImpl implements TravelUseCases {
 
     return true;
   }
-}
-
-/// A custom exception that will be thrown if any travel data is invalid
-class TravelRegisterException implements Exception {
-  /// The error message
-  final String message;
-
-  /// Default constructor
-  TravelRegisterException(this.message);
 }
