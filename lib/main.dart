@@ -4,10 +4,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 import 'data/local/database/database.dart';
+import 'data/repositories/travel/travel_repository_local.dart';
+import 'domain/usecases/review/review_use_cases.dart';
+import 'domain/usecases/travel/travel_usecases.dart';
 import 'modules/review/review_repository.dart';
-import 'modules/review/review_use_cases.dart';
-import 'modules/travel/travel_repository.dart';
-import 'modules/travel/travel_use_cases.dart';
 import 'presentation/providers/login_provider.dart';
 import 'presentation/providers/map_markers_provider.dart';
 import 'presentation/providers/register_travel_provider.dart';
@@ -29,10 +29,10 @@ Future<void> main() async {
 
   /// Instantiate dependencies needed for dependency injection
   final travelRepository = TravelRepositoryImpl();
-  final travelUseCases = TravelUseCasesImpl(travelRepository);
+  final travelUseCases = TravelUseCases.create(travelRepository);
 
   final reviewRepository = ReviewRepositoryImpl();
-  final reviewUseCases = ReviewUseCasesImpl(reviewRepository);
+  final reviewUseCases = ReviewUseCases.create(reviewRepository);
 
   final travels = await generateSampleTravels();
   await travelUseCases.registerTravel(travels.first);

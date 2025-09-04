@@ -61,7 +61,7 @@ class Assets {
       'lib/data/local/database/tables/travel_stop_table.dart';
   static const String tablesTravelTable =
       'lib/data/local/database/tables/travel_table.dart';
-  static const String travelTravelRepository =
+  static const String travel_travelRepository =
       'lib/data/local/modules/travel/travel_repository.dart';
   static const String travelTravelUsecases =
       'lib/data/local/modules/travel/travel_use_cases.dart';

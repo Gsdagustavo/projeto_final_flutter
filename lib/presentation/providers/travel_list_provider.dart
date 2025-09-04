@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../domain/entities/travel.dart';
-import '../../modules/travel/travel_use_cases.dart';
+import '../../domain/usecases/travel/travel_usecases.dart';
 
 class TravelListProvider with ChangeNotifier {
   final _travels = <Travel>[];
@@ -10,7 +10,7 @@ class TravelListProvider with ChangeNotifier {
 
   String? errorMessage;
 
-  final TravelUseCasesImpl travelUseCases;
+  final TravelUseCases travelUseCases;
 
   TravelListProvider(this.travelUseCases) {
     update();

@@ -1,22 +1,24 @@
 import 'dart:io';
 
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';
 import '../../domain/entities/travel_stop.dart';
-import '../../modules/travel/travel_use_cases.dart';
+import '../../domain/usecases/travel/register_travel.dart';
+import '../../domain/usecases/travel/travel_usecases.dart';
 import '../../services/file_service.dart';
 
 /// A [ChangeNotifier] responsible for managing and the app's Travel Register
 /// system
 ///
-/// It uses [TravelUseCasesImpl] for handling use cases related to registering a
+/// It uses [TravelUseCases] for handling use cases related to registering a
 /// travel
 class RegisterTravelProvider with ChangeNotifier {
-  /// Instance of [TravelUseCasesImpl]
-  final TravelUseCasesImpl _travelUseCases;
+  /// Instance of [TravelUseCases]
+  final TravelUseCases _travelUseCases;
 
   /// Instance of [FileService]
   final fileService = FileService();
@@ -43,7 +45,7 @@ class RegisterTravelProvider with ChangeNotifier {
   final _stops = <TravelStop>[];
 
   /// The error message (obtained via exception.message on try-catch structures)
-  String? _errorMsg;
+  Failure<TravelRegisterError>? _failure;
 
   /// Whether there are any asynchronous methods being processed or not
   bool _isLoading = false;
@@ -64,26 +66,6 @@ class RegisterTravelProvider with ChangeNotifier {
 
     debugPrint('Registering travel with title $travelTitle');
 
-    if (!isTravelValid) {
-      debugPrint('Travel is not valid');
-      _errorMsg = 'Invalid Travel Info. Verify the data and try again';
-      _isLoading = false;
-      notifyListeners();
-      return;
-    }
-
-    if (!_areStopsValid) {
-      debugPrint('Stops are not valid');
-      _errorMsg = 'At least 2 stops must be registered';
-      _isLoading = false;
-      notifyListeners();
-      return;
-    }
-
-    final lastStop = stops.last;
-    _stops[stops.length - 1] = lastStop.copyWith(type: TravelStopType.end);
-
-    /// Instantiates a new travel with the given inputs
     final travel = Travel(
       travelTitle: travelTitle,
       participants: participants,
@@ -96,50 +78,60 @@ class RegisterTravelProvider with ChangeNotifier {
 
     debugPrint('Travel that will be inserted: $travel');
 
-    try {
-      await _travelUseCases.registerTravel(travel);
-    } on TravelRegisterException catch (e) {
-      _errorMsg = e.message;
-      _isLoading = false;
-      notifyListeners();
-      return;
-    }
+    final res = await _travelUseCases.registerTravel(travel);
 
-    _errorMsg = null;
+    handleFailure(res, onSuccess: resetForms);
+
     _isLoading = false;
-    _areStopsValid = false;
+    _notify();
+  }
 
-    resetForms();
+  void handleFailure(Either<Failure<TravelRegisterError>, void> res, {
+    VoidCallback? onSuccess,
+    VoidCallback? onFailure,
+  }) {
+    res.fold(
+          (failure) {
+        _failure = failure;
+        if (onFailure != null) {
+          onFailure.call();
+        }
+      },
+          (r) {
+        _failure = null;
+        if (onSuccess != null) {
+          onSuccess.call();
+        }
+      },
+    );
   }
 
   TravelStop? addTravelStop(TravelStop stop) {
-    debugPrint('dkapodwokad ${_stops.length}');
-
     if (_stops.isNotEmpty) {
       if ((stop.arriveDate!.isBefore(_stops.last.leaveDate!)) ||
           (stop.leaveDate!.isAfter(_endDate!))) {
-        _errorMsg = 'Invalid travel stop dates';
-        notifyListeners();
+        _failure = Failure(TravelRegisterError.invalidStopDates);
+        _notify();
         return null;
       }
     }
 
     _stops.add(stop);
 
-    _errorMsg = null;
-
     debugPrint('Travel stop ${stop.toString()} added');
 
     _areStopsValid = _stops.length >= 2;
-    notifyListeners();
+    _notify();
     return stop;
   }
 
   void removeTravelStop(TravelStop stop) {
+    if (!_stops.contains(stop)) return;
+
     _stops.remove(stop);
     debugPrint('Stop $stop removed from travel stops list');
     _areStopsValid = _stops.length >= 2;
-    notifyListeners();
+    _notify();
   }
 
   void updateTravelStop({
@@ -165,7 +157,7 @@ class RegisterTravelProvider with ChangeNotifier {
     debugPrint('New stops: $_stops');
 
     _areStopsValid = _stops.length >= 2;
-    notifyListeners();
+    _notify();
   }
 
   /// Sets all input fields to their default values and cleanses all lists
@@ -177,21 +169,21 @@ class RegisterTravelProvider with ChangeNotifier {
 
     _participants.clear();
 
-    _errorMsg = null;
     _isLoading = false;
+    _areStopsValid = false;
 
     _stops.clear();
 
     _travelPhotos.clear();
 
-    notifyListeners();
+    _notify();
   }
 
   /// Sets the given [value] to [selectedTransportType]
   void selectTransportType(TransportType? value) {
     if (_transportType == value) return;
     _transportType = value ?? TransportType.values.first;
-    notifyListeners();
+    _notify();
   }
 
   /// Adds a participant to the [participants] list with the given inputs
@@ -202,19 +194,16 @@ class RegisterTravelProvider with ChangeNotifier {
     _participants.add(participant);
 
     debugPrint('Participant $participant added');
-    _errorMsg = null;
-    notifyListeners();
+    _notify();
   }
 
   void removeParticipant(Participant participant) {
     _participants.remove(participant);
-    notifyListeners();
+    _notify();
   }
 
-  void updateParticipant(
-    Participant oldParticipant,
-    Participant newParticipant,
-  ) {
+  void updateParticipant(Participant oldParticipant,
+      Participant newParticipant,) {
     debugPrint('Participants len: ${_participants.length}');
 
     debugPrint('Old participants: $_participants');
@@ -226,18 +215,18 @@ class RegisterTravelProvider with ChangeNotifier {
 
     debugPrint('New participants: $_participants');
 
-    notifyListeners();
+    _notify();
   }
 
   void addTravelPhoto(File file) {
     _travelPhotos.add(file);
-    notifyListeners();
+    _notify();
   }
 
   void removeTravelPhoto(File file) {
     if (!_travelPhotos.contains(file)) return;
     _travelPhotos.removeWhere((element) => element == file);
-    notifyListeners();
+    _notify();
   }
 
   Future<void> select() async {
@@ -254,51 +243,26 @@ class RegisterTravelProvider with ChangeNotifier {
   /// Returns the list of [Participants]
   List<Participant> get participants => _participants;
 
-  /// Returns the error message stored in the provider
-  String? get error => _errorMsg;
-
-  /// Returns whether there is an [error message] or not
-  bool get hasError => _errorMsg != null;
-
   /// Returns whether there is any asynchronous process running or not
   bool get isLoading => _isLoading;
 
   List<TravelStop> get stops => _stops;
 
   bool get isTravelValid {
-    final isValid =
-        _areStopsValid &&
-        _travelUseCases.isParticipantInfoValid(participants) &&
+    return _areStopsValid &&
+        _travelUseCases.registerTravel.isParticipantInfoValid(participants) &&
         _startDate != null &&
         _endDate != null;
-
-    return isValid;
   }
 
   DateTime? get lastPossibleArriveDate {
-    if (_startDate == null || _endDate == null) {
-      _errorMsg =
-          'You must select the Travel start and end dates before adding stops';
-      notifyListeners();
-      return null;
-    }
-
     if (_stops.isEmpty) return _startDate;
 
     final latestStop = _stops.last;
-    print('Latest stop: $latestStop');
-    debugPrint('Latest possible Arrive Date: ${latestStop.leaveDate}');
     return latestStop.leaveDate!;
   }
 
   DateTime? get lastPossibleLeaveDate {
-    if (_startDate == null || _endDate == null) {
-      _errorMsg =
-          'You must select the Travel start and end dates before adding stops';
-      notifyListeners();
-      return null;
-    }
-
     return _endDate;
   }
 
@@ -308,13 +272,25 @@ class RegisterTravelProvider with ChangeNotifier {
 
   set endDate(DateTime? value) {
     _endDate = value;
+    _areStopsValid =
+        _stops.length >= 2 && _startDate != null && _endDate != null;
+    _notify();
   }
 
   DateTime? get startDate => _startDate;
 
   set startDate(DateTime? value) {
     _startDate = value;
+    _areStopsValid =
+        _stops.length >= 2 && _startDate != null && _endDate != null;
+    _notify();
   }
 
   List<File> get travelPhotos => _travelPhotos;
+
+  bool get hasFailure => _failure != null;
+
+  Failure<TravelRegisterError>? get failure => _failure;
+
+  void _notify() => notifyListeners();
 }

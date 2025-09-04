@@ -4,44 +4,23 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../../data/local/database/database.dart';
-import '../../data/local/database/tables/experiences_table.dart';
-import '../../data/local/database/tables/participants_table.dart';
-import '../../data/local/database/tables/photos_table.dart';
-import '../../data/local/database/tables/places_table.dart';
-import '../../data/local/database/tables/reviews_table.dart';
-import '../../data/local/database/tables/travel_stop_experiences_table.dart';
-import '../../data/local/database/tables/travel_stop_table.dart';
-import '../../data/local/database/tables/travel_table.dart';
-import '../../data/local/database/tables/travel_travel_status_table.dart';
-import '../../data/models/participant_model.dart';
-import '../../data/models/place_model.dart';
-import '../../data/models/travel_model.dart';
-import '../../data/models/travel_stop_model.dart';
-import '../../domain/entities/enums.dart';
-import '../../domain/entities/travel.dart';
-
-/// This interface defines all necessary methods to register a [Travel]
-/// and get all [Travels]
-abstract class TravelRepository {
-  /// Register a new travel
-  ///
-  /// [travel]: The travel which will be registered
-  Future<void> registerTravel({required Travel travel});
-
-  Future<void> deleteTravel(Travel travel);
-
-  /// Returns a [List] of [Travel] containing all registered travels
-  Future<List<Travel>> getAllTravels();
-
-  Future<void> startTravel(Travel travel);
-
-  Future<void> finishTravel(Travel travel);
-
-  Future<void> updateTravelTitle(Travel travel);
-
-  Future<List<TravelModel>> findTravelsByTitle(String title);
-}
+import '../../../domain/entities/enums.dart';
+import '../../../domain/entities/travel.dart';
+import '../../../domain/repositories/travel/travel_repository.dart';
+import '../../local/database/database.dart';
+import '../../local/database/tables/experiences_table.dart';
+import '../../local/database/tables/participants_table.dart';
+import '../../local/database/tables/photos_table.dart';
+import '../../local/database/tables/places_table.dart';
+import '../../local/database/tables/reviews_table.dart';
+import '../../local/database/tables/travel_stop_experiences_table.dart';
+import '../../local/database/tables/travel_stop_table.dart';
+import '../../local/database/tables/travel_table.dart';
+import '../../local/database/tables/travel_travel_status_table.dart';
+import '../../models/participant_model.dart';
+import '../../models/place_model.dart';
+import '../../models/travel_model.dart';
+import '../../models/travel_stop_model.dart';
 
 /// Concrete implementation of [TravelRepository], using local SQLite database
 ///
@@ -234,9 +213,9 @@ class TravelRepositoryImpl implements TravelRepository {
   }
 
   Map<String, dynamic> _toTravelTravelStatusMap(
-    String travelId,
-    int statusIndex,
-  ) {
+      String travelId,
+      int statusIndex,
+      ) {
     return {
       TravelTravelStatusTable.travelId: travelId,
       TravelTravelStatusTable.travelStatusIndex: statusIndex,
@@ -360,10 +339,10 @@ class TravelRepositoryImpl implements TravelRepository {
   }
 
   Future<void> _insertStop(
-    DatabaseExecutor txn,
-    TravelStopModel stop,
-    String travelId,
-  ) async {
+      DatabaseExecutor txn,
+      TravelStopModel stop,
+      String travelId,
+      ) async {
     final placeMap = stop.place.toMap();
 
     // debugPrint('Place map: $placeMap');

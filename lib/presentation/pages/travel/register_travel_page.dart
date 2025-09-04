@@ -232,7 +232,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
 
     await context.read<TravelListProvider>().update();
 
-    if (state.hasError) {
+    if (state.hasFailure) {
       await showDialog(
         context: context,
         builder: (context) {
@@ -284,6 +284,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
   @override
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
+    final validations = FormValidations(as);
 
     final baseColor = Theme.of(
       context,
@@ -319,9 +320,11 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
 
                     /// Travel title field
                     child: TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       textCapitalization: TextCapitalization.words,
                       onTapOutside: (_) => FocusScope.of(context).unfocus(),
                       controller: _travelTitleController,
+                      validator: validations.travelTitleValidator,
                       decoration: InputDecoration(
                         hintText: as.enter_travel_title,
                       ),
@@ -802,6 +805,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
             ),
           ),
 
+          /// Register travel button
           Padding(
             padding: const EdgeInsets.all(cardPadding),
             child: Consumer<RegisterTravelProvider>(
@@ -820,9 +824,22 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                           : baseColor.withOpacity(0.3),
                     ),
                     onPressed: () async {
-                      if (!state.isTravelValid) {
+                      if (!_travelTitleFormKey.currentState!.validate()) {
                         return;
                       }
+
+                      if (!state.isTravelValid) {
+                        await showDialog(
+                          context: context,
+                          builder: (_) => CustomDialog(
+                            title: as.warning,
+                            isError: true,
+                            content: Text(as.invalid_travel_data),
+                          ),
+                        );
+                        return;
+                      }
+
                       await onTravelRegistered();
                     },
                     child: Text(as.title_register_travel),
