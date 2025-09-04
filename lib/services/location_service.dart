@@ -87,4 +87,15 @@ class LocationService {
       throw Exception(msg);
     }
   }
+
+  // Future<List<Place>> searchForPlaces(String search) async {
+  //   /// Ensure dotenv is initialized
+  //   if (!dotenv.isInitialized) await dotenv.load();
+  //
+  //   /// Get API Key from dotenv
+  //   final apiKey = dotenv.env['MAPS_API_KEY'];
+  //
+  //   final url =
+  //       'https://maps.googleapis.com/maps/api/js?key=$apiKey&loading=async&libraries=places&callback=initMap';
+  // }
 }

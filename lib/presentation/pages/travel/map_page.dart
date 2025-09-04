@@ -1,10 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../core/extensions/date_extensions.dart';
 import '../../../core/extensions/experience_map_extension.dart';
+import '../../../core/extensions/place_model_autocomplete.dart';
 import '../../../core/extensions/travel_stop_extensions.dart';
 import '../../../domain/entities/enums.dart';
 import '../../../domain/entities/place.dart';
@@ -35,6 +42,12 @@ class _TravelMapState extends State<TravelMap> {
   static const double _defaultZoom = 13.8;
   static const double _maxZoom = 18;
   static const double _minZoom = 3;
+
+  final _searchController = TextEditingController();
+
+  var uuid = const Uuid();
+  String _sessionToken = '1234567890';
+  final List<Place> _placeList = [];
 
   bool _isCreatingMap = true;
 
@@ -85,6 +98,51 @@ class _TravelMapState extends State<TravelMap> {
     });
   }
 
+  Future<void> _onChanged() async {
+    if (_sessionToken.isEmpty) {
+      setState(() {
+        _sessionToken = uuid.v4();
+      });
+    }
+
+    await getSuggestion(_searchController.text);
+  }
+
+  Future<void> getSuggestion(String input) async {
+    final key = dotenv.get('MAPS_API_KEY');
+
+    debugPrint('Get suggestion called. Api key: $key');
+
+    setState(_placeList.clear);
+
+    if (input.isEmpty) return;
+
+    try {
+      final baseURL =
+          'https://maps.googleapis.com/maps/api/place/autocomplete/json';
+      final request =
+          '$baseURL?input=$input&key=$key&sessiontoken=$_sessionToken';
+      var response = await http.get(Uri.parse(request));
+
+      debugPrint('Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        setState(() {
+          for (final map in json.decode(response.body)['predictions']) {
+            final place = PlaceModelAutocomplete.fromAutocompleteJson(map);
+            _placeList.add(place.toEntity());
+          }
+
+          debugPrint('Place list: $_placeList');
+        });
+      } else {
+        throw Exception('Failed to load predictions');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
@@ -122,7 +180,7 @@ class _TravelMapState extends State<TravelMap> {
                 ),
                 onMapCreated: _onMapCreated,
                 onLongPress: _onLongPress,
-                myLocationEnabled: true,
+                // myLocationEnabled: true,
                 initialCameraPosition: CameraPosition(
                   target: _center,
                   zoom: _defaultZoom,
@@ -155,52 +213,80 @@ class _TravelMapState extends State<TravelMap> {
                     .toSet(),
               ),
 
+              // Positioned(
+              //   top: 12,
+              //   left: 12,
+              //   right: 12,
+              //   child: Row(
+              //     children: [
+              //       Container(
+              //         decoration: BoxDecoration(
+              //           borderRadius: BorderRadius.circular(12),
+              //           color: Colors.grey.withOpacity(0.75),
+              //         ),
+              //         padding: const EdgeInsets.symmetric(
+              //           vertical: 10,
+              //           horizontal: 14,
+              //         ),
+              //         child: Consumer<RegisterTravelProvider>(
+              //           builder: (_, state, __) {
+              //             return Row(
+              //               spacing: 12,
+              //               children: [
+              //                 const Icon(Icons.route, size: 18),
+              //
+              //                 /// TODO: intl
+              //                 Text('${state.stops.length} stop(s)'),
+              //               ],
+              //             );
+              //           },
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              /// Text field to search for places
               Positioned(
-                top: 12,
-                left: 12,
-                right: 12,
-                child: Row(
+                right: 15,
+                left: 15,
+                top: 15,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.grey.withOpacity(0.75),
+                    TextField(
+                      maxLines: 1,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        suffixIcon: IconButton(
+                          icon: Icon(FontAwesomeIcons.remove),
+                          onPressed: () {
+                            setState(() {
+                              _searchController.clear();
+                              _placeList.clear();
+                            });
+                          },
+                        ),
+                        hintText: 'Search for places...',
                       ),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 14,
-                      ),
-                      child: Consumer<RegisterTravelProvider>(
-                        builder: (_, state, __) {
-                          return Row(
-                            spacing: 12,
-                            children: [
-                              const Icon(Icons.route, size: 18),
-
-                              /// TODO: intl
-                              Text('${state.stops.length} stop(s)'),
-                            ],
-                          );
-                        },
-                      ),
+                      onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                      onChanged: (value) async {
+                        await _onChanged();
+                      },
+                      // mapsApiKey: _mapsApiKey,
+                      controller: _searchController,
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: _placeList.length,
+                      itemBuilder: (context, index) {
+                        final place = _placeList[index];
+                        debugPrint(place.toString());
+                        return Card(child: Text(place.toString()));
+                      },
                     ),
                   ],
                 ),
               ),
-
-              /// Text field to search for places
-              // Positioned(
-              //   right: 30,
-              //   left: 30,
-              //   top: 15,
-              //   child: TextField(
-              //     onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
-              //     decoration: InputDecoration(
-              //       hintText: as.search_for_places,
-              //       prefixIcon: Icon(Icons.search),
-              //     ),
-              //   ),
-              // ),
               Consumer<RegisterTravelProvider>(
                 builder: (_, travelState, __) {
                   final areStopsValid = travelState.areStopsValid;
