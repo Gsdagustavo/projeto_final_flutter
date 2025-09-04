@@ -6,6 +6,7 @@ import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../core/extensions/date_extensions.dart';
 import '../../../domain/entities/participant.dart';
@@ -14,6 +15,7 @@ import '../../../domain/entities/travel.dart';
 import '../../../domain/entities/travel_stop.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../services/file_service.dart';
+import '../../../services/pdf_service.dart';
 import '../../extensions/enums_extensions.dart';
 import '../../providers/review_provider.dart';
 import '../../providers/travel_list_provider.dart';
@@ -25,7 +27,6 @@ import '../../widgets/loading_dialog.dart';
 import '../util/form_validations.dart';
 import '../util/travel_utils.dart';
 import '../util/ui_utils.dart';
-import 'register_travel_page.dart';
 
 class TravelDetailsPage extends StatefulWidget {
   const TravelDetailsPage({super.key, required this.travel});
@@ -38,6 +39,24 @@ class TravelDetailsPage extends StatefulWidget {
 
 class _TravelDetailsPageState extends State<TravelDetailsPage> {
   String locale = 'en';
+
+  void onShare() async {
+    final pdf = await PDFService().generatePDFFromTravel(
+      widget.travel,
+      context,
+    );
+
+    /// TODO: add error handling
+    if (pdf == null) return;
+
+    final result = await SharePlus.instance.share(
+      ShareParams(title: 'Share your travel', files: [XFile(pdf.path)]),
+    );
+
+    if (result.status == ShareResultStatus.success) {
+      debugPrint('file shared');
+    }
+  }
 
   @override
   void initState() {
@@ -68,6 +87,11 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
       body: Column(
         spacing: 8,
         children: [
+          Align(
+            alignment: Alignment.centerRight,
+            child: IconButton(onPressed: onShare, icon: Icon(Icons.share)),
+          ),
+
           Builder(
             builder: (context) {
               if (widget.travel.photos.isEmpty) {
