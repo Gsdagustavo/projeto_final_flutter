@@ -11,6 +11,46 @@ TextStyle? _modalTitleTextStyle(BuildContext context) {
   return Theme.of(context).textTheme.titleLarge;
 }
 
+TextStyle? _snackBarContentTextStyle(BuildContext context) {
+  return Theme.of(context).textTheme.bodyMedium;
+}
+
+class _SuccessIcon extends StatelessWidget {
+  const _SuccessIcon({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      backgroundColor: Colors.green.shade200,
+      child: Icon(Icons.check_circle_outline, color: Colors.green.shade800),
+    );
+  }
+}
+
+class _ErrorIcon extends StatelessWidget {
+  const _ErrorIcon();
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      backgroundColor: Colors.red.shade200,
+      child: Icon(FontAwesomeIcons.xmarkCircle, color: Colors.red.shade800),
+    );
+  }
+}
+
+class _WarningIcon extends StatelessWidget {
+  const _WarningIcon({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      backgroundColor: Colors.yellow.shade200,
+      child: Icon(Icons.warning_amber_outlined, color: Colors.yellow.shade800),
+    );
+  }
+}
+
 class _BaseDialog extends StatelessWidget {
   const _BaseDialog({
     super.key,
@@ -63,8 +103,7 @@ class SuccessModal extends StatelessWidget {
     final as = AppLocalizations.of(context)!;
 
     return _BaseDialog(
-      circleAvatarBackgroundColor: Colors.green.shade200,
-      title: Icon(Icons.check_circle_outline, color: Colors.green.shade800),
+      title: const _SuccessIcon(),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -97,8 +136,7 @@ class ErrorModal extends StatelessWidget {
     final as = AppLocalizations.of(context)!;
 
     return _BaseDialog(
-      circleAvatarBackgroundColor: Colors.red.shade200,
-      title: Icon(FontAwesomeIcons.xmarkCircle, color: Colors.red.shade800),
+      title: const _ErrorIcon(),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -131,8 +169,7 @@ class WarningModal extends StatelessWidget {
     final as = AppLocalizations.of(context)!;
 
     return _BaseDialog(
-      circleAvatarBackgroundColor: Colors.yellow.shade200,
-      title: Icon(Icons.warning_amber_outlined, color: Colors.yellow.shade800),
+      title: const _WarningIcon(),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -367,4 +404,45 @@ class _BaseElevatedButton extends StatelessWidget {
       child: ElevatedButton(onPressed: onPressed, style: style, child: child),
     );
   }
+}
+
+class _BaseSnackBar extends SnackBar {
+  const _BaseSnackBar({this.backgroundColor, required super.content});
+
+  final Color? backgroundColor;
+
+  Widget build(BuildContext context) {
+    return SnackBar(
+      backgroundColor: backgroundColor,
+      padding: EdgeInsets.all(12),
+      duration: duration,
+      showCloseIcon: showCloseIcon,
+      content: content,
+    );
+  }
+}
+
+void showSuccessSnackBar(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    _BaseSnackBar(
+      content: Text(message),
+      backgroundColor: Colors.green.shade800,
+    ),
+  );
+}
+
+void showErrorSnackBar(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    _BaseSnackBar(content: Text(message), backgroundColor: Colors.red.shade800),
+  );
+}
+
+void showWarningSnackBar(BuildContext context, String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    _BaseSnackBar(
+      content: Text(message),
+
+      backgroundColor: Colors.yellow.shade800,
+    ),
+  );
 }
