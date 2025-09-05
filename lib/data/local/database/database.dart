@@ -110,7 +110,8 @@ class DBConnection {
 
   Future<void> printAllTables(Database db) async {
     final tables = await db.rawQuery(
-      "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';",
+      "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE "
+      "'sqlite_%';",
     );
 
     for (var table in tables) {
@@ -118,10 +119,10 @@ class DBConnection {
 
       final rows = await db.rawQuery('SELECT * FROM $tableName');
 
-      print('--- Table: $tableName ---');
+      debugPrint('--- Table: $tableName ---');
       debugPrint('Rows: ${rows.length}');
       for (var row in rows) {
-        print(row);
+        debugPrint(row.toString());
       }
     }
   }

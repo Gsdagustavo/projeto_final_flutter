@@ -80,6 +80,7 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
     }).toList();
 
     final result = await polylinePoints.getRouteBetweenCoordinates(
+      // ignore: deprecated_member_use
       request: PolylineRequest(
         origin: origin,
         destination: destination,

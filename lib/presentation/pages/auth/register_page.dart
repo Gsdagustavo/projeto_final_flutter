@@ -53,6 +53,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
     /// Check if any error has occurred while trying to create the user
     if (loginProvider.hasError) {
+      if (!mounted) return;
+
       await showDialog(
         context: context,
         builder: (context) => ErrorModal(message: loginProvider.errorMsg),
@@ -68,6 +70,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
     /// Check if any error has occurred while trying to sign in
     if (loginProvider.hasError) {
+      if (!mounted) return;
+
       await showDialog(
         context: context,
         builder: (context) => ErrorModal(message: loginProvider.errorMsg),
@@ -76,12 +80,16 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
+    if (!mounted) return;
+
     /// Shows a successful feedback dialog
     await showDialog(
       context: context,
       builder: (context) =>
           SuccessModal(message: as.account_created_successfully),
     );
+
+    if (!mounted) return;
 
     /// Shows a dialog for the user to continue to login
     final login = await showDialog<bool>(
@@ -90,6 +98,8 @@ class _RegisterPageState extends State<RegisterPage> {
         return OkCancelModal(title: as.login, content: as.register_login);
       },
     );
+
+    if (!mounted) return;
 
     if (login ?? false) {
       context.go(AppRoutes.home);
@@ -140,7 +150,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     TextFormField(
                       validator: validations.emailValidator,
                       controller: _emailController,
-                      onTapUpOutside: (_) => FocusScope.of(modalContext).unfocus(),
+                      onTapUpOutside: (_) =>
+                          FocusScope.of(modalContext).unfocus(),
                       decoration: InputDecoration(
                         hintText: as.email,
                         prefixIcon: const Icon(Icons.email),
@@ -152,7 +163,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     TextFormField(
                       validator: validations.passwordValidator,
                       controller: _passwordController,
-                      onTapUpOutside: (_) => FocusScope.of(modalContext).unfocus(),
+                      onTapUpOutside: (_) =>
+                          FocusScope.of(modalContext).unfocus(),
                       decoration: InputDecoration(
                         hintText: as.password,
                         prefixIcon: const Icon(Icons.lock),

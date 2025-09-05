@@ -2,7 +2,8 @@
 class Assets {
   Assets._();
 
-  static const String constantsAppRoutes = 'lib/core/constants/app_routes.dart.dart';
+  static const String constantsAppRoutes =
+      'lib/core/constants/app_routes.dart.dart';
   static const String databaseDatabase =
       'lib/data/local/database/database.dart';
   static const String entitiesEnums = 'lib/domain/entities/enums.dart';

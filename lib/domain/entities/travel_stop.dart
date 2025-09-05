@@ -32,7 +32,7 @@ class TravelStop {
     this.leaveDate,
     this.experiences,
     this.reviews,
-  }) : id = id ?? Uuid().v4() ;
+  }) : id = id ?? Uuid().v4();
 
   TravelStop copyWith({
     String? id,
@@ -57,13 +57,10 @@ class TravelStop {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is TravelStop &&
-              runtimeType == other.runtimeType &&
-              id == other.id;
+      other is TravelStop && runtimeType == other.runtimeType && id == other.id;
 
   @override
   int get hashCode => id.hashCode;
-
 
   @override
   String toString() {

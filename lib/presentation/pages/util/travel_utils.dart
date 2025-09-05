@@ -30,6 +30,8 @@ Future<void> onTravelDeleted(
 
   if (result == null || !result) return;
 
+  if (!context.mounted) return;
+
   final state = context.read<TravelListProvider>();
 
   // await showLoadingDialog(
@@ -73,6 +75,8 @@ Future<bool> onStopRemoved(BuildContext context, TravelStop stop) async {
   } else {
     return false;
   }
+
+  if (!context.mounted) return true;
 
   await showDialog(
     context: context,

@@ -34,7 +34,7 @@ class ReviewModel {
     List<File>? images,
   }) {
     return ReviewModel(
-      id: reviewId ?? this.id,
+      id: reviewId ?? id,
       description: description ?? this.description,
       author: author ?? this.author,
       reviewDate: reviewDate ?? this.reviewDate,

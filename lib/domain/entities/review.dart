@@ -44,6 +44,8 @@ class Review {
 
   @override
   String toString() {
-    return 'Review{id: $id, description: $description, author: $author, reviewDate: $reviewDate, travelStop: $travelStop, stars: $stars, images: $images}';
+    return 'Review{id: $id, description: $description, author: $author, '
+        'reviewDate: $reviewDate, travelStop: $travelStop, stars: $stars, '
+        'images: $images}';
   }
 }

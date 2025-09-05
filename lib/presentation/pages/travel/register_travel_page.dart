@@ -63,6 +63,8 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
       ),
     );
 
+    if (!mounted) return;
+
     final state = context.read<RegisterTravelProvider>();
     if (remove ?? false) {
       state.removeParticipant(participant);
@@ -138,6 +140,8 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
 
     final file = await fileService.pickImage();
 
+    if (!mounted) return;
+
     final state = context.read<RegisterTravelProvider>();
 
     if (file == null || state.travelPhotos.length >= 5) return;
@@ -161,9 +165,13 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
       },
     );
 
+    if (!mounted) return;
+
     await context.read<TravelListProvider>().update();
 
     if (state.hasFailure) {
+      if (!mounted) return;
+
       await showDialog(
         context: context,
         builder: (context) => ErrorModal(
@@ -173,6 +181,8 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
 
       return;
     }
+
+    if (!mounted) return;
 
     await showDialog(
       context: context,
@@ -263,7 +273,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                   /// Transport types dropdown button
                   DropdownButtonFormField<TransportType>(
                     borderRadius: BorderRadius.circular(12),
-                    value: _selectedTransportType,
+                    initialValue: _selectedTransportType,
                     icon: const Icon(Icons.keyboard_arrow_down),
                     isExpanded: true,
                     items: [
@@ -444,7 +454,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                             backgroundColor:
                                 state.startDate != null && state.endDate != null
                                 ? baseColor
-                                : baseColor.withOpacity(0.3),
+                                : baseColor.withValues(alpha: 0.3),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -607,7 +617,8 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                                 ).textTheme.bodySmall,
                               ),
                               Text(
-                                '${state.travelPhotos.length} ${as.photos_selected}',
+                                '${state.travelPhotos.length} '
+                                '${as.photos_selected}',
                                 style: Theme.of(
                                   modalContext,
                                 ).textTheme.bodySmall,
@@ -705,7 +716,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: isTravelValid
                           ? baseColor
-                          : baseColor.withOpacity(0.3),
+                          : baseColor.withValues(alpha: 0.3),
                     ),
                     onPressed: () async {
                       if (!_travelTitleFormKey.currentState!.validate()) {
@@ -929,12 +940,16 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                                               .getDefaultProfilePictureFile(),
                                     );
 
+                                    if (!context.mounted) return;
+
                                     await showDialog(
                                       context: context,
                                       builder: (context) => SuccessModal(
                                         message: as.participant_added,
                                       ),
                                     );
+
+                                    if (!context.mounted) return;
 
                                     Navigator.of(context).pop(participant);
                                   },
@@ -966,12 +981,16 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                                             .getDefaultProfilePictureFile(),
                                   );
 
+                                  if (!context.mounted) return;
+
                                   await showDialog(
                                     context: context,
                                     builder: (context) => SuccessModal(
                                       message: as.participant_updated,
                                     ),
                                   );
+
+                                  if (!context.mounted) return;
 
                                   Navigator.of(context).pop(participant);
                                 },
@@ -1031,11 +1050,7 @@ class _ParticipantModalState extends State<_ParticipantModal> {
 }
 
 class _ParticipantListItem extends StatelessWidget {
-  const _ParticipantListItem({
-    super.key,
-    required this.participant,
-    this.onPressed,
-  });
+  const _ParticipantListItem({required this.participant, this.onPressed});
 
   final Participant participant;
   final VoidCallback? onPressed;
@@ -1063,7 +1078,7 @@ class _ParticipantListItem extends StatelessWidget {
 }
 
 class _TravelStopListItem extends StatelessWidget {
-  const _TravelStopListItem({super.key, required this.stop});
+  const _TravelStopListItem({required this.stop});
 
   final TravelStop stop;
 

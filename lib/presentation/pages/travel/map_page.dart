@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
@@ -42,7 +44,7 @@ class _TravelMapState extends State<TravelMap> {
 
   final _searchController = TextEditingController();
 
-  var uuid = const Uuid();
+  final _uuid = const Uuid();
   String _sessionToken = '1234567890';
   final List<Place> _placeList = [];
 
@@ -66,6 +68,8 @@ class _TravelMapState extends State<TravelMap> {
         _center = LatLng(pos.latitude, pos.longitude);
         _isCreatingMap = false;
       });
+
+      if (!mounted) return;
 
       final markersState = Provider.of<MapMarkersProvider>(
         context,
@@ -98,7 +102,7 @@ class _TravelMapState extends State<TravelMap> {
   Future<void> _onChanged() async {
     if (_sessionToken.isEmpty) {
       setState(() {
-        _sessionToken = uuid.v4();
+        _sessionToken = _uuid.v4();
       });
     }
 
@@ -270,10 +274,12 @@ class _TravelMapState extends State<TravelMap> {
                               debugPrint('Place ${p.toString()} tapped');
 
                               if (p != null) {
-                                _mapController?.animateCamera(
-                                  CameraUpdate.newLatLngZoom(
-                                    LatLng(p.latitude, p.longitude),
-                                    _defaultZoom,
+                                unawaited(
+                                  _mapController?.animateCamera(
+                                    CameraUpdate.newLatLngZoom(
+                                      LatLng(p.latitude, p.longitude),
+                                      _defaultZoom,
+                                    ),
                                   ),
                                 );
                               }
@@ -370,8 +376,6 @@ Future<void> showTravelStopModal(LatLng position, [TravelStop? stop]) async {
 
   if (context == null || !context.mounted) return;
 
-  final as = AppLocalizations.of(context)!;
-
   final Place place;
 
   if (stop != null) {
@@ -386,6 +390,8 @@ Future<void> showTravelStopModal(LatLng position, [TravelStop? stop]) async {
         },
       );
     } on Exception catch (e) {
+      if (!context.mounted) return;
+
       await showDialog(
         context: context,
         builder: (context) => ErrorModal(message: e.toString()),
@@ -394,6 +400,8 @@ Future<void> showTravelStopModal(LatLng position, [TravelStop? stop]) async {
       return;
     }
   }
+
+  if (!context.mounted) return;
 
   final result = await showModalBottomSheet<TravelStop?>(
     context: context,
@@ -405,6 +413,8 @@ Future<void> showTravelStopModal(LatLng position, [TravelStop? stop]) async {
       return _TravelStopModal(place: place, stop: stop);
     },
   );
+
+  if (!context.mounted) return;
 
   FocusScope.of(context).unfocus();
 
@@ -469,6 +479,8 @@ class _TravelStopModalState extends State<_TravelStopModal> {
     final ctx = AppRouter.navigatorKey.currentContext;
 
     if (ctx != null) {
+      if (!ctx.mounted) return;
+
       Navigator.of(ctx).pop(stop);
     }
   }
@@ -645,6 +657,8 @@ class _TravelStopModalState extends State<_TravelStopModal> {
                           );
 
                           if (removed) {
+                            if (!modalContext.mounted) return;
+
                             Navigator.of(modalContext).pop();
                           }
                         },
@@ -700,7 +714,6 @@ class _TravelStopModalState extends State<_TravelStopModal> {
                             ),
                             readOnly: true,
                             onTap: selectLeaveDate,
-                            // onTap: () => _arriveDateController(isStart: false),
                           ),
                         ],
                       ),
@@ -734,7 +747,8 @@ class _TravelStopModalState extends State<_TravelStopModal> {
                           ),
                           onTap: () {
                             /// TODO: implement a travel stop provider to avoid
-                            /// rebuilding the whole widget when selecting an experience
+                            /// rebuilding the whole widget when selecting an
+                            /// experience
                             setState(() {
                               _selectedExperiences[experience] =
                                   !_selectedExperiences[experience]!;
@@ -786,7 +800,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: isStopValid
                                   ? baseColor
-                                  : baseColor.withOpacity(0.3),
+                                  : baseColor.withValues(alpha: 0.3),
                             ),
                             onPressed: () {
                               if (isStopValid) {

@@ -11,12 +11,8 @@ TextStyle? _modalTitleTextStyle(BuildContext context) {
   return Theme.of(context).textTheme.titleLarge;
 }
 
-TextStyle? _snackBarContentTextStyle(BuildContext context) {
-  return Theme.of(context).textTheme.bodyMedium;
-}
-
 class _SuccessIcon extends StatelessWidget {
-  const _SuccessIcon({super.key});
+  const _SuccessIcon();
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +30,13 @@ class _ErrorIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       backgroundColor: Colors.red.shade200,
-      child: Icon(FontAwesomeIcons.xmarkCircle, color: Colors.red.shade800),
+      child: Icon(FontAwesomeIcons.circleXmark, color: Colors.red.shade800),
     );
   }
 }
 
 class _WarningIcon extends StatelessWidget {
-  const _WarningIcon({super.key});
+  const _WarningIcon();
 
   @override
   Widget build(BuildContext context) {
@@ -53,42 +49,26 @@ class _WarningIcon extends StatelessWidget {
 
 class _BaseDialog extends StatelessWidget {
   const _BaseDialog({
-    super.key,
     required this.title,
     required this.content,
     required this.actions,
-    this.insetPadding,
-    this.alignment,
-    this.actionsAlignment,
-    this.actionsPadding,
     this.circleAvatarBackgroundColor,
-    this.circleAvatarForegroundColor,
   });
 
   final Widget title;
   final Widget content;
   final List<Widget> actions;
-  final EdgeInsets? insetPadding;
-  final Alignment? alignment;
-  final MainAxisAlignment? actionsAlignment;
-  final EdgeInsets? actionsPadding;
   final Color? circleAvatarBackgroundColor;
-  final Color? circleAvatarForegroundColor;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: CircleAvatar(
         backgroundColor: circleAvatarBackgroundColor,
-        foregroundColor: circleAvatarForegroundColor,
+
         child: title,
       ),
       content: content,
-      actionsPadding: actionsPadding,
-      actionsAlignment: actionsAlignment,
-      actions: actions,
-      insetPadding: insetPadding,
-      alignment: alignment,
     );
   }
 }
@@ -100,8 +80,6 @@ class SuccessModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
-
     return _BaseDialog(
       title: const _SuccessIcon(),
       content: Column(
@@ -133,8 +111,6 @@ class ErrorModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
-
     return _BaseDialog(
       title: const _ErrorIcon(),
       content: Column(
@@ -248,8 +224,6 @@ class SignOutModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
-
     return _BaseDialog(
       circleAvatarBackgroundColor: Colors.amber.shade200,
       title: Icon(Icons.logout, color: Colors.amber.shade800),
@@ -292,8 +266,6 @@ class NoInternetModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
-
     return _BaseDialog(
       circleAvatarBackgroundColor: Colors.red.shade200,
       title: Icon(
@@ -342,11 +314,9 @@ class OkCancelModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
-
     return _BaseDialog(
       circleAvatarBackgroundColor: Colors.blue.shade200,
-      title: Icon(FontAwesomeIcons.questionCircle, color: Colors.blue.shade800),
+      title: Icon(FontAwesomeIcons.circleQuestion, color: Colors.blue.shade800),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -385,7 +355,6 @@ class OkCancelModal extends StatelessWidget {
 
 class _BaseElevatedButton extends StatelessWidget {
   const _BaseElevatedButton({
-    super.key,
     required this.child,
     this.buttonColor,
     required this.onPressed,
@@ -407,9 +376,7 @@ class _BaseElevatedButton extends StatelessWidget {
 }
 
 class _BaseSnackBar extends SnackBar {
-  const _BaseSnackBar({this.backgroundColor, required super.content});
-
-  final Color? backgroundColor;
+  const _BaseSnackBar({required Color backgroundColor, required super.content});
 
   Widget build(BuildContext context) {
     return SnackBar(

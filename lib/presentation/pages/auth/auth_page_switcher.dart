@@ -69,7 +69,9 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
     final textStyle = Theme.of(context).textTheme.titleLarge?.copyWith(
       color: isSelected
           ? Theme.of(context).colorScheme.primary
-          : Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.6),
+          : Theme.of(
+              context,
+            ).textTheme.bodyLarge?.color?.withValues(alpha: 0.6),
       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
     );
 

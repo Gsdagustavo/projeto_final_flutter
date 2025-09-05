@@ -20,7 +20,7 @@ class PlaceModel {
     this.countryCode,
     required this.latitude,
     required this.longitude,
-  }): id = id ?? Uuid().v4();
+  }) : id = id ?? Uuid().v4();
 
   factory PlaceModel.fromJson(Map<String, dynamic> json) {
     String? getComponent(List components, String type) {

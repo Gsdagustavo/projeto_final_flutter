@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -25,12 +27,14 @@ Future<T> showLoadingDialog<T>({
   required BuildContext context,
   required Future<T> Function() function,
 }) async {
-  showDialog(
-    barrierDismissible: false,
-    context: context,
-    builder: (_) {
-      return const Center(child: LoadingDialog());
-    },
+  unawaited(
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (_) {
+        return const Center(child: LoadingDialog());
+      },
+    ),
   );
 
   await Future.delayed(const Duration(milliseconds: 100));
@@ -45,10 +49,6 @@ Future<T> showLoadingDialog<T>({
     );
     return item;
   }
-
-  debugPrint(
-    'Can pop loading dialog: ${Navigator.of(context, rootNavigator: true).canPop()}',
-  );
 
   if (Navigator.of(context, rootNavigator: true).canPop()) {
     Navigator.of(context, rootNavigator: true).pop();

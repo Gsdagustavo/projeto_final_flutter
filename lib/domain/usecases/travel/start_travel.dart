@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import '../../entities/enums.dart';
 import '../../entities/travel.dart';
 import '../../repositories/travel/travel_repository.dart';
@@ -9,7 +11,7 @@ class StartTravel {
   StartTravel(this._travelRepository);
 
   Future<void> call(Travel travel) async {
-    print('Travel that is going to be started: ${travel.status}');
+    debugPrint('Travel that is going to be started: ${travel.status}');
 
     final now = DateTime.now();
 

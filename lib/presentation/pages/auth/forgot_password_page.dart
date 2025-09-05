@@ -66,7 +66,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     validator: validations.emailValidator,
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
-                    onTapUpOutside: (_) => FocusScope.of(modalContext).unfocus(),
+                    onTapUpOutside: (_) =>
+                        FocusScope.of(modalContext).unfocus(),
                     decoration: InputDecoration(
                       hintText: as.email,
                       prefixIcon: const Icon(Icons.email),
@@ -91,7 +92,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
 class _SendRecoveryCodeButton extends StatelessWidget {
   const _SendRecoveryCodeButton({
-    super.key,
     required this.formKey,
     required this.emailController,
   });
@@ -117,6 +117,8 @@ class _SendRecoveryCodeButton extends StatelessWidget {
             );
 
             if (loginProvider.hasError) {
+              if (!context.mounted) return;
+
               await showDialog(
                 context: context,
                 builder: (context) =>
@@ -125,6 +127,8 @@ class _SendRecoveryCodeButton extends StatelessWidget {
 
               return;
             }
+
+            if (!context.mounted) return;
 
             await showDialog(
               context: context,

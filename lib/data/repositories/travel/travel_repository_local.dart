@@ -213,9 +213,9 @@ class TravelRepositoryImpl implements TravelRepository {
   }
 
   Map<String, dynamic> _toTravelTravelStatusMap(
-      String travelId,
-      int statusIndex,
-      ) {
+    String travelId,
+    int statusIndex,
+  ) {
     return {
       TravelTravelStatusTable.travelId: travelId,
       TravelTravelStatusTable.travelStatusIndex: statusIndex,
@@ -339,10 +339,10 @@ class TravelRepositoryImpl implements TravelRepository {
   }
 
   Future<void> _insertStop(
-      DatabaseExecutor txn,
-      TravelStopModel stop,
-      String travelId,
-      ) async {
+    DatabaseExecutor txn,
+    TravelStopModel stop,
+    String travelId,
+  ) async {
     final placeMap = stop.place.toMap();
 
     // debugPrint('Place map: $placeMap');

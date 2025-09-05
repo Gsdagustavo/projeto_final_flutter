@@ -130,7 +130,8 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                           ],
                         ),
                         Text(
-                          '${widget.travel.totalDuration} ${as.days.toLowerCase()}',
+                          '${widget.travel.totalDuration} '
+                          '${as.days.toLowerCase()}',
                           style: Theme.of(modalContext).textTheme.labelLarge,
                         ),
                       ],
@@ -158,7 +159,8 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                           ],
                         ),
                         Text(
-                          '${widget.travel.participants.length} ${as.participants.toLowerCase()}',
+                          '${widget.travel.participants.length} '
+                          '${as.participants.toLowerCase()}',
                           style: Theme.of(modalContext).textTheme.labelLarge,
                         ),
                       ],
@@ -221,7 +223,8 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                           ],
                         ),
                         Text(
-                          '${widget.travel.numCountries} ${as.countries.toLowerCase()}',
+                          '${widget.travel.numCountries} '
+                          '${as.countries.toLowerCase()}',
                           style: Theme.of(modalContext).textTheme.labelLarge,
                         ),
                       ],
@@ -398,11 +401,15 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                 ),
                                 Text(
                                   state.rate.toStringAsFixed(2),
-                                  style: Theme.of(modalContext).textTheme.titleLarge,
+                                  style: Theme.of(
+                                    modalContext,
+                                  ).textTheme.titleLarge,
                                 ),
                                 Text(
                                   as.based_on_reviews(state.reviews.length),
-                                  style: Theme.of(modalContext).textTheme.bodySmall,
+                                  style: Theme.of(
+                                    modalContext,
+                                  ).textTheme.bodySmall,
                                 ),
                               ],
                             ),
@@ -476,11 +483,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
 }
 
 class _StopStepperWidget extends StatefulWidget {
-  const _StopStepperWidget({
-    super.key,
-    required this.locale,
-    required this.travel,
-  });
+  const _StopStepperWidget({required this.locale, required this.travel});
 
   final Travel travel;
   final String locale;
@@ -552,7 +555,11 @@ class _StopStepperWidgetState extends State<_StopStepperWidget> {
                     ),
                     IconButton(
                       onPressed: () async {
-                        await showReviewModal(modalContext, widget.travel, stop);
+                        await showReviewModal(
+                          modalContext,
+                          widget.travel,
+                          stop,
+                        );
                       },
                       icon: const Icon(Icons.reviews),
                     ),
@@ -739,6 +746,8 @@ class _ReviewModalState extends State<ReviewModal> {
     );
 
     if (reviewState.hasError) {
+      if (!mounted) return;
+
       await showDialog(
         context: context,
         builder: (context) => ErrorModal(message: reviewState.errorMessage!),
@@ -747,10 +756,14 @@ class _ReviewModalState extends State<ReviewModal> {
       return;
     }
 
+    if (!mounted) return;
+
     await showDialog(
       context: context,
       builder: (context) => SuccessModal(message: as.review_registered),
     );
+
+    if (!mounted) return;
 
     Navigator.of(context).pop();
   }
@@ -776,7 +789,9 @@ class _ReviewModalState extends State<ReviewModal> {
     final validations = FormValidations(as);
 
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(modalContext).bottom),
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.viewInsetsOf(modalContext).bottom,
+      ),
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(
           decelerationRate: ScrollDecelerationRate.normal,
@@ -805,7 +820,7 @@ class _ReviewModalState extends State<ReviewModal> {
                 alignment: Alignment.centerLeft,
                 child: DropdownButtonFormField<Participant>(
                   icon: const Icon(Icons.arrow_downward),
-                  value: _author,
+                  initialValue: _author,
                   items: [
                     for (final participant in widget.travel.participants)
                       DropdownMenuItem(
@@ -850,7 +865,8 @@ class _ReviewModalState extends State<ReviewModal> {
                       textCapitalization: TextCapitalization.sentences,
                       validator: validations.reviewValidator,
                       controller: _reviewController,
-                      onTapOutside: (_) => FocusScope.of(modalContext).unfocus(),
+                      onTapOutside: (_) =>
+                          FocusScope.of(modalContext).unfocus(),
                       maxLength: 500,
                       maxLines: 5,
                       decoration: InputDecoration(
@@ -947,7 +963,7 @@ class _ReviewModalState extends State<ReviewModal> {
                 },
               ),
               const Padding(padding: EdgeInsets.all(16)),
-              Container(
+              SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: onSubmit,
@@ -979,7 +995,7 @@ Future<Review?> showReviewModal(
 }
 
 class _TravelTitleWidget extends StatefulWidget {
-  const _TravelTitleWidget({super.key, required this.travel});
+  const _TravelTitleWidget({required this.travel});
 
   final Travel travel;
 
@@ -1012,6 +1028,8 @@ class _TravelTitleWidgetState extends State<_TravelTitleWidget> {
 
     final state = context.read<TravelListProvider>();
     await state.updateTravelTitle(widget.travel);
+
+    if (!mounted) return;
 
     final as = AppLocalizations.of(context)!;
 

@@ -40,10 +40,10 @@ class OkCancelDialog extends StatelessWidget {
 }
 
 Future<bool?> showOkCancelDialog(
-    BuildContext context, {
-      required Widget title,
-      Widget? content,
-    }) async {
+  BuildContext context, {
+  required Widget title,
+  Widget? content,
+}) async {
   return await showDialog<bool>(
     context: context,
     builder: (context) {

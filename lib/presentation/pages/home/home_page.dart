@@ -62,6 +62,8 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
+    if (!mounted) return;
+
     await showDialog(
       context: context,
       builder: (context) =>
@@ -132,6 +134,8 @@ class _HomePageState extends State<HomePage> {
         builder: (context) => ErrorModal(message: state.errorMessage!),
       );
     }
+
+    if (!mounted) return;
 
     await showDialog(
       context: context,
@@ -204,7 +208,7 @@ class _HomePageState extends State<HomePage> {
                               decoration: BoxDecoration(
                                 color: Theme.of(
                                   context,
-                                ).cardColor.withOpacity(0.7),
+                                ).cardColor.withValues(alpha: 0.7),
                                 borderRadius: BorderRadius.circular(16),
                               ),
                               child: Consumer<TravelListProvider>(
@@ -369,7 +373,7 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                           color: Theme.of(
                                             context,
-                                          ).cardColor.withOpacity(0.7),
+                                          ).cardColor.withValues(alpha: 0.7),
                                           border: BoxBorder.all(
                                             color: Theme.of(
                                               context,
@@ -400,7 +404,7 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                           color: Theme.of(
                                             context,
-                                          ).cardColor.withOpacity(0.7),
+                                          ).cardColor.withValues(alpha: 0.7),
                                           border: BoxBorder.all(
                                             color: Theme.of(
                                               context,
@@ -495,15 +499,15 @@ class _TravelStatusWidget extends StatelessWidget {
 
     switch (status) {
       case TravelStatus.upcoming:
-        color = Colors.lightBlueAccent.shade400.withOpacity(0.8);
+        color = Colors.lightBlueAccent.shade400.withValues(alpha: 0.8);
         break;
 
       case TravelStatus.ongoing:
-        color = Colors.green.withOpacity(0.8);
+        color = Colors.green.withValues(alpha: 0.8);
         break;
 
       case TravelStatus.finished:
-        color = Colors.grey.withOpacity(0.8);
+        color = Colors.grey.withValues(alpha: 0.8);
         break;
     }
 

@@ -140,9 +140,9 @@ class _SettingsPageState extends State<SettingsPage> {
               leading: const Icon(Icons.language),
               title: Text(as.language),
               subtitle: Text(
-                _languageGetters[Localizations.localeOf(modalContext).languageCode]!(
-                  as,
-                ),
+                _languageGetters[Localizations.localeOf(
+                  modalContext,
+                ).languageCode]!(as),
               ),
               trailing: const Icon(Icons.arrow_forward_ios, size: 16),
               onTap: () {
@@ -162,7 +162,7 @@ class _SettingsPageState extends State<SettingsPage> {
 }
 
 class _LogoutButton extends StatelessWidget {
-  const _LogoutButton({super.key});
+  const _LogoutButton();
 
   @override
   Widget build(BuildContext context) {
@@ -180,12 +180,17 @@ class _LogoutButton extends StatelessWidget {
             );
 
             if (logout ?? false) {
+              if (!context.mounted) return;
+
               await showLoadingDialog(
                 context: context,
                 function: () async {
                   await context.read<LoginProvider>().signOut();
                 },
               );
+
+              if (!context.mounted) return;
+
               context.go(AppRoutes.auth);
             }
           },
@@ -236,6 +241,8 @@ class _LanguageSelectionSheet extends StatelessWidget {
               await userPreferencesState.changeLanguageCode(
                 languageCode: newLocale.languageCode,
               );
+
+              if (!context.mounted) return;
 
               Navigator.pop(context);
             },

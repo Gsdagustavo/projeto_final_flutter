@@ -12,7 +12,7 @@ class AppTheme {
 
   // Light Theme
   static ThemeData get lightTheme {
-    const ColorScheme lightColorScheme = ColorScheme.light(
+    const lightColorScheme = ColorScheme.light(
       // Core colors
       primary: Color(0xFF030213),
       // --primary
@@ -28,11 +28,6 @@ class AppTheme {
       // --card
       onSurface: Color(0xFF252525),
 
-      // --foreground (approx oklch(0.145 0 0))
-      background: Colors.white,
-      // --background
-      onBackground: Color(0xFF252525),
-
       // --foreground
       error: Color(0xFFD4183D),
       // --destructive
@@ -44,7 +39,7 @@ class AppTheme {
       outlineVariant: Color(0xFFECECF0),
 
       // --muted
-      surfaceVariant: Color(0xFFE9EBEF),
+      surfaceContainerHighest: Color(0xFFE9EBEF),
       // --accent
       onSurfaceVariant: Color(0xFF030213),
 
@@ -157,7 +152,7 @@ class AppTheme {
         color: Colors.white,
         elevation: 2,
         margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        shadowColor: Colors.black.withOpacity(0.1),
+        shadowColor: Colors.black.withValues(alpha: 0.1),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10), // --radius: 0.625rem = 10px
           side: BorderSide(
@@ -299,13 +294,13 @@ class AppTheme {
 
       // Switch theme
       switchTheme: SwitchThemeData(
-        trackColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return const Color(0xFF030213); // --primary
           }
           return const Color(0xFFCBCED4); // --switch-background
         }),
-        thumbColor: MaterialStateProperty.all(Colors.white),
+        thumbColor: WidgetStateProperty.all(Colors.white),
       ),
 
       // Chip theme
@@ -324,7 +319,7 @@ class AppTheme {
 
   // Dark Theme
   static ThemeData get darkTheme {
-    const ColorScheme darkColorScheme = ColorScheme.dark(
+    const darkColorScheme = ColorScheme.dark(
       // Core colors
       primary: Color(0xFFFAFAFA),
       // --primary (oklch(0.985 0 0))
@@ -341,11 +336,6 @@ class AppTheme {
       onSurface: Color(0xFFFAFAFA),
 
       // --foreground
-      background: Color(0xFF252525),
-      // --background
-      onBackground: Color(0xFFFAFAFA),
-
-      // --foreground
       error: Color(0xFFEF4444),
       // --destructive (adjusted for dark)
       onError: Color(0xFFFAFAFA),
@@ -356,7 +346,7 @@ class AppTheme {
       outlineVariant: Color(0xFF434343),
 
       // --muted
-      surfaceVariant: Color(0xFF434343),
+      surfaceContainerHighest: Color(0xFF434343),
       // --accent
       onSurfaceVariant: Color(0xFFFAFAFA),
 
@@ -468,7 +458,7 @@ class AppTheme {
       cardTheme: CardThemeData(
         color: const Color(0xFF252525),
         elevation: 2,
-        shadowColor: Colors.black.withOpacity(0.3),
+        shadowColor: Colors.black.withValues(alpha: 0.3),
         margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
@@ -611,14 +601,14 @@ class AppTheme {
 
       // Switch theme
       switchTheme: SwitchThemeData(
-        trackColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return const Color(0xFFFAFAFA); // --primary
           }
           return const Color(0xFF434343); // --switch-background (dark)
         }),
-        thumbColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return const Color(0xFF343434);
           }
           return const Color(0xFFFAFAFA);

@@ -68,6 +68,8 @@ class _LoginPageState extends State<LoginPage> {
       builder: (context) => SuccessModal(message: as.logged_in_successfully),
     );
 
+    if (!mounted) return;
+
     context.go(AppRoutes.home);
   }
 
@@ -124,7 +126,8 @@ class _LoginPageState extends State<LoginPage> {
                       validator: validations.emailValidator,
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      onTapUpOutside: (_) => FocusScope.of(modalContext).unfocus(),
+                      onTapUpOutside: (_) =>
+                          FocusScope.of(modalContext).unfocus(),
                       decoration: InputDecoration(
                         hintText: as.email,
                         prefixIcon: const Icon(Icons.email),
@@ -137,7 +140,8 @@ class _LoginPageState extends State<LoginPage> {
                     TextFormField(
                       validator: validations.passwordValidator,
                       controller: _passwordController,
-                      onTapUpOutside: (_) => FocusScope.of(modalContext).unfocus(),
+                      onTapUpOutside: (_) =>
+                          FocusScope.of(modalContext).unfocus(),
                       decoration: InputDecoration(
                         hintText: as.password,
                         prefixIcon: const Icon(Icons.lock),
