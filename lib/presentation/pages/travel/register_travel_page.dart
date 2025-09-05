@@ -798,11 +798,8 @@ class _ParticipantModalState extends State<_ParticipantModal> {
   }
 
   Future<void> _pickImage() async {
-    setState(() {
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-        _profilePicture = await FileService().pickImage();
-      });
-    });
+    _profilePicture = await FileService().pickImage();
+    setState(() {});
   }
 
   @override
@@ -894,100 +891,95 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                       const Padding(padding: EdgeInsets.all(16)),
 
                       /// Cancel / Register buttons
-                      Consumer<RegisterTravelProvider>(
-                        builder: (_, state, __) {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              /// Cancel button
-                              TextButton(
-                                onPressed: () => modalContext.pop(),
-                                child: Text(as.cancel),
-                              ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          /// Cancel button
+                          TextButton(
+                            onPressed: () => modalContext.pop(),
+                            child: Text(as.cancel),
+                          ),
 
-                              Builder(
-                                builder: (context) {
-                                  debugPrint('${widget.participant == null}');
+                          Builder(
+                            builder: (context) {
+                              debugPrint('${widget.participant == null}');
 
-                                  /// Register participant
-                                  if (widget.participant == null) {
-                                    return ElevatedButton(
-                                      onPressed: () async {
-                                        if (!_formKey.currentState!
-                                            .validate()) {
-                                          await showDialog(
-                                            context: context,
-                                            builder: (context) => ErrorModal(
-                                              message: as
-                                                  .err_invalid_participant_data,
-                                            ),
-                                          );
-
-                                          return;
-                                        }
-
-                                        final participant = Participant(
-                                          name: _nameController.text,
-                                          age: int.parse(_ageController.text),
-                                          profilePicture:
-                                              _profilePicture ??
-                                              await FileService()
-                                                  .getDefaultProfilePictureFile(),
-                                        );
-
-                                        await showDialog(
-                                          context: context,
-                                          builder: (context) => SuccessModal(
-                                            message: as.participant_added,
-                                          ),
-                                        );
-
-                                        Navigator.of(context).pop(participant);
-                                      },
-                                      child: Text(as.add),
-                                    );
-                                  }
-
-                                  /// Update participant
-                                  return ElevatedButton(
-                                    onPressed: () async {
-                                      if (!_formKey.currentState!.validate()) {
-                                        await showDialog(
-                                          context: context,
-                                          builder: (context) => ErrorModal(
-                                            message:
-                                                as.err_invalid_participant_data,
-                                          ),
-                                        );
-
-                                        return;
-                                      }
-
-                                      final participant = Participant(
-                                        name: _nameController.text,
-                                        age: int.parse(_ageController.text),
-                                        profilePicture:
-                                            _profilePicture ??
-                                            await FileService()
-                                                .getDefaultProfilePictureFile(),
-                                      );
-
+                              /// Register participant
+                              if (widget.participant == null) {
+                                return ElevatedButton(
+                                  onPressed: () async {
+                                    if (!_formKey.currentState!.validate()) {
                                       await showDialog(
                                         context: context,
-                                        builder: (context) => SuccessModal(
-                                          message: as.participant_updated,
+                                        builder: (context) => ErrorModal(
+                                          message:
+                                              as.err_invalid_participant_data,
                                         ),
                                       );
 
-                                      Navigator.of(context).pop(participant);
-                                    },
-                                    child: Text(as.update_participant),
+                                      return;
+                                    }
+
+                                    final participant = Participant(
+                                      name: _nameController.text,
+                                      age: int.parse(_ageController.text),
+                                      profilePicture:
+                                          _profilePicture ??
+                                          await FileService()
+                                              .getDefaultProfilePictureFile(),
+                                    );
+
+                                    await showDialog(
+                                      context: context,
+                                      builder: (context) => SuccessModal(
+                                        message: as.participant_added,
+                                      ),
+                                    );
+
+                                    Navigator.of(context).pop(participant);
+                                  },
+                                  child: Text(as.add),
+                                );
+                              }
+
+                              /// Update participant
+                              return ElevatedButton(
+                                onPressed: () async {
+                                  if (!_formKey.currentState!.validate()) {
+                                    await showDialog(
+                                      context: context,
+                                      builder: (context) => ErrorModal(
+                                        message:
+                                            as.err_invalid_participant_data,
+                                      ),
+                                    );
+
+                                    return;
+                                  }
+
+                                  final participant = Participant(
+                                    name: _nameController.text,
+                                    age: int.parse(_ageController.text),
+                                    profilePicture:
+                                        _profilePicture ??
+                                        await FileService()
+                                            .getDefaultProfilePictureFile(),
                                   );
+
+                                  await showDialog(
+                                    context: context,
+                                    builder: (context) => SuccessModal(
+                                      message: as.participant_updated,
+                                    ),
+                                  );
+
+                                  Navigator.of(context).pop(participant);
                                 },
-                              ),
-                            ],
-                          );
-                        },
+                                child: Text(as.update_participant),
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -1005,39 +997,29 @@ class _ParticipantModalState extends State<_ParticipantModal> {
               SizedBox(
                 width: 128,
                 height: 128,
-                child: Consumer<RegisterTravelProvider>(
-                  builder: (_, travelState, __) {
-                    return FabCircleAvatar(
-                      child: _profilePicture != null
-                          ? InstaImageViewer(
-                              child: Image.file(_profilePicture!),
-                            )
-                          : InstaImageViewer(
-                              child: Image.asset(
-                                'assets/images/default_profile_picture.png',
-                              ),
-                            ),
-                    );
-                  },
+                child: FabCircleAvatar(
+                  child: _profilePicture != null
+                      ? InstaImageViewer(child: Image.file(_profilePicture!))
+                      : InstaImageViewer(
+                          child: Image.asset(
+                            'assets/images/default_profile_picture.png',
+                          ),
+                        ),
                 ),
               ),
 
               Positioned(
                 bottom: 0,
                 right: 2,
-                child: Consumer<RegisterTravelProvider>(
-                  builder: (_, travelState, __) {
-                    return InkWell(
-                      onTap: () async {
-                        await _pickImage();
-                      },
-                      radius: 20,
-                      child: CircleAvatar(
-                        radius: 20,
-                        child: const Center(child: Icon(Icons.edit, size: 32)),
-                      ),
-                    );
+                child: InkWell(
+                  onTap: () async {
+                    await _pickImage();
                   },
+                  radius: 20,
+                  child: CircleAvatar(
+                    radius: 20,
+                    child: const Center(child: Icon(Icons.edit, size: 32)),
+                  ),
                 ),
               ),
             ],
