@@ -7,6 +7,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../core/extensions/date_extensions.dart';
 import '../../../core/extensions/experience_map_extension.dart';
+import '../../../core/extensions/place_extensions.dart';
 import '../../../core/extensions/travel_stop_extensions.dart';
 import '../../../domain/entities/enums.dart';
 import '../../../domain/entities/place.dart';
@@ -176,10 +177,7 @@ class _TravelMapState extends State<TravelMap> {
                                     marker.markerId.value;
                               });
                           await showTravelStopModal(
-                            LatLng(
-                              travelStop.place.latitude,
-                              travelStop.place.longitude,
-                            ),
+                            travelStop.place.latLng,
                             travelStop,
                           );
                         },
@@ -489,17 +487,14 @@ class _TravelStopModalState extends State<_TravelStopModal> {
       arriveDate: _arriveDate,
     );
 
-    final pos = LatLng(stop.place.latitude, stop.place.longitude);
+    final pos = stop.place.latLng;
 
     context.read<MapMarkersProvider>().addMarker(
       Marker(
         markerId: stop.toMarkerId(),
         infoWindow: InfoWindow(title: stop.place.toString()),
         position: pos,
-        onTap: () async => await showTravelStopModal(
-          LatLng(stop.place.latitude, stop.place.longitude),
-          stop,
-        ),
+        onTap: () async => await showTravelStopModal(stop.place.latLng, stop),
       ),
     );
 
@@ -540,10 +535,8 @@ class _TravelStopModalState extends State<_TravelStopModal> {
           widget.stop!.place.latitude,
           widget.stop!.place.longitude,
         ),
-        onTap: () async => await showTravelStopModal(
-          LatLng(widget.stop!.place.latitude, widget.stop!.place.longitude),
-          widget.stop!,
-        ),
+        onTap: () async =>
+            await showTravelStopModal(widget.stop!.place.latLng, widget.stop!),
       ),
     );
 

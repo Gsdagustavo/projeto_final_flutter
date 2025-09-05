@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../core/extensions/place_extensions.dart';
 import '../../core/extensions/travel_stop_extensions.dart';
 import '../../domain/entities/travel_stop.dart';
 import '../pages/travel/map_page.dart';
@@ -17,7 +18,7 @@ class MapMarkersProvider with ChangeNotifier {
 
     if (stops != null && stops.isNotEmpty) {
       for (final stop in stops) {
-        final pos = LatLng(stop.place.latitude, stop.place.longitude);
+        final pos = stop.place.latLng;
 
         _markers.add(
           Marker(

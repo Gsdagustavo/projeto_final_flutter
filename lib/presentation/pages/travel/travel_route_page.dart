@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../core/extensions/place_extensions.dart';
 import '../../../domain/entities/travel.dart';
 import '../../widgets/my_app_bar.dart';
 
@@ -119,9 +120,7 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
   }
 
   void fitBounds() {
-    final stops = widget.travel.stops
-        .map((e) => LatLng(e.place.latitude, e.place.longitude))
-        .toList();
+    final stops = widget.travel.stops.map((e) => e.place.latLng).toList();
 
     if (stops.isEmpty) return;
 
