@@ -18,8 +18,8 @@ import '../../providers/map_markers_provider.dart';
 import '../../providers/register_travel_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../util/app_router.dart';
-import '../../widgets/custom_dialog.dart';
 import '../../widgets/loading_dialog.dart';
+import '../../widgets/modals.dart';
 import '../util/ui_utils.dart';
 
 class TravelMap extends StatefulWidget {
@@ -389,14 +389,9 @@ Future<void> showTravelStopModal(LatLng position, [TravelStop? stop]) async {
     } on Exception catch (e) {
       await showDialog(
         context: context,
-        builder: (context) {
-          return CustomDialog(
-            title: as.warning,
-            content: Text(e.toString()),
-            isError: true,
-          );
-        },
+        builder: (context) => ErrorModal(message: e.toString()),
       );
+
       return;
     }
   }
@@ -512,15 +507,11 @@ class _TravelStopModalState extends State<_TravelStopModal> {
 
     await showDialog(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(as.stop_added),
-          icon: const Icon(Icons.check, color: Colors.green),
-        );
-      },
+      builder: (context) => SuccessModal(message: as.stop_added),
     );
 
     final ctx = AppRouter.navigatorKey.currentContext;
+
     if (ctx != null) {
       Navigator.of(ctx).pop(stop);
     }
@@ -612,14 +603,9 @@ class _TravelStopModalState extends State<_TravelStopModal> {
     if (_arriveDate!.isAfter(lastPossibleLeave)) {
       await showDialog(
         context: context,
-        builder: (context) {
-          return CustomDialog(
-            title: as.warning,
-            content: Text(as.err_invalid_leave_date),
-            isError: true,
-          );
-        },
+        builder: (context) => ErrorModal(message: as.err_invalid_leave_date),
       );
+
       return;
     }
 

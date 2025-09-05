@@ -25,11 +25,9 @@ Future<T> showLoadingDialog<T>({
   required BuildContext context,
   required Future<T> Function() function,
 }) async {
-  final dialogContext = context;
-
   showDialog(
     barrierDismissible: false,
-    context: dialogContext,
+    context: context,
     builder: (_) {
       return const Center(child: LoadingDialog());
     },
@@ -39,14 +37,22 @@ Future<T> showLoadingDialog<T>({
 
   final item = await function();
 
-  debugPrint('is loading dialog context mounted: ${dialogContext.mounted}');
   debugPrint('is context mounted: ${context.mounted}');
 
-  if (!context.mounted) return item;
-
-  if (Navigator.of(context, rootNavigator: true).canPop()) {
-    Navigator.of(context, rootNavigator: true).pop();
+  if (!context.mounted) {
+    debugPrint(
+      'Context not mounted in showLoadingDialog. Returning item: $item',
+    );
+    return item;
   }
+
+  debugPrint(
+    'Can pop loading dialog: ${Navigator.of(context, rootNavigator: true).canPop()}',
+  );
+  //
+  // if (Navigator.of(context, rootNavigator: true).canPop()) {
+  //   debugPrint('Popping loading dialog');
+  //   Navigator.of(context, rootNavigator: true).pop();
 
   return item;
 }

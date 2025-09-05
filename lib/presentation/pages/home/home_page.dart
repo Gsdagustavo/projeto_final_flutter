@@ -14,10 +14,9 @@ import '../../extensions/enums_extensions.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../util/app_routes.dart';
-import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
-import '../../widgets/ok_cancel_dialog.dart';
+import '../../widgets/modals.dart';
 import '../util/travel_utils.dart';
 import '../util/ui_utils.dart';
 
@@ -36,9 +35,12 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> onTravelStarted(Travel travel) async {
     final as = AppLocalizations.of(context)!;
-    final result = await showOkCancelDialog(
-      context,
-      title: Text(as.start_travel_confirmation(travel.travelTitle)),
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => OkCancelModal(
+        title: 'Start Travel?',
+        content: as.start_travel_confirmation(travel.travelTitle),
+      ),
     );
 
     if (result == null || !result) {
@@ -56,13 +58,15 @@ class _HomePageState extends State<HomePage> {
 
       await showDialog(
         context: context,
-        builder: (context) => CustomDialog(
-          isError: true,
-          title: as.warning,
-          content: Text('${as.error}: ${state.errorMessage}'),
-        ),
+        builder: (context) => ErrorModal(message: state.errorMessage!),
       );
     }
+
+    await showDialog(
+      context: context,
+      builder: (context) =>
+          SuccessModal(message: 'Travel Started Succesfully!'),
+    );
   }
 
   Future<void> onTravelFinished(Travel travel) async {
@@ -71,11 +75,8 @@ class _HomePageState extends State<HomePage> {
     if (travel.status == TravelStatus.upcoming) {
       await showDialog(
         context: context,
-        builder: (context) => CustomDialog(
-          isError: true,
-          title: as.warning,
-          content: Text(as.travel_not_stated_yet(travel.travelTitle)),
-        ),
+        builder: (context) =>
+            WarningModal(message: as.travel_not_stated_yet(travel.travelTitle)),
       );
 
       return;
@@ -84,19 +85,20 @@ class _HomePageState extends State<HomePage> {
     if (travel.status == TravelStatus.finished) {
       await showDialog(
         context: context,
-        builder: (context) => CustomDialog(
-          isError: true,
-          title: as.warning,
-          content: Text(as.travel_has_already_finished(travel.travelTitle)),
+        builder: (context) => WarningModal(
+          message: as.travel_has_already_finished(travel.travelTitle),
         ),
       );
 
       return;
     }
 
-    final result = await showOkCancelDialog(
-      context,
-      title: Text(as.finish_travel_confirmation(travel.travelTitle)),
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => OkCancelModal(
+        title: 'Finish Travel?',
+        content: as.finish_travel_confirmation(travel.travelTitle),
+      ),
     );
 
     debugPrint('show ok cancel dialog result on finish travel ui: $result');
@@ -127,13 +129,15 @@ class _HomePageState extends State<HomePage> {
 
       await showDialog(
         context: context,
-        builder: (context) => CustomDialog(
-          isError: true,
-          title: as.warning,
-          content: Text('${as.error}: ${state.errorMessage}'),
-        ),
+        builder: (context) => ErrorModal(message: state.errorMessage!),
       );
     }
+
+    await showDialog(
+      context: context,
+      builder: (context) =>
+          SuccessModal(message: 'Travel Finished Succesfully!'),
+    );
   }
 
   @override
@@ -253,12 +257,13 @@ class _HomePageState extends State<HomePage> {
                                         child: ListTile(
                                           leading: const Icon(Icons.delete),
                                           title: Text(as.delete_travel),
-                                          onTap: () async =>
-                                              await onTravelDeleted(
-                                                context,
-                                                travel,
-                                                popContext: false,
-                                              ),
+                                          onTap: () async {
+                                            await onTravelDeleted(
+                                              context,
+                                              travel,
+                                              popContext: false,
+                                            );
+                                          },
                                         ),
                                       ),
                                     ],

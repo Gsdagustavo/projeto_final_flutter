@@ -15,6 +15,7 @@ import '../../util/app_routes.dart';
 import '../../widgets/fab_circle_avatar.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
+import '../../widgets/modals.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -175,29 +176,7 @@ class _LogoutButton extends StatelessWidget {
           onPressed: () async {
             final logout = await showDialog<bool>(
               context: context,
-              builder: (context) {
-                /// TODO: implement OkCancel dialog
-                return AlertDialog(
-                  title: Text(as.logout),
-                  content: Text(as.logout_confirmation),
-                  actionsAlignment: MainAxisAlignment.spaceBetween,
-                  actions: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(false);
-                      },
-                      child: Text(as.no),
-                    ),
-
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(true);
-                      },
-                      child: Text(as.yes),
-                    ),
-                  ],
-                );
-              },
+              builder: (context) => SignOutModal(),
             );
 
             if (logout ?? false) {

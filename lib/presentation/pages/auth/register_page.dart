@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -7,10 +5,9 @@ import 'package:provider/provider.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../providers/login_provider.dart';
 import '../../util/app_routes.dart';
-import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_auth_animation.dart';
 import '../../widgets/loading_dialog.dart';
-import '../home/home_page.dart';
+import '../../widgets/modals.dart';
 import '../util/form_validations.dart';
 
 /// A [Register] page
@@ -56,17 +53,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
     /// Check if any error has occurred while trying to create the user
     if (loginProvider.hasError) {
-      unawaited(
-        showDialog(
-          context: context,
-          builder: (_) => CustomDialog(
-            title: as.warning,
-            content: Text(loginProvider.errorMsg),
-            isError: true,
-          ),
-        ),
+      await showDialog(
+        context: context,
+        builder: (context) => ErrorModal(message: loginProvider.errorMsg),
       );
-
       return;
     }
 
@@ -78,15 +68,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
     /// Check if any error has occurred while trying to sign in
     if (loginProvider.hasError) {
-      unawaited(
-        showDialog(
-          context: context,
-          builder: (_) => CustomDialog(
-            title: as.warning,
-            content: Text(loginProvider.errorMsg),
-            isError: true,
-          ),
-        ),
+      await showDialog(
+        context: context,
+        builder: (context) => ErrorModal(message: loginProvider.errorMsg),
       );
 
       return;
@@ -95,37 +79,23 @@ class _RegisterPageState extends State<RegisterPage> {
     /// Shows a successful feedback dialog
     await showDialog(
       context: context,
-      builder: (_) => CustomDialog(
-        title: as.register,
-        content: Text(as.account_created_successfully),
-      ),
+      builder: (context) =>
+          SuccessModal(message: as.account_created_successfully),
     );
 
     /// Shows a dialog for the user to continue to login
-    await showDialog(
+    final login = await showDialog<bool>(
       context: context,
-      barrierDismissible: false,
-      builder: (_) => AlertDialog(
-        title: Text(as.login),
-        content: Text(as.register_login),
-        actionsAlignment: MainAxisAlignment.spaceBetween,
-        actions: [
-          TextButton(
-            onPressed: () {
-              context.pop();
-            },
-            child: Text(as.no),
-          ),
-
-          ElevatedButton(
-            onPressed: () {
-              context.go(AppRoutes.home);
-            },
-            child: Text(as.yes),
-          ),
-        ],
-      ),
+      builder: (context) {
+        return OkCancelModal(title: as.login, content: as.register_login);
+      },
     );
+
+    if (login ?? false) {
+      context.go(AppRoutes.home);
+    } else {
+      context.pop();
+    }
   }
 
   void _togglePasswordVisibility() {

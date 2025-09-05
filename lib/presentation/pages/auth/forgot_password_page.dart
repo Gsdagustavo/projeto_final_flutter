@@ -1,12 +1,10 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
 import '../../providers/login_provider.dart';
-import '../../widgets/custom_dialog.dart';
 import '../../widgets/loading_dialog.dart';
+import '../../widgets/modals.dart';
 import '../../widgets/theme_toggle_button.dart';
 import '../util/form_validations.dart';
 
@@ -119,27 +117,19 @@ class _SendRecoveryCodeButton extends StatelessWidget {
             );
 
             if (loginProvider.hasError) {
-              unawaited(
-                showDialog(
-                  context: context,
-                  builder: (context) => CustomDialog(
-                    title: as.warning,
-                    content: Text(loginProvider.errorMsg),
-                    isError: true,
-                  ),
-                ),
+              await showDialog(
+                context: context,
+                builder: (context) =>
+                    ErrorModal(message: loginProvider.errorMsg),
               );
 
               return;
             }
 
-            unawaited(
-              showDialog(
-                context: context,
-                builder: (context) => CustomDialog(
-                  title: '',
-                  content: Text(as.recovery_code_sent_to(emailController.text)),
-                ),
+            await showDialog(
+              context: context,
+              builder: (context) => SuccessModal(
+                message: as.recovery_code_sent_to(emailController.text),
               ),
             );
           },

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -7,9 +5,9 @@ import 'package:provider/provider.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../providers/login_provider.dart';
 import '../../util/app_routes.dart';
-import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_auth_animation.dart';
 import '../../widgets/loading_dialog.dart';
+import '../../widgets/modals.dart';
 import '../util/form_validations.dart';
 import 'forgot_password_page.dart';
 
@@ -37,8 +35,6 @@ class _LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
 
   void _login() async {
-    debugPrint('login method called in widget');
-
     if (!_formKey.currentState!.validate()) return;
 
     final as = AppLocalizations.of(context)!;
@@ -59,15 +55,9 @@ class _LoginPageState extends State<LoginPage> {
     if (!mounted) return;
 
     if (loginProvider.hasError) {
-      unawaited(
-        showDialog(
-          context: context,
-          builder: (_) => CustomDialog(
-            title: as.warning,
-            content: Text(loginProvider.errorMsg),
-            isError: true,
-          ),
-        ),
+      await showDialog(
+        context: context,
+        builder: (context) => ErrorModal(message: loginProvider.errorMsg),
       );
 
       return;
@@ -75,13 +65,8 @@ class _LoginPageState extends State<LoginPage> {
 
     await showDialog(
       context: context,
-      builder: (_) => CustomDialog(
-        title: as.login,
-        content: Text(as.logged_in_successfully),
-      ),
+      builder: (context) => SuccessModal(message: as.logged_in_successfully),
     );
-
-    debugPrint('login method called in widget ended');
 
     context.go(AppRoutes.home);
   }
@@ -193,7 +178,9 @@ class _LoginPageState extends State<LoginPage> {
                   TextButton(
                     child: Text(as.forgot_your_password),
                     onPressed: () {
-                      context.push('${AppRoutes.auth}${AppRoutes.forgotPassword}');
+                      context.push(
+                        '${AppRoutes.auth}${AppRoutes.forgotPassword}',
+                      );
                     },
                   ),
                 ],

@@ -20,10 +20,10 @@ import '../../extensions/enums_extensions.dart';
 import '../../providers/review_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
-import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_circle_avatar.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
+import '../../widgets/modals.dart';
 import '../util/form_validations.dart';
 import '../util/travel_utils.dart';
 import '../util/ui_utils.dart';
@@ -706,12 +706,7 @@ class _ReviewModalState extends State<ReviewModal> {
     if (!_formKey.currentState!.validate()) {
       await showDialog(
         context: context,
-        builder: (context) {
-          return CustomDialog(
-            title: as.warning,
-            content: Text(as.err_invalid_review_data),
-          );
-        },
+        builder: (context) => WarningModal(message: as.err_invalid_review_data),
       );
 
       return;
@@ -720,12 +715,8 @@ class _ReviewModalState extends State<ReviewModal> {
     if (_author == null) {
       await showDialog(
         context: context,
-        builder: (context) {
-          return CustomDialog(
-            title: as.warning,
-            content: Text(as.err_invalid_review_author),
-          );
-        },
+        builder: (context) =>
+            WarningModal(message: as.err_invalid_review_author),
       );
 
       return;
@@ -750,13 +741,7 @@ class _ReviewModalState extends State<ReviewModal> {
     if (reviewState.hasError) {
       await showDialog(
         context: context,
-        builder: (context) {
-          return CustomDialog(
-            isError: true,
-            title: as.warning,
-            content: Text('${as.error_review}: ${reviewState.errorMessage}'),
-          );
-        },
+        builder: (context) => ErrorModal(message: reviewState.errorMessage!),
       );
 
       return;
@@ -764,9 +749,7 @@ class _ReviewModalState extends State<ReviewModal> {
 
     await showDialog(
       context: context,
-      builder: (context) {
-        return AlertDialog(title: Text(as.review_registered));
-      },
+      builder: (context) => SuccessModal(message: as.review_registered),
     );
 
     Navigator.of(context).pop();

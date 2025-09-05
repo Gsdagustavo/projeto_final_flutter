@@ -19,10 +19,10 @@ import '../../providers/map_markers_provider.dart';
 import '../../providers/register_travel_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../util/app_routes.dart';
-import '../../widgets/custom_dialog.dart';
 import '../../widgets/fab_circle_avatar.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
+import '../../widgets/modals.dart';
 import '../util/form_validations.dart';
 import '../util/transport_types_icons.dart';
 import '../util/ui_utils.dart';
@@ -56,47 +56,27 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
 
     final remove = await showDialog<bool>(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(as.warning),
-          content: Text(
-            '${as.remove_participant_confirmation} ${participant.name}?',
-          ),
-          actionsAlignment: MainAxisAlignment.spaceBetween,
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: Text(as.no),
-            ),
-
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: Text(as.yes),
-            ),
-          ],
-        );
-      },
+      builder: (context) => DeleteModal(
+        /// TODO: intl
+        message: '${as.remove_participant_confirmation} ${participant.name}?',
+        title: as.remove_participant,
+      ),
     );
 
     final state = context.read<RegisterTravelProvider>();
     if (remove ?? false) {
       state.removeParticipant(participant);
     } else {
-      await showDialog(
-        context: context,
-        builder: (context) {
-          return CustomDialog(
-            title: as.warning,
-            content: Text(as.err_could_not_add_participant),
-            isError: true,
-          );
-        },
-      );
+      return;
     }
+
+    await showDialog(
+      context: context,
+      builder: (context) => SuccessModal(
+        /// TODO: intl
+        message: 'Participant ${participant.name} removed successfully!',
+      ),
+    );
   }
 
   String _formatDate(DateTime? date) {
@@ -168,20 +148,9 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
     final remove = await showDialog<bool>(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          /// TODO: intl
-          title: Text('Remove Stop'),
-          content: Text('Do you really want to remove this stop?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(as.no),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(as.yes),
-            ),
-          ],
+        return DeleteModal(
+          title: as.remove_stop,
+          message: as.remove_stop_confirmation,
         );
       },
     );
@@ -189,7 +158,17 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
     if (remove != null && remove) {
       travelState.removeTravelStop(stop);
       markersState.removeMarker(stop);
+    } else {
+      return;
     }
+
+    await showDialog(
+      context: context,
+      builder: (context) => SuccessModal(
+        /// TODO: intl
+        message: 'Stop Removed Successfully!',
+      ),
+    );
 
     // Navigator.of(context).pop();
   }
@@ -227,15 +206,9 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
     if (state.hasFailure) {
       await showDialog(
         context: context,
-        builder: (context) {
-          return CustomDialog(
-            title: as.warning,
-            isError: true,
-
-            /// TODO: intl
-            content: Text('An error occurred while registering the travel'),
-          );
-        },
+        builder: (context) => ErrorModal(
+          message: 'An error occurred while registering the travel',
+        ),
       );
 
       return;
@@ -244,10 +217,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
     await showDialog(
       context: context,
       builder: (context) {
-        return CustomDialog(
-          title: as.travel_registered_successfully,
-          content: SizedBox.shrink(),
-        );
+        return SuccessModal(message: as.travel_registered_successfully);
       },
     );
 
@@ -817,18 +787,22 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                     ),
                     onPressed: () async {
                       if (!_travelTitleFormKey.currentState!.validate()) {
+                        await showDialog(
+                          context: context,
+                          builder: (context) =>
+                              ErrorModal(message: as.invalid_travel_title),
+                        );
+
                         return;
                       }
 
                       if (!state.isTravelValid) {
                         await showDialog(
                           context: context,
-                          builder: (_) => CustomDialog(
-                            title: as.warning,
-                            isError: true,
-                            content: Text(as.invalid_travel_data),
-                          ),
+                          builder: (context) =>
+                              ErrorModal(message: as.invalid_travel_data),
                         );
+
                         return;
                       }
 
@@ -1021,15 +995,10 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                                             .validate()) {
                                           await showDialog(
                                             context: context,
-                                            builder: (context) {
-                                              return CustomDialog(
-                                                title: as.warning,
-                                                content: Text(
-                                                  as.err_invalid_participant_data,
-                                                ),
-                                                isError: true,
-                                              );
-                                            },
+                                            builder: (context) => ErrorModal(
+                                              message: as
+                                                  .err_invalid_participant_data,
+                                            ),
                                           );
 
                                           return;
@@ -1046,14 +1015,9 @@ class _ParticipantModalState extends State<_ParticipantModal> {
 
                                         await showDialog(
                                           context: context,
-                                          builder: (context) {
-                                            return CustomDialog(
-                                              title: as.add_participant,
-                                              content: Text(
-                                                as.participant_added,
-                                              ),
-                                            );
-                                          },
+                                          builder: (context) => SuccessModal(
+                                            message: as.participant_added,
+                                          ),
                                         );
 
                                         Navigator.of(context).pop(participant);
@@ -1068,15 +1032,10 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                                       if (!_formKey.currentState!.validate()) {
                                         await showDialog(
                                           context: context,
-                                          builder: (context) {
-                                            return CustomDialog(
-                                              title: as.update_participant,
-                                              content: Text(
+                                          builder: (context) => ErrorModal(
+                                            message:
                                                 as.err_invalid_participant_data,
-                                              ),
-                                              isError: true,
-                                            );
-                                          },
+                                          ),
                                         );
 
                                         return;
@@ -1093,14 +1052,9 @@ class _ParticipantModalState extends State<_ParticipantModal> {
 
                                       await showDialog(
                                         context: context,
-                                        builder: (context) {
-                                          return CustomDialog(
-                                            title: as.update_participant,
-                                            content: Text(
-                                              as.participant_updated,
-                                            ),
-                                          );
-                                        },
+                                        builder: (context) => SuccessModal(
+                                          message: as.participant_updated,
+                                        ),
                                       );
 
                                       Navigator.of(context).pop(participant);
