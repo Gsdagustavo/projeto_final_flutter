@@ -210,6 +210,10 @@ class _HomePageState extends State<HomePage> {
                               child: Consumer<TravelListProvider>(
                                 builder: (_, state, __) {
                                   return PopupMenuButton(
+                                    popUpAnimationStyle: AnimationStyle(
+                                      curve: Curves.easeInOutQuart,
+                                      duration: Duration(milliseconds: 750),
+                                    ),
                                     icon: const Icon(Icons.more_vert),
                                     itemBuilder: (context) => <PopupMenuEntry>[
                                       if (travel.status ==

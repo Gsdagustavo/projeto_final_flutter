@@ -31,7 +31,7 @@ Future<void> onTravelDeleted(
   if (result == null || !result) return;
 
   final state = context.read<TravelListProvider>();
-  //
+
   // await showLoadingDialog(
   //   context: context,
   //   function: () async => await state.deleteTravel(travel),
@@ -42,11 +42,6 @@ Future<void> onTravelDeleted(
   debugPrint('Context after loading dialog call: $context');
 
   if (!context.mounted) return;
-
-  await showDialog(
-    context: context,
-    builder: (context) => SuccessModal(message: as.travel_deleted),
-  );
 
   if (popContext) {
     Navigator.of(context).pop();
