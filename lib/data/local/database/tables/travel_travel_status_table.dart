@@ -1,34 +1,35 @@
 import 'travel_status_table.dart';
 import 'travel_table.dart';
 
-/// SQLite table schema and constants for the `travelTravelStatus table.
+/// SQLite table schema and constants for the `travelTravelStatus` table.
 ///
 /// This class defines the column names and the SQL statement to create
 /// the table. It represents the many-to-many relationship between
-/// travel and travel status
+/// travels and their status.
 abstract final class TravelTravelStatusTable {
   /// Name of the travelTravelStatus table in the database.
   static const String tableName = 'travelTravelStatus';
 
-  /// Column name for the travel ID (foreign key)
+  /// Column name for the Travel ID (foreign key).
   ///
-  /// `INTEGER NOT NULL`
-  static const String travelId = 'travelId';
+  /// References [TravelTable.travelId]
+  static const String travelId = TravelTable.travelId;
 
-  /// Column name for the travel status (foreign key)
+  /// Column name for the Travel Status Index (foreign key).
   ///
-  /// `INTEGER NOT NULL`
-  static const String travelStatusIndex = 'travelStatusIndex';
+  /// References [TravelStatusTable.travelStatusIndex]
+  static const String travelStatusIndex = TravelStatusTable.travelStatusIndex;
 
-  /// SQL command to create the travelStopExperiences table
+  /// SQL command to create the travelTravelStatus table.
   static const String createTable =
-      '''
-    CREATE TABLE $tableName (
-      $travelStatusIndex INTEGER NOT NULL,
-      $travelId TEXT NOT NULL,
-      FOREIGN KEY ($travelId) REFERENCES ${TravelTable.tableName} (${TravelTable.travelId}),
-      FOREIGN KEY ($travelStatusIndex) REFERENCES ${TravelStatusTable.tableName} (${TravelStatusTable.travelStatusIndex}),
-      PRIMARY KEY ($travelId, $travelStatusIndex)
-    );
-  ''';
+  '''
+      CREATE TABLE $tableName (
+        $travelStatusIndex INTEGER NOT NULL,
+        $travelId TEXT NOT NULL,
+        
+        FOREIGN KEY ($travelId) REFERENCES ${TravelTable.tableName} (${TravelTable.travelId}),
+        FOREIGN KEY ($travelStatusIndex) REFERENCES ${TravelStatusTable.tableName} (${TravelStatusTable.travelStatusIndex}),
+        PRIMARY KEY ($travelId, $travelStatusIndex)
+      );
+      ''';
 }

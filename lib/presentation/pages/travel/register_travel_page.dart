@@ -1092,6 +1092,8 @@ class _TravelStopListItem extends StatelessWidget {
       shape: Theme.of(context).cardTheme.shape,
       leading: Builder(
         builder: (context) {
+          debugPrint('Stop type: ${stop.type}');
+
           switch (stop.type) {
             case TravelStopType.start:
               return CircleAvatar(

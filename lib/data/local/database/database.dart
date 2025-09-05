@@ -13,6 +13,7 @@ import 'tables/transport_types_table.dart';
 import 'tables/travel_status_table.dart';
 import 'tables/travel_stop_experiences_table.dart';
 import 'tables/travel_stop_table.dart';
+import 'tables/travel_stop_type_table.dart';
 import 'tables/travel_table.dart';
 import 'tables/travel_travel_status_table.dart';
 
@@ -88,6 +89,13 @@ class DBConnection {
       }),
     );
 
+    /// Insert values into travel stop types table
+    TravelStopType.values.map(
+      (t) async => await db.insert(TravelStopTypeTable.tableName, {
+        TravelStopTypeTable.travelStopTypeIndex: t.index,
+      }),
+    );
+
     debugPrint('_insertDefaultValuesIntoTables method finished');
   }
 
@@ -108,6 +116,7 @@ class DBConnection {
     debugPrint('Database cleansed');
   }
 
+  /// Prints all database tables and their rows
   Future<void> printAllTables(Database db) async {
     final tables = await db.rawQuery(
       "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE "

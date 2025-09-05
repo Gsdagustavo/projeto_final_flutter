@@ -450,7 +450,8 @@ class _TravelStopModalState extends State<_TravelStopModal> {
   final _arriveDateController = TextEditingController();
   final _leaveDateController = TextEditingController();
 
-  void onStopAdded() async {
+  /// Adds the stop marker on the [MapMarkersProvider]
+  void addStopMarker() async {
     final stop = TravelStop(
       place: widget.place,
       experiences: _selectedExperiences.toExperiencesList(),
@@ -807,7 +808,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
                                 if (useStop) {
                                   onStopUpdated();
                                 } else {
-                                  onStopAdded();
+                                  addStopMarker();
                                 }
                               }
                             },

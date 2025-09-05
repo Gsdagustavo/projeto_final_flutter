@@ -1,18 +1,33 @@
 import 'reviews_table.dart';
 
+/// SQLite table schema and constants for the `reviewsPhotos` table.
+///
+/// This class defines the column names and the SQL statement to create
+/// the table. It represents the one-to-many relationship between reviews
+/// and their associated photos.
 abstract final class ReviewsPhotosTable {
-  static const String tableName = 'reviewsPhotosTable';
+  /// Name of the reviewsPhotos table in the database.
+  static const String tableName = 'reviewsPhotos';
 
-  static const String reviewId = 'reviewId';
+  /// Column name for the Photo data.
+  ///
+  /// `BLOB NOT NULL`
   static const String photo = 'photo';
 
+  /// Column name for the Review ID (foreign key).
+  ///
+  /// References [ReviewsTable.reviewId]
+  static const String reviewId = ReviewsTable.reviewId;
+
+  /// SQL command to create the reviewsPhotos table.
   static const String createTable =
-      '''
-     CREATE TABLE $tableName(
-      $reviewId TEXT NOT NULL,
-      $photo BLOB,
-      
-      FOREIGN KEY ($reviewId) REFERENCES ${ReviewsTable.tableName} (${ReviewsTable.reviewId})
-     )
+  '''
+      CREATE TABLE $tableName (
+        $reviewId TEXT NOT NULL,
+        $photo BLOB NOT NULL,
+        
+        FOREIGN KEY ($reviewId) REFERENCES ${ReviewsTable.tableName} (${ReviewsTable.reviewId}),
+        PRIMARY KEY ($reviewId, $photo)
+      );
       ''';
 }

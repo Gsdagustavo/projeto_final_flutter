@@ -22,6 +22,7 @@ import '../../models/place_model.dart';
 import '../../models/review_model.dart';
 import '../../models/travel_stop_model.dart';
 
+/// Concrete implementation of [ReviewRepository], using local SQLite database
 class ReviewRepositoryImpl implements ReviewRepository {
   late final Future<Database> _db = DBConnection().getDatabase();
 

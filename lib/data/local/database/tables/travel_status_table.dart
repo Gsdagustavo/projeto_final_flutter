@@ -1,22 +1,22 @@
-/// SQLite table schema and constants for the `experiences` table.
+/// SQLite table schema and constants for the `travelStatus` table.
 ///
 /// This class defines the column names and the SQL statement to create
-/// the table. It is used to store the list of possible experiences that
-/// can be associated with travel stops.
+/// the table. It is used to store the possible status values
+/// that can be associated with a travel.
 abstract final class TravelStatusTable {
-  /// Name of the experiences table in the database.
+  /// Name of the travelStatus table in the database.
   static const String tableName = 'travelStatus';
 
-  /// Column name for the experience name
+  /// Column name for the travel status index
   ///
   /// `INTEGER PRIMARY KEY`
-  static const String travelStatusIndex = 'travelStatus';
+  static const String travelStatusIndex = 'travelStatusIndex';
 
-  /// SQL command to create the experiences table
+  /// SQL command to create the travelStatus table
   static const String createTable =
-      '''
-    CREATE TABLE $tableName (
-      $travelStatusIndex INTEGER PRIMARY KEY
-    );
-  ''';
+  '''
+      CREATE TABLE $tableName (
+        $travelStatusIndex INTEGER PRIMARY KEY
+      );
+      ''';
 }

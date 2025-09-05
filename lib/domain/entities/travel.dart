@@ -1,38 +1,51 @@
 import 'dart:io';
-
 import 'package:uuid/uuid.dart';
 
 import 'enums.dart';
 import 'participant.dart';
 import 'travel_stop.dart';
 
-/// Represents a Travel record in the application's database
+/// Represents a [Travel] record in the application's database.
+///
+/// This class stores information about a travel, including title, start and end dates,
+/// transport type, associated participants, travel stops, status, and photos.
+/// It provides utility methods for duration, countries visited, and copying/updating the travel.
 class Travel {
-  /// Travel Id
+  /// Unique identifier for the travel.
+  ///
+  /// Automatically generated using a UUID if not provided.
   final String id;
 
-  /// Travel Title
+  /// Title of the travel.
   String travelTitle;
 
-  /// Travel start date
+  /// Start date of the travel.
   DateTime startDate;
 
-  /// Travel end date
+  /// End date of the travel.
   DateTime endDate;
 
-  /// Travel transport type
+  /// Mode of transport used for the travel.
   final TransportType transportType;
 
-  /// Travel participants
+  /// List of participants in this travel.
   final List<Participant> participants;
 
-  /// Travel stops
+  /// List of stops included in this travel.
   final List<TravelStop> stops;
 
+  /// Current status of the travel.
   TravelStatus status;
 
+  /// List of photos associated with the travel.
   final List<File?> photos;
 
+  /// Named constructor for [Travel].
+  ///
+  /// Creates a new [Travel] instance with required fields [travelTitle], [startDate],
+  /// [endDate], [transportType], [participants], [stops], and [photos].
+  /// The [id] is optional; if not provided, a new UUID will be generated automatically.
+  /// The [status] defaults to [TravelStatus.upcoming].
   Travel({
     String? id,
     required this.travelTitle,
@@ -45,15 +58,27 @@ class Travel {
     this.status = TravelStatus.upcoming,
   }) : id = id ?? Uuid().v4();
 
-  /// Returns a [Duration] that represents the total duration of the travel
+  /// Returns the total duration of the travel in days.
+  ///
+  /// If the start and end date are the same day, returns 1.
   int get totalDuration {
     final diff = endDate.difference(startDate).inDays;
-
-    if (diff == 0) return 1;
-
-    return diff;
+    return diff == 0 ? 1 : diff;
   }
 
+  /// Returns the total number of unique countries visited in this travel.
+  int get numCountries {
+    return stops.map((e) => e.place.country).toSet().length;
+  }
+
+  /// Returns a list of unique countries visited in this travel.
+  List<String?> get countries {
+    return stops.map((e) => e.place.country).toSet().toList();
+  }
+
+  /// Returns a copy of this [Travel] with optional updated fields.
+  ///
+  /// This allows updating any property while keeping the other values unchanged.
   Travel copyWith({
     String? travelTitle,
     DateTime? startDate,
@@ -65,6 +90,7 @@ class Travel {
     List<File>? photos,
   }) {
     return Travel(
+      id: id,
       travelTitle: travelTitle ?? this.travelTitle,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
@@ -76,28 +102,20 @@ class Travel {
     );
   }
 
-  int get numCountries {
-    return stops.map((e) => e.place.country).toSet().length;
-  }
-
-  List<String?> get countries {
-    return stops.map((e) => e.place.country).toSet().toList();
-  }
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Travel &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          travelTitle == other.travelTitle &&
-          startDate == other.startDate &&
-          endDate == other.endDate &&
-          transportType == other.transportType &&
-          participants == other.participants &&
-          stops == other.stops &&
-          status == other.status &&
-          photos == other.photos;
+          other is Travel &&
+              runtimeType == other.runtimeType &&
+              id == other.id &&
+              travelTitle == other.travelTitle &&
+              startDate == other.startDate &&
+              endDate == other.endDate &&
+              transportType == other.transportType &&
+              participants == other.participants &&
+              stops == other.stops &&
+              status == other.status &&
+              photos == other.photos;
 
   @override
   int get hashCode => Object.hash(

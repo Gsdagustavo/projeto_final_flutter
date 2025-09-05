@@ -23,10 +23,6 @@ import '../../models/travel_model.dart';
 import '../../models/travel_stop_model.dart';
 
 /// Concrete implementation of [TravelRepository], using local SQLite database
-///
-/// This class realizes all necessary implementations to register a [Travel]
-/// and get all [Travels], consulting the [TravelTable], [TravelStopTable],
-/// [TravelStopExperiencesTable] and [ParticipantsTable] tables
 class TravelRepositoryImpl implements TravelRepository {
   late final Future<Database> _db = DBConnection().getDatabase();
 

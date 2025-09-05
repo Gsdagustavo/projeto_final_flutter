@@ -5,15 +5,43 @@ import '../local/database/tables/reviews_table.dart';
 import 'participant_model.dart';
 import 'travel_stop_model.dart';
 
+/// Model class to represent a [Review].
+///
+/// This model class contains methods to manipulate review data, such as
+/// fromMap, toMap, fromEntity, toEntity, and other serialization/deserialization
+/// operations. It stores information about the review description, rating (stars),
+/// associated participant, travel stop, and optional images.
 class ReviewModel {
+  /// Unique identifier of the review.
   final String id;
+
+  /// Text description of the review.
   final String description;
+
+  /// Author of the review (participant).
   final ParticipantModel author;
+
+  /// Date of the review.
   final DateTime reviewDate;
+
+  /// Travel stop to which the review is related.
   final TravelStopModel travelStop;
+
+  /// Number of stars given in the review.
   final int stars;
+
+  /// Images attached to the review.
   final List<File> images;
 
+  /// Named constructor for [ReviewModel].
+  ///
+  /// [id] is the unique review identifier.
+  /// [description] is the review content.
+  /// [author] is the participant who wrote the review.
+  /// [reviewDate] is the date of the review.
+  /// [travelStop] is the related travel stop.
+  /// [stars] is the rating.
+  /// [images] is the list of images attached.
   const ReviewModel({
     required this.id,
     required this.description,
@@ -24,6 +52,7 @@ class ReviewModel {
     required this.images,
   });
 
+  /// Returns a copy of this [ReviewModel] with optional updated fields.
   ReviewModel copyWith({
     String? reviewId,
     String? description,
@@ -44,6 +73,7 @@ class ReviewModel {
     );
   }
 
+  /// Converts this [ReviewModel] into a [Map] for database storage.
   Map<String, dynamic> toMap() {
     return {
       ReviewsTable.reviewId: id,
@@ -55,17 +85,23 @@ class ReviewModel {
     };
   }
 
+  /// Creates a [ReviewModel] from a [Map] (e.g., from database row).
+  ///
+  /// [map] contains the database row data.
+  /// [participant] is the author of the review.
+  /// [travelStop] is the travel stop related to the review.
+  /// [images] is the list of images attached to the review.
   factory ReviewModel.fromMap(
-    Map<String, dynamic> map,
-    ParticipantModel participant,
-    TravelStopModel travelStop,
-    List<File> images,
-  ) {
+      Map<String, dynamic> map,
+      ParticipantModel participant,
+      TravelStopModel travelStop,
+      List<File> images,
+      ) {
     return ReviewModel(
       id: map[ReviewsTable.reviewId] as String,
       description: map[ReviewsTable.description] as String,
       author: participant,
-      reviewDate: DateTime.fromMicrosecondsSinceEpoch(
+      reviewDate: DateTime.fromMillisecondsSinceEpoch(
         map[ReviewsTable.reviewDate] as int,
       ),
       travelStop: travelStop,
@@ -74,6 +110,7 @@ class ReviewModel {
     );
   }
 
+  /// Converts this [ReviewModel] to a domain [Review] entity.
   Review toEntity() {
     return Review(
       description: description,
@@ -85,6 +122,7 @@ class ReviewModel {
     );
   }
 
+  /// Creates a [ReviewModel] from a domain [Review] entity.
   factory ReviewModel.fromEntity(Review review) {
     return ReviewModel(
       id: review.id,
@@ -99,8 +137,8 @@ class ReviewModel {
 
   @override
   String toString() {
-    return 'Review{reviewId: $id, description: $description, '
-        'author: $author, reviewDate: $reviewDate, travelStop: $travelStop'
-        ', stars: $stars}';
+    return 'ReviewModel{id: $id, description: $description, '
+        'author: $author, reviewDate: $reviewDate, travelStop: $travelStop, '
+        'stars: $stars, images: $images}';
   }
 }

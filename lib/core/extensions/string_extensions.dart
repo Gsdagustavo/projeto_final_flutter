@@ -1,4 +1,4 @@
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 
 /// This extension contains some util methods on [String] class
 extension StringFormatExtension on String {
@@ -44,9 +44,4 @@ extension StringFormatExtension on String {
 
     return result;
   }
-}
-
-extension LatLngString on LatLng {
-  String get formatted =>
-      '${latitude.toStringAsFixed(5)}, ${longitude.toStringAsFixed(5)}';
 }

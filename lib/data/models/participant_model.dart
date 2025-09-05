@@ -5,6 +5,10 @@ import 'package:flutter/foundation.dart';
 import '../../domain/entities/participant.dart';
 import '../local/database/tables/participants_table.dart';
 
+/// Model class to represent a [Participant]
+///
+/// This model class contains methods to manipulate participant data, such as
+/// fromMap, toMap, fromEntity, toEntity, etc.
 class ParticipantModel {
   /// Participant ID
   final String id;
@@ -15,10 +19,18 @@ class ParticipantModel {
   /// Participant Age
   final int age;
 
-  /// Participant profile picture (path to the file)
+  /// Participant profile picture
   final File profilePicture;
 
-  /// Named constructor for the participant
+  /// Named constructor for [ParticipantModel].
+  ///
+  /// Creates a [ParticipantModel] with required [id], [name], [age],
+  /// and [profilePicture].
+  ///
+  /// [id] is the unique identifier for the participant.
+  /// [name] is the participant's full name.
+  /// [age] is the participant's age in years.
+  /// [profilePicture] is the participant's profile picture stored as a [File].
   ParticipantModel({
     required this.name,
     required this.age,
@@ -52,6 +64,7 @@ class ParticipantModel {
     };
   }
 
+  /// fromEntity factory constructor
   factory ParticipantModel.fromEntity(Participant participant) {
     return ParticipantModel(
       id: participant.id,
@@ -61,6 +74,7 @@ class ParticipantModel {
     );
   }
 
+  /// toEntity method
   Participant toEntity() {
     return Participant(
       id: id,

@@ -114,6 +114,12 @@ class RegisterTravelProvider with ChangeNotifier {
       }
     }
 
+    if (_stops.isEmpty) {
+      stop.type = TravelStopType.start;
+    } else {
+      stop.type = TravelStopType.stop;
+    }
+
     _stops.add(stop);
 
     debugPrint('Travel stop ${stop.toString()} added');

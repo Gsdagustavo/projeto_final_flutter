@@ -7,7 +7,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
-import '../core/extensions/place_model_autocomplete.dart';
 import '../data/models/place_model.dart';
 import '../domain/entities/place.dart';
 
@@ -105,9 +104,7 @@ class LocationService {
 
       if (response.statusCode == 200) {
         for (final map in json.decode(response.body)['predictions']) {
-          places.add(
-            PlaceModelAutocomplete.fromAutocompleteJson(map).toEntity(),
-          );
+          places.add(PlaceModel.fromAutocompleteJson(map).toEntity());
         }
       } else {
         throw Exception('Failed to load predictions');

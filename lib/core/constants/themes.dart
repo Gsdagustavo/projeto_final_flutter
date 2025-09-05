@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 
+import '../../domain/entities/enums.dart';
+
+/// This class defines the app's theme, with support for both light and dark
+/// modes
 class AppTheme {
-  // Travel Status Colors
+  /// Travel ucoming color light
   static const Color travelUpcomingLight = Color(0xFF3B82F6); // Blue
+  /// Travel ongoing color light
   static const Color travelOngoingLight = Color(0xFF10B981); // Green
+  /// Travel finished color light
   static const Color travelFinishedLight = Color(0xFF6B7280); // Gray
 
+  /// Travel ucoming color dark
   static const Color travelUpcomingDark = Color(0xFF60A5FA); // Lighter blue
+  /// Travel ongoing color dark
   static const Color travelOngoingDark = Color(0xFF34D399); // Lighter green
+  /// Travel finished color dark
   static const Color travelFinishedDark = Color(0xFF9CA3AF); // Lighter gray
 
-  // Light Theme
+  /// Light Theme
   static ThemeData get lightTheme {
     const lightColorScheme = ColorScheme.light(
       // Core colors
@@ -317,7 +326,7 @@ class AppTheme {
     );
   }
 
-  // Dark Theme
+  /// Dark Theme
   static ThemeData get darkTheme {
     const darkColorScheme = ColorScheme.dark(
       // Core colors
@@ -629,24 +638,24 @@ class AppTheme {
     );
   }
 
-  // Helper method to get travel status color
-  static Color getTravelStatusColor(String status, {required bool isDark}) {
-    switch (status.toLowerCase()) {
-      case 'upcoming':
+  /// Helper method to get travel status color
+  static Color getTravelStatusColor(
+    TravelStatus status, {
+    required bool isDark,
+  }) {
+    switch (status) {
+      case TravelStatus.upcoming:
         return isDark ? travelUpcomingDark : travelUpcomingLight;
-      case 'ongoing':
+      case TravelStatus.ongoing:
         return isDark ? travelOngoingDark : travelOngoingLight;
-      case 'finished':
-      case 'completed':
-        return isDark ? travelFinishedDark : travelFinishedLight;
-      default:
+      case TravelStatus.finished:
         return isDark ? travelFinishedDark : travelFinishedLight;
     }
   }
 
-  // Helper method to get contrasting text color for travel status
+  /// Helper method to get contrasting text color for travel status
   static Color getTravelStatusTextColor(String status, {required bool isDark}) {
-    // All status colors have sufficient contrast with white/near-white text
+    /// All status colors have sufficient contrast with white/near-white text
     return isDark ? const Color(0xFFF3F4F6) : Colors.white;
   }
 }

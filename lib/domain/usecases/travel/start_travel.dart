@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-
 import '../../entities/enums.dart';
 import '../../entities/travel.dart';
 import '../../repositories/travel/travel_repository.dart';
 
+/// Use case for starting a [Travel].
 class StartTravel {
+  /// Repository to handle travel persistence.
   final TravelRepository _travelRepository;
 
-  /// Default constructor
+  /// Creates an instance of [StartTravel].
   StartTravel(this._travelRepository);
 
+  /// Starts the travel by updating its status and start date.
+  ///
+  /// Throws an [Exception] if the travel has already started or finished.
   Future<void> call(Travel travel) async {
     debugPrint('Travel that is going to be started: ${travel.status}');
 

@@ -3,15 +3,48 @@ import 'package:uuid/uuid.dart';
 import '../../domain/entities/place.dart';
 import '../local/database/tables/places_table.dart';
 
+/// Model class to represent a [Place]
+///
+/// This model class contains methods to manipulate place data, such as
+/// fromMap, toMap, fromEntity, toEntity, and other serialization/deserialization
+/// operations. It stores information about city, state, country, country code,
+/// and geographical coordinates (latitude and longitude).
 class PlaceModel {
+  /// Unique identifier for the place
   final String id;
+
+  /// City name of the place
   final String? city;
+
+  /// State or region of the place
   final String? state;
+
+  /// Country name
   final String? country;
+
+  /// ISO country code (e.g., "US")
   final String? countryCode;
+
+  /// Latitude coordinate
   final double latitude;
+
+  /// Longitude coordinate
   final double longitude;
 
+
+  /// Named constructor for [PlaceModel].
+  ///
+  /// Creates a [PlaceModel] with optional [id], [city], [state], [country],
+  /// [countryCode], and required [latitude] and [longitude].
+  ///
+  /// [id] is the unique identifier for the place. If not provided, a new UUID
+  /// will be generated automatically.
+  /// [city] is the name of the city for this place (optional).
+  /// [state] is the name of the state or province (optional).
+  /// [country] is the name of the country (optional).
+  /// [countryCode] is the ISO country code (optional).
+  /// [latitude] is the latitude coordinate of the place (required).
+  /// [longitude] is the longitude coordinate of the place (required).
   PlaceModel({
     String? id,
     this.city,
@@ -22,6 +55,8 @@ class PlaceModel {
     required this.longitude,
   }) : id = id ?? Uuid().v4();
 
+
+  /// Creates a [PlaceModel] from JSON data returned by Google Places API
   factory PlaceModel.fromJson(Map<String, dynamic> json) {
     String? getComponent(List components, String type) {
       try {
@@ -53,6 +88,26 @@ class PlaceModel {
     );
   }
 
+  /// Creates a [PlaceModel] from autocomplete JSON data
+  factory PlaceModel.fromAutocompleteJson(Map<String, dynamic> json) {
+    final description = json['description'] as String? ?? '';
+    final parts = description.split(',').map((e) => e.trim()).toList();
+    String? city, state, country;
+    if (parts.isNotEmpty) city = parts[0];
+    if (parts.length >= 2) state = parts[1];
+    if (parts.length >= 3) country = parts.last;
+
+    return PlaceModel(
+      latitude: 0.0,
+      longitude: 0.0,
+      city: city,
+      state: state,
+      country: country,
+      countryCode: null,
+    );
+  }
+
+  /// Creates a [PlaceModel] from a Map (database row)
   factory PlaceModel.fromMap(Map<String, dynamic> map) {
     return PlaceModel(
       id: map[PlacesTable.placeId] as String,
@@ -65,6 +120,7 @@ class PlaceModel {
     );
   }
 
+  /// Converts this [PlaceModel] into a Map (for database storage)
   Map<String, dynamic> toMap() {
     return {
       PlacesTable.placeId: id,
@@ -77,6 +133,7 @@ class PlaceModel {
     };
   }
 
+  /// Returns a copy of this [PlaceModel] with updated fields
   PlaceModel copyWith({
     String? id,
     String? city,
@@ -97,6 +154,7 @@ class PlaceModel {
     );
   }
 
+  /// Converts a domain [Place] entity to this model
   factory PlaceModel.fromEntity(Place place) {
     return PlaceModel(
       id: place.id,
@@ -109,6 +167,7 @@ class PlaceModel {
     );
   }
 
+  /// Converts this model to a domain [Place] entity
   Place toEntity() {
     return Place(
       id: id,

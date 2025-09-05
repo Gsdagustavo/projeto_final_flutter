@@ -4,31 +4,32 @@ import 'travel_stop_table.dart';
 /// SQLite table schema and constants for the `travelStopExperiences` table.
 ///
 /// This class defines the column names and the SQL statement to create
-/// the table. It represents the many-to-many relationship between
-/// travel stops and experiences
+/// the table. It represents the many-to-many relationship between travel stops
+/// and experiences.
 abstract final class TravelStopExperiencesTable {
   /// Name of the travelStopExperiences table in the database.
   static const String tableName = 'travelStopExperiences';
 
-  /// Column name for the travel stop ID (foreign key)
+  /// Column name for the Travel Stop ID (foreign key).
   ///
-  /// `INTEGER NOT NULL`
-  static const String travelStopId = 'travelStopId';
+  /// References [TravelStopTable.travelStopId]
+  static const String travelStopId = TravelStopTable.travelStopId;
 
-  /// Column name for the experience (foreign key)
+  /// Column name for the Experience Index (foreign key).
   ///
-  /// `INTEGER NOT NULL`
-  static const String experienceIndex = 'experienceIndex';
+  /// References [ExperiencesTable.experienceIndex]
+  static const String experienceIndex = ExperiencesTable.experienceIndex;
 
-  /// SQL command to create the travelStopExperiences table
+  /// SQL command to create the travelStopExperiences table.
   static const String createTable =
-      '''
-    CREATE TABLE $tableName (
-      $travelStopId TEXT NOT NULL,
-      $experienceIndex INTEGER NOT NULL,
-      FOREIGN KEY ($travelStopId) REFERENCES ${TravelStopTable.tableName} (${TravelStopTable.travelStopId}),
-      FOREIGN KEY ($experienceIndex) REFERENCES ${ExperiencesTable.tableName} (${ExperiencesTable.experienceIndex}),
-      PRIMARY KEY ($travelStopId, $experienceIndex)
-    );
-  ''';
+  '''
+      CREATE TABLE $tableName (
+        $travelStopId TEXT NOT NULL,
+        $experienceIndex INTEGER NOT NULL,
+        
+        FOREIGN KEY ($travelStopId) REFERENCES ${TravelStopTable.tableName} (${TravelStopTable.travelStopId}),
+        FOREIGN KEY ($experienceIndex) REFERENCES ${ExperiencesTable.tableName} (${ExperiencesTable.experienceIndex}),
+        PRIMARY KEY ($travelStopId, $experienceIndex)
+      );
+      ''';
 }
