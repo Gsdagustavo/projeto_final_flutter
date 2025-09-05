@@ -639,8 +639,14 @@ class _TravelStopModalState extends State<_TravelStopModal> {
                     if (useStop)
                       IconButton(
                         onPressed: () async {
-                          await onStopRemoved(modalContext, widget.stop!);
-                          Navigator.of(modalContext).pop();
+                          final removed = await onStopRemoved(
+                            modalContext,
+                            widget.stop!,
+                          );
+
+                          if (removed) {
+                            Navigator.of(modalContext).pop();
+                          }
                         },
                         icon: const Icon(
                           Icons.delete_outline,

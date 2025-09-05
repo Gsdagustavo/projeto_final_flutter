@@ -53,7 +53,7 @@ Future<void> onTravelDeleted(
   }
 }
 
-Future<void> onStopRemoved(BuildContext context, TravelStop stop) async {
+Future<bool> onStopRemoved(BuildContext context, TravelStop stop) async {
   final travelState = Provider.of<RegisterTravelProvider>(
     context,
     listen: false,
@@ -76,7 +76,7 @@ Future<void> onStopRemoved(BuildContext context, TravelStop stop) async {
     travelState.removeTravelStop(stop);
     markersState.removeMarker(stop);
   } else {
-    return;
+    return false;
   }
 
   await showDialog(
@@ -87,5 +87,5 @@ Future<void> onStopRemoved(BuildContext context, TravelStop stop) async {
     ),
   );
 
-  // Navigator.of(context).pop();
+  return true;
 }
