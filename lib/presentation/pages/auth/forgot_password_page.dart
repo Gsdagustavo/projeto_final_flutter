@@ -24,8 +24,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _emailController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
+  Widget build(BuildContext modalContext) {
+    final as = AppLocalizations.of(modalContext)!;
     final validations = FormValidations(as);
 
     return Scaffold(
@@ -66,7 +66,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     validator: validations.emailValidator,
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
-                    onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
+                    onTapUpOutside: (_) => FocusScope.of(modalContext).unfocus(),
                     decoration: InputDecoration(
                       hintText: as.email,
                       prefixIcon: const Icon(Icons.email),

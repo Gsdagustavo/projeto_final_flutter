@@ -137,7 +137,7 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext modalContext) {
     return Scaffold(
       appBar: MyAppBar(
         title: widget.travel.travelTitle,

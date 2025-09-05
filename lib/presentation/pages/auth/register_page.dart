@@ -112,8 +112,8 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
+  Widget build(BuildContext modalContext) {
+    final as = AppLocalizations.of(modalContext)!;
     final validations = FormValidations(as);
 
     return Scaffold(
@@ -140,7 +140,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     TextFormField(
                       validator: validations.emailValidator,
                       controller: _emailController,
-                      onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
+                      onTapUpOutside: (_) => FocusScope.of(modalContext).unfocus(),
                       decoration: InputDecoration(
                         hintText: as.email,
                         prefixIcon: const Icon(Icons.email),
@@ -152,7 +152,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     TextFormField(
                       validator: validations.passwordValidator,
                       controller: _passwordController,
-                      onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
+                      onTapUpOutside: (_) => FocusScope.of(modalContext).unfocus(),
                       decoration: InputDecoration(
                         hintText: as.password,
                         prefixIcon: const Icon(Icons.lock),

@@ -85,8 +85,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
+  Widget build(BuildContext modalContext) {
+    final as = AppLocalizations.of(modalContext)!;
     final validations = FormValidations(as);
 
     return Scaffold(
@@ -124,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                       validator: validations.emailValidator,
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
+                      onTapUpOutside: (_) => FocusScope.of(modalContext).unfocus(),
                       decoration: InputDecoration(
                         hintText: as.email,
                         prefixIcon: const Icon(Icons.email),
@@ -137,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                     TextFormField(
                       validator: validations.passwordValidator,
                       controller: _passwordController,
-                      onTapUpOutside: (_) => FocusScope.of(context).unfocus(),
+                      onTapUpOutside: (_) => FocusScope.of(modalContext).unfocus(),
                       decoration: InputDecoration(
                         hintText: as.password,
                         prefixIcon: const Icon(Icons.lock),
@@ -178,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                   TextButton(
                     child: Text(as.forgot_your_password),
                     onPressed: () {
-                      context.push(
+                      modalContext.push(
                         '${AppRoutes.auth}${AppRoutes.forgotPassword}',
                       );
                     },

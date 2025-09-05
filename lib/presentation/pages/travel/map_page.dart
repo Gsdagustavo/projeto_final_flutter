@@ -21,6 +21,7 @@ import '../../providers/user_preferences_provider.dart';
 import '../../util/app_router.dart';
 import '../../widgets/loading_dialog.dart';
 import '../../widgets/modals.dart';
+import '../util/travel_utils.dart';
 import '../util/ui_utils.dart';
 
 class TravelMap extends StatefulWidget {
@@ -122,8 +123,8 @@ class _TravelMapState extends State<TravelMap> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
+  Widget build(BuildContext modalContext) {
+    final as = AppLocalizations.of(modalContext)!;
     return Scaffold(
       /// TODO: add transparency to appbar
       appBar: AppBar(
@@ -131,11 +132,11 @@ class _TravelMapState extends State<TravelMap> {
           children: [
             Text(
               as.route_planning,
-              style: Theme.of(context).textTheme.displaySmall,
+              style: Theme.of(modalContext).textTheme.displaySmall,
             ),
             Text(
               as.long_press_to_add_stops,
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(modalContext).textTheme.bodyMedium,
             ),
           ],
         ),
@@ -439,46 +440,6 @@ class _TravelStopModalState extends State<_TravelStopModal> {
   final _arriveDateController = TextEditingController();
   final _leaveDateController = TextEditingController();
 
-  void onStopRemoved() async {
-    final travelState = Provider.of<RegisterTravelProvider>(
-      context,
-      listen: false,
-    );
-    final markersState = Provider.of<MapMarkersProvider>(
-      context,
-      listen: false,
-    );
-
-    final as = AppLocalizations.of(context)!;
-
-    final remove = await showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(as.remove_stop),
-          content: Text(as.remove_stop_confirmation),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(as.no),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(as.yes),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (remove != null && remove) {
-      travelState.removeTravelStop(widget.stop!);
-      markersState.removeMarker(widget.stop!);
-    }
-
-    // Navigator.of(context).pop();
-  }
-
   void onStopAdded() async {
     final stop = TravelStop(
       place: widget.place,
@@ -638,17 +599,19 @@ class _TravelStopModalState extends State<_TravelStopModal> {
   final _controller = DraggableScrollableController();
 
   @override
-  Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
+  Widget build(BuildContext modalContext) {
+    final as = AppLocalizations.of(modalContext)!;
     final placeInfo = widget.place.toString();
 
     final locale = Provider.of<UserPreferencesProvider>(
-      context,
+      modalContext,
       listen: false,
     ).languageCode;
 
     _arriveDateController.text = _arriveDate?.getFormattedDate(locale) ?? '';
     _leaveDateController.text = _leaveDate?.getFormattedDate(locale) ?? '';
+
+    final useStop = widget.stop != null;
 
     return DraggableScrollableSheet(
       controller: _controller,
@@ -672,6 +635,18 @@ class _TravelStopModalState extends State<_TravelStopModal> {
                       as.add_stop,
                       style: Theme.of(context).textTheme.displaySmall,
                     ),
+                    const Spacer(),
+                    if (useStop)
+                      IconButton(
+                        onPressed: () async {
+                          await onStopRemoved(modalContext, widget.stop!);
+                          Navigator.of(modalContext).pop();
+                        },
+                        icon: const Icon(
+                          Icons.delete_outline,
+                          color: Colors.red,
+                        ),
+                      ),
                   ],
                 ),
                 const Padding(padding: EdgeInsets.all(4)),
@@ -809,20 +784,14 @@ class _TravelStopModalState extends State<_TravelStopModal> {
                             ),
                             onPressed: () {
                               if (isStopValid) {
-                                if (widget.stop == null) {
-                                  onStopAdded();
-                                } else {
+                                if (useStop) {
                                   onStopUpdated();
+                                } else {
+                                  onStopAdded();
                                 }
                               }
                             },
-
-                            /// TODO: intl
-                            child: Text(
-                              widget.stop == null
-                                  ? as.add_stop
-                                  : as.update_stop,
-                            ),
+                            child: Text(useStop ? as.update_stop : as.add_stop),
                           );
                         },
                       ),

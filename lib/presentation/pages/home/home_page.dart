@@ -141,8 +141,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
+  Widget build(BuildContext modalContext) {
+    final as = AppLocalizations.of(modalContext)!;
 
     return Consumer<TravelListProvider>(
       builder: (_, state, __) {
@@ -432,7 +432,7 @@ class _HomePageState extends State<HomePage> {
                 child: Padding(
                   padding: const EdgeInsets.all(cardPadding),
                   child: TextField(
-                    onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                    onTapOutside: (_) => FocusScope.of(modalContext).unfocus(),
                     controller: searchController,
                     onChanged: (value) async {
                       await state.searchTravel(searchController.text);

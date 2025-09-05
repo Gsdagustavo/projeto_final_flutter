@@ -72,14 +72,14 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
+  Widget build(BuildContext modalContext) {
+    final as = AppLocalizations.of(modalContext)!;
 
     return FabPage(
       title: widget.travel.travelTitle,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await context.read<ReviewProvider>().getReviewsByTravel(
+          await modalContext.read<ReviewProvider>().getReviewsByTravel(
             widget.travel,
           );
         },
@@ -125,13 +125,13 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                             const Icon(Icons.calendar_today, size: 16),
                             Text(
                               as.duration,
-                              style: Theme.of(context).textTheme.bodyLarge,
+                              style: Theme.of(modalContext).textTheme.bodyLarge,
                             ),
                           ],
                         ),
                         Text(
                           '${widget.travel.totalDuration} ${as.days.toLowerCase()}',
-                          style: Theme.of(context).textTheme.labelLarge,
+                          style: Theme.of(modalContext).textTheme.labelLarge,
                         ),
                       ],
                     ),
@@ -153,13 +153,13 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                             const Icon(Icons.people, size: 16),
                             Text(
                               as.participants,
-                              style: Theme.of(context).textTheme.bodyLarge,
+                              style: Theme.of(modalContext).textTheme.bodyLarge,
                             ),
                           ],
                         ),
                         Text(
                           '${widget.travel.participants.length} ${as.participants.toLowerCase()}',
-                          style: Theme.of(context).textTheme.labelLarge,
+                          style: Theme.of(modalContext).textTheme.labelLarge,
                         ),
                       ],
                     ),
@@ -186,15 +186,15 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                             const Icon(Icons.airplanemode_active, size: 16),
                             Text(
                               as.transport,
-                              style: Theme.of(context).textTheme.bodyLarge,
+                              style: Theme.of(modalContext).textTheme.bodyLarge,
                             ),
                           ],
                         ),
                         Text(
                           widget.travel.transportType.getIntlTransportType(
-                            context,
+                            modalContext,
                           ),
-                          style: Theme.of(context).textTheme.labelLarge,
+                          style: Theme.of(modalContext).textTheme.labelLarge,
                         ),
                       ],
                     ),
@@ -216,13 +216,13 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                             const Icon(Icons.location_on, size: 16),
                             Text(
                               as.countries,
-                              style: Theme.of(context).textTheme.bodyLarge,
+                              style: Theme.of(modalContext).textTheme.bodyLarge,
                             ),
                           ],
                         ),
                         Text(
                           '${widget.travel.numCountries} ${as.countries.toLowerCase()}',
-                          style: Theme.of(context).textTheme.labelLarge,
+                          style: Theme.of(modalContext).textTheme.labelLarge,
                         ),
                       ],
                     ),
@@ -289,7 +289,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                       const Icon(Icons.calendar_today),
                       Text(
                         as.travel_dates,
-                        style: Theme.of(context).textTheme.bodyLarge,
+                        style: Theme.of(modalContext).textTheme.bodyLarge,
                       ),
                     ],
                   ),
@@ -299,7 +299,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                     children: [
                       Text(
                         as.start,
-                        style: Theme.of(context).textTheme.labelLarge,
+                        style: Theme.of(modalContext).textTheme.labelLarge,
                       ),
                       Text(
                         widget.travel.startDate.getFormattedDateWithYear(
@@ -314,7 +314,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                     children: [
                       Text(
                         as.end,
-                        style: Theme.of(context).textTheme.labelLarge,
+                        style: Theme.of(modalContext).textTheme.labelLarge,
                       ),
                       Text(
                         widget.travel.endDate.getFormattedDateWithYear(locale),
@@ -337,7 +337,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                       const Icon(Icons.location_on),
                       Text(
                         as.travel_route,
-                        style: Theme.of(context).textTheme.bodyLarge,
+                        style: Theme.of(modalContext).textTheme.bodyLarge,
                       ),
                     ],
                   ),
@@ -398,11 +398,11 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                 ),
                                 Text(
                                   state.rate.toStringAsFixed(2),
-                                  style: Theme.of(context).textTheme.titleLarge,
+                                  style: Theme.of(modalContext).textTheme.titleLarge,
                                 ),
                                 Text(
                                   as.based_on_reviews(state.reviews.length),
-                                  style: Theme.of(context).textTheme.bodySmall,
+                                  style: Theme.of(modalContext).textTheme.bodySmall,
                                 ),
                               ],
                             ),
@@ -446,9 +446,9 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                 onPressed: () async {
                   await showLoadingDialog(
-                    context: context,
+                    context: modalContext,
                     function: () async {
-                      await onTravelDeleted(context, widget.travel);
+                      await onTravelDeleted(modalContext, widget.travel);
                     },
                   );
                 },
@@ -493,7 +493,7 @@ class _StopStepperWidgetState extends State<_StopStepperWidget> {
   int index = 0;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext modalContext) {
     final stops = widget.travel.stops;
     debugPrint('Stops: ${widget.travel.stops}');
 
@@ -538,7 +538,7 @@ class _StopStepperWidgetState extends State<_StopStepperWidget> {
       steps: [
         for (final stop in stops)
           Step(
-            subtitle: Text(stop.type.getIntlTravelStopType(context)),
+            subtitle: Text(stop.type.getIntlTravelStopType(modalContext)),
             title: Text('${stop.place.country}, ${stop.place.city}'),
             label: const Icon(Icons.reviews),
             content: Column(
@@ -552,7 +552,7 @@ class _StopStepperWidgetState extends State<_StopStepperWidget> {
                     ),
                     IconButton(
                       onPressed: () async {
-                        await showReviewModal(context, widget.travel, stop);
+                        await showReviewModal(modalContext, widget.travel, stop);
                       },
                       icon: const Icon(Icons.reviews),
                     ),
@@ -771,12 +771,12 @@ class _ReviewModalState extends State<ReviewModal> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
+  Widget build(BuildContext modalContext) {
+    final as = AppLocalizations.of(modalContext)!;
     final validations = FormValidations(as);
 
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+      padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(modalContext).bottom),
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(
           decelerationRate: ScrollDecelerationRate.normal,
@@ -790,13 +790,13 @@ class _ReviewModalState extends State<ReviewModal> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      Navigator.of(modalContext).pop();
                     },
                     icon: const Icon(Icons.close),
                   ),
                   Text(
                     as.give_a_review,
-                    style: Theme.of(context).textTheme.displaySmall,
+                    style: Theme.of(modalContext).textTheme.displaySmall,
                   ),
                 ],
               ),
@@ -840,7 +840,7 @@ class _ReviewModalState extends State<ReviewModal> {
                 children: [
                   Text(
                     as.detail_review,
-                    style: Theme.of(context).textTheme.labelMedium,
+                    style: Theme.of(modalContext).textTheme.labelMedium,
                   ),
                   const Padding(padding: EdgeInsets.all(6)),
                   Form(
@@ -850,13 +850,13 @@ class _ReviewModalState extends State<ReviewModal> {
                       textCapitalization: TextCapitalization.sentences,
                       validator: validations.reviewValidator,
                       controller: _reviewController,
-                      onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                      onTapOutside: (_) => FocusScope.of(modalContext).unfocus(),
                       maxLength: 500,
                       maxLines: 5,
                       decoration: InputDecoration(
                         hint: Text(
                           as.review,
-                          style: Theme.of(context).textTheme.labelSmall,
+                          style: Theme.of(modalContext).textTheme.labelSmall,
                         ),
                       ),
                     ),
@@ -875,7 +875,7 @@ class _ReviewModalState extends State<ReviewModal> {
                     child: Container(
                       decoration: BoxDecoration(
                         border: BoxBorder.all(
-                          color: Theme.of(context).highlightColor,
+                          color: Theme.of(modalContext).highlightColor,
                           width: 1,
                         ),
                         borderRadius: BorderRadius.circular(32),
@@ -1032,8 +1032,8 @@ class _TravelTitleWidgetState extends State<_TravelTitleWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
+  Widget build(BuildContext modalContext) {
+    final as = AppLocalizations.of(modalContext)!;
     final validations = FormValidations(as);
 
     return Padding(
@@ -1054,7 +1054,7 @@ class _TravelTitleWidgetState extends State<_TravelTitleWidget> {
               ),
               controller: travelTitleController,
               validator: validations.travelTitleValidator,
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: Theme.of(modalContext).textTheme.headlineMedium,
             ),
           ),
           IconButton(

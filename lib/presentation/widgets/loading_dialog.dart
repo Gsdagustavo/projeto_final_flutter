@@ -49,10 +49,10 @@ Future<T> showLoadingDialog<T>({
   debugPrint(
     'Can pop loading dialog: ${Navigator.of(context, rootNavigator: true).canPop()}',
   );
-  //
-  // if (Navigator.of(context, rootNavigator: true).canPop()) {
-  //   debugPrint('Popping loading dialog');
-  //   Navigator.of(context, rootNavigator: true).pop();
+
+  if (Navigator.of(context, rootNavigator: true).canPop()) {
+    Navigator.of(context, rootNavigator: true).pop();
+  }
 
   return item;
 }

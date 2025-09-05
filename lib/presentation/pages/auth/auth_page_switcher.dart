@@ -95,7 +95,7 @@ class _AuthPageSwitcherState extends State<AuthPageSwitcher> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext modalContext) {
     return Scaffold(
       body: Column(
         children: [

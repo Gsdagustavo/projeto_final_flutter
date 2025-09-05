@@ -37,9 +37,9 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
-    final loginProvider = Provider.of<LoginProvider>(context);
+  Widget build(BuildContext modalContext) {
+    final as = AppLocalizations.of(modalContext)!;
+    final loginProvider = Provider.of<LoginProvider>(modalContext);
     final user = loginProvider.loggedUser;
 
     const defaultPfpPath = 'assets/images/default_profile_picture.png';
@@ -51,7 +51,7 @@ class _SettingsPageState extends State<SettingsPage> {
       backgroundImage = Image.asset(defaultPfpPath);
     }
 
-    final locale = Localizations.localeOf(context).toString();
+    final locale = Localizations.localeOf(modalContext).toString();
 
     final creationTime = user?.metadata.creationTime ?? 'N/A';
 
@@ -109,7 +109,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 children: [
                   Text(
                     as.account,
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: Theme.of(modalContext).textTheme.titleMedium,
                   ),
                   Column(
                     children: [
@@ -140,14 +140,14 @@ class _SettingsPageState extends State<SettingsPage> {
               leading: const Icon(Icons.language),
               title: Text(as.language),
               subtitle: Text(
-                _languageGetters[Localizations.localeOf(context).languageCode]!(
+                _languageGetters[Localizations.localeOf(modalContext).languageCode]!(
                   as,
                 ),
               ),
               trailing: const Icon(Icons.arrow_forward_ios, size: 16),
               onTap: () {
                 showModalBottomSheet(
-                  context: context,
+                  context: modalContext,
                   builder: (context) => _LanguageSelectionSheet(),
                 );
               },

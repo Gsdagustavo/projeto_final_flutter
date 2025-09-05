@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext modalContext) {
     return const Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 }

@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../domain/entities/travel.dart';
+import '../../../domain/entities/travel_stop.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../providers/map_markers_provider.dart';
+import '../../providers/register_travel_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../widgets/modals.dart';
 
@@ -48,4 +51,41 @@ Future<void> onTravelDeleted(
   if (popContext) {
     Navigator.of(context).pop();
   }
+}
+
+Future<void> onStopRemoved(BuildContext context, TravelStop stop) async {
+  final travelState = Provider.of<RegisterTravelProvider>(
+    context,
+    listen: false,
+  );
+  final markersState = Provider.of<MapMarkersProvider>(context, listen: false);
+
+  final as = AppLocalizations.of(context)!;
+
+  final remove = await showDialog<bool>(
+    context: context,
+    builder: (context) {
+      return DeleteModal(
+        title: as.remove_stop,
+        message: as.remove_stop_confirmation,
+      );
+    },
+  );
+
+  if (remove != null && remove) {
+    travelState.removeTravelStop(stop);
+    markersState.removeMarker(stop);
+  } else {
+    return;
+  }
+
+  await showDialog(
+    context: context,
+    builder: (context) => SuccessModal(
+      /// TODO: intl
+      message: 'Stop Removed Successfully!',
+    ),
+  );
+
+  // Navigator.of(context).pop();
 }
