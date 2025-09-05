@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../../../domain/entities/enums.dart';
 import '../../../domain/entities/participant.dart';
+import '../../../domain/entities/travel_stop.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../services/file_service.dart';
 import '../../extensions/enums_extensions.dart';
@@ -526,62 +527,30 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                           ],
                         );
                       } else {
-                        return ListView.separated(
-                          itemCount: stops.length,
+                        return ImplicitlyAnimatedList<TravelStop>(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
+                          items: stops,
+                          areItemsTheSame: (oldItem, newItem) {
+                            return oldItem.hashCode == newItem.hashCode;
+                          },
+                          removeItemBuilder: (context, animation, stop) {
+                            return SizeFadeTransition(
+                              curve: Curves.easeInOut,
+                              animation: animation,
+                              child: _TravelStopListItem(stop: stop),
+                            );
+                          },
                           separatorBuilder: (context, index) {
                             return const Padding(padding: EdgeInsets.all(12));
                           },
-                          itemBuilder: (context, index) {
-                            final backgroundColor = Theme.of(context)
-                                .elevatedButtonTheme
-                                .style!
-                                .backgroundColor!
-                                .resolve({});
-
-                            final stop = state.stops[index];
-                            return ListTile(
-                              shape: Theme.of(context).cardTheme.shape,
-                              leading: Builder(
+                          itemBuilder: (context, animation, stop, i) {
+                            return SizeFadeTransition(
+                              animation: animation,
+                              child: Builder(
                                 builder: (context) {
-                                  if (index == 0) {
-                                    /// First stop
-                                    return CircleAvatar(
-                                      backgroundColor: backgroundColor,
-                                      child: const Center(
-                                        child: Icon(
-                                          FontAwesomeIcons.paperPlane,
-                                        ),
-                                      ),
-                                    );
-                                  } else if (index == stops.length - 1) {
-                                    /// Last stop
-                                    return CircleAvatar(
-                                      backgroundColor: backgroundColor,
-                                      child: const Center(
-                                        child: Icon(FontAwesomeIcons.flag),
-                                      ),
-                                    );
-                                  } else {
-                                    /// Waypoint
-                                    return CircleAvatar(
-                                      backgroundColor: backgroundColor,
-                                      child: const Center(
-                                        child: Icon(Icons.location_on),
-                                      ),
-                                    );
-                                  }
+                                  return _TravelStopListItem(stop: stop);
                                 },
-                              ),
-                              title: Text(stop.place.city ?? ''),
-                              subtitle: Text(
-                                '${stop.place.city ?? ''}, ${stop.place.country ?? ''}',
-                              ),
-                              trailing: IconButton(
-                                onPressed: () async =>
-                                    await onStopRemoved(context, stop),
-                                icon: const Icon(FontAwesomeIcons.xmark),
                               ),
                             );
                           },
@@ -1112,6 +1081,50 @@ class _ParticipantListItem extends StatelessWidget {
       child: ListTile(
         title: Text(participant.name),
         subtitle: Text('${as.age}: ${participant.age}'),
+      ),
+    );
+  }
+}
+
+class _TravelStopListItem extends StatelessWidget {
+  const _TravelStopListItem({super.key, required this.stop});
+
+  final TravelStop stop;
+
+  @override
+  Widget build(BuildContext context) {
+    final backgroundColor = Theme.of(
+      context,
+    ).elevatedButtonTheme.style!.backgroundColor!.resolve({});
+
+    return ListTile(
+      shape: Theme.of(context).cardTheme.shape,
+      leading: Builder(
+        builder: (context) {
+          switch (stop.type) {
+            case TravelStopType.start:
+              return CircleAvatar(
+                backgroundColor: backgroundColor,
+                child: const Center(child: Icon(FontAwesomeIcons.paperPlane)),
+              );
+            case TravelStopType.stop:
+              return CircleAvatar(
+                backgroundColor: backgroundColor,
+                child: const Center(child: Icon(Icons.location_on)),
+              );
+            case TravelStopType.end:
+              return CircleAvatar(
+                backgroundColor: backgroundColor,
+                child: const Center(child: Icon(FontAwesomeIcons.flag)),
+              );
+          }
+        },
+      ),
+      title: Text(stop.place.city ?? ''),
+      subtitle: Text('${stop.place.city ?? ''}, ${stop.place.country ?? ''}'),
+      trailing: IconButton(
+        onPressed: () async => await onStopRemoved(context, stop),
+        icon: const Icon(FontAwesomeIcons.xmark),
       ),
     );
   }
