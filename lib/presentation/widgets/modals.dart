@@ -3,11 +3,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../l10n/app_localizations.dart';
 
-TextStyle? modalContentTextStyle(BuildContext context) {
+TextStyle? _modalContentTextStyle(BuildContext context) {
   return Theme.of(context).textTheme.bodyMedium;
 }
 
-TextStyle? modalTitleTextStyle(BuildContext context) {
+TextStyle? _modalTitleTextStyle(BuildContext context) {
   return Theme.of(context).textTheme.titleLarge;
 }
 
@@ -70,8 +70,8 @@ class SuccessModal extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         spacing: 12,
         children: [
-          Text('Success!', style: modalTitleTextStyle(context)),
-          Text(message, style: modalContentTextStyle(context)),
+          Text('Success!', style: _modalTitleTextStyle(context)),
+          Text(message, style: _modalContentTextStyle(context)),
         ],
       ),
       actions: [
@@ -104,8 +104,8 @@ class ErrorModal extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         spacing: 12,
         children: [
-          Text('Error Occurred', style: modalContentTextStyle(context)),
-          Text(message, style: modalContentTextStyle(context)),
+          Text('Error Occurred', style: _modalContentTextStyle(context)),
+          Text(message, style: _modalContentTextStyle(context)),
         ],
       ),
       actions: [
@@ -138,8 +138,8 @@ class WarningModal extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         spacing: 12,
         children: [
-          Text(as.warning, style: modalTitleTextStyle(context)),
-          Text(message, style: modalContentTextStyle(context)),
+          Text(as.warning, style: _modalTitleTextStyle(context)),
+          Text(message, style: _modalContentTextStyle(context)),
         ],
       ),
       actions: [
@@ -181,8 +181,8 @@ class DeleteModal extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         spacing: 12,
         children: [
-          Text(title, style: modalTitleTextStyle(context)),
-          Text(message, style: modalContentTextStyle(context)),
+          Text(title, style: _modalTitleTextStyle(context)),
+          Text(message, style: _modalContentTextStyle(context)),
         ],
       ),
       actions: [
@@ -221,11 +221,11 @@ class SignOutModal extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         spacing: 12,
         children: [
-          Text('Sign Out?', style: modalContentTextStyle(context)),
+          Text('Sign Out?', style: _modalContentTextStyle(context)),
           Text(
             'Are you sure you want to sign out? You\'ll need to sign in again '
             'to access your travels.',
-            style: modalTitleTextStyle(context),
+            style: _modalTitleTextStyle(context),
           ),
         ],
       ),
@@ -268,11 +268,11 @@ class NoInternetModal extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         spacing: 12,
         children: [
-          Text('No Internet Connection', style: modalTitleTextStyle(context)),
+          Text('No Internet Connection', style: _modalTitleTextStyle(context)),
           Text(
             'You\'re currently offline. Some features may not be available '
             'until you reconnect to the internet.',
-            style: modalContentTextStyle(context),
+            style: _modalContentTextStyle(context),
           ),
         ],
       ),
@@ -290,6 +290,56 @@ class NoInternetModal extends StatelessWidget {
             Navigator.of(context).pop(false);
           },
           child: Text('Continue Offline'),
+        ),
+      ],
+    );
+  }
+}
+
+/// Pops [true] if the user confirms (Ok). Otherwise, returns [false]
+class OkCancelModal extends StatelessWidget {
+  const OkCancelModal({super.key, required this.title, required this.content});
+
+  final String title;
+  final String content;
+
+  @override
+  Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+
+    return _BaseDialog(
+      circleAvatarBackgroundColor: Colors.blue.shade200,
+      title: Icon(FontAwesomeIcons.questionCircle, color: Colors.blue.shade800),
+      content: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        spacing: 12,
+        children: [
+          Text(title, style: _modalTitleTextStyle(context)),
+          Text(content, style: _modalContentTextStyle(context)),
+        ],
+      ),
+      actions: [
+        Row(
+          children: [
+            Expanded(
+              child: _BaseElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: Text('Cancel'),
+              ),
+            ),
+            const Padding(padding: EdgeInsets.all(6)),
+            Expanded(
+              child: _BaseElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: Text('Ok'),
+              ),
+            ),
+          ],
         ),
       ],
     );
