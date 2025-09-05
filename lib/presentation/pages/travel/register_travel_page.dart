@@ -389,31 +389,11 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                         itemBuilder: (context, animation, participant, i) {
                           return SizeFadeTransition(
                             animation: animation,
-                            child: Card(
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 6,
-                                vertical: 16,
-                              ),
-                              child: ListTile(
-                                onTap: () => _showParticipantModal(
-                                  context,
-                                  participant: participant,
-                                ),
-                                leading: FabCircleAvatar(
-                                  backgroundImage: FileImage(
-                                    participant.profilePicture,
-                                  ),
-                                ),
-                                title: Text(participant.name),
-                                trailing: IconButton(
-                                  onPressed: () =>
-                                      onParticipantRemovePress(participant),
-                                  icon: const Icon(FontAwesomeIcons.xmark),
-                                ),
-                                subtitle: Text(
-                                  '${as.age}: ${participant.age.toString()}',
-                                ),
-                              ),
+                            child: _ParticipantListItem(
+                              participant: participant,
+                              onPressed: () async {
+                                await onParticipantRemovePress(participant);
+                              },
                             ),
                           );
                         },
@@ -1069,18 +1049,32 @@ class _ParticipantModalState extends State<_ParticipantModal> {
 }
 
 class _ParticipantListItem extends StatelessWidget {
-  const _ParticipantListItem({super.key, required this.participant});
+  const _ParticipantListItem({
+    super.key,
+    required this.participant,
+    this.onPressed,
+  });
 
   final Participant participant;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
+
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 16),
       child: ListTile(
+        onTap: () => _showParticipantModal(context, participant: participant),
+        leading: FabCircleAvatar(
+          backgroundImage: FileImage(participant.profilePicture),
+        ),
         title: Text(participant.name),
-        subtitle: Text('${as.age}: ${participant.age}'),
+        trailing: IconButton(
+          onPressed: onPressed,
+          icon: const Icon(FontAwesomeIcons.xmark),
+        ),
+        subtitle: Text('${as.age}: ${participant.age.toString()}'),
       ),
     );
   }
