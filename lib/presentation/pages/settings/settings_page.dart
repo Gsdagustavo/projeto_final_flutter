@@ -17,7 +17,7 @@ import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
 import '../../widgets/modals.dart';
 
-/// The Home Page of the app
+  /// The Home Page of the app
 class SettingsPage extends StatefulWidget {
   /// Constant constructor
   const SettingsPage({super.key});

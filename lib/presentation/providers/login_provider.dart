@@ -152,5 +152,6 @@ class LoginProvider with ChangeNotifier {
   /// Returns the error message
   String get errorMsg => _errorMsg!;
 
+  /// Returns whether the state is loading or not
   bool get isLoading => _isLoading;
 }

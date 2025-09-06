@@ -3,14 +3,17 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../l10n/app_localizations.dart';
 
+/// Returns the text style used for modal content.
 TextStyle? _modalContentTextStyle(BuildContext context) {
   return Theme.of(context).textTheme.bodyMedium;
 }
 
+/// Returns the text style used for modal titles.
 TextStyle? _modalTitleTextStyle(BuildContext context) {
   return Theme.of(context).textTheme.titleLarge;
 }
 
+/// Icon displayed in the [SuccessModal].
 class _SuccessIcon extends StatelessWidget {
   const _SuccessIcon();
 
@@ -23,6 +26,7 @@ class _SuccessIcon extends StatelessWidget {
   }
 }
 
+/// Icon displayed in the [ErrorModal].
 class _ErrorIcon extends StatelessWidget {
   const _ErrorIcon();
 
@@ -35,6 +39,7 @@ class _ErrorIcon extends StatelessWidget {
   }
 }
 
+/// Icon displayed in the [WarningModal].
 class _WarningIcon extends StatelessWidget {
   const _WarningIcon();
 
@@ -47,41 +52,51 @@ class _WarningIcon extends StatelessWidget {
   }
 }
 
+/// Base dialog used by all modals, providing icon, content, and actions.
 class _BaseDialog extends StatelessWidget {
+  /// The icon displayed inside the circle avatar at the top of the dialog.
+  final Widget icon;
+
+  /// The main content of the dialog.
+  final Widget content;
+
+  /// The list of actions displayed at the bottom of the dialog.
+  final List<Widget> actions;
+
+  /// Optional background color for the circle avatar.
+  final Color? circleAvatarBackgroundColor;
+
   const _BaseDialog({
-    required this.title,
+    required this.icon,
     required this.content,
     required this.actions,
     this.circleAvatarBackgroundColor,
   });
-
-  final Widget title;
-  final Widget content;
-  final List<Widget> actions;
-  final Color? circleAvatarBackgroundColor;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: CircleAvatar(
         backgroundColor: circleAvatarBackgroundColor,
-
-        child: title,
+        child: icon,
       ),
       content: content,
     );
   }
 }
 
+/// A modal dialog indicating a successful operation.
 class SuccessModal extends StatelessWidget {
-  const SuccessModal({super.key, required this.message});
-
+  /// The message displayed in the modal.
   final String message;
+
+  /// Constant constructor
+  const SuccessModal({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {
     return _BaseDialog(
-      title: const _SuccessIcon(),
+      icon: const _SuccessIcon(),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -104,15 +119,18 @@ class SuccessModal extends StatelessWidget {
   }
 }
 
+/// A modal dialog indicating an error.
 class ErrorModal extends StatelessWidget {
-  const ErrorModal({super.key, required this.message});
-
+  /// The error message displayed in the modal.
   final String message;
+
+  /// Constant constructor
+  const ErrorModal({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {
     return _BaseDialog(
-      title: const _ErrorIcon(),
+      icon: const _ErrorIcon(),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -134,18 +152,22 @@ class ErrorModal extends StatelessWidget {
   }
 }
 
-/// Pops [true] if the user taps [Continue]. Otherwise, returns [false]
+/// A warning modal with options to continue or cancel.
+///
+/// Pops `true` if the user taps Continue, `false` if Cancel.
 class WarningModal extends StatelessWidget {
-  const WarningModal({super.key, required this.message});
-
+  /// The warning message displayed in the modal.
   final String message;
+
+  /// Constant constructor
+  const WarningModal({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
 
     return _BaseDialog(
-      title: const _WarningIcon(),
+      icon: const _WarningIcon(),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -163,7 +185,6 @@ class WarningModal extends StatelessWidget {
           },
           child: Text('Continue'),
         ),
-
         _BaseElevatedButton(
           onPressed: () {
             Navigator.of(context).pop(false);
@@ -175,12 +196,18 @@ class WarningModal extends StatelessWidget {
   }
 }
 
-/// Pops [true] if the item deletion was confirmed. Otherwise, returns [false]
+/// A modal dialog for confirming deletion.
+///
+/// Pops `true` if deletion is confirmed, otherwise `false`.
 class DeleteModal extends StatelessWidget {
-  const DeleteModal({super.key, required this.message, required this.title});
-
+  /// Title of the deletion dialog.
   final String title;
+
+  /// Message describing what will be deleted.
   final String message;
+
+  /// Constant constructor
+  const DeleteModal({super.key, required this.message, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +215,7 @@ class DeleteModal extends StatelessWidget {
 
     return _BaseDialog(
       circleAvatarBackgroundColor: Colors.red.shade200,
-      title: Icon(Icons.delete_outline, color: Colors.red.shade800),
+      icon: Icon(Icons.delete_outline, color: Colors.red.shade800),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -206,7 +233,6 @@ class DeleteModal extends StatelessWidget {
           },
           child: Text('Delete'),
         ),
-
         _BaseElevatedButton(
           onPressed: () {
             Navigator.of(context).pop(false);
@@ -218,15 +244,18 @@ class DeleteModal extends StatelessWidget {
   }
 }
 
-/// Pops [true] if the user confirms sign out. Otherwise, returns [false]
+/// Modal dialog asking the user to confirm sign out.
+///
+/// Pops `true` if sign out is confirmed, otherwise `false`.
 class SignOutModal extends StatelessWidget {
+  /// Constant constructor
   const SignOutModal({super.key});
 
   @override
   Widget build(BuildContext context) {
     return _BaseDialog(
       circleAvatarBackgroundColor: Colors.amber.shade200,
-      title: Icon(Icons.logout, color: Colors.amber.shade800),
+      icon: Icon(Icons.logout, color: Colors.amber.shade800),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -260,15 +289,18 @@ class SignOutModal extends StatelessWidget {
   }
 }
 
-/// Pops [true] if the user tries to connect again. Otherwise, returns [false]
+/// Modal shown when there is no internet connection.
+///
+/// Pops `true` if user tries to reconnect, otherwise `false`.
 class NoInternetModal extends StatelessWidget {
+  /// Constant constructor
   const NoInternetModal({super.key});
 
   @override
   Widget build(BuildContext context) {
     return _BaseDialog(
       circleAvatarBackgroundColor: Colors.red.shade200,
-      title: Icon(
+      icon: Icon(
         Icons.signal_wifi_connected_no_internet_4_outlined,
         color: Colors.red.shade800,
       ),
@@ -305,18 +337,24 @@ class NoInternetModal extends StatelessWidget {
   }
 }
 
-/// Pops [true] if the user confirms (Ok). Otherwise, returns [false]
+/// Modal with "Ok" and "Cancel" buttons.
+///
+/// Pops `true` if user taps Ok, otherwise `false`.
 class OkCancelModal extends StatelessWidget {
-  const OkCancelModal({super.key, required this.title, required this.content});
-
+  /// The title of the dialog.
   final String title;
+
+  /// The content of the dialog.
   final String content;
+
+  /// Constant constructor
+  const OkCancelModal({super.key, required this.title, required this.content});
 
   @override
   Widget build(BuildContext context) {
     return _BaseDialog(
       circleAvatarBackgroundColor: Colors.blue.shade200,
-      title: Icon(FontAwesomeIcons.circleQuestion, color: Colors.blue.shade800),
+      icon: Icon(FontAwesomeIcons.circleQuestion, color: Colors.blue.shade800),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -353,16 +391,22 @@ class OkCancelModal extends StatelessWidget {
   }
 }
 
+/// Base button used in modals.
 class _BaseElevatedButton extends StatelessWidget {
+  /// The child widget of the button.
+  final Widget child;
+
+  /// Optional background color for the button.
+  final Color? buttonColor;
+
+  /// Callback triggered when the button is pressed.
+  final VoidCallback onPressed;
+
   const _BaseElevatedButton({
     required this.child,
     this.buttonColor,
     required this.onPressed,
   });
-
-  final Widget child;
-  final Color? buttonColor;
-  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -375,7 +419,9 @@ class _BaseElevatedButton extends StatelessWidget {
   }
 }
 
+/// Base snack bar used in custom snack bars.
 class _BaseSnackBar extends SnackBar {
+  /// Creates a snack bar with [backgroundColor] and [content].
   const _BaseSnackBar({required Color backgroundColor, required super.content});
 
   Widget build(BuildContext context) {
@@ -389,6 +435,7 @@ class _BaseSnackBar extends SnackBar {
   }
 }
 
+/// Shows a green snack bar with a success message.
 void showSuccessSnackBar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(
     _BaseSnackBar(
@@ -398,17 +445,18 @@ void showSuccessSnackBar(BuildContext context, String message) {
   );
 }
 
+/// Shows a red snack bar with an error message.
 void showErrorSnackBar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(
     _BaseSnackBar(content: Text(message), backgroundColor: Colors.red.shade800),
   );
 }
 
+/// Shows a yellow snack bar with a warning message.
 void showWarningSnackBar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(
     _BaseSnackBar(
       content: Text(message),
-
       backgroundColor: Colors.yellow.shade800,
     ),
   );

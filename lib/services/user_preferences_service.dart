@@ -5,13 +5,22 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../core/exceptions/invalid_language_code_exception.dart';
 
+/// Service class to manage user preferences such as profile picture,
+/// theme mode, and language.
+///
+/// This class handles loading and saving preferences using [SharedPreferences].
 class UserPreferencesService {
+  /// Key used to save the profile picture file path
   static const String _profilePictureKey = 'profilePicture';
+
+  /// Key used to save dark mode preference
   static const String _darkModeKey = 'is_dark_mode';
 
+  /// Retrieves the current saved profile picture.
+  ///
+  /// Returns a [File] if a profile picture is saved; otherwise returns `null`.
   Future<File?> getCurrentProfilePicture() async {
     final prefs = await SharedPreferences.getInstance();
-
     final filePath = prefs.getString(_profilePictureKey);
 
     if (!prefs.containsKey(_profilePictureKey) || filePath == null) {
@@ -21,38 +30,42 @@ class UserPreferencesService {
     return File(filePath);
   }
 
+  /// Saves the given [profilePicture] file path into [SharedPreferences].
+  ///
+  /// Does nothing if [profilePicture] is `null`.
   Future<void> saveProfilePicture(File? profilePicture) async {
     final prefs = await SharedPreferences.getInstance();
-
     if (profilePicture == null) return;
 
     await prefs.setString(_profilePictureKey, profilePicture.path);
   }
 
-  /// Saves [isDarkMode] into the [_darkModeKey]
+  /// Saves the current theme mode into [SharedPreferences].
+  ///
+  /// [isDarkMode] determines whether dark mode is enabled.
   Future<void> saveMode({required bool isDarkMode}) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_darkModeKey, isDarkMode);
   }
 
-  /// Returns a [Future] that corresponds to the current state of the app's
-  /// theme (whether is in dark mode or not)
+  /// Returns the current theme mode stored in [SharedPreferences].
+  ///
+  /// Returns `true` if dark mode is enabled, `false` otherwise.
   Future<bool> getMode() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_darkModeKey) ?? false;
   }
 
-  /// A list of available language codes
+  /// Available language codes for the app
   static const languageCodes = ['en', 'es', 'pt'];
 
-  /// The key used to load and save the current language code in
-  /// [SharedPreferences]
+  /// Key used to save the current language code in [SharedPreferences]
   static const _languageCodeKey = 'languageCode';
 
-  /// Saves the given [languageCode] to [SharedPreferences]
+  /// Saves the given [languageCode] into [SharedPreferences].
   ///
-  /// Throws [InvalidLanguageCodeException] if the given [LanguageCode] is not
-  /// valid
+  /// Throws [InvalidLanguageCodeException] if [languageCode] is invalid or
+  /// empty.
   Future<void> saveLanguageCode({required String languageCode}) async {
     if (languageCode.isEmpty) {
       throw InvalidLanguageCodeException('Language code cannot be empty');
@@ -66,21 +79,20 @@ class UserPreferencesService {
     await prefs.setString(_languageCodeKey, languageCode);
   }
 
-  /// Returns the current saved [language code] from [SharedPreferences]
+  /// Loads the current saved language code from [SharedPreferences].
   ///
-  /// If there is no saved [language code] (user has not changed it previously),
-  /// the device's language code will be be saved to [SharedPreferences] and be
-  /// returned
+  /// If no language code is saved, it defaults to the device's language if
+  /// valid, otherwise the app's default language is saved and returned.
   Future<String> loadLanguageCode() async {
     final prefs = await SharedPreferences.getInstance();
-
     final languageCode = prefs.getString(_languageCodeKey);
+
     if (languageCode != null && languageCodes.contains(languageCode)) {
       return languageCode;
     }
 
-    /// TODO: implement a better way of retrieving the device's language code,
-    /// since [window] is deprecated
+    // TODO: implement a better way of retrieving the device's language code,
+    // since [window] is deprecated
     final deviceLanguageCode = window.locale.languageCode;
     final finalLanguageCode = languageCodes.contains(deviceLanguageCode)
         ? deviceLanguageCode
@@ -90,7 +102,9 @@ class UserPreferencesService {
     return finalLanguageCode;
   }
 
-  /// The default language code of the app
+  /// Returns the default language code of the app.
+  ///
+  /// Defaults to the first element in [languageCodes].
   String get defaultLanguageCode {
     return languageCodes.first;
   }

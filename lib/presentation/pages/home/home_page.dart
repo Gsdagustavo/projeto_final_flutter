@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
     await showDialog(
       context: context,
       builder: (context) =>
-          SuccessModal(message: 'Travel Started Succesfully!'),
+          SuccessModal(message: 'Travel Started Successfully!'),
     );
   }
 
@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
     await showDialog(
       context: context,
       builder: (context) =>
-          SuccessModal(message: 'Travel Finished Succesfully!'),
+          SuccessModal(message: 'Travel Finished Successfully!'),
     );
   }
 

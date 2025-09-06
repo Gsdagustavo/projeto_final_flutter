@@ -3,7 +3,8 @@ import '../../entities/travel.dart';
 
 /// Repository interface to manage [Travel] data in the application.
 ///
-/// Defines methods to register, update, start, finish, delete, and search travels.
+/// Defines methods to register, update, start, finish, delete, and search
+/// travels.
 abstract interface class TravelRepository {
   /// Registers a new travel in the repository.
   ///

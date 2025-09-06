@@ -2,54 +2,55 @@ import 'package:flutter/material.dart';
 
 import '../../services/user_preferences_service.dart';
 
+/// A [ChangeNotifier] provider responsible for managing user preferences
+/// such as theme mode and language code. It loads and persists these
+/// preferences using [UserPreferencesService].
 class UserPreferencesProvider with ChangeNotifier {
-  /// The current language code (e.g: 'en', 'pt, 'es')
-  String _languageCode = UserPreferencesService().defaultLanguageCode;
+  /// The current language code (e.g., 'en', 'pt', 'es').
+  String languageCode = UserPreferencesService().defaultLanguageCode;
 
-  /// Calls the [_init] method to initialize the provider's internal state
+  /// Whether the dark theme is enabled.
+  bool _isDarkMode = false;
+
+  /// Creates an instance of [UserPreferencesProvider] and initializes the
+  /// internal state by loading persisted user preferences.
   UserPreferencesProvider() {
     _init();
   }
 
-  /// Internal method to initialize the [_languageCode]
+  /// Internal method to initialize user preferences by loading the saved
+  /// language code and theme mode.
   Future<void> _init() async {
     await loadLanguageCode();
     _isDarkMode = await UserPreferencesService().getMode();
     notifyListeners();
   }
 
-  /// Loads the saved language code from [LocaleService] and updates the
-  /// internal state ([_languageCode])
+  /// Loads the saved language code from [UserPreferencesService] and updates
+  /// the current state.
   Future<void> loadLanguageCode() async {
-    _languageCode = await UserPreferencesService().loadLanguageCode();
+    languageCode = await UserPreferencesService().loadLanguageCode();
     notifyListeners();
   }
 
   /// Changes the current language code and persists the new value using
-  /// [LocaleService]
+  /// [UserPreferencesService].
+  ///
+  /// - [languageCode]: The new language code to apply.
   Future<void> changeLanguageCode({required String languageCode}) async {
-    _languageCode = languageCode;
+    this.languageCode = languageCode;
     await UserPreferencesService().saveLanguageCode(languageCode: languageCode);
     notifyListeners();
   }
 
-  /// Toggles the current theme and save it to [SharedPreferences] using the
-  /// [ThemeService] class
+  /// Toggles between dark and light themes and persists the choice using
+  /// [UserPreferencesService].
   void toggleTheme() async {
     _isDarkMode = !_isDarkMode;
     await UserPreferencesService().saveMode(isDarkMode: _isDarkMode);
     notifyListeners();
   }
 
-  /// Returns the state of dark mode flag
+  /// Returns whether dark mode is currently enabled.
   bool get isDarkMode => _isDarkMode;
-
-  /// Returns the current [LanguageCode]
-  String get languageCode => _languageCode;
-
-  set languageCode(String value) {
-    _languageCode = value;
-  }
-
-  bool _isDarkMode = false;
 }

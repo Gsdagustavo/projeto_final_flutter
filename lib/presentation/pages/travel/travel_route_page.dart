@@ -7,9 +7,12 @@ import '../../../core/extensions/place_extensions.dart';
 import '../../../domain/entities/travel.dart';
 import '../../widgets/my_app_bar.dart';
 
+/// This page shows the route of the given [Travel]
 class TravelRoutePage extends StatefulWidget {
+  /// Constant constructor
   const TravelRoutePage({super.key, required this.travel});
 
+  /// The [Travel] that will have its route shown
   final Travel travel;
 
   @override

@@ -34,7 +34,8 @@ class Place {
   ///
   /// Creates a new [Place] instance with optional [city], [state], [country],
   /// [countryCode] and required [latitude] and [longitude].
-  /// The [id] is optional; if not provided, a new UUID will be generated automatically.
+  /// The [id] is optional; if not provided, a new UUID will be generated
+  /// automatically.
   ///
   /// [id] – Unique identifier for the place (optional).
   /// [city] – City name (optional).

@@ -9,8 +9,8 @@ import 'travel_stop_model.dart';
 ///
 /// This model class contains methods to manipulate review data, such as
 /// fromMap, toMap, fromEntity, toEntity, and other serialization/deserialization
-/// operations. It stores information about the review description, rating (stars),
-/// associated participant, travel stop, and optional images.
+/// operations. It stores information about the review description,
+/// rating (stars), associated participant, travel stop, and optional images.
 class ReviewModel {
   /// Unique identifier of the review.
   final String id;
@@ -92,11 +92,11 @@ class ReviewModel {
   /// [travelStop] is the travel stop related to the review.
   /// [images] is the list of images attached to the review.
   factory ReviewModel.fromMap(
-      Map<String, dynamic> map,
-      ParticipantModel participant,
-      TravelStopModel travelStop,
-      List<File> images,
-      ) {
+    Map<String, dynamic> map,
+    ParticipantModel participant,
+    TravelStopModel travelStop,
+    List<File> images,
+  ) {
     return ReviewModel(
       id: map[ReviewsTable.reviewId] as String,
       description: map[ReviewsTable.description] as String,

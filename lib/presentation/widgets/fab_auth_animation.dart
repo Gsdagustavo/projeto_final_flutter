@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+/// A reusable widget to display a Lottie animation for authentication FABs or
+/// similar.
+///
+/// This widget allows you to provide a Lottie [asset] and optionally set
+/// [width] and [height].
 class FabAuthAnimation extends StatelessWidget {
+  /// Constant constructor
   const FabAuthAnimation({
     super.key,
     required this.asset,
@@ -9,8 +15,13 @@ class FabAuthAnimation extends StatelessWidget {
     this.height,
   });
 
+  /// The path to the Lottie animation asset.
   final String asset;
+
+  /// Optional width of the animation.
   final double? width;
+
+  /// Optional height of the animation.
   final double? height;
 
   @override
@@ -19,7 +30,7 @@ class FabAuthAnimation extends StatelessWidget {
       asset,
       width: width,
       height: height,
-      repeat: true,
+      repeat: true, // keeps looping the animation
       fit: BoxFit.cover,
     );
   }

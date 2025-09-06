@@ -27,7 +27,9 @@ import '../util/transport_types_icons.dart';
 import '../util/travel_utils.dart';
 import '../util/ui_utils.dart';
 
+/// The page for registering a Travel
 class RegisterTravelPage extends StatefulWidget {
+  /// Constant constructor
   const RegisterTravelPage({super.key});
 
   @override

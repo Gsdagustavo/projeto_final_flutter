@@ -1,8 +1,9 @@
 import 'dart:io';
+
 import 'package:uuid/uuid.dart';
 
-import '../../domain/entities/travel.dart';
 import '../../domain/entities/enums.dart';
+import '../../domain/entities/travel.dart';
 import '../local/database/tables/travel_table.dart';
 import 'participant_model.dart';
 import 'travel_stop_model.dart';
@@ -70,11 +71,11 @@ class TravelModel {
   /// [stops] is the list of travel stops.
   /// [photos] is the list of photos associated with the travel.
   factory TravelModel.fromMap(
-      Map<String, dynamic> map, {
-        required List<ParticipantModel> participants,
-        required List<TravelStopModel> stops,
-        required List<File> photos,
-      }) {
+    Map<String, dynamic> map, {
+    required List<ParticipantModel> participants,
+    required List<TravelStopModel> stops,
+    required List<File> photos,
+  }) {
     return TravelModel(
       id: map[TravelTable.travelId],
       travelTitle: map[TravelTable.travelTitle] as String,
@@ -112,8 +113,9 @@ class TravelModel {
       startDate: travel.startDate,
       endDate: travel.endDate,
       transportType: travel.transportType,
-      participants:
-      travel.participants.map(ParticipantModel.fromEntity).toList(),
+      participants: travel.participants
+          .map(ParticipantModel.fromEntity)
+          .toList(),
       stops: travel.stops.map(TravelStopModel.fromEntity).toList(),
       photos: travel.photos,
       status: travel.status,

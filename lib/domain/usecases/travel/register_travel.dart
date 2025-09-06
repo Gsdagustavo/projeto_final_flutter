@@ -84,18 +84,38 @@ class RegisterTravel {
 }
 
 /// Generic failure class to represent validation or repository errors.
+///
+/// [T] is a type-safe identifier (usually an enum) that describes
+/// the specific kind of error. Optionally, [params] can be used to
+/// provide contextual information about the failure.
 class Failure<T> {
+  /// Type of the failure (usually an enum like [TravelRegisterError]).
   final T type;
+
+  /// Optional parameters that provide more context about the failure.
   final Map<String, dynamic>? params;
 
+  /// Creates a [Failure] with the given [type] and optional [params].
   Failure(this.type, {this.params});
+
+  @override
+  String toString() => 'Failure(type: $type, params: ${params ?? {}})';
 }
 
 /// Errors that can occur during travel registration.
 enum TravelRegisterError {
+  /// The travel title is empty or invalid.
   invalidTitle,
+
+  /// The travel has fewer than two stops (start and end required).
   notEnoughStops,
+
+  /// The travel has no participants.
   noParticipants,
+
+  /// One or more participants have invalid data (e.g., age, name).
   invalidParticipantData,
+
+  /// Invalid or inconsistent stop dates.
   invalidStopDates,
 }

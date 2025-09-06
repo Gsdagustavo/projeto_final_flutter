@@ -28,9 +28,12 @@ import '../util/form_validations.dart';
 import '../util/travel_utils.dart';
 import '../util/ui_utils.dart';
 
+/// This page shows information about the given [Travel]
 class TravelDetailsPage extends StatefulWidget {
+  /// Constant constructor
   const TravelDetailsPage({super.key, required this.travel});
 
+  /// The [Travel] that will have its infos shown
   final Travel travel;
 
   @override
@@ -429,7 +432,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                               itemBuilder: (context, index) {
                                 debugPrint('$index');
                                 final review = state.reviews[index];
-                                return ReviewListItem(
+                                return _ReviewListItem(
                                   review: review,
                                   locale: locale,
                                 );
@@ -555,7 +558,7 @@ class _StopStepperWidgetState extends State<_StopStepperWidget> {
                     ),
                     IconButton(
                       onPressed: () async {
-                        await showReviewModal(
+                        await _showReviewModal(
                           modalContext,
                           widget.travel,
                           stop,
@@ -573,8 +576,8 @@ class _StopStepperWidgetState extends State<_StopStepperWidget> {
   }
 }
 
-class ReviewListItem extends StatelessWidget {
-  const ReviewListItem({super.key, required this.review, required this.locale});
+class _ReviewListItem extends StatelessWidget {
+  const _ReviewListItem({required this.review, required this.locale});
 
   final Review review;
   final String locale;
@@ -672,17 +675,17 @@ class ReviewListItem extends StatelessWidget {
   }
 }
 
-class ReviewModal extends StatefulWidget {
-  const ReviewModal({super.key, required this.travel, required this.stop});
+class _ReviewModal extends StatefulWidget {
+  const _ReviewModal({required this.travel, required this.stop});
 
   final Travel travel;
   final TravelStop stop;
 
   @override
-  State<ReviewModal> createState() => _ReviewModalState();
+  State<_ReviewModal> createState() => _ReviewModalState();
 }
 
-class _ReviewModalState extends State<ReviewModal> {
+class _ReviewModalState extends State<_ReviewModal> {
   final _formKey = GlobalKey<FormState>();
   final _reviewController = TextEditingController();
   double _reviewRate = 5;
@@ -978,7 +981,7 @@ class _ReviewModalState extends State<ReviewModal> {
   }
 }
 
-Future<Review?> showReviewModal(
+Future<Review?> _showReviewModal(
   BuildContext context,
   Travel travel,
   TravelStop stop,
@@ -987,7 +990,7 @@ Future<Review?> showReviewModal(
     context: context,
     isScrollControlled: true,
     builder: (context) {
-      return ReviewModal(travel: travel, stop: stop);
+      return _ReviewModal(travel: travel, stop: stop);
     },
   );
 

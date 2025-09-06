@@ -11,16 +11,13 @@ import '../../domain/usecases/travel/register_travel.dart';
 import '../../domain/usecases/travel/travel_usecases.dart';
 import '../../services/file_service.dart';
 
-/// A [ChangeNotifier] responsible for managing and the app's Travel Register
-/// system
-///
-/// It uses [TravelUseCases] for handling use cases related to registering a
-/// travel
+/// A [ChangeNotifier] that manages travel registration, participants, stops,
+/// photos, and validation logic for creating new [Travel] instances.
 class RegisterTravelProvider with ChangeNotifier {
-  /// Instance of [TravelUseCases]
+  /// Instance of [TravelUseCases] for executing travel-related use cases.
   final TravelUseCases _travelUseCases;
 
-  /// Instance of [FileService]
+  /// Handles file operations, such as saving travel photos.
   final fileService = FileService();
 
   /// Default constructor
@@ -33,30 +30,24 @@ class RegisterTravelProvider with ChangeNotifier {
 
   final _travelPhotos = <File>[];
 
-  /// The selected travel [TransportType]
+  /// The selected transport type for the travel.
   var _transportType = TransportType.values.first;
 
-  /// The list of [Participants] assigned to the travel
+  /// The participants assigned to this travel.
   final _participants = <Participant>[];
 
-  /// The stops of the travel
+  /// The stops of the travel.
   final _stops = <TravelStop>[];
 
   Failure<TravelRegisterError>? _failure;
 
-  /// Whether there are any asynchronous methods being processed or not
+  /// Indicates whether any async operation is running.
   bool _isLoading = false;
 
-  /// Tries to register a new [Travel] with the given inputs using
-  /// [_travelUseCases]
+  /// Attempts to register a new [Travel] with the given [travelTitle].
   ///
-  /// If any exception is caught during this process, the error message
-  /// of the exception is assigned to [_errorMsg]
-  ///
-  /// Otherwise, [_errorMsg] is set to [Null]
-  ///
-  /// Currently, it is not working 100%, since there is no way of registering
-  /// a travel stop, so it is generated automatically
+  /// The travel includes participants, stops, dates, transport type, and photos
+  /// Handles success and failure using [handleFailure].
   Future<void> registerTravel(String travelTitle) async {
     _isLoading = true;
     notifyListeners();
@@ -83,6 +74,9 @@ class RegisterTravelProvider with ChangeNotifier {
     _notify();
   }
 
+  /// Handles the result of a travel registration operation.
+  ///
+  /// Calls [onSuccess] if the operation was successful, [onFailure] otherwise.
   void handleFailure(
     Either<Failure<TravelRegisterError>, void> res, {
     VoidCallback? onSuccess,
@@ -91,19 +85,21 @@ class RegisterTravelProvider with ChangeNotifier {
     res.fold(
       (failure) {
         _failure = failure;
-        if (onFailure != null) {
-          onFailure.call();
-        }
+        if (onFailure != null) onFailure();
       },
       (r) {
         _failure = null;
-        if (onSuccess != null) {
-          onSuccess.call();
-        }
+        if (onSuccess != null) onSuccess();
       },
     );
   }
 
+  /// Adds a new [TravelStop] to the travel.
+  ///
+  /// Automatically sets the type to `start` if it's the first stop, `stop`
+  /// otherwise
+  ///
+  /// Returns `null` if the stop dates are invalid.
   TravelStop? addTravelStop(TravelStop stop) {
     if (_stops.isNotEmpty) {
       if ((stop.arriveDate!.isBefore(_stops.last.leaveDate!)) ||
@@ -114,11 +110,7 @@ class RegisterTravelProvider with ChangeNotifier {
       }
     }
 
-    if (_stops.isEmpty) {
-      stop.type = TravelStopType.start;
-    } else {
-      stop.type = TravelStopType.stop;
-    }
+    stop.type = _stops.isEmpty ? TravelStopType.start : TravelStopType.stop;
 
     _stops.add(stop);
 
@@ -129,6 +121,7 @@ class RegisterTravelProvider with ChangeNotifier {
     return stop;
   }
 
+  /// Removes the given [stop] from the travel.
   void removeTravelStop(TravelStop stop) {
     if (!_stops.contains(stop)) return;
 
@@ -138,122 +131,94 @@ class RegisterTravelProvider with ChangeNotifier {
     _notify();
   }
 
+  /// Updates an existing travel stop.
+  ///
+  /// Replaces [oldStop] with [newStop] in the list of stops.
   void updateTravelStop({
     required TravelStop oldStop,
     required TravelStop newStop,
   }) {
-    debugPrint('Old travel stop: $oldStop');
-    debugPrint('New travel stop: $newStop');
-
-    debugPrint('Travel stops len: ${_stops.length}');
-
-    debugPrint('Old stops: $_stops');
-
     final idx = _stops.indexOf(oldStop);
-
-    if (idx == -1) {
-      debugPrint('Error: old stop not found in list');
-      return;
-    }
+    if (idx == -1) return;
 
     _stops[idx] = newStop;
-
-    debugPrint('New stops: $_stops');
-
     _areStopsValid = _stops.length >= 2;
     _notify();
   }
 
-  /// Sets all input fields to their default values and cleanses all lists
+  /// Resets all forms and clears participants, stops, photos, and other fields.
   void resetForms() {
     _transportType = TransportType.values.first;
-
     _startDate = null;
     _endDate = null;
-
     _participants.clear();
-
     _isLoading = false;
     _areStopsValid = false;
-
     _stops.clear();
-
     _travelPhotos.clear();
-
     _notify();
   }
 
-  /// Sets the given [value] to [selectedTransportType]
+  /// Sets the selected transport type.
   void selectTransportType(TransportType? value) {
     if (_transportType == value) return;
     _transportType = value ?? TransportType.values.first;
     _notify();
   }
 
-  /// Adds a participant to the [participants] list with the given inputs
-  ///
-  /// [profilePictureUrl]: An optional argument that represents the path of the
-  /// profile picture of the participant
+  /// Adds a [Participant] to the travel.
   void addParticipant(Participant participant) {
     _participants.add(participant);
-
     debugPrint('Participant $participant added');
     _notify();
   }
 
+  /// Removes a [Participant] from the travel.
   void removeParticipant(Participant participant) {
     _participants.remove(participant);
     _notify();
   }
 
+  /// Updates an existing participant.
   void updateParticipant(
     Participant oldParticipant,
     Participant newParticipant,
   ) {
-    debugPrint('Participants len: ${_participants.length}');
-
-    debugPrint('Old participants: $_participants');
-
     final idx = _participants.indexOf(oldParticipant);
+    if (idx == -1) return;
 
-    _participants.removeAt(idx);
-    _participants.insert(idx, newParticipant);
-
-    debugPrint('New participants: $_participants');
-
+    _participants[idx] = newParticipant;
     _notify();
   }
 
+  /// Adds a photo file to the travel.
   void addTravelPhoto(File file) {
     _travelPhotos.add(file);
     _notify();
   }
 
+  /// Removes a photo file from the travel.
   void removeTravelPhoto(File file) {
-    if (!_travelPhotos.contains(file)) return;
-    _travelPhotos.removeWhere((element) => element == file);
+    _travelPhotos.remove(file);
     _notify();
   }
 
-  Future<void> select() async {
-    final travels = await _travelUseCases.getAllTravels();
-    debugPrint('Listing all travels:\n$travels');
-  }
-
-  /// Returns the number of registered participants
+  /// Returns the number of participants.
   int get numParticipants => _participants.length;
 
-  /// Returns the [selectedTransportType]
+  /// Returns the selected transport type.
   TransportType get transportType => _transportType;
 
-  /// Returns the list of [Participants]
+  /// Returns the list of participants.
   List<Participant> get participants => _participants;
 
-  /// Returns whether there is any asynchronous process running or not
-  bool get isLoading => _isLoading;
-
+  /// Returns the list of travel stops.
   List<TravelStop> get stops => _stops;
 
+  /// Returns the list of travel photos.
+  List<File> get travelPhotos => _travelPhotos;
+
+  /// Returns whether the travel form is valid.
   bool get isTravelValid {
     return _areStopsValid &&
         _travelUseCases.registerTravel.isParticipantInfoValid(participants) &&
@@ -261,28 +226,10 @@ class RegisterTravelProvider with ChangeNotifier {
         _endDate != null;
   }
 
-  DateTime? get lastPossibleArriveDate {
-    if (_stops.isEmpty) return _startDate;
-
-    final latestStop = _stops.last;
-    return latestStop.leaveDate!;
-  }
-
-  DateTime? get lastPossibleLeaveDate {
-    return _endDate;
-  }
-
+  /// Returns whether there are at least 2 valid stops.
   bool get areStopsValid => _areStopsValid;
 
-  DateTime? get endDate => _endDate;
-
-  set endDate(DateTime? value) {
-    _endDate = value;
-    _areStopsValid =
-        _stops.length >= 2 && _startDate != null && _endDate != null;
-    _notify();
-  }
-
+  /// The start date of the travel.
   DateTime? get startDate => _startDate;
 
   set startDate(DateTime? value) {
@@ -292,10 +239,30 @@ class RegisterTravelProvider with ChangeNotifier {
     _notify();
   }
 
-  List<File> get travelPhotos => _travelPhotos;
+  /// The end date of the travel.
+  DateTime? get endDate => _endDate;
 
+  set endDate(DateTime? value) {
+    _endDate = value;
+    _areStopsValid =
+        _stops.length >= 2 && _startDate != null && _endDate != null;
+    _notify();
+  }
+
+  /// Returns the last possible arrive date for adding a new stop.
+  DateTime? get lastPossibleArriveDate =>
+      _stops.isEmpty ? _startDate : _stops.last.leaveDate;
+
+  /// Returns the last possible leave date for adding a new stop.
+  DateTime? get lastPossibleLeaveDate => _endDate;
+
+  /// Returns whether any async process is currently running.
+  bool get isLoading => _isLoading;
+
+  /// Returns whether there is any failure.
   bool get hasFailure => _failure != null;
 
+  /// Returns the current failure, if any.
   Failure<TravelRegisterError>? get failure => _failure;
 
   void _notify() => notifyListeners();

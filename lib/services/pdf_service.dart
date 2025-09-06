@@ -14,17 +14,32 @@ import '../l10n/app_localizations.dart';
 import '../presentation/extensions/enums_extensions.dart';
 import '../presentation/providers/user_preferences_provider.dart';
 
+/// Service to generate PDF documents for [Travel] objects
+///
+/// Provides methods to create a PDF containing a cover page and a list of
+/// participants.
+///
+/// Saves the PDF to the app's document directory.
 class PDFService {
+  /// Generates a PDF file from a [Travel] instance
+  ///
+  /// [travel]: The travel data to be included in the PDF
+  /// [externalContext]: The Flutter [BuildContext] used to access localization
+  /// and user preferences
+  ///
+  /// Returns a [File] representing the saved PDF, or null if an error occurs
   Future<File?> generatePDFFromTravel(
     Travel travel,
     BuildContext externalContext,
   ) async {
     final document = pdf.Document();
 
+    // Load the font used for the PDF
     final font = await PdfGoogleFonts.nunitoExtraLight();
 
     const double pagePadding = 32;
 
+    // Add the cover page
     document.addPage(
       index: 0,
       pdf.Page(
@@ -39,6 +54,7 @@ class PDFService {
       ),
     );
 
+    // Add the participants page
     document.addPage(
       index: 1,
       pdf.Page(
@@ -56,19 +72,21 @@ class PDFService {
       ),
     );
 
+    // Save the PDF to the app's documents directory
     final dir = await getApplicationDocumentsDirectory();
     final filePath = '${dir.path}/${travel.travelTitle}.pdf';
     final pdfBytes = await document.save();
 
     final file = File(filePath);
-
     await file.writeAsBytes(pdfBytes);
 
     debugPrint('pdf file saved at: $filePath');
     return file;
   }
 
-  /// PDF Cover
+  /// Creates the cover page for the PDF
+  ///
+  /// Displays the travel title, start/end dates, and transport type
   pdf.Center coverPage({
     required BuildContext context,
     required Travel travel,
@@ -94,7 +112,9 @@ class PDFService {
     );
   }
 
-  /// First page
+  /// Creates the participants page for the PDF
+  ///
+  /// Displays each participant's profile picture and name
   pdf.Column participantsPage({
     required BuildContext context,
     required List<Participant> participants,
@@ -139,9 +159,7 @@ class PDFService {
                       height: 32,
                       fit: pdf.BoxFit.cover,
                     ),
-
                     pdf.Padding(padding: pdf.EdgeInsets.all(6)),
-
                     pdf.Text(
                       participant.name,
                       style: pdf.TextStyle(fontSize: 20),

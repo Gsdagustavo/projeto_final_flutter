@@ -18,11 +18,12 @@ abstract final class TravelStopTravelStopTypeTable {
   /// Column name for the Travel Stop Type Index (foreign key).
   ///
   /// References [TravelStopTypeTable.travelStopTypeIndex]
-  static const String travelStopTypeIndex = TravelStopTypeTable.travelStopTypeIndex;
+  static const String travelStopTypeIndex =
+      TravelStopTypeTable.travelStopTypeIndex;
 
   /// SQL command to create the travelStopTravelStopType table.
   static const String createTable =
-  '''
+      '''
       CREATE TABLE $tableName (
         $travelStopId TEXT NOT NULL,
         $travelStopTypeIndex INTEGER NOT NULL,

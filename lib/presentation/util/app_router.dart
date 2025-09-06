@@ -16,13 +16,20 @@ import '../pages/travel/travel_details_page.dart';
 import '../pages/travel/travel_route_page.dart';
 import 'app_routes.dart';
 
+/// A centralized router using [GoRouter] for the application.
+///
+/// Handles both the main app navigation (with a bottom navigation bar) and
+/// authentication or standalone pages.
 class AppRouter {
+  /// The global navigator key for the app.
   static final navigatorKey = GlobalKey<NavigatorState>();
 
+  /// The configured [GoRouter] instance for the app.
   static final router = GoRouter(
     navigatorKey: navigatorKey,
     initialLocation: AppRoutes.splash,
     routes: [
+      /// Main app routes with bottom navigation bar
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return ScaffoldWithNavBar(navigationShell: navigationShell);
@@ -58,6 +65,7 @@ class AppRouter {
         ],
       ),
 
+      /// Travel detail pages
       GoRoute(
         path: AppRoutes.travelDetails,
         pageBuilder: (context, state) {
@@ -65,12 +73,10 @@ class AppRouter {
           return NoTransitionPage(child: TravelDetailsPage(travel: travel));
         },
       ),
-
       GoRoute(
         path: AppRoutes.travelMap,
         pageBuilder: (context, state) => NoTransitionPage(child: TravelMap()),
       ),
-
       GoRoute(
         path: AppRoutes.travelRoute,
         pageBuilder: (context, state) {
@@ -79,6 +85,7 @@ class AppRouter {
         },
       ),
 
+      /// Authentication flow
       GoRoute(
         path: AppRoutes.auth,
         pageBuilder: (context, state) =>
@@ -102,6 +109,7 @@ class AppRouter {
         ],
       ),
 
+      /// Splash screen
       GoRoute(
         path: AppRoutes.splash,
         pageBuilder: (context, state) =>
@@ -111,11 +119,16 @@ class AppRouter {
   );
 }
 
+/// A [StatelessWidget] that wraps the app's main pages with a
+/// [BottomNavigationBar] and handles switching between tabs.
 class ScaffoldWithNavBar extends StatelessWidget {
+  /// Creates a scaffold with a navigation shell.
   const ScaffoldWithNavBar({super.key, required this.navigationShell});
 
+  /// The shell used for managing bottom navigation.
   final StatefulNavigationShell navigationShell;
 
+  /// Handles taps on the bottom navigation bar items.
   void _onItemTapped(int index) {
     navigationShell.goBranch(
       index,

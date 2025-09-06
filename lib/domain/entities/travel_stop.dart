@@ -5,8 +5,10 @@ import 'review.dart';
 
 /// Represents a [TravelStop] in a travel itinerary.
 ///
-/// This class stores information about a stop during a travel, including arrival
-/// and leave dates, stop type, location (place), associated experiences, and reviews.
+/// This class stores information about a stop during a travel, including
+/// arrival and leave dates, stop type, location (place),
+/// associated experiences, and reviews.
+///
 /// It provides utility methods for copying and comparing travel stops.
 class TravelStop {
   /// Unique identifier for the travel stop.
@@ -34,7 +36,8 @@ class TravelStop {
 
   /// Location information for the travel stop.
   ///
-  /// Stored as a [Place] object containing city, state, country, and coordinates.
+  /// Stored as a [Place] object containing city, state, country, and
+  /// coordinates.
   final Place place;
 
   /// List of reviews associated with this travel stop.
@@ -79,13 +82,6 @@ class TravelStop {
     );
   }
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is TravelStop && runtimeType == other.runtimeType && id == other.id;
-
-  @override
-  int get hashCode => id.hashCode;
 
   @override
   String toString() {

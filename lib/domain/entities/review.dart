@@ -8,8 +8,11 @@ import 'travel_stop.dart';
 /// Represents a [Review] written by a [Participant] for a [TravelStop].
 ///
 /// This class stores information about the review content, rating (stars),
-/// the author, the associated travel stop, the review date, and any attached images.
-/// It provides methods to create copies with updated fields and a string representation.
+/// the author, the associated travel stop, the review date, and any attached
+/// images.
+///
+/// It provides methods to create copies with updated fields and a string
+/// representation.
 class Review {
   /// Unique identifier for the review.
   ///
@@ -38,7 +41,8 @@ class Review {
   ///
   /// Creates a new [Review] instance with required [description], [author],
   /// [reviewDate], [travelStop], [stars], and [images].
-  /// The [id] is optional; if not provided, a new UUID will be generated automatically.
+  /// The [id] is optional; if not provided, a new UUID will be generated
+  /// automatically.
   ///
   /// [id] – Unique identifier for the review (optional).
   /// [description] – Text content of the review (required).

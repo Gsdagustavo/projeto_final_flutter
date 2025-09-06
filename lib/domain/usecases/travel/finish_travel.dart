@@ -14,7 +14,7 @@ class FinishTravel {
 
   /// Finishes the travel by updating its status and end date.
   ///
-  /// Throws an [Exception] if the travel has not started or is already finished.
+  /// Throws an [Exception] if the travel has not started or is already finished
   Future<void> call(Travel travel) async {
     debugPrint('Travel that is going to be finished: ${travel.status}');
 

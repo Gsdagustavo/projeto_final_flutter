@@ -5,10 +5,18 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
+/// A service for handling file-related operations such as
+/// retrieving the default profile picture and picking images from the gallery.
 class FileService {
+  /// Path to the default profile picture in assets.
   static const _defaultProfilePicturePath =
       'assets/images/default_profile_picture.png';
 
+  /// Returns a [File] representing the default profile picture.
+  ///
+  /// If the file already exists in the application's documents directory,
+  /// it returns that file. Otherwise, it copies the default profile picture
+  /// from the assets to the documents directory and then returns it.
   Future<File> getDefaultProfilePictureFile() async {
     final dir = await getApplicationDocumentsDirectory();
     final file = File('${dir.path}/default_profile_picture.png');
@@ -22,6 +30,10 @@ class FileService {
     return file;
   }
 
+  /// Opens the image picker for the user to select an image from the gallery.
+  ///
+  /// Returns a [File] representing the selected image, or `null` if
+  /// the user cancels the selection.
   Future<File?> pickImage() async {
     final imageXFile = await ImagePicker().pickImage(
       source: ImageSource.gallery,

@@ -7,9 +7,23 @@ import '../../core/extensions/travel_stop_extensions.dart';
 import '../../domain/entities/travel_stop.dart';
 import '../pages/travel/map_page.dart';
 
+/// A provider that manages the set of [Marker]s displayed on the map.
+///
+/// Exposes methods to reset, add, and remove markers based on [TravelStop]s.
+/// Uses [ChangeNotifier] to update listeners when the marker set changes.
 class MapMarkersProvider with ChangeNotifier {
+  /// Internal storage of active markers.
   final _markers = <Marker>{};
 
+  /// Clears all markers and, optionally, repopulates them from a list of
+  /// [TravelStop]s.
+  ///
+  /// Each stop is converted into a [Marker] positioned at the stop’s [LatLng].
+  /// When a marker is tapped, it opens the stop details modal.
+  ///
+  /// Parameters:
+  /// - [context]: The [BuildContext] used for showing the modal on marker tap.
+  /// - [stops]: An optional list of [TravelStop]s to render as markers.
   void resetMarkers(BuildContext context, [List<TravelStop>? stops]) {
     _markers.clear();
 
@@ -34,15 +48,18 @@ class MapMarkersProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  /// Adds a single [marker] to the map.
   void addMarker(Marker marker) {
     _markers.add(marker);
     notifyListeners();
   }
 
+  /// Removes the marker corresponding to the given [stop].
   void removeMarker(TravelStop stop) {
     _markers.removeWhere((marker) => marker.markerId == stop.toMarkerId());
     notifyListeners();
   }
 
+  /// Returns the current set of active markers.
   Set<Marker> get markers => _markers;
 }

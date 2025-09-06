@@ -59,11 +59,11 @@ class TravelStopModel {
   /// [reviews] is the list of reviews at this stop.
   /// [place] is the associated [PlaceModel].
   factory TravelStopModel.fromMap(
-      Map<String, dynamic> map,
-      List<Experience> experiences,
-      List<Review>? reviews,
-      PlaceModel place,
-      ) {
+    Map<String, dynamic> map,
+    List<Experience> experiences,
+    List<Review>? reviews,
+    PlaceModel place,
+  ) {
     final arriveDate = map[TravelStopTable.arriveDate] != null
         ? DateTime.fromMillisecondsSinceEpoch(map[TravelStopTable.arriveDate])
         : null;
@@ -142,7 +142,8 @@ class TravelStopModel {
 
   @override
   String toString() {
-    return 'TravelStopModel{id: $id, arriveDate: $arriveDate, leaveDate: $leaveDate, '
-        'type: $type, experiences: $experiences, place: $place, reviews: $reviews}';
+    return 'TravelStopModel{id: $id, arriveDate: $arriveDate, '
+        'leaveDate: $leaveDate, type: $type, experiences: $experiences, '
+        'place: $place, reviews: $reviews}';
   }
 }

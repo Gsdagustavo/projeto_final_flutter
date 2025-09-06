@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:uuid/uuid.dart';
 
 import 'enums.dart';
@@ -7,8 +8,10 @@ import 'travel_stop.dart';
 
 /// Represents a [Travel] record in the application's database.
 ///
-/// This class stores information about a travel, including title, start and end dates,
-/// transport type, associated participants, travel stops, status, and photos.
+/// This class stores information about a travel, including title,
+/// start and end dates, transport type, associated participants, travel stops,
+/// status, and photos.
+///
 /// It provides utility methods for duration, countries visited, and copying/updating the travel.
 class Travel {
   /// Unique identifier for the travel.
@@ -42,9 +45,13 @@ class Travel {
 
   /// Named constructor for [Travel].
   ///
-  /// Creates a new [Travel] instance with required fields [travelTitle], [startDate],
-  /// [endDate], [transportType], [participants], [stops], and [photos].
-  /// The [id] is optional; if not provided, a new UUID will be generated automatically.
+  /// Creates a new [Travel] instance with required fields [travelTitle],
+  /// [startDate], [endDate], [transportType], [participants], [stops],
+  /// and [photos].
+  ///
+  /// The [id] is optional; if not provided, a new UUID will be generated
+  /// automatically.
+  ///
   /// The [status] defaults to [TravelStatus.upcoming].
   Travel({
     String? id,
@@ -62,13 +69,18 @@ class Travel {
   ///
   /// If the start and end date are the same day, returns 1.
   int get totalDuration {
-    final diff = endDate.difference(startDate).inDays;
+    final diff = endDate
+        .difference(startDate)
+        .inDays;
     return diff == 0 ? 1 : diff;
   }
 
   /// Returns the total number of unique countries visited in this travel.
   int get numCountries {
-    return stops.map((e) => e.place.country).toSet().length;
+    return stops
+        .map((e) => e.place.country)
+        .toSet()
+        .length;
   }
 
   /// Returns a list of unique countries visited in this travel.
@@ -78,7 +90,7 @@ class Travel {
 
   /// Returns a copy of this [Travel] with optional updated fields.
   ///
-  /// This allows updating any property while keeping the other values unchanged.
+  /// This allows updating any property while keeping the other values unchanged
   Travel copyWith({
     String? travelTitle,
     DateTime? startDate,
@@ -103,38 +115,10 @@ class Travel {
   }
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is Travel &&
-              runtimeType == other.runtimeType &&
-              id == other.id &&
-              travelTitle == other.travelTitle &&
-              startDate == other.startDate &&
-              endDate == other.endDate &&
-              transportType == other.transportType &&
-              participants == other.participants &&
-              stops == other.stops &&
-              status == other.status &&
-              photos == other.photos;
-
-  @override
-  int get hashCode => Object.hash(
-    id,
-    travelTitle,
-    startDate,
-    endDate,
-    transportType,
-    participants,
-    stops,
-    status,
-    photos,
-  );
-
-  @override
   String toString() {
-    return 'Travel{travelId: $id, travelTitle: $travelTitle, '
-        'startDate: $startDate, endDate: $endDate, '
-        'transportType: $transportType, participants: $participants, '
-        'stops: $stops, status: $status, photos: $photos}';
+  return 'Travel{travelId: $id, travelTitle: $travelTitle, '
+  'startDate: $startDate, endDate: $endDate, '
+  'transportType: $transportType, participants: $participants, '
+  'stops: $stops, status: $status, photos: $photos}';
   }
 }

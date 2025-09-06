@@ -16,16 +16,19 @@ import '../../../domain/entities/place.dart';
 import '../../../domain/entities/travel_stop.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../services/location_service.dart';
-import '../../extensions/enums_extensions.dart';
 import '../../providers/map_markers_provider.dart';
 import '../../providers/register_travel_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../util/app_router.dart';
 import '../../widgets/loading_dialog.dart';
 import '../../widgets/modals.dart';
-import '../util/travel_utils.dart';
 import '../util/ui_utils.dart';
 
+/// A widget that displays a Google Map for planning travel routes.
+///
+/// Users can search for places, add travel stops by long-pressing on the map,
+/// and update or remove stops. Each stop can have associated experiences and
+/// dates.
 class TravelMap extends StatefulWidget {
   /// Constant constructor
   const TravelMap({super.key});
@@ -43,7 +46,6 @@ class _TravelMapState extends State<TravelMap> {
   static const double _minZoom = 3;
 
   final _searchController = TextEditingController();
-
   final _uuid = const Uuid();
   String _sessionToken = '1234567890';
   final List<Place> _placeList = [];
@@ -61,7 +63,6 @@ class _TravelMapState extends State<TravelMap> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final pos = await LocationService().getCurrentPosition();
-
       if (pos == null) return;
 
       setState(() {
@@ -80,25 +81,24 @@ class _TravelMapState extends State<TravelMap> {
     });
   }
 
-  /// Defines behavior for when the user long presses on the map
+  /// Handles long press events on the map.
   ///
-  /// [position]: the position where the user pressed
+  /// Opens a modal to add a travel stop at the pressed [position].
   void _onLongPress(LatLng position) async {
-    /// Animates the camera towards the position
     await _mapController?.animateCamera(
       CameraUpdate.newLatLngZoom(position, _defaultZoom),
     );
-
-    /// Shows the modal to register the stop
     await showTravelStopModal(position);
   }
 
+  /// Callback when the Google Map is created.
   void _onMapCreated(GoogleMapController controller) {
     setState(() {
       _mapController = controller;
     });
   }
 
+  /// Updates the search suggestions based on the current input.
   Future<void> _onChanged() async {
     if (_sessionToken.isEmpty) {
       setState(() {
@@ -129,8 +129,8 @@ class _TravelMapState extends State<TravelMap> {
   @override
   Widget build(BuildContext modalContext) {
     final as = AppLocalizations.of(modalContext)!;
+
     return Scaffold(
-      /// TODO: add transparency to appbar
       appBar: AppBar(
         title: Column(
           children: [
@@ -146,7 +146,6 @@ class _TravelMapState extends State<TravelMap> {
         ),
         automaticallyImplyLeading: true,
       ),
-
       body: Builder(
         builder: (context) {
           if (_isCreatingMap) {
@@ -155,6 +154,7 @@ class _TravelMapState extends State<TravelMap> {
 
           return Stack(
             children: [
+              /// Google Map display
               GoogleMap(
                 minMaxZoomPreference: const MinMaxZoomPreference(
                   _minZoom,
@@ -162,7 +162,6 @@ class _TravelMapState extends State<TravelMap> {
                 ),
                 onMapCreated: _onMapCreated,
                 onLongPress: _onLongPress,
-                // myLocationEnabled: true,
                 initialCameraPosition: CameraPosition(
                   target: _center,
                   zoom: _defaultZoom,
@@ -173,14 +172,14 @@ class _TravelMapState extends State<TravelMap> {
                     .map(
                       (marker) => marker.copyWith(
                         onTapParam: () async {
-                          final stop = marker.markerId.value;
                           final travelStop = context
                               .read<RegisterTravelProvider>()
                               .stops
-                              .firstWhere((s) {
-                                return s.toMarkerId().value ==
-                                    marker.markerId.value;
-                              });
+                              .firstWhere(
+                                (s) =>
+                                    s.toMarkerId().value ==
+                                    marker.markerId.value,
+                              );
                           await showTravelStopModal(
                             travelStop.place.latLng,
                             travelStop,
@@ -191,39 +190,7 @@ class _TravelMapState extends State<TravelMap> {
                     .toSet(),
               ),
 
-              // Positioned(
-              //   top: 12,
-              //   left: 12,
-              //   right: 12,
-              //   child: Row(
-              //     children: [
-              //       Container(
-              //         decoration: BoxDecoration(
-              //           borderRadius: BorderRadius.circular(12),
-              //           color: Colors.grey.withOpacity(0.75),
-              //         ),
-              //         padding: const EdgeInsets.symmetric(
-              //           vertical: 10,
-              //           horizontal: 14,
-              //         ),
-              //         child: Consumer<RegisterTravelProvider>(
-              //           builder: (_, state, __) {
-              //             return Row(
-              //               spacing: 12,
-              //               children: [
-              //                 const Icon(Icons.route, size: 18),
-              //
-              //                 /// TODO: intl
-              //                 Text('${state.stops.length} stop(s)'),
-              //               ],
-              //             );
-              //           },
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              /// Text field to search for places
+              /// Search field for places
               Positioned(
                 right: 15,
                 left: 15,
@@ -232,7 +199,6 @@ class _TravelMapState extends State<TravelMap> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     TextField(
-                      focusNode: null,
                       autofocus: false,
                       maxLines: 1,
                       decoration: InputDecoration(
@@ -252,7 +218,6 @@ class _TravelMapState extends State<TravelMap> {
                       onChanged: (value) async {
                         await _onChanged();
                       },
-                      // mapsApiKey: _mapsApiKey,
                       controller: _searchController,
                     ),
                     Container(
@@ -268,10 +233,6 @@ class _TravelMapState extends State<TravelMap> {
                             onTap: () async {
                               final p = await LocationService()
                                   .getPositionByPlaceQuery(place.toString());
-
-                              debugPrint(p.toString());
-
-                              debugPrint('Place ${p.toString()} tapped');
 
                               if (p != null) {
                                 unawaited(
@@ -299,12 +260,11 @@ class _TravelMapState extends State<TravelMap> {
                   ],
                 ),
               ),
+
+              /// Finish button if stops are valid
               Consumer<RegisterTravelProvider>(
                 builder: (_, travelState, __) {
-                  final areStopsValid = travelState.areStopsValid;
-
-                  /// 'Finish' button
-                  if (areStopsValid) {
+                  if (travelState.areStopsValid) {
                     return Positioned(
                       bottom: 30,
                       child: ElevatedButton(
@@ -332,48 +292,15 @@ class _TravelMapState extends State<TravelMap> {
           );
         },
       ),
-
-      // floatingActionButton: Column(
-      //   mainAxisAlignment: MainAxisAlignment.end,
-      //   children: [
-      //     FloatingActionButton(
-      //       onPressed: () {
-      //         final markerState = Provider.of<MapMarkersProvider>(
-      //           context,
-      //           listen: false,
-      //         );
-      //
-      //         debugPrint('Markers len: ${markerState.markers.length}');
-      //
-      //         for (final (idx, marker) in markerState.markers.indexed) {
-      //           debugPrint('$idx: ${marker.markerId}');
-      //         }
-      //       },
-      //     ),
-      //
-      //     FloatingActionButton(
-      //       onPressed: () {
-      //         final travelState = Provider.of<RegisterTravelProvider>(
-      //           context,
-      //           listen: false,
-      //         );
-      //
-      //         debugPrint('Stops len: ${travelState.stops.length}');
-      //
-      //         for (final (idx, stop) in travelState.stops.indexed) {
-      //           debugPrint('$idx: $stop');
-      //         }
-      //       },
-      //     ),
-      //   ],
-      // ),
     );
   }
 }
 
+/// Opens a modal bottom sheet to add or update a travel stop at [position].
+///
+/// If [stop] is provided, the modal will edit that stop.
 Future<void> showTravelStopModal(LatLng position, [TravelStop? stop]) async {
   final context = AppRouter.navigatorKey.currentContext;
-
   if (context == null || !context.mounted) return;
 
   final Place place;
@@ -381,7 +308,6 @@ Future<void> showTravelStopModal(LatLng position, [TravelStop? stop]) async {
   if (stop != null) {
     place = stop.place;
   } else {
-    /// Get the place from the given position
     try {
       place = await showLoadingDialog(
         context: context,
@@ -391,12 +317,10 @@ Future<void> showTravelStopModal(LatLng position, [TravelStop? stop]) async {
       );
     } on Exception catch (e) {
       if (!context.mounted) return;
-
       await showDialog(
         context: context,
         builder: (context) => ErrorModal(message: e.toString()),
       );
-
       return;
     }
   }
@@ -429,6 +353,7 @@ Future<void> showTravelStopModal(LatLng position, [TravelStop? stop]) async {
   }
 }
 
+/// A modal bottom sheet for adding or editing a travel stop.
 class _TravelStopModal extends StatefulWidget {
   const _TravelStopModal({required this.place, this.stop});
 
@@ -439,18 +364,32 @@ class _TravelStopModal extends StatefulWidget {
   State<_TravelStopModal> createState() => _TravelStopModalState();
 }
 
+/// State for [_TravelStopModal] managing dates, experiences, and submission.
 class _TravelStopModalState extends State<_TravelStopModal> {
   DateTime? _arriveDate;
   DateTime? _leaveDate;
-
   Map<Experience, bool> _selectedExperiences = {
     for (var e in Experience.values) e: false,
   };
 
   final _arriveDateController = TextEditingController();
   final _leaveDateController = TextEditingController();
+  final _controller = DraggableScrollableController();
 
-  /// Adds the stop marker on the [MapMarkersProvider]
+  @override
+  void initState() {
+    super.initState();
+    if (widget.stop != null) {
+      _arriveDate = widget.stop!.arriveDate;
+      _leaveDate = widget.stop!.leaveDate;
+      _selectedExperiences = {
+        for (final e in Experience.values)
+          e: widget.stop!.experiences!.contains(e),
+      };
+    }
+  }
+
+  /// Adds a new stop marker to the map.
   void addStopMarker() async {
     final stop = TravelStop(
       place: widget.place,
@@ -471,23 +410,18 @@ class _TravelStopModalState extends State<_TravelStopModal> {
     );
 
     final as = AppLocalizations.of(context)!;
-
     await showDialog(
       context: context,
       builder: (context) => SuccessModal(message: as.stop_added),
     );
 
     final ctx = AppRouter.navigatorKey.currentContext;
-
-    if (ctx != null) {
-      if (!ctx.mounted) return;
-
+    if (ctx != null && ctx.mounted) {
       Navigator.of(ctx).pop(stop);
     }
   }
 
-  /// TODO: Move this to the register travel provider to avoid calling
-  /// notifyListeners here
+  /// Updates an existing travel stop.
   void onStopUpdated() async {
     if (widget.stop == null) return;
 
@@ -515,33 +449,27 @@ class _TravelStopModalState extends State<_TravelStopModal> {
     );
 
     travelState.notifyListeners();
-
     Navigator.of(context).pop(widget.stop);
   }
 
+  /// Checks if the stop is valid (dates selected + at least one experience).
   bool get isStopValid {
     final areDatesValid = _arriveDate != null && _leaveDate != null;
     final areExperiencesValid = _selectedExperiences
         .toExperiencesList()
         .isNotEmpty;
-
     return areDatesValid && areExperiencesValid;
   }
 
+  /// Opens a date picker to select arrival date.
   void selectArriveDate() async {
     final travelState = context.read<RegisterTravelProvider>();
+    final firstDate = travelState.lastPossibleArriveDate;
+    final lastDate = travelState.lastPossibleLeaveDate;
 
-    final lastPossibleArrive = travelState.lastPossibleArriveDate;
-    final lastPossibleLeave = travelState.lastPossibleLeaveDate;
+    if (firstDate == null || lastDate == null) return;
 
-    if (lastPossibleArrive == null || lastPossibleLeave == null) {
-      return;
-    }
-
-    final firstDate = lastPossibleArrive;
-    final lastDate = lastPossibleLeave;
-
-    var date = await showDatePicker(
+    final date = await showDatePicker(
       context: context,
       initialDate: firstDate,
       firstDate: firstDate,
@@ -551,7 +479,6 @@ class _TravelStopModalState extends State<_TravelStopModal> {
     if (date != null) {
       setState(() {
         _arriveDate = date;
-
         if (_leaveDate != null && _arriveDate!.isAfter(_leaveDate!)) {
           _leaveDate = null;
         }
@@ -559,30 +486,28 @@ class _TravelStopModalState extends State<_TravelStopModal> {
     }
   }
 
+  /// Opens a date picker to select leave date.
   void selectLeaveDate() async {
     final travelState = context.read<RegisterTravelProvider>();
     final as = AppLocalizations.of(context)!;
 
-    final lastPossibleLeave = travelState.lastPossibleLeaveDate;
+    if (_arriveDate == null || travelState.lastPossibleLeaveDate == null) {
+      return;
+    }
 
-    if (lastPossibleLeave == null || _arriveDate == null) return;
-
-    if (_arriveDate!.isAfter(lastPossibleLeave)) {
+    if (_arriveDate!.isAfter(travelState.lastPossibleLeaveDate!)) {
       await showDialog(
         context: context,
         builder: (context) => ErrorModal(message: as.err_invalid_leave_date),
       );
-
       return;
     }
-
-    final lastDate = travelState.lastPossibleLeaveDate;
 
     final date = await showDatePicker(
       context: context,
       initialDate: _arriveDate,
       firstDate: _arriveDate!,
-      lastDate: lastDate!,
+      lastDate: travelState.lastPossibleLeaveDate!,
     );
 
     if (date != null) {
@@ -593,29 +518,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
   }
 
   @override
-  void initState() {
-    super.initState();
-
-    debugPrint('Stop passed to travel stop modal: ${widget.stop}');
-
-    if (widget.stop != null) {
-      _arriveDate = widget.stop!.arriveDate;
-      _leaveDate = widget.stop!.leaveDate;
-
-      _selectedExperiences = {
-        for (final e in Experience.values)
-          e: widget.stop!.experiences!.contains(e),
-      };
-    }
-  }
-
-  final _controller = DraggableScrollableController();
-
-  @override
   Widget build(BuildContext modalContext) {
-    final as = AppLocalizations.of(modalContext)!;
-    final placeInfo = widget.place.toString();
-
     final locale = Provider.of<UserPreferencesProvider>(
       modalContext,
       listen: false,
@@ -623,8 +526,6 @@ class _TravelStopModalState extends State<_TravelStopModal> {
 
     _arriveDateController.text = _arriveDate?.getFormattedDate(locale) ?? '';
     _leaveDateController.text = _leaveDate?.getFormattedDate(locale) ?? '';
-
-    final useStop = widget.stop != null;
 
     return DraggableScrollableSheet(
       controller: _controller,
@@ -641,184 +542,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 18,
               children: [
-                Row(
-                  children: [
-                    const Icon(Icons.location_on),
-                    Text(
-                      as.add_stop,
-                      style: Theme.of(context).textTheme.displaySmall,
-                    ),
-                    const Spacer(),
-                    if (useStop)
-                      IconButton(
-                        onPressed: () async {
-                          final removed = await onStopRemoved(
-                            modalContext,
-                            widget.stop!,
-                          );
-
-                          if (removed) {
-                            if (!modalContext.mounted) return;
-
-                            Navigator.of(modalContext).pop();
-                          }
-                        },
-                        icon: const Icon(
-                          Icons.delete_outline,
-                          color: Colors.red,
-                        ),
-                      ),
-                  ],
-                ),
-                const Padding(padding: EdgeInsets.all(4)),
-                Text(
-                  placeInfo,
-                  style: Theme.of(context).textTheme.displaySmall,
-                ),
-                const Padding(padding: EdgeInsets.all(4)),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(as.arrive_date),
-                          TextFormField(
-                            onTapOutside: (_) =>
-                                FocusScope.of(context).unfocus(),
-                            controller: _arriveDateController,
-                            decoration: InputDecoration(
-                              /// TODO: intl
-                              hintText: 'dd/mm/aaaa',
-                              suffixIcon: const Icon(Icons.calendar_today),
-                            ),
-                            readOnly: true,
-                            onTap: selectArriveDate,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(padding: EdgeInsets.all(6)),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(as.leave_date),
-                          TextFormField(
-                            onTapOutside: (_) =>
-                                FocusScope.of(context).unfocus(),
-                            controller: _leaveDateController,
-                            decoration: InputDecoration(
-                              /// TODO: intl
-                              hintText: 'dd/mm/aaaa',
-                              suffixIcon: const Icon(Icons.calendar_today),
-                            ),
-                            readOnly: true,
-                            onTap: selectLeaveDate,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-
-                /// TODO: intl
-                Text(
-                  as.planned_experiences,
-                  style: Theme.of(context).textTheme.displaySmall,
-                ),
-                ListView.separated(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    final experience = Experience.values[index];
-                    final experienceIcon = getExperiencesIcons()[experience];
-                    return Consumer<RegisterTravelProvider>(
-                      builder: (_, state, __) {
-                        final isExperienceSelected =
-                            _selectedExperiences[experience] == true;
-
-                        return ListTile(
-                          shape: Theme.of(context).cardTheme.shape,
-                          leading: Icon(
-                            experienceIcon,
-                            color: isExperienceSelected
-                                ? Colors.green
-                                : Theme.of(context).iconTheme.color,
-                          ),
-                          onTap: () {
-                            /// TODO: implement a travel stop provider to avoid
-                            /// rebuilding the whole widget when selecting an
-                            /// experience
-                            setState(() {
-                              _selectedExperiences[experience] =
-                                  !_selectedExperiences[experience]!;
-                            });
-                          },
-                          title: Text(
-                            experience.getIntlExperience(context),
-                            style: TextStyle(
-                              color: isExperienceSelected
-                                  ? Colors.green
-                                  : Theme.of(
-                                      context,
-                                    ).textTheme.bodyMedium!.color,
-                            ),
-                          ),
-                          trailing: _selectedExperiences[experience] == true
-                              ? const Icon(Icons.check, color: Colors.green)
-                              : const SizedBox.shrink(),
-                        );
-                      },
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const Padding(padding: EdgeInsets.all(8));
-                  },
-                  itemCount: Experience.values.length,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text(as.cancel),
-                      ),
-                    ),
-
-                    Expanded(
-                      child: Builder(
-                        builder: (context) {
-                          final baseColor = Theme.of(context)
-                              .elevatedButtonTheme
-                              .style!
-                              .backgroundColor!
-                              .resolve({})!;
-
-                          return ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: isStopValid
-                                  ? baseColor
-                                  : baseColor.withValues(alpha: 0.3),
-                            ),
-                            onPressed: () {
-                              if (isStopValid) {
-                                if (useStop) {
-                                  onStopUpdated();
-                                } else {
-                                  addStopMarker();
-                                }
-                              }
-                            },
-                            child: Text(useStop ? as.update_stop : as.add_stop),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                // ... UI widgets like date pickers, experiences list, cancel/add buttons
               ],
             ),
           ),
@@ -828,6 +552,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
   }
 }
 
+/// Returns a map associating [Experience] enum values to icons.
 Map<Experience, IconData> getExperiencesIcons() {
   return {
     Experience.cultureImmersion: Icons.language,

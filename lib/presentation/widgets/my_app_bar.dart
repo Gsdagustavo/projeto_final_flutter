@@ -19,6 +19,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// A list of widgets of all actions of the App Bar
   final List<Widget>? actions;
 
+  /// Controls whether we should try to imply the leading widget if null
   final bool automaticallyImplyLeading;
 
   @override
