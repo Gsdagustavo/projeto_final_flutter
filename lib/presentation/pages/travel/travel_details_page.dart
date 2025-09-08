@@ -455,12 +455,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                 onPressed: () async {
-                  await showLoadingDialog(
-                    context: modalContext,
-                    function: () async {
-                      await onTravelDeleted(modalContext, widget.travel);
-                    },
-                  );
+                  await onTravelDeleted(context, widget.travel);
                 },
                 child: Stack(
                   alignment: Alignment.center,
@@ -530,16 +525,16 @@ class _StopStepperWidgetState extends State<_StopStepperWidget> {
       stepIconBuilder: (stepIndex, stepState) {
         /// First stop
         if (stepIndex == 0) {
-          return const Icon(Icons.start, color: Colors.blueAccent);
+          return const Icon(Icons.start);
         }
 
         /// Last stop
         if (stepIndex == stops.length - 1) {
-          return const Icon(Icons.flag, color: Colors.grey);
+          return const Icon(Icons.flag);
         }
 
         /// Middle stop
-        return const Icon(Icons.location_on, color: Colors.green);
+        return const Icon(Icons.location_on);
       },
       steps: [
         for (final stop in stops)

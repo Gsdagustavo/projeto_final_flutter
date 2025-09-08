@@ -23,10 +23,9 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
   GoogleMapController? _controller;
 
   var _polylines = <Polyline>{};
+  final _polylinePoints = PolylinePoints(apiKey: dotenv.env['MAPS_API_KEY']!);
 
-  final polylinePoints = PolylinePoints(apiKey: dotenv.env['MAPS_API_KEY']!);
-
-  LatLngBounds calculateBounds(List<LatLng> points) {
+  LatLngBounds _calculateBounds(List<LatLng> points) {
     var minLat = points.first.latitude;
     var maxLat = points.first.latitude;
     var minLon = points.first.longitude;
@@ -46,7 +45,7 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
     );
   }
 
-  Set<Marker> calculateMarkers() {
+  Set<Marker> _calculateMarkers() {
     final stops = widget.travel.stops;
 
     return stops.map((stop) {
@@ -61,7 +60,7 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
     }).toSet();
   }
 
-  Future<List<LatLng>> calculatePolylines() async {
+  Future<List<LatLng>> _calculatePolylines() async {
     final stops = widget.travel.stops;
 
     if (stops.length < 2) return [];
@@ -82,7 +81,7 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
       );
     }).toList();
 
-    final result = await polylinePoints.getRouteBetweenCoordinates(
+    final result = await _polylinePoints.getRouteBetweenCoordinates(
       // ignore: deprecated_member_use
       request: PolylineRequest(
         origin: origin,
@@ -101,8 +100,8 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
     }).toList();
   }
 
-  Future<void> generatePolyline() async {
-    final polylineCoords = await calculatePolylines();
+  Future<void> _generatePolyline() async {
+    final polylineCoords = await _calculatePolylines();
 
     final polyline = Polyline(
       polylineId: const PolylineId('Route'),
@@ -115,20 +114,20 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
       _polylines = {polyline};
     });
 
-    fitBounds();
+    _fitBounds();
   }
 
-  LatLng getInitialPosition() {
+  LatLng _getInitialPosition() {
     final stops = widget.travel.stops;
     return LatLng(stops.first.place.latitude, stops.first.place.longitude);
   }
 
-  void fitBounds() {
+  void _fitBounds() {
     final stops = widget.travel.stops.map((e) => e.place.latLng).toList();
 
     if (stops.isEmpty) return;
 
-    final bounds = calculateBounds(stops);
+    final bounds = _calculateBounds(stops);
 
     _controller?.animateCamera(CameraUpdate.newLatLngBounds(bounds, 50));
   }
@@ -137,7 +136,7 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
   void initState() {
     super.initState();
     widget.travel.stops.sort((a, b) => a.id.compareTo(b.id));
-    generatePolyline();
+    _generatePolyline();
   }
 
   @override
@@ -152,16 +151,16 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
         onMapCreated: (controller) {
           setState(() {
             _controller = controller;
-            fitBounds();
+            _fitBounds();
           });
         },
 
         initialCameraPosition: CameraPosition(
-          target: getInitialPosition(),
+          target: _getInitialPosition(),
           zoom: 15,
         ),
 
-        markers: calculateMarkers(),
+        markers: _calculateMarkers(),
         polylines: _polylines,
       ),
     );

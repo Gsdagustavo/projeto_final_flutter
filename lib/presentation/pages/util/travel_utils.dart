@@ -7,6 +7,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../providers/map_markers_provider.dart';
 import '../../providers/register_travel_provider.dart';
 import '../../providers/travel_list_provider.dart';
+import '../../widgets/loading_dialog.dart';
 import '../../widgets/modals.dart';
 
 /// Handles the deletion of a [Travel].
@@ -42,15 +43,22 @@ Future<void> onTravelDeleted(
   debugPrint('Context after delete modal: $context');
 
   if (result == null || !result) return;
+
   if (!context.mounted) return;
 
   final state = context.read<TravelListProvider>();
 
-  await state.deleteTravel(travel);
-
-  debugPrint('Context after loading dialog call: $context');
+  await showLoadingDialog(
+    context: context,
+    function: () async => await state.deleteTravel(travel),
+  );
 
   if (!context.mounted) return;
+
+  await showDialog(
+    context: context,
+    builder: (context) => SuccessModal(message: 'Travel Deleted Successfully!'),
+  );
 
   if (popContext) {
     Navigator.of(context).pop();

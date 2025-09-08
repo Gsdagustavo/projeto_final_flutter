@@ -17,7 +17,6 @@ import '../../util/app_routes.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
 import '../../widgets/modals.dart';
-import '../util/travel_utils.dart';
 import '../util/ui_utils.dart';
 
 /// The Home Page of the app
@@ -33,7 +32,7 @@ class _HomePageState extends State<HomePage> {
   final formKey = GlobalKey<FormState>();
   final searchController = TextEditingController();
 
-  Future<void> onTravelStarted(Travel travel) async {
+  Future<void> _onTravelStarted(Travel travel) async {
     final as = AppLocalizations.of(context)!;
     final result = await showDialog<bool>(
       context: context,
@@ -51,7 +50,10 @@ class _HomePageState extends State<HomePage> {
 
     final state = context.read<TravelListProvider>();
 
-    await state.startTravel(travel);
+    await showLoadingDialog(
+      context: context,
+      function: () async => await state.startTravel(travel),
+    );
 
     if (state.hasError) {
       if (!mounted) return;
@@ -60,6 +62,8 @@ class _HomePageState extends State<HomePage> {
         context: context,
         builder: (context) => ErrorModal(message: state.errorMessage!),
       );
+
+      return;
     }
 
     if (!mounted) return;
@@ -71,30 +75,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> onTravelFinished(Travel travel) async {
+  Future<void> _onTravelFinished(Travel travel) async {
     final as = AppLocalizations.of(context)!;
-
-    if (travel.status == TravelStatus.upcoming) {
-      await showDialog(
-        context: context,
-        builder: (context) =>
-            WarningModal(message: as.travel_not_stated_yet(travel.travelTitle)),
-      );
-
-      return;
-    }
-
-    if (travel.status == TravelStatus.finished) {
-      await showDialog(
-        context: context,
-        builder: (context) => WarningModal(
-          message: as.travel_has_already_finished(travel.travelTitle),
-        ),
-      );
-
-      return;
-    }
-
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => OkCancelModal(
@@ -102,8 +84,6 @@ class _HomePageState extends State<HomePage> {
         content: as.finish_travel_confirmation(travel.travelTitle),
       ),
     );
-
-    debugPrint('show ok cancel dialog result on finish travel ui: $result');
 
     if (result == null || !result) {
       return;
@@ -113,18 +93,10 @@ class _HomePageState extends State<HomePage> {
 
     final state = context.read<TravelListProvider>();
 
-    debugPrint('going to show loading dialog');
-
-    final res = await showLoadingDialog(
+    await showLoadingDialog(
       context: context,
-      function: () async {
-        debugPrint('calling state finish travel');
-        await state.finishTravel(travel);
-        debugPrint('state finish travel ended');
-      },
+      function: () async => await state.finishTravel(travel),
     );
-
-    debugPrint('showloadingdialog result on finish travel ui: $res');
 
     if (state.hasError) {
       if (!mounted) return;
@@ -133,6 +105,8 @@ class _HomePageState extends State<HomePage> {
         context: context,
         builder: (context) => ErrorModal(message: state.errorMessage!),
       );
+
+      return;
     }
 
     if (!mounted) return;
@@ -141,6 +115,49 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (context) =>
           SuccessModal(message: 'Travel Finished Successfully!'),
+    );
+  }
+
+  Future<void> _onTravelDeleted(Travel travel) async {
+    final as = AppLocalizations.of(context)!;
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => DeleteModal(
+        title: 'Delete Travel?',
+        message: as.finish_travel_confirmation(travel.travelTitle),
+      ),
+    );
+
+    if (result == null || !result) {
+      return;
+    }
+
+    if (!mounted) return;
+
+    final state = context.read<TravelListProvider>();
+
+    await showLoadingDialog(
+      context: context,
+      function: () async => await state.deleteTravel(travel),
+    );
+
+    if (state.hasError) {
+      if (!mounted) return;
+
+      await showDialog(
+        context: context,
+        builder: (context) => ErrorModal(message: state.errorMessage!),
+      );
+
+      return;
+    }
+
+    if (!mounted) return;
+
+    await showDialog(
+      context: context,
+      builder: (context) =>
+          SuccessModal(message: 'Travel Deleted Successfully!'),
     );
   }
 
@@ -213,13 +230,15 @@ class _HomePageState extends State<HomePage> {
                               ),
                               child: Consumer<TravelListProvider>(
                                 builder: (_, state, __) {
+                                  final parentContext = context;
+
                                   return PopupMenuButton(
                                     popUpAnimationStyle: AnimationStyle(
                                       curve: Curves.easeInOutQuart,
                                       duration: Duration(milliseconds: 750),
                                     ),
                                     icon: const Icon(Icons.more_vert),
-                                    itemBuilder: (context) => <PopupMenuEntry>[
+                                    itemBuilder: (context) => [
                                       if (travel.status ==
                                           TravelStatus.upcoming) ...[
                                         PopupMenuItem(
@@ -228,8 +247,10 @@ class _HomePageState extends State<HomePage> {
                                               FontAwesomeIcons.play,
                                             ),
                                             title: Text(as.start_travel),
-                                            onTap: () async =>
-                                                await onTravelStarted(travel),
+                                            onTap: () async {
+                                              Navigator.of(parentContext).pop();
+                                              await _onTravelStarted(travel);
+                                            },
                                           ),
                                         ),
                                       ] else if (travel.status ==
@@ -240,8 +261,10 @@ class _HomePageState extends State<HomePage> {
                                               FontAwesomeIcons.flag,
                                             ),
                                             title: Text(as.finish_travel),
-                                            onTap: () async =>
-                                                await onTravelFinished(travel),
+                                            onTap: () async {
+                                              Navigator.of(parentContext).pop();
+                                              await _onTravelFinished(travel);
+                                            },
                                           ),
                                         ),
                                       ],
@@ -253,6 +276,7 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                           title: Text(as.view_travel_route),
                                           onTap: () {
+                                            Navigator.of(parentContext).pop();
                                             context.push(
                                               AppRoutes.travelRoute,
                                               extra: travel,
@@ -263,15 +287,12 @@ class _HomePageState extends State<HomePage> {
 
                                       PopupMenuItem(
                                         child: ListTile(
+                                          onTap: () async {
+                                            Navigator.of(parentContext).pop();
+                                            await _onTravelDeleted(travel);
+                                          },
                                           leading: const Icon(Icons.delete),
                                           title: Text(as.delete_travel),
-                                          onTap: () async {
-                                            await onTravelDeleted(
-                                              context,
-                                              travel,
-                                              popContext: false,
-                                            );
-                                          },
                                         ),
                                       ),
                                     ],
@@ -467,26 +488,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-// class _TravelWidget extends StatefulWidget {
-//   const _TravelWidget({required this.travel});
-//
-//   final Travel travel;
-//
-//   @override
-//   State<_TravelWidget> createState() => _TravelWidgetState();
-// }
-//
-// class _TravelWidgetState extends State<_TravelWidget> {
-//
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final as = AppLocalizations.of(context)!;
-//
-//     return
-//   }
-// }
 
 class _TravelStatusWidget extends StatelessWidget {
   const _TravelStatusWidget({required this.status});

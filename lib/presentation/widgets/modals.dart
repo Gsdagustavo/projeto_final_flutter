@@ -81,6 +81,7 @@ class _BaseDialog extends StatelessWidget {
         child: icon,
       ),
       content: content,
+      actions: actions,
     );
   }
 }

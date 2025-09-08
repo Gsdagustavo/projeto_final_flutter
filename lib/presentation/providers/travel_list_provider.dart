@@ -30,11 +30,8 @@ class TravelListProvider with ChangeNotifier {
 
   /// Starts the given [travel].
   ///
-  /// Sets [_isLoading] during the operation. On error, updates [errorMessage].
+  /// On error, updates [errorMessage].
   Future<void> startTravel(Travel travel) async {
-    _isLoading = true;
-    notifyListeners();
-
     try {
       await travelUseCases.startTravel(travel);
     } on Exception catch (e) {
@@ -43,19 +40,14 @@ class TravelListProvider with ChangeNotifier {
       notifyListeners();
       return;
     }
-
-    _isLoading = false;
     errorMessage = null;
-    await update();
+    notifyListeners();
   }
 
   /// Marks the given [travel] as finished.
   ///
-  /// Sets [_isLoading] during the operation. On error, updates [errorMessage].
+  /// On error, updates [errorMessage].
   Future<void> finishTravel(Travel travel) async {
-    _isLoading = true;
-    notifyListeners();
-
     try {
       await travelUseCases.finishTravel(travel);
     } on Exception catch (e) {
@@ -64,18 +56,14 @@ class TravelListProvider with ChangeNotifier {
       notifyListeners();
       return;
     }
-    _isLoading = false;
     errorMessage = null;
-    await update();
+    notifyListeners();
   }
 
   /// Deletes the given [travel].
   ///
-  /// Sets [_isLoading] during the operation. On error, updates [errorMessage].
+  /// On error, updates [errorMessage].
   Future<void> deleteTravel(Travel travel) async {
-    _isLoading = true;
-    notifyListeners();
-
     try {
       await travelUseCases.deleteTravel(travel);
     } on Exception catch (e) {
@@ -85,9 +73,9 @@ class TravelListProvider with ChangeNotifier {
       return;
     }
 
-    _isLoading = false;
+    _travels.remove(travel);
     errorMessage = null;
-    await update();
+    notifyListeners();
   }
 
   /// Updates the title of the given [travel].

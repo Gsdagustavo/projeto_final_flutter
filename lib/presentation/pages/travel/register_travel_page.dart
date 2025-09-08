@@ -137,7 +137,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
     }
   }
 
-  void onImagePicked() async {
+  void _onImagePicked() async {
     final fileService = FileService();
 
     final file = await fileService.pickImage();
@@ -151,7 +151,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
     state.addTravelPhoto(file);
   }
 
-  void onImageRemoved(File image) {
+  void _onImageRemoved(File image) {
     context.read<RegisterTravelProvider>().removeTravelPhoto(image);
   }
 
@@ -628,7 +628,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                               const Padding(padding: EdgeInsets.all(2)),
                               UnconstrainedBox(
                                 child: ElevatedButton(
-                                  onPressed: onImagePicked,
+                                  onPressed: _onImagePicked,
                                   child: Row(
                                     children: [
                                       const Icon(Icons.file_upload_outlined),
@@ -676,7 +676,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                                     shape: BoxShape.circle,
                                   ),
                                   child: IconButton(
-                                    onPressed: () => onImageRemoved(image),
+                                    onPressed: () => _onImageRemoved(image),
                                     icon: const Icon(FontAwesomeIcons.xmark),
                                     constraints: const BoxConstraints(),
                                     padding: EdgeInsets.zero,

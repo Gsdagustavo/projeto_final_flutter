@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -26,54 +27,42 @@ class LoadingDialog extends StatelessWidget {
   }
 }
 
-/// Shows a modal loading dialog while executing an asynchronous function.
+const int _loadingDialogDelay = 150; // ms
+
+/// Shows a modal dialog with a loading spinner while [function] executes.
+/// Automatically closes the dialog when the function completes.
 ///
-/// The dialog will prevent user interaction (`barrierDismissible: false`)
-/// and automatically closes when the [function] completes.
-///
-/// Returns the result of [function].
-///
-/// Example usage:
+/// Example:
 /// ```dart
-/// final result = await showLoadingDialog(
+/// await showLoadingDialog(
 ///   context: context,
 ///   function: () async {
-///     return await fetchData();
+///     await myAsyncFunction();
 ///   },
 /// );
 /// ```
-Future<T> showLoadingDialog<T>({
+Future<T?> showLoadingDialog<T>({
   required BuildContext context,
   required Future<T> Function() function,
 }) async {
-  // Show the loading dialog, but don't await it (unawaited)
-  unawaited(
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (_) => const Center(child: LoadingDialog()),
-    ),
+  final rootContext = Navigator.of(context, rootNavigator: true).context;
+
+  showDialog(
+    context: rootContext,
+    barrierDismissible: false,
+    builder: (_) => const Center(child: LoadingDialog()),
   );
 
-  // Small delay to ensure dialog is displayed
-  await Future.delayed(const Duration(milliseconds: 100));
+  await Future.delayed(const Duration(milliseconds: _loadingDialogDelay));
 
-  // Execute the asynchronous function
-  final item = await function();
-
-  debugPrint('is context mounted: ${context.mounted}');
-
-  if (!context.mounted) {
-    debugPrint(
-      'Context not mounted in showLoadingDialog. Returning item: $item',
-    );
-    return item;
+  T? result;
+  try {
+    result = await function();
+  } finally {
+    if (Navigator.of(rootContext, rootNavigator: true).canPop()) {
+      Navigator.of(rootContext, rootNavigator: true).pop();
+    }
   }
 
-  // Close the loading dialog if it is still open
-  if (Navigator.of(context, rootNavigator: true).canPop()) {
-    Navigator.of(context, rootNavigator: true).pop();
-  }
-
-  return item;
+  return result;
 }
