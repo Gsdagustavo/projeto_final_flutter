@@ -152,7 +152,7 @@
   "err_invalid_participant_name": "Invalid participant name",
   "err_invalid_participant_age": "Invalid participant age",
   "err_invalid_participant_data": "Invalid participant data",
-  "no_participants_on_the_list": "No participants on the list",
+  "no_participants_registered": "No participants registered",
   "add_participant": "Add participant",
   "update_participant": "Update participant",
   "name": "Name",
@@ -254,6 +254,7 @@
   "delete_review": "Delete Review",
   "delete_review_confirmation": "Do you really want to delete this review?",
   "review_deleted_successfully": "Review Deleted Successfully!",
+  "review_requires_content": "You must add at least one image or write a description before submitting your review. Reviews cannot be empty.",
 
   "@@modals": {},
   "success": "Success!",

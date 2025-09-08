@@ -553,11 +553,11 @@ abstract class AppLocalizations {
   /// **'Invalid participant data'**
   String get err_invalid_participant_data;
 
-  /// No description provided for @no_participants_on_the_list.
+  /// No description provided for @no_participants_registered.
   ///
   /// In en, this message translates to:
-  /// **'No participants on the list'**
-  String get no_participants_on_the_list;
+  /// **'No participants registered'**
+  String get no_participants_registered;
 
   /// No description provided for @add_participant.
   ///
@@ -1020,6 +1020,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Review Deleted Successfully!'**
   String get review_deleted_successfully;
+
+  /// No description provided for @review_requires_content.
+  ///
+  /// In en, this message translates to:
+  /// **'You must add at least one image or write a description before submitting your review. Reviews cannot be empty.'**
+  String get review_requires_content;
 
   /// No description provided for @success.
   ///

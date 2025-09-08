@@ -154,6 +154,7 @@
   "err_invalid_participant_age": "Edad de participante inválida",
   "err_invalid_participant_data": "Datos de participante inválidos",
   "no_participants_on_the_list": "No hay participantes en la lista",
+  "no_participants_registered": "No hay participantes registrados",
   "add_participant": "Agregar participante",
   "update_participant": "Actualizar participante",
   "name": "Nombre",
@@ -255,6 +256,7 @@
   "delete_review": "Eliminar reseña",
   "delete_review_confirmation": "¿Realmente desea eliminar esta reseña?",
   "review_deleted_successfully": "¡Reseña eliminada con éxito!",
+  "review_requires_content": "Debes agregar al menos una imagen o escribir una descripción antes de enviar tu reseña. Las reseñas no pueden estar vacías.",
 
   "@@modals": {},
   "success": "¡Éxito!",

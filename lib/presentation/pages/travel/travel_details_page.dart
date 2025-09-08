@@ -53,7 +53,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
     /// TODO: add error handling
     if (pdf == null) return;
 
-    if (!context.mounted) return;
+    if (!mounted) return;
 
     final as = AppLocalizations.of(context)!;
 
@@ -576,7 +576,6 @@ class _ReviewListItemState extends State<_ReviewListItem> {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => DeleteModal(
-        /// TODO: intl
         title: as.delete_review,
         message: as.delete_review_confirmation,
       ),
@@ -597,22 +596,13 @@ class _ReviewListItemState extends State<_ReviewListItem> {
 
     if (state.hasError) {
       if (!mounted) return;
-
-      await showDialog(
-        context: context,
-        builder: (context) => ErrorModal(message: state.errorMessage!),
-      );
-
+      showErrorSnackBar(context, state.errorMessage!);
       return;
     }
 
     if (!mounted) return;
 
-    await showDialog(
-      context: context,
-      builder: (context) =>
-          SuccessModal(message: as.review_deleted_successfully),
-    );
+    showSuccessSnackBar(context, as.review_deleted_successfully);
   }
 
   @override
@@ -746,6 +736,11 @@ class _ReviewModalState extends State<_ReviewModal> {
 
     if (!_formKey.currentState!.validate()) {
       showErrorSnackBar(context, as.err_invalid_review_data);
+      return;
+    }
+
+    if (_reviewController.text.isEmpty && _images.isEmpty) {
+      showErrorSnackBar(context, as.review_requires_content);
       return;
     }
 
@@ -1056,6 +1051,7 @@ class _TravelTitleWidgetState extends State<_TravelTitleWidget> {
     if (!mounted) return;
 
     showSuccessSnackBar(context, as.travel_title_updated);
+    travelTitleFocusNode.unfocus();
   }
 
   @override

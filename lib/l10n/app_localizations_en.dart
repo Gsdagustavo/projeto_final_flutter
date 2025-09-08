@@ -259,7 +259,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get err_invalid_participant_data => 'Invalid participant data';
 
   @override
-  String get no_participants_on_the_list => 'No participants on the list';
+  String get no_participants_registered => 'No participants registered';
 
   @override
   String get add_participant => 'Add participant';
@@ -503,6 +503,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get review_deleted_successfully => 'Review Deleted Successfully!';
+
+  @override
+  String get review_requires_content => 'You must add at least one image or write a description before submitting your review. Reviews cannot be empty.';
 
   @override
   String get success => 'Success!';

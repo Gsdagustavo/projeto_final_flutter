@@ -153,6 +153,7 @@
   "err_invalid_participant_name": "Nome do participante inválido",
   "err_invalid_participant_age": "Idade do participante inválida",
   "err_invalid_participant_data": "Dados de participante inválidos",
+  "no_participants_registered": "Nenhum participante registrado",
   "no_participants_on_the_list": "Nenhum participante na lista",
   "add_participant": "Adicionar participante",
   "update_participant": "Atualizar participante",
@@ -254,6 +255,7 @@
   "delete_review": "Excluir avaliação",
   "delete_review_confirmation": "Você realmente deseja excluir esta avaliação?",
   "review_deleted_successfully": "Avaliação excluída com sucesso!",
+  "review_requires_content": "Você precisa adicionar pelo menos uma imagem ou escrever uma descrição antes de enviar sua avaliação. Avaliações não podem ficar vazias.",
 
   "@@modals": {},
   "success": "Sucesso!",

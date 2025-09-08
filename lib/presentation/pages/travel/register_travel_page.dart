@@ -147,7 +147,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
 
     final state = context.read<RegisterTravelProvider>();
 
-    if (file == null || state.travelPhotos.length >= 5) return;
+    if (file == null) return;
 
     state.addTravelPhoto(file);
 
@@ -379,6 +379,22 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                   /// Participants list
                   Consumer<RegisterTravelProvider>(
                     builder: (_, state, __) {
+                      if (state.participants.isEmpty) {
+                        return Column(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(top: 42),
+                              child: Icon(Icons.people, size: 42),
+                            ),
+                            const Padding(padding: EdgeInsets.all(12)),
+                            Text(
+                              as.no_participants_registered,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        );
+                      }
+
                       return FabAnimatedList<Participant>(
                         itemData: state.participants,
                         itemBuilder: (context, participant) {
@@ -569,10 +585,6 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                               Text(
                                 as.add_travel_photos,
                                 style: Theme.of(context).textTheme.bodyMedium,
-                              ),
-                              Text(
-                                as.tap_select_photos,
-                                style: Theme.of(context).textTheme.bodySmall,
                               ),
                               Text(
                                 '${state.travelPhotos.length} '
@@ -989,7 +1001,6 @@ class _ParticipantListItem extends StatelessWidget {
     final as = AppLocalizations.of(context)!;
 
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 16),
       child: ListTile(
         onTap: () => _showParticipantModal(context, participant: participant),
         leading: FabCircleAvatar(
@@ -1017,34 +1028,36 @@ class _TravelStopListItem extends StatelessWidget {
       context,
     ).elevatedButtonTheme.style!.backgroundColor!.resolve({});
 
-    return ListTile(
-      shape: Theme.of(context).cardTheme.shape,
-      leading: Builder(
-        builder: (context) {
-          switch (stop.type) {
-            case TravelStopType.start:
-              return CircleAvatar(
-                backgroundColor: backgroundColor,
-                child: const Center(child: Icon(FontAwesomeIcons.paperPlane)),
-              );
-            case TravelStopType.stop:
-              return CircleAvatar(
-                backgroundColor: backgroundColor,
-                child: const Center(child: Icon(Icons.location_on)),
-              );
-            case TravelStopType.end:
-              return CircleAvatar(
-                backgroundColor: backgroundColor,
-                child: const Center(child: Icon(FontAwesomeIcons.flag)),
-              );
-          }
-        },
-      ),
-      title: Text(stop.place.city ?? ''),
-      subtitle: Text('${stop.place.city ?? ''}, ${stop.place.country ?? ''}'),
-      trailing: IconButton(
-        onPressed: () async => await onStopRemoved(context, stop),
-        icon: const Icon(FontAwesomeIcons.xmark),
+    return Card(
+      child: ListTile(
+        shape: Theme.of(context).cardTheme.shape,
+        leading: Builder(
+          builder: (context) {
+            switch (stop.type) {
+              case TravelStopType.start:
+                return CircleAvatar(
+                  backgroundColor: backgroundColor,
+                  child: const Center(child: Icon(FontAwesomeIcons.paperPlane)),
+                );
+              case TravelStopType.stop:
+                return CircleAvatar(
+                  backgroundColor: backgroundColor,
+                  child: const Center(child: Icon(Icons.location_on)),
+                );
+              case TravelStopType.end:
+                return CircleAvatar(
+                  backgroundColor: backgroundColor,
+                  child: const Center(child: Icon(FontAwesomeIcons.flag)),
+                );
+            }
+          },
+        ),
+        title: Text(stop.place.city ?? ''),
+        subtitle: Text('${stop.place.city ?? ''}, ${stop.place.country ?? ''}'),
+        trailing: IconButton(
+          onPressed: () async => await onStopRemoved(context, stop),
+          icon: const Icon(FontAwesomeIcons.xmark),
+        ),
       ),
     );
   }
