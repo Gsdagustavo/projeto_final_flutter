@@ -1,54 +1,46 @@
 import 'package:flutter/material.dart';
 
+/// Defines the application's theme configurations, including light and dark
+/// themes, color schemes, typography, and component styling.
 class AppTheme {
   // Travel Status Colors
+
+  /// Color used to represent an upcoming travel in light mode.
   static const Color travelUpcomingLight = Color(0xFF3B82F6); // Blue
+
+  /// Color used to represent an ongoing travel in light mode.
   static const Color travelOngoingLight = Color(0xFF10B981); // Green
+
+  /// Color used to represent a finished travel in light mode.
   static const Color travelFinishedLight = Color(0xFF6B7280); // Gray
 
+  /// Color used to represent an upcoming travel in dark mode.
   static const Color travelUpcomingDark = Color(0xFF60A5FA); // Lighter blue
+
+  /// Color used to represent an ongoing travel in dark mode.
   static const Color travelOngoingDark = Color(0xFF34D399); // Lighter green
+
+  /// Color used to represent a finished travel in dark mode.
   static const Color travelFinishedDark = Color(0xFF9CA3AF); // Lighter gray
 
-  // Light Theme
+  /// The [ThemeData] configuration for the application's **light theme**.
+  ///
+  /// Defines color schemes, text styles, card styling, buttons, inputs,
+  /// app bar, bottom navigation bar, switches, and chips for light mode.
   static ThemeData get lightTheme {
-    const ColorScheme lightColorScheme = ColorScheme.light(
-      // Core colors
+    const lightColorScheme = ColorScheme.light(
       primary: Color(0xFF030213),
-      // --primary
       onPrimary: Colors.white,
-
-      // --primary-foreground
       secondary: Color(0xFFF1F2F6),
-      // --secondary (approx oklch(0.95 0.0058 264.53))
       onSecondary: Color(0xFF030213),
-
-      // --secondary-foreground
       surface: Colors.white,
-      // --card
       onSurface: Color(0xFF252525),
-
-      // --foreground (approx oklch(0.145 0 0))
-      background: Colors.white,
-      // --background
-      onBackground: Color(0xFF252525),
-
-      // --foreground
       error: Color(0xFFD4183D),
-      // --destructive
       onError: Colors.white,
-
-      // --destructive-foreground
       outline: Color(0x1A000000),
-      // --border (rgba(0, 0, 0, 0.1))
       outlineVariant: Color(0xFFECECF0),
-
-      // --muted
-      surfaceVariant: Color(0xFFE9EBEF),
-      // --accent
+      surfaceContainerHighest: Color(0xFFE9EBEF),
       onSurfaceVariant: Color(0xFF030213),
-
-      // --accent-foreground
       inversePrimary: Color(0xFFFAFAFA),
       inverseSurface: Color(0xFF252525),
       onInverseSurface: Color(0xFFFAFAFA),
@@ -57,8 +49,6 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: lightColorScheme,
-
-      // Typography
       textTheme: const TextTheme(
         displayLarge: TextStyle(
           fontSize: 32.0,
@@ -130,7 +120,7 @@ class AppTheme {
           fontSize: 12.0,
           fontWeight: FontWeight.w400,
           height: 1.5,
-          color: Color(0xFF717182), // --muted-foreground
+          color: Color(0xFF717182),
         ),
         labelLarge: TextStyle(
           fontSize: 14.0,
@@ -151,29 +141,23 @@ class AppTheme {
           color: Color(0xFF717182),
         ),
       ),
-
-      // Card theme
       cardTheme: CardThemeData(
         color: Colors.white,
         elevation: 2,
         margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        shadowColor: Colors.black.withOpacity(0.1),
+        shadowColor: Colors.black.withValues(alpha: 0.1),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10), // --radius: 0.625rem = 10px
+          borderRadius: BorderRadius.circular(10),
           side: BorderSide(
-            color: const Color(0x1A000000), // --border
+            color: const Color(0x1A000000),
             width: 1,
           ),
         ),
       ),
-
-      // Button themes
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF030213),
-          // --primary
           foregroundColor: Colors.white,
-          // --primary-foreground
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           shape: RoundedRectangleBorder(
@@ -186,12 +170,11 @@ class AppTheme {
           ),
         ),
       ),
-
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: const Color(0xFF030213),
           side: const BorderSide(
-            color: Color(0x1A000000), // --border
+            color: Color(0x1A000000),
             width: 1,
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -205,7 +188,6 @@ class AppTheme {
           ),
         ),
       ),
-
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: const Color(0xFF030213),
@@ -220,16 +202,13 @@ class AppTheme {
           ),
         ),
       ),
-
-      // Input decoration theme
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: const Color(0xFFF3F3F5),
-        // --input-background
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(
-            color: Color(0x1A000000), // --border
+            color: Color(0x1A000000),
             width: 1,
           ),
         ),
@@ -240,14 +219,14 @@ class AppTheme {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(
-            color: Color(0xFF030213), // --primary
+            color: Color(0xFF030213),
             width: 2,
           ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(
-            color: Color(0xFFD4183D), // --destructive
+            color: Color(0xFFD4183D),
             width: 1,
           ),
         ),
@@ -256,13 +235,11 @@ class AppTheme {
           vertical: 12,
         ),
         hintStyle: const TextStyle(
-          color: Color(0xFF717182), // --muted-foreground
+          color: Color(0xFF717182),
           fontSize: 14,
           fontWeight: FontWeight.w400,
         ),
       ),
-
-      // App bar theme
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.white,
         foregroundColor: Color(0xFF252525),
@@ -277,14 +254,10 @@ class AppTheme {
           height: 1.5,
         ),
       ),
-
-      // Bottom navigation bar theme
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: Colors.white,
         selectedItemColor: Color(0xFF030213),
-        // --primary
         unselectedItemColor: Color(0xFF717182),
-        // --muted-foreground
         type: BottomNavigationBarType.fixed,
         elevation: 8,
         selectedLabelStyle: TextStyle(
@@ -296,23 +269,19 @@ class AppTheme {
           fontWeight: FontWeight.w400,
         ),
       ),
-
-      // Switch theme
       switchTheme: SwitchThemeData(
-        trackColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
-            return const Color(0xFF030213); // --primary
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return const Color(0xFF030213);
           }
-          return const Color(0xFFCBCED4); // --switch-background
+          return const Color(0xFFCBCED4);
         }),
-        thumbColor: MaterialStateProperty.all(Colors.white),
+        thumbColor: WidgetStateProperty.all(Colors.white),
       ),
-
-      // Chip theme
       chipTheme: ChipThemeData(
-        backgroundColor: const Color(0xFFE9EBEF), // --accent
+        backgroundColor: const Color(0xFFE9EBEF),
         labelStyle: const TextStyle(
-          color: Color(0xFF030213), // --accent-foreground
+          color: Color(0xFF030213),
           fontSize: 12,
           fontWeight: FontWeight.w500,
         ),
@@ -322,45 +291,24 @@ class AppTheme {
     );
   }
 
-  // Dark Theme
+  /// The [ThemeData] configuration for the application's **dark theme**.
+  ///
+  /// Defines color schemes, text styles, card styling, buttons, inputs,
+  /// app bar, bottom navigation bar, switches, and chips for dark mode.
   static ThemeData get darkTheme {
-    const ColorScheme darkColorScheme = ColorScheme.dark(
-      // Core colors
+    const darkColorScheme = ColorScheme.dark(
       primary: Color(0xFFFAFAFA),
-      // --primary (oklch(0.985 0 0))
       onPrimary: Color(0xFF343434),
-
-      // --primary-foreground (oklch(0.205 0 0))
       secondary: Color(0xFF434343),
-      // --secondary (oklch(0.269 0 0))
       onSecondary: Color(0xFFFAFAFA),
-
-      // --secondary-foreground
       surface: Color(0xFF252525),
-      // --card (oklch(0.145 0 0))
       onSurface: Color(0xFFFAFAFA),
-
-      // --foreground
-      background: Color(0xFF252525),
-      // --background
-      onBackground: Color(0xFFFAFAFA),
-
-      // --foreground
       error: Color(0xFFEF4444),
-      // --destructive (adjusted for dark)
       onError: Color(0xFFFAFAFA),
-
-      // --destructive-foreground
       outline: Color(0xFF434343),
-      // --border
       outlineVariant: Color(0xFF434343),
-
-      // --muted
-      surfaceVariant: Color(0xFF434343),
-      // --accent
+      surfaceContainerHighest: Color(0xFF434343),
       onSurfaceVariant: Color(0xFFFAFAFA),
-
-      // --accent-foreground
       inversePrimary: Color(0xFF252525),
       inverseSurface: Color(0xFFFAFAFA),
       onInverseSurface: Color(0xFF252525),
@@ -369,8 +317,6 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: darkColorScheme,
-
-      // Typography
       textTheme: const TextTheme(
         displayLarge: TextStyle(
           fontSize: 32.0,
@@ -442,7 +388,7 @@ class AppTheme {
           fontSize: 12.0,
           fontWeight: FontWeight.w400,
           height: 1.5,
-          color: Color(0xFFB5B5B5), // --muted-foreground (oklch(0.708 0 0))
+          color: Color(0xFFB5B5B5),
         ),
         labelLarge: TextStyle(
           fontSize: 14.0,
@@ -463,29 +409,24 @@ class AppTheme {
           color: Color(0xFFB5B5B5),
         ),
       ),
-
-      // Card theme
       cardTheme: CardThemeData(
         color: const Color(0xFF252525),
         elevation: 2,
+        // ignore: deprecated_member_use
         shadowColor: Colors.black.withOpacity(0.3),
         margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
           side: const BorderSide(
-            color: Color(0xFF434343), // --border
+            color: Color(0xFF434343),
             width: 1,
           ),
         ),
       ),
-
-      // Button themes
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFFFAFAFA),
-          // --primary
           foregroundColor: const Color(0xFF343434),
-          // --primary-foreground
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           shape: RoundedRectangleBorder(
@@ -498,12 +439,11 @@ class AppTheme {
           ),
         ),
       ),
-
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: const Color(0xFFFAFAFA),
           side: const BorderSide(
-            color: Color(0xFF434343), // --border
+            color: Color(0xFF434343),
             width: 1,
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -517,7 +457,6 @@ class AppTheme {
           ),
         ),
       ),
-
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: const Color(0xFFFAFAFA),
@@ -532,16 +471,13 @@ class AppTheme {
           ),
         ),
       ),
-
-      // Input decoration theme
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: const Color(0xFF434343),
-        // --input
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(
-            color: Color(0xFF434343), // --border
+            color: Color(0xFF434343),
             width: 1,
           ),
         ),
@@ -552,14 +488,14 @@ class AppTheme {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(
-            color: Color(0xFFFAFAFA), // --primary
+            color: Color(0xFFFAFAFA),
             width: 2,
           ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(
-            color: Color(0xFFEF4444), // --destructive
+            color: Color(0xFFEF4444),
             width: 1,
           ),
         ),
@@ -568,13 +504,11 @@ class AppTheme {
           vertical: 12,
         ),
         hintStyle: const TextStyle(
-          color: Color(0xFFB5B5B5), // --muted-foreground
+          color: Color(0xFFB5B5B5),
           fontSize: 14,
           fontWeight: FontWeight.w400,
         ),
       ),
-
-      // App bar theme
       appBarTheme: const AppBarTheme(
         backgroundColor: Color(0xFF252525),
         foregroundColor: Color(0xFFFAFAFA),
@@ -589,14 +523,10 @@ class AppTheme {
           height: 1.5,
         ),
       ),
-
-      // Bottom navigation bar theme
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: Color(0xFF252525),
         selectedItemColor: Color(0xFFFAFAFA),
-        // --primary
         unselectedItemColor: Color(0xFFB5B5B5),
-        // --muted-foreground
         type: BottomNavigationBarType.fixed,
         elevation: 8,
         selectedLabelStyle: TextStyle(
@@ -608,28 +538,24 @@ class AppTheme {
           fontWeight: FontWeight.w400,
         ),
       ),
-
-      // Switch theme
       switchTheme: SwitchThemeData(
-        trackColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
-            return const Color(0xFFFAFAFA); // --primary
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return const Color(0xFFFAFAFA);
           }
-          return const Color(0xFF434343); // --switch-background (dark)
+          return const Color(0xFF434343);
         }),
-        thumbColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return const Color(0xFF343434);
           }
           return const Color(0xFFFAFAFA);
         }),
       ),
-
-      // Chip theme
       chipTheme: ChipThemeData(
-        backgroundColor: const Color(0xFF434343), // --accent
+        backgroundColor: const Color(0xFF434343),
         labelStyle: const TextStyle(
-          color: Color(0xFFFAFAFA), // --accent-foreground
+          color: Color(0xFFFAFAFA),
           fontSize: 12,
           fontWeight: FontWeight.w500,
         ),
@@ -639,7 +565,15 @@ class AppTheme {
     );
   }
 
-  // Helper method to get travel status color
+  /// Returns the appropriate color for a travel status based on the theme
+  /// brightness.
+  ///
+  /// - [status] is a string that can be `"upcoming"`, `"ongoing"`, `"finished"`
+  /// or `"completed"`.
+  /// - [isDark] determines whether to use dark theme colors or light theme
+  /// colors
+  ///
+  /// Defaults to the finished travel color if the status is unrecognized.
   static Color getTravelStatusColor(String status, {required bool isDark}) {
     switch (status.toLowerCase()) {
       case 'upcoming':
@@ -654,9 +588,13 @@ class AppTheme {
     }
   }
 
-  // Helper method to get contrasting text color for travel status
+  /// Returns a contrasting text color for the given travel status,
+  /// ensuring sufficient readability against the status background color.
+  ///
+  /// - [status] is the current travel status.
+  /// - [isDark] determines whether to return a color suitable for dark mode or
+  /// light mode.
   static Color getTravelStatusTextColor(String status, {required bool isDark}) {
-    // All status colors have sufficient contrast with white/near-white text
     return isDark ? const Color(0xFFF3F4F6) : Colors.white;
   }
 }

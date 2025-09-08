@@ -47,21 +47,20 @@ Future<T?> showLoadingDialog<T>({
 }) async {
   final rootContext = Navigator.of(context, rootNavigator: true).context;
 
-  showDialog(
+  unawaited(showDialog(
     context: rootContext,
     barrierDismissible: false,
     builder: (_) => const Center(child: LoadingDialog()),
-  );
+  ));
 
   await Future.delayed(const Duration(milliseconds: _loadingDialogDelay));
 
-  T? result;
-  try {
-    result = await function();
-  } finally {
-    if (Navigator.of(rootContext, rootNavigator: true).canPop()) {
-      Navigator.of(rootContext, rootNavigator: true).pop();
-    }
+  final result = await function();
+
+  if (!rootContext.mounted) return result;
+
+  if (Navigator.of(rootContext, rootNavigator: true).canPop()) {
+    Navigator.of(rootContext, rootNavigator: true).pop();
   }
 
   return result;

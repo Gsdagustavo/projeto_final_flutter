@@ -61,6 +61,8 @@ Future<void> onTravelDeleted(
   );
 
   if (popContext) {
+    if (!context.mounted) return;
+
     Navigator.of(context).pop();
   }
 }

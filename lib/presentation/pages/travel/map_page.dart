@@ -397,7 +397,6 @@ class _TravelStopModalState extends State<_TravelStopModal> {
   void _onStopUpdated() async {
     if (widget.stop == null) return;
 
-    final travelState = context.read<RegisterTravelProvider>();
     final markersState = context.read<MapMarkersProvider>();
 
     markersState.removeMarker(widget.stop!);
@@ -420,7 +419,6 @@ class _TravelStopModalState extends State<_TravelStopModal> {
       ),
     );
 
-    travelState.notifyListeners();
     Navigator.of(context).pop(widget.stop);
   }
 
