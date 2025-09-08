@@ -34,7 +34,7 @@ abstract interface class TravelRepository {
   /// Updates the title of an existing travel.
   ///
   /// [travel]: The [Travel] object with the updated title.
-  Future<void> updateTravelTitle(Travel travel);
+  Future<void> updateTravelTitle(Travel travel, String newTitle);
 
   /// Searches for travels by their title.
   ///

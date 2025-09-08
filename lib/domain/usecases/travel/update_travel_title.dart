@@ -12,12 +12,14 @@ class UpdateTravelTitle {
   /// Updates the travel title after validating it.
   ///
   /// Throws an [Exception] if the title is invalid.
-  Future<void> call(Travel travel) async {
-    if (!_validateTravelTitle(travel.travelTitle)) {
+  Future<void> call(Travel travel, String newTitle) async {
+    if (!_validateTravelTitle(newTitle)) {
       throw Exception('Invalid travel name');
     }
 
-    await _travelRepository.updateTravelTitle(travel);
+    travel.travelTitle = newTitle;
+
+    await _travelRepository.updateTravelTitle(travel, newTitle);
   }
 
   /// Validates the travel title.

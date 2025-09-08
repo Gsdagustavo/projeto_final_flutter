@@ -18,6 +18,7 @@ import '../../widgets/fab_animated_list.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
 import '../../widgets/modals.dart';
+import '../util/travel_utils.dart';
 import '../util/ui_utils.dart';
 
 /// The Home Page of the app
@@ -137,22 +138,13 @@ class _TravelListItemState extends State<_TravelListItem> {
 
     if (state.hasError) {
       if (!mounted) return;
-
-      await showDialog(
-        context: context,
-        builder: (context) => ErrorModal(message: state.errorMessage!),
-      );
-
+      showErrorSnackBar(context, state.errorMessage!);
       return;
     }
 
     if (!mounted) return;
 
-    await showDialog(
-      context: context,
-      builder: (context) =>
-          SuccessModal(message: as.travel_started_successfully),
-    );
+    showSuccessSnackBar(context, as.travel_started_successfully);
   }
 
   Future<void> _onTravelFinished(Travel travel) async {
@@ -180,65 +172,13 @@ class _TravelListItemState extends State<_TravelListItem> {
 
     if (state.hasError) {
       if (!mounted) return;
-
-      await showDialog(
-        context: context,
-        builder: (context) => ErrorModal(message: state.errorMessage!),
-      );
-
+      showErrorSnackBar(context, state.errorMessage!);
       return;
     }
 
     if (!mounted) return;
 
-    await showDialog(
-      context: context,
-      builder: (context) =>
-          SuccessModal(message: as.travel_finished_successfully),
-    );
-  }
-
-  Future<void> _onTravelDeleted(Travel travel) async {
-    final as = AppLocalizations.of(context)!;
-    final result = await showDialog<bool>(
-      context: context,
-      builder: (context) => DeleteModal(
-        title: as.delete_travel,
-        message: as.delete_travel_confirmation(travel.travelTitle),
-      ),
-    );
-
-    if (result == null || !result) {
-      return;
-    }
-
-    if (!mounted) return;
-
-    final state = context.read<TravelListProvider>();
-
-    await showLoadingDialog(
-      context: context,
-      function: () async => await state.deleteTravel(travel),
-    );
-
-    if (state.hasError) {
-      if (!mounted) return;
-
-      await showDialog(
-        context: context,
-        builder: (context) => ErrorModal(message: state.errorMessage!),
-      );
-
-      return;
-    }
-
-    if (!mounted) return;
-
-    await showDialog(
-      context: context,
-      builder: (context) =>
-          SuccessModal(message: as.travel_deleted_successfully),
-    );
+    showSuccessSnackBar(context, as.travel_finished_successfully);
   }
 
   @override
@@ -340,7 +280,11 @@ class _TravelListItemState extends State<_TravelListItem> {
                               child: ListTile(
                                 onTap: () async {
                                   Navigator.of(parentContext).pop();
-                                  await _onTravelDeleted(widget.travel);
+                                  await onTravelDeleted(
+                                    context,
+                                    widget.travel,
+                                    popContext: false,
+                                  );
                                 },
                                 leading: const Icon(Icons.delete),
                                 title: Text(as.delete_travel),

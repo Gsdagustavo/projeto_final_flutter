@@ -84,9 +84,9 @@ class TravelListProvider with ChangeNotifier {
   /// Updates the title of the given [travel].
   ///
   /// Refreshes the full travel list after the update.
-  Future<void> updateTravelTitle(Travel travel) async {
-    await travelUseCases.updateTravelTitle(travel);
-    await update();
+  Future<void> updateTravelTitle(Travel travel, String newTitle) async {
+    await travelUseCases.updateTravelTitle(travel, newTitle);
+    notifyListeners();
   }
 
   /// Refreshes the travel list by fetching all travels from the use case.

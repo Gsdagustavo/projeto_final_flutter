@@ -193,7 +193,7 @@ class TravelRepositoryImpl implements TravelRepository {
   }
 
   @override
-  Future<void> updateTravelTitle(Travel travel) async {
+  Future<void> updateTravelTitle(Travel travel, String newTitle) async {
     final db = await _db;
 
     await db.transaction((txn) async {
@@ -201,7 +201,7 @@ class TravelRepositoryImpl implements TravelRepository {
 
       await txn.update(
         TravelTable.tableName,
-        travelModel.toMap(),
+        {TravelTable.travelTitle: travelModel.toMap()[TravelTable.travelTitle]},
         where: '${TravelTable.travelId} = ?',
         whereArgs: [travelModel.id],
       );

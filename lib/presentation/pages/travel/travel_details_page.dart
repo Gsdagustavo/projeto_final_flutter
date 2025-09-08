@@ -741,28 +741,18 @@ class _ReviewModalState extends State<_ReviewModal> {
 
   Future<void> onSubmit() async {
     final as = AppLocalizations.of(context)!;
-    debugPrint('submit button tap');
 
     if (!_formKey.currentState!.validate()) {
-      await showDialog(
-        context: context,
-        builder: (context) => WarningModal(message: as.err_invalid_review_data),
-      );
-
+      showErrorSnackBar(context, as.err_invalid_review_data);
       return;
     }
 
     if (_author == null) {
-      await showDialog(
-        context: context,
-        builder: (context) =>
-            WarningModal(message: as.err_invalid_review_author),
-      );
-
+      showErrorSnackBar(context, as.err_invalid_review_author);
       return;
     }
 
-    final reviewState = context.read<ReviewProvider>();
+    final state = context.read<ReviewProvider>();
 
     final review = Review(
       description: _reviewController.text,
@@ -775,28 +765,20 @@ class _ReviewModalState extends State<_ReviewModal> {
 
     await showLoadingDialog(
       context: context,
-      function: () async => await reviewState.addReview(review),
+      function: () async => await state.addReview(review),
     );
 
     reviewDescriptionFocusNode.unfocus();
 
-    if (reviewState.hasError) {
+    if (state.hasError) {
       if (!mounted) return;
-
-      await showDialog(
-        context: context,
-        builder: (context) => ErrorModal(message: reviewState.errorMessage!),
-      );
-
+      showErrorSnackBar(context, state.errorMessage!);
       return;
     }
 
     if (!mounted) return;
 
-    await showDialog(
-      context: context,
-      builder: (context) => SuccessModal(message: as.review_registered),
-    );
+    showSuccessSnackBar(context, as.review_registered);
 
     if (!mounted) return;
 
@@ -1057,11 +1039,7 @@ class _TravelTitleWidgetState extends State<_TravelTitleWidget> {
     final as = AppLocalizations.of(context)!;
 
     if (!formKey.currentState!.validate()) {
-      await showDialog(
-        context: context,
-        builder: (context) => WarningModal(message: as.invalid_travel_title),
-      );
-
+      showErrorSnackBar(context, as.invalid_travel_title);
       return;
     }
 
@@ -1070,19 +1048,12 @@ class _TravelTitleWidgetState extends State<_TravelTitleWidget> {
       return;
     }
 
-    widget.travel.travelTitle = travelTitleController.text;
-
     final state = context.read<TravelListProvider>();
-    await state.updateTravelTitle(widget.travel);
+    await state.updateTravelTitle(widget.travel, travelTitleController.text);
 
     if (!mounted) return;
 
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return SuccessModal(message: as.travel_title_updated);
-      },
-    );
+    showSuccessSnackBar(context, as.travel_title_updated);
   }
 
   @override

@@ -28,8 +28,6 @@ Future<void> onTravelDeleted(
   Travel travel, {
   bool popContext = true,
 }) async {
-  debugPrint('Context on onTravelDeleted call: $context');
-
   final as = AppLocalizations.of(context)!;
 
   final result = await showDialog<bool>(
@@ -39,8 +37,6 @@ Future<void> onTravelDeleted(
       title: as.delete_travel,
     ),
   );
-
-  debugPrint('Context after delete modal: $context');
 
   if (result == null || !result) return;
 
@@ -110,10 +106,7 @@ Future<bool> onStopRemoved(BuildContext context, TravelStop stop) async {
 
   if (!context.mounted) return true;
 
-  await showDialog(
-    context: context,
-    builder: (context) => SuccessModal(message: as.travel_stop_removed),
-  );
+  showSuccessSnackBar(context, as.travel_stop_removed);
 
   return true;
 }

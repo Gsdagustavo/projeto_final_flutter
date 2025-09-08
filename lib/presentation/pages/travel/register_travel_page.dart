@@ -75,11 +75,13 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
       return;
     }
 
-    await showDialog(
-      context: context,
-      builder: (context) =>
-          SuccessModal(message: as.participant_removed(participant.name)),
-    );
+    // await showDialog(
+    //   context: context,
+    //   builder: (context) =>
+    //       SuccessModal(message: as.participant_removed(participant.name)),
+    // );
+
+    showSuccessSnackBar(context, as.participant_removed(participant.name));
   }
 
   String _formatDate(DateTime? date) {
@@ -670,22 +672,12 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                     ),
                     onPressed: () async {
                       if (!_travelTitleFormKey.currentState!.validate()) {
-                        await showDialog(
-                          context: context,
-                          builder: (context) =>
-                              ErrorModal(message: as.invalid_travel_title),
-                        );
-
+                        showErrorSnackBar(context, as.invalid_travel_title);
                         return;
                       }
 
                       if (!state.isTravelValid) {
-                        await showDialog(
-                          context: context,
-                          builder: (context) =>
-                              ErrorModal(message: as.invalid_travel_data),
-                        );
-
+                        showErrorSnackBar(context, as.invalid_travel_data);
                         return;
                       }
 
@@ -763,6 +755,57 @@ class _ParticipantModalState extends State<_ParticipantModal> {
   Future<void> _pickImage() async {
     _profilePicture = await FileService().pickImage();
     setState(() {});
+  }
+
+  Future<void> onParticipantAdded() async {
+    final as = AppLocalizations.of(context)!;
+
+    if (!_formKey.currentState!.validate()) {
+      showErrorSnackBar(context, as.err_invalid_participant_data);
+      return;
+    }
+
+    final participant = Participant(
+      name: _nameController.text,
+      age: int.parse(_ageController.text),
+      profilePicture:
+          _profilePicture ?? await FileService().getDefaultProfilePictureFile(),
+    );
+
+    if (!mounted) return;
+
+    showSuccessSnackBar(context, as.participant_added);
+
+    if (!mounted) return;
+
+    Navigator.of(context).pop(participant);
+  }
+
+  Future<void> onParticipantUpdated() async {
+    final as = AppLocalizations.of(context)!;
+
+    if (!_formKey.currentState!.validate()) {
+      showErrorSnackBar(context, as.err_invalid_participant_data);
+      return;
+    }
+
+    final participant = Participant(
+      name: _nameController.text,
+      age: int.parse(_ageController.text),
+      profilePicture:
+          _profilePicture ?? await FileService().getDefaultProfilePictureFile(),
+    );
+
+    if (!mounted) return;
+
+    await showDialog(
+      context: context,
+      builder: (context) => SuccessModal(message: as.participant_updated),
+    );
+
+    if (!mounted) return;
+
+    Navigator.of(context).pop(participant);
   }
 
   @override
@@ -865,87 +908,17 @@ class _ParticipantModalState extends State<_ParticipantModal> {
 
                           Builder(
                             builder: (context) {
-                              debugPrint('${widget.participant == null}');
-
                               /// Register participant
                               if (widget.participant == null) {
                                 return ElevatedButton(
-                                  onPressed: () async {
-                                    if (!_formKey.currentState!.validate()) {
-                                      await showDialog(
-                                        context: context,
-                                        builder: (context) => ErrorModal(
-                                          message:
-                                              as.err_invalid_participant_data,
-                                        ),
-                                      );
-
-                                      return;
-                                    }
-
-                                    final participant = Participant(
-                                      name: _nameController.text,
-                                      age: int.parse(_ageController.text),
-                                      profilePicture:
-                                          _profilePicture ??
-                                          await FileService()
-                                              .getDefaultProfilePictureFile(),
-                                    );
-
-                                    if (!context.mounted) return;
-
-                                    await showDialog(
-                                      context: context,
-                                      builder: (context) => SuccessModal(
-                                        message: as.participant_added,
-                                      ),
-                                    );
-
-                                    if (!context.mounted) return;
-
-                                    Navigator.of(context).pop(participant);
-                                  },
+                                  onPressed: onParticipantAdded,
                                   child: Text(as.add),
                                 );
                               }
 
                               /// Update participant
                               return ElevatedButton(
-                                onPressed: () async {
-                                  if (!_formKey.currentState!.validate()) {
-                                    await showDialog(
-                                      context: context,
-                                      builder: (context) => ErrorModal(
-                                        message:
-                                            as.err_invalid_participant_data,
-                                      ),
-                                    );
-
-                                    return;
-                                  }
-
-                                  final participant = Participant(
-                                    name: _nameController.text,
-                                    age: int.parse(_ageController.text),
-                                    profilePicture:
-                                        _profilePicture ??
-                                        await FileService()
-                                            .getDefaultProfilePictureFile(),
-                                  );
-
-                                  if (!context.mounted) return;
-
-                                  await showDialog(
-                                    context: context,
-                                    builder: (context) => SuccessModal(
-                                      message: as.participant_updated,
-                                    ),
-                                  );
-
-                                  if (!context.mounted) return;
-
-                                  Navigator.of(context).pop(participant);
-                                },
+                                onPressed: onParticipantUpdated,
                                 child: Text(as.update_participant),
                               );
                             },

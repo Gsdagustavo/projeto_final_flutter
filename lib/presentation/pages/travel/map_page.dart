@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -262,34 +261,6 @@ class _TravelMapState extends State<TravelMap> {
                   ],
                 ),
               ),
-
-              /// Finish button if stops are valid
-              Consumer<RegisterTravelProvider>(
-                builder: (_, travelState, __) {
-                  if (travelState.areStopsValid) {
-                    return Positioned(
-                      bottom: 30,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 16,
-                            horizontal: 64,
-                          ),
-                        ),
-                        onPressed: () {
-                          context.pop();
-                        },
-                        child: Text(
-                          as.finish,
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                      ),
-                    );
-                  }
-
-                  return const SizedBox.shrink();
-                },
-              ),
             ],
           );
         },
@@ -419,6 +390,10 @@ class _TravelStopModalState extends State<_TravelStopModal> {
       ),
     );
 
+    final as = AppLocalizations.of(context)!;
+
+    showSuccessSnackBar(context, as.stop_updated_successfully);
+
     Navigator.of(context).pop(widget.stop);
   }
 
@@ -445,10 +420,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
 
     final as = AppLocalizations.of(context)!;
 
-    await showDialog(
-      context: context,
-      builder: (context) => SuccessModal(message: as.stop_added),
-    );
+    showSuccessSnackBar(context, as.stop_added);
 
     final ctx = AppRouter.navigatorKey.currentContext;
 
