@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pdf;
@@ -39,9 +40,15 @@ class PDFService {
 
     const double pagePadding = 32;
 
+    if (!externalContext.mounted) return null;
+
+    final locale = externalContext.read<UserPreferencesProvider>().languageCode;
+
+    var pageIndex = 0;
+
     // Add the cover page
     document.addPage(
-      index: 0,
+      index: pageIndex,
       pdf.Page(
         pageTheme: pdf.PageTheme(
           margin: pdf.EdgeInsets.all(pagePadding),
@@ -54,9 +61,11 @@ class PDFService {
       ),
     );
 
+    pageIndex++;
+
     // Add the participants page
     document.addPage(
-      index: 1,
+      index: pageIndex,
       pdf.Page(
         pageTheme: pdf.PageTheme(
           margin: pdf.EdgeInsets.all(pagePadding),
@@ -67,6 +76,67 @@ class PDFService {
           return participantsPage(
             context: externalContext,
             participants: travel.participants,
+          );
+        },
+      ),
+    );
+
+    pageIndex++;
+
+    /// TODO: pages with stops details
+
+    final logoBytes = await rootBundle.load('assets/images/app_logo.png');
+    final pdfImage = pdf.MemoryImage(logoBytes.buffer.asUint8List());
+
+    // Add last page
+    document.addPage(
+      index: pageIndex,
+      pdf.Page(
+        pageTheme: pdf.PageTheme(
+          margin: pdf.EdgeInsets.all(pagePadding),
+          pageFormat: PdfPageFormat.a5,
+          theme: pdf.ThemeData(defaultTextStyle: pdf.TextStyle(font: font)),
+        ),
+        build: (context) {
+          final now = DateTime.now();
+          final formatted = now.getFormattedDateWithYear(locale);
+
+          return pdf.Column(
+            children: [
+              pdf.ClipRRect(
+                horizontalRadius: 16,
+                verticalRadius: 16,
+                child: pdf.Image(
+                  pdfImage,
+                  fit: pdf.BoxFit.contain,
+                  height: 275,
+                ),
+              ),
+              pdf.Padding(padding: pdf.EdgeInsets.all(8)),
+              pdf.Text(
+                '"UMA VIAGEM NÃO SE MEDE EM MILHAS, MAS EM MOMENTOS. '
+                'CADA PÁGINA DESTE LIVRETO GUARDA MAIS DO QUE PAISAGENS: '
+                'SÃO SORRISOS ESPONTÂNEOS, DESCOBERTAS INESPERADAS, '
+                'CONVERSAS QUE FICARAM NA ALMA E SILÊNCIOS QUE FALARAM '
+                'MAIS QUE PALAVRAS.',
+                textAlign: pdf.TextAlign.center,
+                style: pdf.TextStyle(
+                  font: font,
+                  fontWeight: pdf.FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+
+              pdf.Spacer(),
+              pdf.Divider(),
+              pdf.Padding(
+                padding: pdf.EdgeInsets.symmetric(vertical: 16),
+                child: pdf.Text(
+                  'Documento gerado em $formatted',
+                  style: pdf.TextStyle(font: font),
+                ),
+              ),
+            ],
           );
         },
       ),
