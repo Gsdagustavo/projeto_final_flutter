@@ -7,7 +7,7 @@ plugins {
 
 android {
 
-    namespace = "com.example.projeto_final_flutter"
+    namespace = "com.example.travlr"
     compileSdk = flutter.compileSdkVersion
 
     compileOptions {
@@ -20,7 +20,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.projeto_final_flutter"
+        applicationId = "com.example.travlr"
         minSdk = 24
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
