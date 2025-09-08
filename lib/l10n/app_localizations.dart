@@ -63,8 +63,7 @@ import 'app_localizations_pt.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -72,8 +71,7 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -85,19 +83,18 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
     Locale('es'),
-    Locale('pt'),
+    Locale('pt')
   ];
 
   /// No description provided for @language_en.
@@ -370,6 +367,12 @@ abstract class AppLocalizations {
   /// **'Start Travel {travel}?'**
   String start_travel_confirmation(Object travel);
 
+  /// No description provided for @travel_started_successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel Started Successfully!'**
+  String get travel_started_successfully;
+
   /// No description provided for @travel_has_already_started.
   ///
   /// In en, this message translates to:
@@ -388,17 +391,23 @@ abstract class AppLocalizations {
   /// **'Finish Travel {travel}?'**
   String finish_travel_confirmation(Object travel);
 
+  /// No description provided for @travel_finished_successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel Finished Successfully!'**
+  String get travel_finished_successfully;
+
   /// No description provided for @travel_has_already_finished.
   ///
   /// In en, this message translates to:
   /// **'The Travel {travel} has already been finished'**
   String travel_has_already_finished(Object travel);
 
-  /// No description provided for @travel_not_stated_yet.
+  /// No description provided for @travel_not_started_yet.
   ///
   /// In en, this message translates to:
   /// **'The Travel {travel} has not started yet'**
-  String travel_not_stated_yet(Object travel);
+  String travel_not_started_yet(Object travel);
 
   /// No description provided for @delete_travel.
   ///
@@ -412,11 +421,11 @@ abstract class AppLocalizations {
   /// **'Do you really want to delete the travel {travel}?'**
   String delete_travel_confirmation(Object travel);
 
-  /// No description provided for @travel_deleted.
+  /// No description provided for @travel_deleted_successfully.
   ///
   /// In en, this message translates to:
-  /// **'Travel deleted successfully'**
-  String get travel_deleted;
+  /// **'Travel Deleted Successfully!'**
+  String get travel_deleted_successfully;
 
   /// No description provided for @view_travel_route.
   ///
@@ -580,23 +589,23 @@ abstract class AppLocalizations {
   /// **'Participant added!'**
   String get participant_added;
 
-  /// No description provided for @remove_participant_confirmation.
-  ///
-  /// In en, this message translates to:
-  /// **'Would you really want to remove the participant'**
-  String get remove_participant_confirmation;
-
   /// No description provided for @remove_participant.
   ///
   /// In en, this message translates to:
   /// **'Remove participant'**
   String get remove_participant;
 
+  /// No description provided for @remove_participant_confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Would you really want to remove the participant {participant}?'**
+  String remove_participant_confirmation(Object participant);
+
   /// No description provided for @participant_removed.
   ///
   /// In en, this message translates to:
-  /// **'Participant removed'**
-  String get participant_removed;
+  /// **'Participant {participant} removed successfully!'**
+  String participant_removed(Object participant);
 
   /// No description provided for @participant_updated.
   ///
@@ -621,6 +630,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Travel Stop added successfully!'**
   String get stop_added;
+
+  /// No description provided for @travel_stop_removed.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel Stop removed successfully!'**
+  String get travel_stop_removed;
 
   /// No description provided for @err_invalid_leave_date.
   ///
@@ -970,6 +985,102 @@ abstract class AppLocalizations {
   /// **'Review registered successfully!'**
   String get review_registered;
 
+  /// No description provided for @share_your_travel.
+  ///
+  /// In en, this message translates to:
+  /// **'Share your travel'**
+  String get share_your_travel;
+
+  /// No description provided for @delete_review.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Review'**
+  String get delete_review;
+
+  /// No description provided for @delete_review_confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you really want to delete this review?'**
+  String get delete_review_confirmation;
+
+  /// No description provided for @review_deleted_successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Review Deleted Successfully!'**
+  String get review_deleted_successfully;
+
+  /// No description provided for @success.
+  ///
+  /// In en, this message translates to:
+  /// **'Success!'**
+  String get success;
+
+  /// No description provided for @great.
+  ///
+  /// In en, this message translates to:
+  /// **'Great!'**
+  String get great;
+
+  /// No description provided for @error_occurred.
+  ///
+  /// In en, this message translates to:
+  /// **'Error Occurred'**
+  String get error_occurred;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @sign_out_question.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Out?'**
+  String get sign_out_question;
+
+  /// No description provided for @sign_out_confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to sign out? You\'ll need to sign in again to access your travels'**
+  String get sign_out_confirmation;
+
+  /// No description provided for @sign_out.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Out'**
+  String get sign_out;
+
+  /// No description provided for @stay_signed_in.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay Signed In'**
+  String get stay_signed_in;
+
+  /// No description provided for @no_internet.
+  ///
+  /// In en, this message translates to:
+  /// **'No Internet Connection'**
+  String get no_internet;
+
+  /// No description provided for @no_internet_message.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re currently offline. Some features may not be available until you reconnect to the internet'**
+  String get no_internet_message;
+
+  /// No description provided for @try_again.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get try_again;
+
+  /// No description provided for @continue_offline.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue Offline'**
+  String get continue_offline;
+
   /// No description provided for @yes.
   ///
   /// In en, this message translates to:
@@ -981,6 +1092,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No'**
   String get no;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'Ok'**
+  String get ok;
+
+  /// No description provided for @continue_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continue_label;
 
   /// No description provided for @add.
   ///
@@ -1017,10 +1140,15 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unknown error'**
   String get unknown_error;
+
+  /// No description provided for @search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search;
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -1029,28 +1157,26 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'es', 'pt'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'es', 'pt'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
+
+
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en':
-      return AppLocalizationsEn();
-    case 'es':
-      return AppLocalizationsEs();
-    case 'pt':
-      return AppLocalizationsPt();
+    case 'en': return AppLocalizationsEn();
+    case 'es': return AppLocalizationsEs();
+    case 'pt': return AppLocalizationsPt();
   }
 
   throw FlutterError(
     'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
+    'that was used.'
   );
 }

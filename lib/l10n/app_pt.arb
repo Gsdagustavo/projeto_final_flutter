@@ -68,8 +68,8 @@
 
   "@@home_page": {},
   "my_travels": "Minhas Viagens",
-  "start_travel": "Iniciar viagem",
-  "start_travel_confirmation": "Iniciar viagem {travel}?",
+  "start_travel": "Iniciar Viagem",
+  "start_travel_confirmation": "Iniciar Viagem {travel}?",
   "@@start_travel_confirmation": {
     "placeholders": {
       "travel": {
@@ -77,7 +77,8 @@
       }
     }
   },
-  "travel_has_already_started": "A viagem {travel} já foi iniciada",
+  "travel_started_successfully": "Viagem iniciada com sucesso!",
+  "travel_has_already_started": "A Viagem {travel} já foi iniciada",
   "@@travel_has_already_started": {
     "placeholders": {
       "travel": {
@@ -85,8 +86,8 @@
       }
     }
   },
-  "finish_travel": "Finalizar viagem",
-  "finish_travel_confirmation": "Finalizar viagem {travel}?",
+  "finish_travel": "Finalizar Viagem",
+  "finish_travel_confirmation": "Finalizar Viagem {travel}?",
   "@@finish_travel_confirmation": {
     "placeholders": {
       "travel": {
@@ -94,7 +95,8 @@
       }
     }
   },
-  "travel_has_already_finished": "A viagem {travel} já foi finalizada",
+  "travel_finished_successfully": "Viagem finalizada com sucesso!",
+  "travel_has_already_finished": "A Viagem {travel} já foi finalizada",
   "@@travel_has_already_finished": {
     "placeholders": {
       "travel": {
@@ -102,7 +104,7 @@
       }
     }
   },
-  "travel_not_started_yet": "A viagem {travel} ainda não começou",
+  "travel_not_started_yet": "A Viagem {travel} ainda não começou",
   "@@travel_not_started_yet": {
     "placeholders": {
       "travel": {
@@ -110,7 +112,7 @@
       }
     }
   },
-  "delete_travel": "Excluir viagem",
+  "delete_travel": "Excluir Viagem",
   "delete_travel_confirmation": "Você realmente deseja excluir a viagem {travel}?",
   "@@delete_travel_confirmation": {
     "placeholders": {
@@ -119,7 +121,7 @@
       }
     }
   },
-  "travel_deleted": "Viagem excluída com sucesso",
+  "travel_deleted_successfully": "Viagem Excluída com Sucesso!",
   "view_travel_route": "Ver rota da viagem",
   "stop": "{count, plural, =1{{count} parada} other{{count} paradas}}",
   "@@stop": {
@@ -157,18 +159,33 @@
   "name": "Nome",
   "age": "Idade",
   "participant_added": "Participante adicionado!",
-  "remove_participant_confirmation": "Você realmente deseja remover o participante",
   "remove_participant": "Remover participante",
-  "participant_removed": "Participante removido",
+  "remove_participant_confirmation": "Você realmente deseja remover o participante {participant}?",
+  "@remove_participant_confirmation": {
+    "placeholders": {
+      "participant": {
+        "type": "Object"
+      }
+    }
+  },
+  "participant_removed": "Participante {participant} removido com sucesso!",
+  "@participant_removed": {
+    "placeholders": {
+      "participant": {
+        "type": "Object"
+      }
+    }
+  },
   "participant_updated": "Participante atualizado",
   "err_could_not_add_participant": "Não foi possível adicionar o participante",
-  "remove_stop": "Remove Travel Stop",
-  "stop_added": "Travel Stop added successfully!",
-  "err_invalid_leave_date": "Invalid leave date",
-  "add_stop": "Add Travel Stop",
-  "remove_stop_confirmation": "Do you really want to remove this stop?",
-  "planned_experiences": "Planned Experiences",
-  "err_register_travel_generic": "An error occurred while registering the travel",
+  "remove_stop": "Remover Parada",
+  "stop_added": "Parada adicionada com sucesso!",
+  "travel_stop_removed": "Parada da viagem removida com sucesso!",
+  "err_invalid_leave_date": "Data de saída inválida",
+  "add_stop": "Adicionar Parada",
+  "remove_stop_confirmation": "Remover Parada?",
+  "planned_experiences": "Experiências Planejadas",
+  "err_register_travel_generic": "Um erro ocorreu ao registrar a viagem",
   "long_press_to_add_stops": "Pressione e segure para adicionar paradas",
   "travel_map": "Mapa da Viagem",
   "open_map": "Abrir Mapa",
@@ -221,7 +238,6 @@
   "no_reviews": "Ainda não há avaliações!",
   "based_on_reviews": "{count, plural, =1{Baseado em 1 avaliação} other{Baseado em {count} avaliações}}",
   "@based_on_reviews": {
-    "description": "Etiqueta mostrando a quantidade de avaliações",
     "placeholders": {
       "count": {}
     }
@@ -232,14 +248,35 @@
   "err_invalid_review_data": "Dados da avaliação inválidos",
   "err_invalid_review_author": "Autor da avaliação inválido",
   "review_registered": "Avaliação registrada com sucesso!",
+  "share_your_travel": "Compartilhe sua viagem",
+  "delete_review": "Excluir avaliação",
+  "delete_review_confirmation": "Você realmente deseja excluir esta avaliação?",
+  "review_deleted_successfully": "Avaliação excluída com sucesso!",
+
+  "@@modals": {},
+  "success": "Sucesso!",
+  "great": "Ótimo!",
+  "error_occurred": "Ocorreu um erro",
+  "delete": "Excluir",
+  "sign_out_question": "Sair?",
+  "sign_out_confirmation": "Tem certeza de que deseja sair? Você precisará entrar novamente para acessar suas viagens",
+  "sign_out": "Sair",
+  "stay_signed_in": "Manter conectado",
+  "no_internet": "Sem conexão com a internet",
+  "no_internet_message": "Você está offline no momento. Alguns recursos podem não estar disponíveis até que você se reconecte à internet",
+  "try_again": "Tentar novamente",
+  "continue_offline": "Continuar offline",
 
   "@@util": {},
   "yes": "Sim",
   "no": "Não",
+  "ok": "Ok",
+  "continue_label": "Continuar",
   "add": "Adicionar",
   "remove": "Remover",
   "warning": "Aviso",
   "cancel": "Cancelar",
   "error": "Erro",
-  "unknown_error": "Erro desconhecido"
+  "unknown_error": "Erro desconhecido",
+  "search": "Pesquisar"
 }

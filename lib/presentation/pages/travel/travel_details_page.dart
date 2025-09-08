@@ -53,14 +53,11 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
     /// TODO: add error handling
     if (pdf == null) return;
 
-    final result = await SharePlus.instance.share(
-      /// TODO: intl
-      ShareParams(title: 'Share your travel', files: [XFile(pdf.path)]),
-    );
+    final as = AppLocalizations.of(context)!;
 
-    if (result.status == ShareResultStatus.success) {
-      debugPrint('file shared');
-    }
+    await SharePlus.instance.share(
+      ShareParams(title: as.share_your_travel, files: [XFile(pdf.path)]),
+    );
   }
 
   @override
@@ -486,7 +483,6 @@ class _StopStepperWidgetState extends State<_StopStepperWidget> {
   @override
   Widget build(BuildContext modalContext) {
     final stops = widget.travel.stops;
-    debugPrint('Stops: ${widget.travel.stops}');
 
     return Stepper(
       stepIconHeight: 60,
@@ -573,12 +569,14 @@ class _ReviewListItem extends StatefulWidget {
 
 class _ReviewListItemState extends State<_ReviewListItem> {
   Future<void> _onReviewDeleted() async {
+    final as = AppLocalizations.of(context)!;
+
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => DeleteModal(
         /// TODO: intl
-        title: 'Delete Review?',
-        message: 'Do you really want to delete this review?',
+        title: as.delete_review,
+        message: as.delete_review_confirmation,
       ),
     );
 
@@ -611,8 +609,7 @@ class _ReviewListItemState extends State<_ReviewListItem> {
     await showDialog(
       context: context,
       builder: (context) =>
-          /// TODO: intl
-          SuccessModal(message: 'Review Deleted Successfully!'),
+          SuccessModal(message: as.review_deleted_successfully),
     );
   }
 
@@ -720,6 +717,7 @@ class _ReviewModal extends StatefulWidget {
 class _ReviewModalState extends State<_ReviewModal> {
   final _formKey = GlobalKey<FormState>();
   final _reviewController = TextEditingController();
+  final reviewDescriptionFocusNode = FocusNode();
   double _reviewRate = 5;
   final _images = <File>[];
 
@@ -780,6 +778,8 @@ class _ReviewModalState extends State<_ReviewModal> {
       function: () async => await reviewState.addReview(review),
     );
 
+    reviewDescriptionFocusNode.unfocus();
+
     if (reviewState.hasError) {
       if (!mounted) return;
 
@@ -801,6 +801,8 @@ class _ReviewModalState extends State<_ReviewModal> {
     if (!mounted) return;
 
     Navigator.of(context).pop();
+    reviewDescriptionFocusNode.unfocus();
+    FocusScope.of(context).unfocus();
   }
 
   @override
@@ -897,6 +899,8 @@ class _ReviewModalState extends State<_ReviewModal> {
                     key: _formKey,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: TextFormField(
+                      autofocus: false,
+                      focusNode: reviewDescriptionFocusNode,
                       textCapitalization: TextCapitalization.sentences,
                       validator: validations.reviewValidator,
                       controller: _reviewController,
@@ -1041,6 +1045,7 @@ class _TravelTitleWidget extends StatefulWidget {
 class _TravelTitleWidgetState extends State<_TravelTitleWidget> {
   final formKey = GlobalKey<FormState>();
   final travelTitleController = TextEditingController();
+  final travelTitleFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -1049,12 +1054,12 @@ class _TravelTitleWidgetState extends State<_TravelTitleWidget> {
   }
 
   Future<void> onTravelTitleUpdated() async {
+    final as = AppLocalizations.of(context)!;
+
     if (!formKey.currentState!.validate()) {
       await showDialog(
         context: context,
-
-        /// TODO: intl
-        builder: (context) => WarningModal(message: 'Invalid Travel Title'),
+        builder: (context) => WarningModal(message: as.invalid_travel_title),
       );
 
       return;
@@ -1072,20 +1077,10 @@ class _TravelTitleWidgetState extends State<_TravelTitleWidget> {
 
     if (!mounted) return;
 
-    final as = AppLocalizations.of(context)!;
-
     await showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(as.travel_title_updated),
-              const Icon(Icons.check, color: Colors.green),
-            ],
-          ),
-        );
+        return SuccessModal(message: as.travel_title_updated);
       },
     );
   }
@@ -1104,6 +1099,7 @@ class _TravelTitleWidgetState extends State<_TravelTitleWidget> {
           Form(
             key: formKey,
             child: TextFormField(
+              focusNode: travelTitleFocusNode,
               decoration: InputDecoration(
                 constraints: const BoxConstraints(
                   maxWidth: 300,

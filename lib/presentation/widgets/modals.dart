@@ -96,6 +96,8 @@ class SuccessModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+
     return _BaseDialog(
       icon: const _SuccessIcon(),
       content: Column(
@@ -103,7 +105,7 @@ class SuccessModal extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         spacing: 12,
         children: [
-          Text('Success!', style: _modalTitleTextStyle(context)),
+          Text(as.success, style: _modalTitleTextStyle(context)),
           Text(message, style: _modalContentTextStyle(context)),
         ],
       ),
@@ -113,7 +115,7 @@ class SuccessModal extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop(true);
           },
-          child: Text('Great!'),
+          child: Text(as.great),
         ),
       ],
     );
@@ -130,6 +132,8 @@ class ErrorModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+
     return _BaseDialog(
       icon: const _ErrorIcon(),
       content: Column(
@@ -137,7 +141,7 @@ class ErrorModal extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         spacing: 12,
         children: [
-          Text('Error Occurred', style: _modalContentTextStyle(context)),
+          Text(as.error_occurred, style: _modalContentTextStyle(context)),
           Text(message, style: _modalContentTextStyle(context)),
         ],
       ),
@@ -146,7 +150,7 @@ class ErrorModal extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text('Ok'),
+          child: Text(as.ok),
         ),
       ],
     );
@@ -184,7 +188,7 @@ class WarningModal extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop(true);
           },
-          child: Text('Continue'),
+          child: Text(as.continue_label),
         ),
         _BaseElevatedButton(
           onPressed: () {
@@ -232,7 +236,7 @@ class DeleteModal extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop(true);
           },
-          child: Text('Delete'),
+          child: Text(as.delete),
         ),
         _BaseElevatedButton(
           onPressed: () {
@@ -254,6 +258,8 @@ class SignOutModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+
     return _BaseDialog(
       circleAvatarBackgroundColor: Colors.amber.shade200,
       icon: Icon(Icons.logout, color: Colors.amber.shade800),
@@ -262,12 +268,8 @@ class SignOutModal extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         spacing: 12,
         children: [
-          Text('Sign Out?', style: _modalContentTextStyle(context)),
-          Text(
-            'Are you sure you want to sign out? You\'ll need to sign in again '
-            'to access your travels.',
-            style: _modalTitleTextStyle(context),
-          ),
+          Text(as.sign_out_question, style: _modalContentTextStyle(context)),
+          Text(as.sign_out_confirmation, style: _modalTitleTextStyle(context)),
         ],
       ),
       actions: [
@@ -276,14 +278,14 @@ class SignOutModal extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop(true);
           },
-          child: Text('Sign Out'),
+          child: Text(as.sign_out),
         ),
         const Padding(padding: EdgeInsets.all(6)),
         _BaseElevatedButton(
           onPressed: () {
             Navigator.of(context).pop(false);
           },
-          child: Text('Stay Signed In'),
+          child: Text(as.stay_signed_in),
         ),
       ],
     );
@@ -299,6 +301,8 @@ class NoInternetModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+
     return _BaseDialog(
       circleAvatarBackgroundColor: Colors.red.shade200,
       icon: Icon(
@@ -310,12 +314,8 @@ class NoInternetModal extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         spacing: 12,
         children: [
-          Text('No Internet Connection', style: _modalTitleTextStyle(context)),
-          Text(
-            'You\'re currently offline. Some features may not be available '
-            'until you reconnect to the internet.',
-            style: _modalContentTextStyle(context),
-          ),
+          Text(as.no_internet, style: _modalTitleTextStyle(context)),
+          Text(as.no_internet_message, style: _modalContentTextStyle(context)),
         ],
       ),
       actions: [
@@ -353,6 +353,8 @@ class OkCancelModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+
     return _BaseDialog(
       circleAvatarBackgroundColor: Colors.blue.shade200,
       icon: Icon(FontAwesomeIcons.circleQuestion, color: Colors.blue.shade800),
@@ -373,7 +375,7 @@ class OkCancelModal extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).pop(false);
                 },
-                child: Text('Cancel'),
+                child: Text(as.cancel),
               ),
             ),
             const Padding(padding: EdgeInsets.all(6)),
@@ -382,7 +384,7 @@ class OkCancelModal extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).pop(true);
                 },
-                child: Text('Ok'),
+                child: Text(as.ok),
               ),
             ),
           ],

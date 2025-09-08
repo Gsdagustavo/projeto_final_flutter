@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -117,8 +116,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get experience_historical_places => 'Visitar Lugares Históricos';
 
   @override
-  String get experience_visit_local_establishments =>
-      'Visitar Establecimientos Locales (Bares, Restaurantes, Parques, etc.)';
+  String get experience_visit_local_establishments => 'Visitar Establecimientos Locales (Bares, Restaurantes, Parques, etc.)';
 
   @override
   String get experience_contact_with_nature => 'Contacto con la Naturaleza';
@@ -150,6 +148,9 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get travel_started_successfully => '¡Viaje iniciado con éxito!';
+
+  @override
   String travel_has_already_started(Object travel) {
     return 'El viaje $travel ya ha comenzado';
   }
@@ -163,13 +164,16 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get travel_finished_successfully => '¡Viaje finalizado con éxito!';
+
+  @override
   String travel_has_already_finished(Object travel) {
     return 'El viaje $travel ya ha terminado';
   }
 
   @override
-  String travel_not_stated_yet(Object travel) {
-    return 'The Travel $travel has not started yet';
+  String travel_not_started_yet(Object travel) {
+    return 'El viaje $travel aún no ha comenzado';
   }
 
   @override
@@ -181,7 +185,7 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get travel_deleted => 'Viaje eliminado con éxito';
+  String get travel_deleted_successfully => '¡Viaje eliminado con éxito!';
 
   @override
   String get view_travel_route => 'Ver ruta del viaje';
@@ -240,8 +244,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get end_date => 'Fecha de Fin del Viaje';
 
   @override
-  String get err_invalid_date_snackbar =>
-      '¡Debes seleccionar una fecha de inicio primero!';
+  String get err_invalid_date_snackbar => '¡Debes seleccionar una fecha de inicio primero!';
 
   @override
   String get participants => 'Participantes';
@@ -274,14 +277,17 @@ class AppLocalizationsEs extends AppLocalizations {
   String get participant_added => 'Participante agregado!';
 
   @override
-  String get remove_participant_confirmation =>
-      '¿Realmente deseas eliminar al participante';
-
-  @override
   String get remove_participant => 'Eliminar participante';
 
   @override
-  String get participant_removed => 'Participante eliminado';
+  String remove_participant_confirmation(Object participant) {
+    return '¿Realmente desea eliminar al participante $participant?';
+  }
+
+  @override
+  String participant_removed(Object participant) {
+    return '¡Participante $participant eliminado con éxito!';
+  }
 
   @override
   String get participant_updated => 'Participante actualizado';
@@ -296,25 +302,25 @@ class AppLocalizationsEs extends AppLocalizations {
   String get stop_added => '¡Parada agregada con éxito!';
 
   @override
+  String get travel_stop_removed => '¡Parada del viaje eliminada con éxito!';
+
+  @override
   String get err_invalid_leave_date => 'Fecha de salida inválida';
 
   @override
   String get add_stop => 'Agregar parada';
 
   @override
-  String get remove_stop_confirmation =>
-      '¿Realmente desea eliminar esta parada?';
+  String get remove_stop_confirmation => '¿Realmente desea eliminar esta parada?';
 
   @override
   String get planned_experiences => 'Experiencias planificadas';
 
   @override
-  String get err_register_travel_generic =>
-      'Ocurrió un error al registrar el viaje';
+  String get err_register_travel_generic => 'Ocurrió un error al registrar el viaje';
 
   @override
-  String get long_press_to_add_stops =>
-      'Mantén presionado para agregar paradas';
+  String get long_press_to_add_stops => 'Mantén presionado para agregar paradas';
 
   @override
   String get travel_map => 'Mapa del Viaje';
@@ -326,19 +332,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get route_planning => 'Planificación de Ruta';
 
   @override
-  String get route_planning_label =>
-      'Planifica la ruta y las paradas de tu viaje';
+  String get route_planning_label => 'Planifica la ruta y las paradas de tu viaje';
 
   @override
   String get registered_stops => 'Paradas Registradas';
 
   @override
-  String get no_stops_registered =>
-      'No hay paradas registradas aún. Usa el mapa para planificar tu ruta entre diferentes ciudades y países';
+  String get no_stops_registered => 'No hay paradas registradas aún. Usa el mapa para planificar tu ruta entre diferentes ciudades y países';
 
   @override
-  String get use_the_map_add_waypoints =>
-      'Usa el mapa para modificar tu ruta o agregar más paradas';
+  String get use_the_map_add_waypoints => 'Usa el mapa para modificar tu ruta o agregar más paradas';
 
   @override
   String get travel_photos => 'Fotos del Viaje';
@@ -356,8 +359,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get choose_photos => 'Elegir Fotos';
 
   @override
-  String get add_photos_label =>
-      'Agrega fotos para hacer tu viaje más memorable y visualmente atractivo';
+  String get add_photos_label => 'Agrega fotos para hacer tu viaje más memorable y visualmente atractivo';
 
   @override
   String get invalid_travel_data => '¡Datos de viaje no válidos!';
@@ -384,8 +386,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get stop_registered_successfully => '¡Parada registrada con éxito!';
 
   @override
-  String get err_register_stop =>
-      'Ocurrió un error al intentar registrar la parada';
+  String get err_register_stop => 'Ocurrió un error al intentar registrar la parada';
 
   @override
   String get update_stop => 'Actualizar parada';
@@ -400,8 +401,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get leave_date => 'Fecha de salida';
 
   @override
-  String get err_you_must_select_arrive_date_first =>
-      '¡Debes seleccionar primero la fecha de llegada!';
+  String get err_you_must_select_arrive_date_first => '¡Debes seleccionar primero la fecha de llegada!';
 
   @override
   String get finish => 'Finalizar';
@@ -475,8 +475,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get remove_review => 'Eliminar reseña';
 
   @override
-  String get remove_review_confirmation =>
-      '¿Realmente deseas eliminar esta reseña?';
+  String get remove_review_confirmation => '¿Realmente deseas eliminar esta reseña?';
 
   @override
   String get err_invalid_review_data => 'Datos de la reseña inválidos';
@@ -488,10 +487,64 @@ class AppLocalizationsEs extends AppLocalizations {
   String get review_registered => '¡Reseña registrada con éxito!';
 
   @override
+  String get share_your_travel => 'Comparte tu viaje';
+
+  @override
+  String get delete_review => 'Eliminar reseña';
+
+  @override
+  String get delete_review_confirmation => '¿Realmente desea eliminar esta reseña?';
+
+  @override
+  String get review_deleted_successfully => '¡Reseña eliminada con éxito!';
+
+  @override
+  String get success => '¡Éxito!';
+
+  @override
+  String get great => '¡Genial!';
+
+  @override
+  String get error_occurred => 'Ocurrió un error';
+
+  @override
+  String get delete => 'Eliminar';
+
+  @override
+  String get sign_out_question => '¿Cerrar sesión?';
+
+  @override
+  String get sign_out_confirmation => '¿Está seguro de que desea cerrar sesión? Necesitará iniciar sesión nuevamente para acceder a sus viajes';
+
+  @override
+  String get sign_out => 'Cerrar sesión';
+
+  @override
+  String get stay_signed_in => 'Mantener sesión iniciada';
+
+  @override
+  String get no_internet => 'Sin conexión a internet';
+
+  @override
+  String get no_internet_message => 'Actualmente estás sin conexión. Algunas funciones pueden no estar disponibles hasta que te reconectes a internet';
+
+  @override
+  String get try_again => 'Intentar de nuevo';
+
+  @override
+  String get continue_offline => 'Continuar sin conexión';
+
+  @override
   String get yes => 'Sí';
 
   @override
   String get no => 'No';
+
+  @override
+  String get ok => 'Ok';
+
+  @override
+  String get continue_label => 'Continuar';
 
   @override
   String get add => 'Agregar';
@@ -510,4 +563,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get unknown_error => 'Error desconocido';
+
+  @override
+  String get search => 'Buscar';
 }

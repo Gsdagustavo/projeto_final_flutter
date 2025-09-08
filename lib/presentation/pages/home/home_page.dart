@@ -81,8 +81,7 @@ class _HomePageState extends State<HomePage> {
                       await state.searchTravel(searchController.text);
                     },
                     decoration: InputDecoration(
-                      /// TODO: intl
-                      hintText: 'Search...',
+                      hintText: as.search,
                       prefixIcon: const Icon(Icons.search),
                       suffixIcon: IconButton(
                         onPressed: () async {
@@ -118,8 +117,7 @@ class _TravelListItemState extends State<_TravelListItem> {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => OkCancelModal(
-        /// TODO: intl
-        title: 'Start Travel?',
+        title: as.start_travel,
         content: as.start_travel_confirmation(travel.travelTitle),
       ),
     );
@@ -153,8 +151,7 @@ class _TravelListItemState extends State<_TravelListItem> {
     await showDialog(
       context: context,
       builder: (context) =>
-          /// TODO: intl
-          SuccessModal(message: 'Travel Started Successfully!'),
+          SuccessModal(message: as.travel_started_successfully),
     );
   }
 
@@ -163,8 +160,7 @@ class _TravelListItemState extends State<_TravelListItem> {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => OkCancelModal(
-        /// TODO: intl
-        title: 'Finish Travel?',
+        title: as.finish_travel,
         content: as.finish_travel_confirmation(travel.travelTitle),
       ),
     );
@@ -198,8 +194,7 @@ class _TravelListItemState extends State<_TravelListItem> {
     await showDialog(
       context: context,
       builder: (context) =>
-          /// TODO: intl
-          SuccessModal(message: 'Travel Finished Successfully!'),
+          SuccessModal(message: as.travel_finished_successfully),
     );
   }
 
@@ -208,9 +203,8 @@ class _TravelListItemState extends State<_TravelListItem> {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => DeleteModal(
-        /// TODO: intl
-        title: 'Delete Travel?',
-        message: as.finish_travel_confirmation(travel.travelTitle),
+        title: as.delete_travel,
+        message: as.delete_travel_confirmation(travel.travelTitle),
       ),
     );
 
@@ -243,8 +237,7 @@ class _TravelListItemState extends State<_TravelListItem> {
     await showDialog(
       context: context,
       builder: (context) =>
-          /// TODO: intl
-          SuccessModal(message: 'Travel Deleted Successfully!'),
+          SuccessModal(message: as.travel_deleted_successfully),
     );
   }
 

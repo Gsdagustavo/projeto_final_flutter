@@ -112,10 +112,7 @@ Future<bool> onStopRemoved(BuildContext context, TravelStop stop) async {
 
   await showDialog(
     context: context,
-    builder: (context) => SuccessModal(
-      /// TODO: localize message
-      message: 'Stop Removed Successfully!',
-    ),
+    builder: (context) => SuccessModal(message: as.travel_stop_removed),
   );
 
   return true;

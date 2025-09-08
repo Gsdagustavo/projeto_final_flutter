@@ -77,6 +77,7 @@
       }
     }
   },
+  "travel_started_successfully": "Travel Started Successfully!",
   "travel_has_already_started": "The Travel {travel} has already been started",
   "@@travel_has_already_started": {
     "placeholders": {
@@ -94,6 +95,7 @@
       }
     }
   },
+  "travel_finished_successfully": "Travel Finished Successfully!",
   "travel_has_already_finished": "The Travel {travel} has already been finished",
   "@@travel_has_already_finished": {
     "placeholders": {
@@ -102,7 +104,7 @@
       }
     }
   },
-  "travel_not_stated_yet": "The Travel {travel} has not started yet",
+  "travel_not_started_yet": "The Travel {travel} has not started yet",
   "@@travel_not_stated_yet": {
     "placeholders": {
       "travel": {
@@ -119,7 +121,7 @@
       }
     }
   },
-  "travel_deleted": "Travel deleted successfully",
+  "travel_deleted_successfully": "Travel Deleted Successfully!",
   "view_travel_route": "View Travel Route",
   "stop": "{count, plural, =1{{count} Stop} other{{count} Stops}}",
   "@@stop": {
@@ -156,13 +158,28 @@
   "name": "Name",
   "age": "Age",
   "participant_added": "Participant added!",
-  "remove_participant_confirmation": "Would you really want to remove the participant",
   "remove_participant": "Remove participant",
-  "participant_removed": "Participant removed",
+  "remove_participant_confirmation": "Would you really want to remove the participant {participant}?",
+  "@@remove_participant_confirmation": {
+    "placeholders": {
+      "participant": {
+        "type": "Object"
+      }
+    }
+  },
+  "participant_removed": "Participant {participant} removed successfully!",
+  "@@participant_removed": {
+    "placeholders": {
+      "participant": {
+        "type": "Object"
+      }
+    }
+  },
   "participant_updated": "Participant updated",
   "err_could_not_add_participant": "Could not add participant",
   "remove_stop": "Remove Travel Stop",
   "stop_added": "Travel Stop added successfully!",
+  "travel_stop_removed": "Travel Stop removed successfully!",
   "err_invalid_leave_date": "Invalid leave date",
   "add_stop": "Add Travel Stop",
   "remove_stop_confirmation": "Do you really want to remove this stop?",
@@ -231,14 +248,35 @@
   "err_invalid_review_data": "Invalid review data",
   "err_invalid_review_author": "Invalid review author",
   "review_registered": "Review registered successfully!",
+  "share_your_travel": "Share your travel",
+  "delete_review": "Delete Review",
+  "delete_review_confirmation": "Do you really want to delete this review?",
+  "review_deleted_successfully": "Review Deleted Successfully!",
+
+  "@@modals": {},
+  "success": "Success!",
+  "great": "Great!",
+  "error_occurred": "Error Occurred",
+  "delete": "Delete",
+  "sign_out_question": "Sign Out?",
+  "sign_out_confirmation": "Are you sure you want to sign out? You'll need to sign in again to access your travels",
+  "sign_out": "Sign Out",
+  "stay_signed_in": "Stay Signed In",
+  "no_internet": "No Internet Connection",
+  "no_internet_message": "You're currently offline. Some features may not be available until you reconnect to the internet",
+  "try_again": "Try Again",
+  "continue_offline": "Continue Offline",
 
   "@@util": {},
   "yes": "Yes",
   "no": "No",
+  "ok": "Ok",
+  "continue_label": "Continue",
   "add": "Add",
   "remove": "Remove",
   "warning": "Warning",
   "cancel": "Cancel",
   "error": "Error",
-  "unknown_error": "Unknown error"
+  "unknown_error": "Unknown error",
+  "search": "Search"
 }

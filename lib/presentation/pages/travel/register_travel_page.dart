@@ -62,8 +62,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
     final remove = await showDialog<bool>(
       context: context,
       builder: (context) => DeleteModal(
-        /// TODO: intl
-        message: '${as.remove_participant_confirmation} ${participant.name}?',
+        message: as.remove_participant_confirmation(participant.name),
         title: as.remove_participant,
       ),
     );
@@ -78,10 +77,8 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
 
     await showDialog(
       context: context,
-      builder: (context) => SuccessModal(
-        /// TODO: intl
-        message: 'Participant ${participant.name} removed successfully!',
-      ),
+      builder: (context) =>
+          SuccessModal(message: as.participant_removed(participant.name)),
     );
   }
 
@@ -178,10 +175,8 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
 
       await showDialog(
         context: context,
-        builder: (context) => ErrorModal(
-          /// TODO: intl
-          message: 'An error occurred while registering the travel',
-        ),
+        builder: (context) =>
+            ErrorModal(message: as.err_register_travel_generic),
       );
 
       return;
