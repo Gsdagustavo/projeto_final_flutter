@@ -422,45 +422,58 @@ class _BaseElevatedButton extends StatelessWidget {
   }
 }
 
-/// Base snack bar used in custom snack bars.
-class _BaseSnackBar extends SnackBar {
-  /// Creates a snack bar with [backgroundColor] and [content].
-  const _BaseSnackBar({required Color backgroundColor, required super.content});
-
-  Widget build(BuildContext context) {
-    return SnackBar(
-      backgroundColor: backgroundColor,
-      padding: EdgeInsets.all(12),
-      duration: duration,
-      showCloseIcon: showCloseIcon,
-      content: content,
-    );
-  }
+SnackBar _baseSnackBar({
+  required Color backgroundColor,
+  required Widget icon,
+  required String message,
+  Duration duration = const Duration(seconds: 4),
+  SnackBarBehavior behavior = SnackBarBehavior.floating,
+}) {
+  return SnackBar(
+    margin: EdgeInsets.all(12),
+    padding: EdgeInsets.all(12),
+    content: Row(spacing: 12, children: [icon, Text(message)]),
+    duration: duration,
+    backgroundColor: backgroundColor,
+    behavior: behavior,
+  );
 }
 
 /// Shows a green snack bar with a success message.
 void showSuccessSnackBar(BuildContext context, String message) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    _BaseSnackBar(
-      content: Text(message),
-      backgroundColor: Colors.green.shade800,
-    ),
+  final snackBar = _baseSnackBar(
+    icon: _SuccessIcon(),
+    message: message,
+    backgroundColor: Colors.green.shade400,
   );
+
+  ScaffoldMessenger.of(context)
+    ..clearSnackBars()
+    ..showSnackBar(snackBar);
 }
 
 /// Shows a red snack bar with an error message.
 void showErrorSnackBar(BuildContext context, String message) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    _BaseSnackBar(content: Text(message), backgroundColor: Colors.red.shade800),
+  final snackBar = _baseSnackBar(
+    icon: _ErrorIcon(),
+    message: message,
+    backgroundColor: Colors.red.shade400,
   );
+
+  ScaffoldMessenger.of(context)
+    ..clearSnackBars()
+    ..showSnackBar(snackBar);
 }
 
 /// Shows a yellow snack bar with a warning message.
 void showWarningSnackBar(BuildContext context, String message) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    _BaseSnackBar(
-      content: Text(message),
-      backgroundColor: Colors.yellow.shade800,
-    ),
+  final snackBar = _baseSnackBar(
+    icon: _WarningIcon(),
+    message: message,
+    backgroundColor: Colors.yellow.shade400,
   );
+
+  ScaffoldMessenger.of(context)
+    ..clearSnackBars()
+    ..showSnackBar(snackBar);
 }
