@@ -5,7 +5,7 @@ import 'package:implicitly_animated_list/implicitly_animated_list.dart';
 const _defaultAnimationCurve = Curves.easeInOutQuad;
 
 /// Default duration used for insert and delete animations in [FabAnimatedList].
-const _defaultAnimationDuration = Duration(milliseconds: 750);
+const _defaultAnimationDuration = Duration(milliseconds: 500);
 
 /// Wraps an [Animation] with a default curve and drives it from 0 to 1.
 ///
