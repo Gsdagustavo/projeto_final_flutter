@@ -46,15 +46,17 @@ class PDFService {
 
     var pageIndex = 0;
 
+    final pageTheme = pdf.PageTheme(
+      margin: pdf.EdgeInsets.all(pagePadding),
+      pageFormat: PdfPageFormat.a5,
+      theme: pdf.ThemeData(defaultTextStyle: pdf.TextStyle(font: font)),
+    );
+
     // Add the cover page
     document.addPage(
       index: pageIndex,
       pdf.Page(
-        pageTheme: pdf.PageTheme(
-          margin: pdf.EdgeInsets.all(pagePadding),
-          pageFormat: PdfPageFormat.a5,
-          theme: pdf.ThemeData(defaultTextStyle: pdf.TextStyle(font: font)),
-        ),
+        pageTheme: pageTheme,
         build: (context) {
           return coverPage(context: externalContext, travel: travel);
         },
@@ -67,11 +69,7 @@ class PDFService {
     document.addPage(
       index: pageIndex,
       pdf.Page(
-        pageTheme: pdf.PageTheme(
-          margin: pdf.EdgeInsets.all(pagePadding),
-          pageFormat: PdfPageFormat.a5,
-          theme: pdf.ThemeData(defaultTextStyle: pdf.TextStyle(font: font)),
-        ),
+        pageTheme: pageTheme,
         build: (context) {
           return participantsPage(
             context: externalContext,
@@ -85,61 +83,12 @@ class PDFService {
 
     /// TODO: pages with stops details
 
-    final logoBytes = await rootBundle.load('assets/images/app_logo.png');
-    final pdfImage = pdf.MemoryImage(logoBytes.buffer.asUint8List());
+    final lastPage = await finalPage(locale: locale);
 
     // Add last page
     document.addPage(
       index: pageIndex,
-      pdf.Page(
-        pageTheme: pdf.PageTheme(
-          margin: pdf.EdgeInsets.all(pagePadding),
-          pageFormat: PdfPageFormat.a5,
-          theme: pdf.ThemeData(defaultTextStyle: pdf.TextStyle(font: font)),
-        ),
-        build: (context) {
-          final now = DateTime.now();
-          final formatted = now.getFormattedDateWithYear(locale);
-
-          return pdf.Column(
-            children: [
-              pdf.ClipRRect(
-                horizontalRadius: 16,
-                verticalRadius: 16,
-                child: pdf.Image(
-                  pdfImage,
-                  fit: pdf.BoxFit.contain,
-                  height: 275,
-                ),
-              ),
-              pdf.Padding(padding: pdf.EdgeInsets.all(8)),
-              pdf.Text(
-                '"UMA VIAGEM NÃO SE MEDE EM MILHAS, MAS EM MOMENTOS. '
-                'CADA PÁGINA DESTE LIVRETO GUARDA MAIS DO QUE PAISAGENS: '
-                'SÃO SORRISOS ESPONTÂNEOS, DESCOBERTAS INESPERADAS, '
-                'CONVERSAS QUE FICARAM NA ALMA E SILÊNCIOS QUE FALARAM '
-                'MAIS QUE PALAVRAS.',
-                textAlign: pdf.TextAlign.center,
-                style: pdf.TextStyle(
-                  font: font,
-                  fontWeight: pdf.FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-
-              pdf.Spacer(),
-              pdf.Divider(),
-              pdf.Padding(
-                padding: pdf.EdgeInsets.symmetric(vertical: 16),
-                child: pdf.Text(
-                  'Documento gerado em $formatted',
-                  style: pdf.TextStyle(font: font),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
+      pdf.Page(pageTheme: pageTheme, build: (context) => lastPage),
     );
 
     // Save the PDF to the app's documents directory
@@ -243,6 +192,40 @@ class PDFService {
             },
             itemCount: participants.length,
           ),
+        ),
+      ],
+    );
+  }
+
+  Future<pdf.Column> finalPage({required String locale}) async {
+    final now = DateTime.now();
+    final formatted = now.getFormattedDateWithYear(locale);
+
+    final logoBytes = await rootBundle.load('assets/images/app_logo.png');
+    final logoImage = pdf.MemoryImage(logoBytes.buffer.asUint8List());
+
+    return pdf.Column(
+      children: [
+        pdf.ClipRRect(
+          horizontalRadius: 16,
+          verticalRadius: 16,
+          child: pdf.Image(logoImage, fit: pdf.BoxFit.contain, height: 275),
+        ),
+        pdf.Padding(padding: pdf.EdgeInsets.all(8)),
+        pdf.Text(
+          '"UMA VIAGEM NÃO SE MEDE EM MILHAS, MAS EM MOMENTOS. '
+          'CADA PÁGINA DESTE LIVRETO GUARDA MAIS DO QUE PAISAGENS: '
+          'SÃO SORRISOS ESPONTÂNEOS, DESCOBERTAS INESPERADAS, '
+          'CONVERSAS QUE FICARAM NA ALMA E SILÊNCIOS QUE FALARAM '
+          'MAIS QUE PALAVRAS.',
+          textAlign: pdf.TextAlign.center,
+          style: pdf.TextStyle(fontWeight: pdf.FontWeight.bold, fontSize: 16),
+        ),
+        pdf.Spacer(),
+        pdf.Divider(),
+        pdf.Padding(
+          padding: pdf.EdgeInsets.symmetric(vertical: 16),
+          child: pdf.Text('Documento gerado em $formatted'),
         ),
       ],
     );
