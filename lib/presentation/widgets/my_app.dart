@@ -7,6 +7,9 @@ import '../../l10n/app_localizations.dart';
 import '../providers/user_preferences_provider.dart';
 import '../util/app_router.dart';
 
+const _appTitle = 'Travlr';
+const _debugShowCheckedModeBanner = false;
+
 /// This widget is the [MaterialApp] of the application, which contains all
 /// important info about layout, theme, routes, localization, etc.
 class MyApp extends StatelessWidget {
@@ -15,7 +18,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ---- THEME RELATED ----
     final isDarkMode = Provider.of<UserPreferencesProvider>(context).isDarkMode;
 
     final baseTheme = AppTheme.lightTheme;
@@ -29,15 +31,14 @@ class MyApp extends StatelessWidget {
       textTheme: GoogleFonts.quicksandTextTheme(baseDarkTheme.textTheme),
     );
 
-    // ---- LANGUAGE RELATED ----
     final languageCode = Provider.of<UserPreferencesProvider>(
       context,
     ).languageCode;
     final locale = Locale(languageCode);
 
     return MaterialApp.router(
-      title: 'Roam',
-      debugShowCheckedModeBanner: false,
+      title: _appTitle,
+      debugShowCheckedModeBanner: _debugShowCheckedModeBanner,
 
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
