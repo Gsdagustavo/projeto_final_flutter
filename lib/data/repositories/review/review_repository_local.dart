@@ -77,6 +77,27 @@ class ReviewRepositoryImpl implements ReviewRepository {
   }
 
   @override
+  Future<void> deleteReview({required Review review}) async {
+    final db = await _db;
+
+    await db.transaction((txn) async {
+      /// Delete from [ReviewsTable]
+      await txn.delete(
+        ReviewsTable.tableName,
+        where: '${ReviewsTable.reviewId} = ?',
+        whereArgs: [review.id],
+      );
+
+      /// Delete from [ReviewsPhotosTable]
+      await txn.delete(
+        ReviewsPhotosTable.tableName,
+        where: '${ReviewsPhotosTable.reviewId} = ?',
+        whereArgs: [review.id],
+      );
+    });
+  }
+
+  @override
   Future<List<Review>> getReviews() async {
     final db = await _db;
 

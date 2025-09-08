@@ -15,6 +15,11 @@ abstract class ReviewRepository {
   /// [reviews]: A list of [Review] objects to be added.
   Future<void> addReviews({required List<Review> reviews});
 
+  /// Deletes a review from the repository.
+  ///
+  /// [review]: The [Review] object to be deleted.
+  Future<void> deleteReview({required Review review});
+
   /// Retrieves all reviews stored in the repository.
   ///
   /// Returns a [List] of [Review] objects.

@@ -19,9 +19,18 @@ class ReviewProvider with ChangeNotifier {
   ///
   /// Notifies listeners after the review is added.
   Future<void> addReview(Review review) async {
-    debugPrint('add review provider');
     await _reviewUseCases.addReview(review: review);
     _reviews.add(review);
+    notifyListeners();
+  }
+
+  /// Delete a [review] to the repository and updates the internal list of
+  ///reviews
+  ///
+  /// Notifies listeners after the review is deleted.
+  Future<void> deleteReview(Review review) async {
+    await _reviewUseCases.deleteReview(review: review);
+    _reviews.remove(review);
     notifyListeners();
   }
 
@@ -33,8 +42,6 @@ class ReviewProvider with ChangeNotifier {
     _reviews.clear();
     _reviews.addAll(await _reviewUseCases.getReviews());
     notifyListeners();
-
-    debugPrint('Reviews: $_reviews');
   }
 
   /// Retrieves reviews associated with a specific [travel] and updates
@@ -63,8 +70,8 @@ class ReviewProvider with ChangeNotifier {
     if (_reviews.isEmpty) return 0;
 
     return _reviews.fold(0, (previousValue, element) {
-      return element.stars + previousValue;
-    }) /
+          return element.stars + previousValue;
+        }) /
         _reviews.length;
   }
 }

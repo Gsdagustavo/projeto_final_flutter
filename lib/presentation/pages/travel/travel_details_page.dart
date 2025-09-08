@@ -571,11 +571,59 @@ class _StopStepperWidgetState extends State<_StopStepperWidget> {
   }
 }
 
-class _ReviewListItem extends StatelessWidget {
+class _ReviewListItem extends StatefulWidget {
   const _ReviewListItem({required this.review, required this.locale});
 
   final Review review;
   final String locale;
+
+  @override
+  State<_ReviewListItem> createState() => _ReviewListItemState();
+}
+
+class _ReviewListItemState extends State<_ReviewListItem> {
+  Future<void> _onReviewDeleted() async {
+    final as = AppLocalizations.of(context)!;
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => DeleteModal(
+        title: 'Delete Review?',
+        message: 'Do you really want to delete this review?',
+      ),
+    );
+
+    if (result == null || !result) {
+      return;
+    }
+
+    if (!mounted) return;
+
+    final state = context.read<ReviewProvider>();
+
+    await showLoadingDialog(
+      context: context,
+      function: () async => await state.deleteReview(widget.review),
+    );
+
+    if (state.hasError) {
+      if (!mounted) return;
+
+      await showDialog(
+        context: context,
+        builder: (context) => ErrorModal(message: state.errorMessage!),
+      );
+
+      return;
+    }
+
+    if (!mounted) return;
+
+    await showDialog(
+      context: context,
+      builder: (context) =>
+          SuccessModal(message: 'Review Deleted Successfully!'),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -583,20 +631,17 @@ class _ReviewListItem extends StatelessWidget {
       isThreeLine: true,
       leading: FabCircleAvatar(
         child: InstaImageViewer(
-          child: Image.file(review.author.profilePicture),
+          child: Image.file(widget.review.author.profilePicture),
         ),
       ),
 
       title: Text(
-        review.author.name,
+        widget.review.author.name,
         style: Theme.of(context).textTheme.titleLarge,
       ),
 
       trailing: IconButton(
-        onPressed: () {
-          /// TODO: remove review
-          debugPrint('Remove review');
-        },
+        onPressed: _onReviewDeleted,
         icon: const Icon(FontAwesomeIcons.xmark),
       ),
 
@@ -613,19 +658,19 @@ class _ReviewListItem extends StatelessWidget {
                 StarRating(
                   mainAxisAlignment: MainAxisAlignment.start,
                   starCount: 5,
-                  rating: review.stars.toDouble(),
+                  rating: widget.review.stars.toDouble(),
                   size: 18,
                 ),
-                Text(review.reviewDate.getMonthDay(locale)),
+                Text(widget.review.reviewDate.getMonthDay(widget.locale)),
                 const Icon(Icons.circle, size: 4),
                 const Icon(Icons.location_on, size: 12),
-                Text(review.travelStop.place.city ?? ''),
+                Text(widget.review.travelStop.place.city ?? ''),
               ],
             ),
           ),
           Builder(
             builder: (context) {
-              if (review.description.isEmpty) {
+              if (widget.review.description.isEmpty) {
                 return SizedBox.shrink();
               }
 
@@ -634,21 +679,21 @@ class _ReviewListItem extends StatelessWidget {
                   horizontal: 12,
                   vertical: 6,
                 ),
-                child: Text(review.description),
+                child: Text(widget.review.description),
               );
             },
           ),
 
-          if (review.images.isNotEmpty) ...[
+          if (widget.review.images.isNotEmpty) ...[
             const SizedBox(height: 8),
             SizedBox(
               height: 100,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount: review.images.length,
+                itemCount: widget.review.images.length,
                 separatorBuilder: (context, _) => const SizedBox(width: 8),
                 itemBuilder: (context, index) {
-                  final photo = review.images[index];
+                  final photo = widget.review.images[index];
                   return ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: InstaImageViewer(

@@ -1,6 +1,7 @@
 import '../../repositories/review/review_repository.dart';
 import 'add_review.dart';
 import 'add_reviews.dart';
+import 'delete_review.dart';
 import 'get_reviews.dart';
 import 'get_reviews_by_stop_id.dart';
 import 'get_reviews_by_travel.dart';
@@ -12,6 +13,9 @@ class ReviewUseCases {
 
   /// Use case to add a single review
   final AddReview addReview;
+
+  /// Use case to delete a review
+  final DeleteReview deleteReview;
 
   /// Use case to fetch all reviews
   final GetReviews getReviews;
@@ -26,6 +30,7 @@ class ReviewUseCases {
   const ReviewUseCases({
     required this.addReviews,
     required this.addReview,
+    required this.deleteReview,
     required this.getReviews,
     required this.getReviewsByTravel,
     required this.getReviewsByStopId,
@@ -38,6 +43,7 @@ class ReviewUseCases {
     return ReviewUseCases(
       addReviews: AddReviews(repository),
       addReview: AddReview(repository),
+      deleteReview: DeleteReview(repository),
       getReviews: GetReviews(repository),
       getReviewsByTravel: GetReviewsByTravel(repository),
       getReviewsByStopId: GetReviewsByStopId(repository),
