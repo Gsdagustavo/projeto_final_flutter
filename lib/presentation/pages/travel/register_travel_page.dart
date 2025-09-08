@@ -177,6 +177,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
       await showDialog(
         context: context,
         builder: (context) => ErrorModal(
+          /// TODO: intl
           message: 'An error occurred while registering the travel',
         ),
       );
@@ -1094,8 +1095,6 @@ class _TravelStopListItem extends StatelessWidget {
       shape: Theme.of(context).cardTheme.shape,
       leading: Builder(
         builder: (context) {
-          debugPrint('Stop type: ${stop.type}');
-
           switch (stop.type) {
             case TravelStopType.start:
               return CircleAvatar(

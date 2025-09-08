@@ -53,6 +53,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
     if (pdf == null) return;
 
     final result = await SharePlus.instance.share(
+      /// TODO: intl
       ShareParams(title: 'Share your travel', files: [XFile(pdf.path)]),
     );
 
@@ -587,6 +588,7 @@ class _ReviewListItemState extends State<_ReviewListItem> {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => DeleteModal(
+        /// TODO: intl
         title: 'Delete Review?',
         message: 'Do you really want to delete this review?',
       ),
@@ -621,6 +623,7 @@ class _ReviewListItemState extends State<_ReviewListItem> {
     await showDialog(
       context: context,
       builder: (context) =>
+          /// TODO: intl
           SuccessModal(message: 'Review Deleted Successfully!'),
     );
   }
@@ -1058,7 +1061,13 @@ class _TravelTitleWidgetState extends State<_TravelTitleWidget> {
 
   Future<void> onTravelTitleUpdated() async {
     if (!formKey.currentState!.validate()) {
-      /// TODO: show error dialog
+      await showDialog(
+        context: context,
+
+        /// TODO: intl
+        builder: (context) => WarningModal(message: 'Invalid Travel Title'),
+      );
+
       return;
     }
 

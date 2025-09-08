@@ -37,6 +37,7 @@ class _HomePageState extends State<HomePage> {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => OkCancelModal(
+        /// TODO: intl
         title: 'Start Travel?',
         content: as.start_travel_confirmation(travel.travelTitle),
       ),
@@ -71,6 +72,7 @@ class _HomePageState extends State<HomePage> {
     await showDialog(
       context: context,
       builder: (context) =>
+          /// TODO: intl
           SuccessModal(message: 'Travel Started Successfully!'),
     );
   }
@@ -80,6 +82,7 @@ class _HomePageState extends State<HomePage> {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => OkCancelModal(
+        /// TODO: intl
         title: 'Finish Travel?',
         content: as.finish_travel_confirmation(travel.travelTitle),
       ),
@@ -114,6 +117,7 @@ class _HomePageState extends State<HomePage> {
     await showDialog(
       context: context,
       builder: (context) =>
+          /// TODO: intl
           SuccessModal(message: 'Travel Finished Successfully!'),
     );
   }
@@ -123,6 +127,7 @@ class _HomePageState extends State<HomePage> {
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => DeleteModal(
+        /// TODO: intl
         title: 'Delete Travel?',
         message: as.finish_travel_confirmation(travel.travelTitle),
       ),
@@ -157,6 +162,7 @@ class _HomePageState extends State<HomePage> {
     await showDialog(
       context: context,
       builder: (context) =>
+      /// TODO: intl
           SuccessModal(message: 'Travel Deleted Successfully!'),
     );
   }
