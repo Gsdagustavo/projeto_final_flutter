@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating/flutter_rating.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:implicitly_animated_list/implicitly_animated_list.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -418,21 +419,11 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                               ],
                             ),
 
-                            ListView.separated(
-                              separatorBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 8,
-                                  ),
-                                  child: const Divider(),
-                                );
-                              },
+                            ImplicitlyAnimatedList(
+                              itemData: state.reviews,
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
-                              itemCount: state.reviews.length,
-                              itemBuilder: (context, index) {
-                                debugPrint('$index');
-                                final review = state.reviews[index];
+                              itemBuilder: (context, review) {
                                 return _ReviewListItem(
                                   review: review,
                                   locale: locale,
@@ -691,12 +682,11 @@ class _ReviewListItemState extends State<_ReviewListItem> {
             const SizedBox(height: 8),
             SizedBox(
               height: 100,
-              child: ListView.separated(
+              child: ImplicitlyAnimatedList(
                 scrollDirection: Axis.horizontal,
-                itemCount: widget.review.images.length,
-                separatorBuilder: (context, _) => const SizedBox(width: 8),
-                itemBuilder: (context, index) {
-                  final photo = widget.review.images[index];
+                itemData: widget.review.images,
+                shrinkWrap: true,
+                itemBuilder: (context, photo) {
                   return ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: InstaImageViewer(
