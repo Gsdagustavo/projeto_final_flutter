@@ -573,7 +573,6 @@ class _ReviewListItem extends StatefulWidget {
 
 class _ReviewListItemState extends State<_ReviewListItem> {
   Future<void> _onReviewDeleted() async {
-    final as = AppLocalizations.of(context)!;
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => DeleteModal(

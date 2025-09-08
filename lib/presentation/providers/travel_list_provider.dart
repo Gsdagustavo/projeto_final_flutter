@@ -30,7 +30,8 @@ class TravelListProvider with ChangeNotifier {
 
   /// Starts the given [travel].
   ///
-  /// Notifies listeners after updating. In case of an exception, sets [errorMessage].
+  /// Notifies listeners after updating. In case of an exception,
+  /// sets [errorMessage].
   Future<void> startTravel(Travel travel) async {
     try {
       await travelUseCases.startTravel(travel);
@@ -46,7 +47,8 @@ class TravelListProvider with ChangeNotifier {
 
   /// Marks the given [travel] as finished.
   ///
-  /// Notifies listeners after updating. In case of an exception, sets [errorMessage].
+  /// Notifies listeners after updating. In case of an exception, sets
+  /// [errorMessage].
   Future<void> finishTravel(Travel travel) async {
     try {
       await travelUseCases.finishTravel(travel);
@@ -62,7 +64,8 @@ class TravelListProvider with ChangeNotifier {
 
   /// Deletes the given [travel] from the list.
   ///
-  /// Notifies listeners after updating. In case of an exception, sets [errorMessage].
+  /// Notifies listeners after updating. In case of an exception,
+  /// sets [errorMessage].
   Future<void> deleteTravel(Travel travel) async {
     try {
       await travelUseCases.deleteTravel(travel);
@@ -130,7 +133,7 @@ class TravelListProvider with ChangeNotifier {
 
   /// Internal helper to refresh [_travels] from the use case.
   ///
-  /// Does not notify listeners; used by other methods that handle notifications.
+  /// Does not notify listeners; used by other methods that handle notifications
   Future<void> _refreshTravels() async {
     _travels.clear();
     _travels.addAll(await travelUseCases.getAllTravels());

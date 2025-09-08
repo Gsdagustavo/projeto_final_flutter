@@ -104,7 +104,7 @@ class _HomePageState extends State<HomePage> {
 }
 
 class _TravelListItem extends StatefulWidget {
-  const _TravelListItem({super.key, required this.travel});
+  const _TravelListItem({required this.travel});
 
   final Travel travel;
 
