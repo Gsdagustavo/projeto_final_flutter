@@ -362,6 +362,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get add_photos_label => 'Agrega fotos para hacer tu viaje más memorable y visualmente atractivo';
 
   @override
+  String get travel_photo_added => 'Foto da viagem adicionada';
+
+  @override
+  String get could_not_add_travel_photo => 'Não foi possível adicionar a foto da viagem';
+
+  @override
   String get invalid_travel_data => '¡Datos de viaje no válidos!';
 
   @override

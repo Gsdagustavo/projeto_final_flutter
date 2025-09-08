@@ -200,6 +200,8 @@
   "photos_selected": "fotos selecionadas",
   "choose_photos": "Escolher Fotos",
   "add_photos_label": "Adicione fotos para tornar sua viagem mais memorável e visualmente atraente",
+  "travel_photo_added": "Foto da viagem adicionada",
+  "could_not_add_travel_photo": "Não foi possível adicionar a foto da viagem",
   "invalid_travel_data": "A viagem contém dados inválidos",
   "travel_registered_successfully": "Viagem registrada com sucesso",
 

@@ -53,6 +53,8 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
     /// TODO: add error handling
     if (pdf == null) return;
 
+    if (!context.mounted) return;
+
     final as = AppLocalizations.of(context)!;
 
     await SharePlus.instance.share(

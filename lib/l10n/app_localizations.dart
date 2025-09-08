@@ -751,6 +751,18 @@ abstract class AppLocalizations {
   /// **'Add photos to make your travel more memorable and visually appealing'**
   String get add_photos_label;
 
+  /// No description provided for @travel_photo_added.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel photo added'**
+  String get travel_photo_added;
+
+  /// No description provided for @could_not_add_travel_photo.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not add travel photo'**
+  String get could_not_add_travel_photo;
+
   /// No description provided for @invalid_travel_data.
   ///
   /// In en, this message translates to:

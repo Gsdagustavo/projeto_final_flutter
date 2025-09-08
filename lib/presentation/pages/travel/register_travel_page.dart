@@ -150,6 +150,10 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
     if (file == null || state.travelPhotos.length >= 5) return;
 
     state.addTravelPhoto(file);
+
+    final as = AppLocalizations.of(context)!;
+
+    showSuccessSnackBar(context, as.travel_photo_added);
   }
 
   void _onImageRemoved(File image) {
