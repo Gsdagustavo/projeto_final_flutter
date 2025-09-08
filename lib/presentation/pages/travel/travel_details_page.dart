@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating/flutter_rating.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:implicitly_animated_list/implicitly_animated_list.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -21,6 +20,7 @@ import '../../extensions/enums_extensions.dart';
 import '../../providers/review_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
+import '../../widgets/fab_animated_list.dart';
 import '../../widgets/fab_circle_avatar.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
@@ -419,10 +419,8 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                               ],
                             ),
 
-                            ImplicitlyAnimatedList(
+                            FabAnimatedList(
                               itemData: state.reviews,
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
                               itemBuilder: (context, review) {
                                 return _ReviewListItem(
                                   review: review,
@@ -682,19 +680,21 @@ class _ReviewListItemState extends State<_ReviewListItem> {
             const SizedBox(height: 8),
             SizedBox(
               height: 100,
-              child: ImplicitlyAnimatedList(
+              child: FabAnimatedList(
                 scrollDirection: Axis.horizontal,
                 itemData: widget.review.images,
-                shrinkWrap: true,
                 itemBuilder: (context, photo) {
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: InstaImageViewer(
-                      child: Image.file(
-                        photo,
-                        fit: BoxFit.cover,
-                        width: 100,
-                        height: 100,
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 16),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: InstaImageViewer(
+                        child: Image.file(
+                          photo,
+                          fit: BoxFit.cover,
+                          width: 100,
+                          height: 100,
+                        ),
                       ),
                     ),
                   );

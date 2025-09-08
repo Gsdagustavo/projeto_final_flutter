@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:animated_list_plus/animated_list_plus.dart';
-import 'package:animated_list_plus/transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
@@ -18,6 +16,7 @@ import '../../extensions/enums_extensions.dart';
 import '../../providers/register_travel_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../util/app_routes.dart';
+import '../../widgets/fab_animated_list.dart';
 import '../../widgets/fab_circle_avatar.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
@@ -56,6 +55,10 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
   Future<void> onParticipantRemovePress(Participant participant) async {
     final as = AppLocalizations.of(context)!;
 
+    final state = context.read<RegisterTravelProvider>();
+
+    if (!state.participants.contains(participant)) return;
+
     final remove = await showDialog<bool>(
       context: context,
       builder: (context) => DeleteModal(
@@ -67,7 +70,6 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
 
     if (!mounted) return;
 
-    final state = context.read<RegisterTravelProvider>();
     if (remove ?? false) {
       state.removeParticipant(participant);
     } else {
@@ -217,12 +219,12 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
   }
 
   @override
-  Widget build(BuildContext modalContext) {
-    final as = AppLocalizations.of(modalContext)!;
+  Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
     final validations = FormValidations(as);
 
     final baseColor = Theme.of(
-      modalContext,
+      context,
     ).elevatedButtonTheme.style!.backgroundColor!.resolve({})!;
 
     return FabPage(
@@ -242,12 +244,12 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                 children: [
                   Text(
                     as.travel_details,
-                    style: Theme.of(modalContext).textTheme.displaySmall,
+                    style: Theme.of(context).textTheme.displaySmall,
                   ),
                   const Padding(padding: EdgeInsets.all(26)),
                   Text(
                     as.travel_title_label,
-                    style: Theme.of(modalContext).textTheme.titleMedium,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const Padding(padding: EdgeInsets.all(2)),
                   Form(
@@ -257,8 +259,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                     child: TextFormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       textCapitalization: TextCapitalization.words,
-                      onTapOutside: (_) =>
-                          FocusScope.of(modalContext).unfocus(),
+                      onTapOutside: (_) => FocusScope.of(context).unfocus(),
                       controller: _travelTitleController,
                       validator: validations.travelTitleValidator,
                       decoration: InputDecoration(
@@ -269,7 +270,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                   const Padding(padding: EdgeInsets.all(12)),
                   Text(
                     as.transport_type_label,
-                    style: Theme.of(modalContext).textTheme.titleMedium,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const Padding(padding: EdgeInsets.all(2)),
 
@@ -287,9 +288,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                             children: [
                               Icon(entry.value),
                               const Padding(padding: EdgeInsets.all(6)),
-                              Text(
-                                entry.key.getIntlTransportType(modalContext),
-                              ),
+                              Text(entry.key.getIntlTransportType(context)),
                             ],
                           ),
                         ),
@@ -308,8 +307,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                       Expanded(
                         /// Travel start date field
                         child: TextFormField(
-                          onTapOutside: (_) =>
-                              FocusScope.of(modalContext).unfocus(),
+                          onTapOutside: (_) => FocusScope.of(context).unfocus(),
                           controller: _startDateController,
                           decoration: InputDecoration(
                             labelText: as.start_date,
@@ -326,8 +324,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                       Expanded(
                         /// Travel end date field
                         child: TextFormField(
-                          onTapOutside: (_) =>
-                              FocusScope.of(modalContext).unfocus(),
+                          onTapOutside: (_) => FocusScope.of(context).unfocus(),
                           controller: _endDateController,
                           decoration: InputDecoration(
                             labelText: as.end_date,
@@ -363,9 +360,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                         builder: (_, state, __) {
                           return Text(
                             '${as.participants} (${state.participants.length})',
-                            style: Theme.of(
-                              modalContext,
-                            ).textTheme.displaySmall,
+                            style: Theme.of(context).textTheme.displaySmall,
                           );
                         },
                       ),
@@ -373,41 +368,24 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                       Flexible(
                         /// Add participant button
                         child: ElevatedButton(
-                          onPressed: () => _showParticipantModal(modalContext),
+                          onPressed: () => _showParticipantModal(context),
                           child: Text(as.add),
                         ),
                       ),
                     ],
                   ),
+
+                  /// Participants list
                   Consumer<RegisterTravelProvider>(
                     builder: (_, state, __) {
-                      /// Participants list
-                      return ImplicitlyAnimatedList<Participant>(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        items: state.participants,
-                        areItemsTheSame: (oldItem, newItem) {
-                          return oldItem.hashCode == newItem.hashCode;
-                        },
-                        removeItemBuilder: (context, animation, participant) {
-                          return SizeFadeTransition(
-                            curve: Curves.easeInOut,
-                            animation: animation,
-                            child: _ParticipantListItem(
-                              participant: participant,
-                            ),
-                          );
-                        },
-
-                        itemBuilder: (context, animation, participant, i) {
-                          return SizeFadeTransition(
-                            animation: animation,
-                            child: _ParticipantListItem(
-                              participant: participant,
-                              onPressed: () async {
-                                await onParticipantRemovePress(participant);
-                              },
-                            ),
+                      return FabAnimatedList<Participant>(
+                        itemData: state.participants,
+                        itemBuilder: (context, participant) {
+                          return _ParticipantListItem(
+                            participant: participant,
+                            onPressed: () async {
+                              await onParticipantRemovePress(participant);
+                            },
                           );
                         },
                       );
@@ -436,7 +414,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                       children: [
                         Text(
                           as.route_planning,
-                          style: Theme.of(modalContext).textTheme.displaySmall,
+                          style: Theme.of(context).textTheme.displaySmall,
                         ),
                         Text(as.route_planning_label),
                       ],
@@ -450,7 +428,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                           onPressed: () {
                             if (state.startDate != null &&
                                 state.endDate != null) {
-                              modalContext.push(AppRoutes.travelMap);
+                              context.push(AppRoutes.travelMap);
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -488,7 +466,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                     children: [
                       Text(
                         as.registered_stops,
-                        style: Theme.of(modalContext).textTheme.displaySmall,
+                        style: Theme.of(context).textTheme.displaySmall,
                       ),
                       Consumer<RegisterTravelProvider>(
                         builder: (_, state, __) {
@@ -520,32 +498,12 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                           ],
                         );
                       } else {
-                        return ImplicitlyAnimatedList<TravelStop>(
+                        return FabAnimatedList<TravelStop>(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          items: stops,
-                          areItemsTheSame: (oldItem, newItem) {
-                            return oldItem.hashCode == newItem.hashCode;
-                          },
-                          removeItemBuilder: (context, animation, stop) {
-                            return SizeFadeTransition(
-                              curve: Curves.easeInOut,
-                              animation: animation,
-                              child: _TravelStopListItem(stop: stop),
-                            );
-                          },
-                          separatorBuilder: (context, index) {
-                            return const Padding(padding: EdgeInsets.all(12));
-                          },
-                          itemBuilder: (context, animation, stop, i) {
-                            return SizeFadeTransition(
-                              animation: animation,
-                              child: Builder(
-                                builder: (context) {
-                                  return _TravelStopListItem(stop: stop);
-                                },
-                              ),
-                            );
+                          itemData: stops,
+                          itemBuilder: (context, stop) {
+                            return _TravelStopListItem(stop: stop);
                           },
                         );
                       }
@@ -558,7 +516,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                     child: Center(
                       child: Text(
                         as.use_the_map_add_waypoints,
-                        style: Theme.of(modalContext).textTheme.bodySmall,
+                        style: Theme.of(context).textTheme.bodySmall,
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -583,7 +541,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                     children: [
                       Text(
                         as.travel_photos,
-                        style: Theme.of(modalContext).textTheme.displaySmall,
+                        style: Theme.of(context).textTheme.displaySmall,
                       ),
                     ],
                   ),
@@ -595,7 +553,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                       padding: const EdgeInsets.symmetric(vertical: 48),
                       decoration: BoxDecoration(
                         border: BoxBorder.all(
-                          color: Theme.of(modalContext).iconTheme.color!,
+                          color: Theme.of(context).iconTheme.color!,
                           width: 1,
                         ),
                         borderRadius: BorderRadius.circular(12),
@@ -609,22 +567,16 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                               const Icon(Icons.camera_alt, size: 42),
                               Text(
                                 as.add_travel_photos,
-                                style: Theme.of(
-                                  modalContext,
-                                ).textTheme.bodyMedium,
+                                style: Theme.of(context).textTheme.bodyMedium,
                               ),
                               Text(
                                 as.tap_select_photos,
-                                style: Theme.of(
-                                  modalContext,
-                                ).textTheme.bodySmall,
+                                style: Theme.of(context).textTheme.bodySmall,
                               ),
                               Text(
                                 '${state.travelPhotos.length} '
                                 '${as.photos_selected}',
-                                style: Theme.of(
-                                  modalContext,
-                                ).textTheme.bodySmall,
+                                style: Theme.of(context).textTheme.bodySmall,
                               ),
                               const Padding(padding: EdgeInsets.all(2)),
                               UnconstrainedBox(
@@ -694,7 +646,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                   Center(
                     child: Text(
                       as.add_photos_label,
-                      style: Theme.of(modalContext).textTheme.bodySmall,
+                      style: Theme.of(context).textTheme.bodySmall,
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -710,7 +662,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
               builder: (_, state, __) {
                 final isTravelValid = state.isTravelValid;
                 final baseColor = Theme.of(
-                  modalContext,
+                  context,
                 ).elevatedButtonTheme.style!.backgroundColor!.resolve({})!;
 
                 return SizedBox(
@@ -724,7 +676,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                     onPressed: () async {
                       if (!_travelTitleFormKey.currentState!.validate()) {
                         await showDialog(
-                          context: modalContext,
+                          context: context,
                           builder: (context) =>
                               ErrorModal(message: as.invalid_travel_title),
                         );
@@ -734,7 +686,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
 
                       if (!state.isTravelValid) {
                         await showDialog(
-                          context: modalContext,
+                          context: context,
                           builder: (context) =>
                               ErrorModal(message: as.invalid_travel_data),
                         );
@@ -762,6 +714,8 @@ Future<void> _showParticipantModal(
   Participant? participant,
 }) async {
   final state = context.read<RegisterTravelProvider>();
+
+  if (participant != null && !state.participants.contains(participant)) return;
 
   final result = await showModalBottomSheet<Participant?>(
     context: context,
@@ -817,8 +771,8 @@ class _ParticipantModalState extends State<_ParticipantModal> {
   }
 
   @override
-  Widget build(BuildContext modalContext) {
-    final as = AppLocalizations.of(modalContext)!;
+  Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
     final validations = FormValidations(as);
 
     return Stack(
@@ -838,13 +792,13 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                 top: -64,
                 child: ColorFiltered(
                   colorFilter: ColorFilter.mode(
-                    Theme.of(modalContext).canvasColor,
+                    Theme.of(context).canvasColor,
                     BlendMode.srcOut,
                   ),
                   child: Stack(
                     children: [
                       Positioned(
-                        left: MediaQuery.sizeOf(modalContext).width / 2 - 66,
+                        left: MediaQuery.sizeOf(context).width / 2 - 66,
                         child: Container(
                           width: 132,
                           height: 132,
@@ -863,7 +817,7 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                 child: SingleChildScrollView(
                   padding: EdgeInsets.only(
                     top: 72,
-                    bottom: MediaQuery.viewInsetsOf(modalContext).bottom,
+                    bottom: MediaQuery.viewInsetsOf(context).bottom,
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -879,7 +833,7 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                               textCapitalization: TextCapitalization.words,
                               validator: validations.participantNameValidator,
                               onTapOutside: (_) =>
-                                  FocusScope.of(modalContext).unfocus(),
+                                  FocusScope.of(context).unfocus(),
                               controller: _nameController,
                               decoration: InputDecoration(
                                 hintText: as.name,
@@ -890,7 +844,7 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                             TextFormField(
                               validator: validations.participantAgeValidator,
                               onTapOutside: (_) =>
-                                  FocusScope.of(modalContext).unfocus(),
+                                  FocusScope.of(context).unfocus(),
                               controller: _ageController,
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
@@ -910,7 +864,7 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                         children: [
                           /// Cancel button
                           TextButton(
-                            onPressed: () => modalContext.pop(),
+                            onPressed: () => context.pop(),
                             child: Text(as.cancel),
                           ),
 
@@ -1013,7 +967,7 @@ class _ParticipantModalState extends State<_ParticipantModal> {
         ),
         Positioned(
           top: -64,
-          left: MediaQuery.sizeOf(modalContext).width / 2 - 64,
+          left: MediaQuery.sizeOf(context).width / 2 - 64,
           child: Stack(
             children: [
               SizedBox(

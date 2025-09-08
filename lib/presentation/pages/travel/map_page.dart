@@ -634,8 +634,6 @@ class _TravelStopModalState extends State<_TravelStopModal> {
                     ),
                   ],
                 ),
-
-                /// TODO: intl
                 Text(
                   as.planned_experiences,
                   style: Theme.of(context).textTheme.displaySmall,
@@ -646,43 +644,38 @@ class _TravelStopModalState extends State<_TravelStopModal> {
                   itemBuilder: (context, index) {
                     final experience = Experience.values[index];
                     final experienceIcon = getExperiencesIcons()[experience];
-                    return Consumer<RegisterTravelProvider>(
-                      builder: (_, state, __) {
-                        final isExperienceSelected =
-                            _selectedExperiences[experience] == true;
 
-                        return ListTile(
-                          shape: Theme.of(context).cardTheme.shape,
-                          leading: Icon(
-                            experienceIcon,
-                            color: isExperienceSelected
-                                ? Colors.green
-                                : Theme.of(context).iconTheme.color,
-                          ),
-                          onTap: () {
-                            /// TODO: implement a travel stop provider to avoid
-                            /// rebuilding the whole widget when selecting an
-                            /// experience
-                            setState(() {
-                              _selectedExperiences[experience] =
-                                  !_selectedExperiences[experience]!;
-                            });
-                          },
-                          title: Text(
-                            experience.getIntlExperience(context),
-                            style: TextStyle(
-                              color: isExperienceSelected
-                                  ? Colors.green
-                                  : Theme.of(
-                                      context,
-                                    ).textTheme.bodyMedium!.color,
-                            ),
-                          ),
-                          trailing: _selectedExperiences[experience] == true
-                              ? const Icon(Icons.check, color: Colors.green)
-                              : const SizedBox.shrink(),
-                        );
+                    final isExperienceSelected =
+                        _selectedExperiences[experience] == true;
+
+                    return ListTile(
+                      shape: Theme.of(context).cardTheme.shape,
+                      leading: Icon(
+                        experienceIcon,
+                        color: isExperienceSelected
+                            ? Colors.green
+                            : Theme.of(context).iconTheme.color,
+                      ),
+                      onTap: () {
+                        /// TODO: implement a travel stop provider to avoid
+                        /// rebuilding the whole widget when selecting an
+                        /// experience
+                        setState(() {
+                          _selectedExperiences[experience] =
+                              !_selectedExperiences[experience]!;
+                        });
                       },
+                      title: Text(
+                        experience.getIntlExperience(context),
+                        style: TextStyle(
+                          color: isExperienceSelected
+                              ? Colors.green
+                              : Theme.of(context).textTheme.bodyMedium!.color,
+                        ),
+                      ),
+                      trailing: _selectedExperiences[experience] == true
+                          ? const Icon(Icons.check, color: Colors.green)
+                          : const SizedBox.shrink(),
                     );
                   },
                   separatorBuilder: (context, index) {

@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import '../../domain/entities/travel.dart';
 import '../../domain/usecases/travel/travel_usecases.dart';
 
-/// Provider responsible for managing the list of [Travel]s and exposing
+/// Provider responsible for managing a list of [Travel]s and exposing
 /// travel-related actions such as start, finish, delete, update, and search.
 ///
 /// Uses [ChangeNotifier] to notify listeners when the travel list or
@@ -12,13 +12,13 @@ class TravelListProvider with ChangeNotifier {
   /// Internal storage of the current list of travels.
   final _travels = <Travel>[];
 
-  /// Whether a background operation is in progress.
+  /// Whether a background operation is currently in progress.
   bool _isLoading = false;
 
-  /// Stores an error message if an operation fails.
+  /// Stores an error message if any operation fails.
   String? errorMessage;
 
-  /// Collection of travel-related use cases.
+  /// Collection of travel-related use cases used to perform CRUD operations.
   final TravelUseCases travelUseCases;
 
   /// Creates a [TravelListProvider] with the provided [travelUseCases].
@@ -30,7 +30,7 @@ class TravelListProvider with ChangeNotifier {
 
   /// Starts the given [travel].
   ///
-  /// On error, updates [errorMessage].
+  /// Notifies listeners after updating. In case of an exception, sets [errorMessage].
   Future<void> startTravel(Travel travel) async {
     try {
       await travelUseCases.startTravel(travel);
@@ -46,7 +46,7 @@ class TravelListProvider with ChangeNotifier {
 
   /// Marks the given [travel] as finished.
   ///
-  /// On error, updates [errorMessage].
+  /// Notifies listeners after updating. In case of an exception, sets [errorMessage].
   Future<void> finishTravel(Travel travel) async {
     try {
       await travelUseCases.finishTravel(travel);
@@ -60,9 +60,9 @@ class TravelListProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  /// Deletes the given [travel].
+  /// Deletes the given [travel] from the list.
   ///
-  /// On error, updates [errorMessage].
+  /// Notifies listeners after updating. In case of an exception, sets [errorMessage].
   Future<void> deleteTravel(Travel travel) async {
     try {
       await travelUseCases.deleteTravel(travel);
@@ -79,20 +79,22 @@ class TravelListProvider with ChangeNotifier {
   }
 
   /// Updates the title of the given [travel].
+  ///
+  /// Refreshes the full travel list after the update.
   Future<void> updateTravelTitle(Travel travel) async {
     await travelUseCases.updateTravelTitle(travel);
     await update();
   }
 
-  /// Refreshes the travel list by fetching all travels.
+  /// Refreshes the travel list by fetching all travels from the use case.
   ///
-  /// Sets [_isLoading] during the operation.
+  /// Sets [_isLoading] during the operation and notifies listeners before
+  /// and after the update.
   Future<void> update() async {
     _isLoading = true;
     notifyListeners();
 
-    _travels.clear();
-    _travels.addAll(await travelUseCases.getAllTravels());
+    await _refreshTravels();
 
     _isLoading = false;
     notifyListeners();
@@ -100,16 +102,16 @@ class TravelListProvider with ChangeNotifier {
 
   /// Searches for travels by [title] and updates the internal list.
   ///
-  /// If [title] is empty, resets the list by calling [update].
+  /// If [title] is empty, resets the list by fetching all travels.
+  /// Notifies listeners after updating.
   Future<void> searchTravel(String title) async {
     if (title.isEmpty) {
-      await update();
+      await _refreshTravels();
+      notifyListeners();
       return;
     }
 
-    debugPrint('Search travel called in provider');
     final searchResult = await travelUseCases.findTravelsByTitle(title);
-    debugPrint('Search result: $searchResult');
 
     _travels
       ..clear()
@@ -119,8 +121,19 @@ class TravelListProvider with ChangeNotifier {
   }
 
   /// Clears the current search and refreshes the full list of travels.
+  ///
+  /// Notifies listeners after updating.
   Future<void> clearSearch() async {
-    await update();
+    await _refreshTravels();
+    notifyListeners();
+  }
+
+  /// Internal helper to refresh [_travels] from the use case.
+  ///
+  /// Does not notify listeners; used by other methods that handle notifications.
+  Future<void> _refreshTravels() async {
+    _travels.clear();
+    _travels.addAll(await travelUseCases.getAllTravels());
   }
 
   /// Returns the current list of travels.

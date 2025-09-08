@@ -14,6 +14,7 @@ import '../../extensions/enums_extensions.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../util/app_routes.dart';
+import '../../widgets/fab_animated_list.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
 import '../../widgets/modals.dart';
@@ -31,7 +32,87 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final formKey = GlobalKey<FormState>();
   final searchController = TextEditingController();
+  final searchFocusNode = FocusNode();
 
+  @override
+  void dispose() {
+    searchController.dispose();
+    searchFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
+
+    return Consumer<TravelListProvider>(
+      builder: (_, state, __) {
+        if (state.isLoading) {
+          return const Center(child: LoadingDialog());
+        }
+
+        return FabPage(
+          title: as.title_home,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async => await state.update(),
+          ),
+          body: FabAnimatedList<Travel>(
+            itemData: state.travels,
+            itemEquality: (a, b) => a.id == b.id,
+            itemBuilder: (context, travel) {
+              return _TravelListItem(travel: travel);
+            },
+          ),
+
+          slivers: [
+            AdaptiveHeightSliverPersistentHeader(
+              floating: true,
+              needRepaint: true,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 32),
+                child: Padding(
+                  padding: const EdgeInsets.all(cardPadding),
+                  child: TextField(
+                    autofocus: false,
+                    focusNode: searchFocusNode,
+                    onTapOutside: (_) => searchFocusNode.unfocus(),
+                    controller: searchController,
+                    onChanged: (value) async {
+                      await state.searchTravel(searchController.text);
+                    },
+                    decoration: InputDecoration(
+                      /// TODO: intl
+                      hintText: 'Search...',
+                      prefixIcon: const Icon(Icons.search),
+                      suffixIcon: IconButton(
+                        onPressed: () async {
+                          await state.clearSearch();
+                          searchController.clear();
+                        },
+                        icon: const Icon(FontAwesomeIcons.xmark),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _TravelListItem extends StatefulWidget {
+  const _TravelListItem({super.key, required this.travel});
+
+  final Travel travel;
+
+  @override
+  State<_TravelListItem> createState() => _TravelListItemState();
+}
+
+class _TravelListItemState extends State<_TravelListItem> {
   Future<void> _onTravelStarted(Travel travel) async {
     final as = AppLocalizations.of(context)!;
     final result = await showDialog<bool>(
@@ -162,335 +243,250 @@ class _HomePageState extends State<HomePage> {
     await showDialog(
       context: context,
       builder: (context) =>
-      /// TODO: intl
+          /// TODO: intl
           SuccessModal(message: 'Travel Deleted Successfully!'),
     );
   }
 
   @override
-  Widget build(BuildContext modalContext) {
-    final as = AppLocalizations.of(modalContext)!;
+  Widget build(BuildContext context) {
+    final as = AppLocalizations.of(context)!;
 
-    return Consumer<TravelListProvider>(
-      builder: (_, state, __) {
-        if (state.isLoading) {
-          return const Center(child: LoadingDialog());
-        }
+    return Card(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () {
+          context.push(AppRoutes.travelDetails, extra: widget.travel);
+        },
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                Builder(
+                  builder: (context) {
+                    if (widget.travel.photos.isEmpty) {
+                      return Image.asset('assets/images/placeholder.png');
+                    }
 
-        return FabPage(
-          title: as.title_home,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () async => await state.update(),
-          ),
-          body: ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: state.travels.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 26),
-            itemBuilder: (context, index) {
-              final travel = state.travels[index];
-
-              return Card(
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(12),
-                  onTap: () {
-                    context.push(AppRoutes.travelDetails, extra: travel);
+                    return ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        topRight: Radius.circular(12),
+                      ),
+                      child: Image.file(widget.travel.photos.first!),
+                    );
                   },
-                  child: Column(
-                    children: [
-                      Stack(
-                        children: [
-                          Builder(
-                            builder: (context) {
-                              if (travel.photos.isEmpty) {
-                                return Image.asset(
-                                  'assets/images/placeholder.png',
-                                );
-                              }
+                ),
 
-                              return ClipRRect(
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(12),
-                                  topRight: Radius.circular(12),
+                Positioned(
+                  top: 12,
+                  left: 12,
+                  child: _TravelStatusWidget(status: widget.travel.status),
+                ),
+
+                Positioned(
+                  right: 12,
+                  top: 12,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor.withValues(alpha: 0.7),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Consumer<TravelListProvider>(
+                      builder: (_, state, __) {
+                        final parentContext = context;
+
+                        return PopupMenuButton(
+                          popUpAnimationStyle: AnimationStyle(
+                            curve: Curves.easeInOutQuart,
+                            duration: Duration(milliseconds: 750),
+                          ),
+                          icon: const Icon(Icons.more_vert),
+                          itemBuilder: (context) => [
+                            if (widget.travel.status ==
+                                TravelStatus.upcoming) ...[
+                              PopupMenuItem(
+                                child: ListTile(
+                                  leading: const Icon(FontAwesomeIcons.play),
+                                  title: Text(as.start_travel),
+                                  onTap: () async {
+                                    Navigator.of(parentContext).pop();
+                                    await _onTravelStarted(widget.travel);
+                                  },
                                 ),
-                                child: Image.file(travel.photos.first!),
-                              );
-                            },
-                          ),
-
-                          Positioned(
-                            top: 12,
-                            left: 12,
-                            child: _TravelStatusWidget(status: travel.status),
-                          ),
-
-                          Positioned(
-                            right: 12,
-                            top: 12,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Theme.of(
-                                  context,
-                                ).cardColor.withValues(alpha: 0.7),
-                                borderRadius: BorderRadius.circular(16),
                               ),
-                              child: Consumer<TravelListProvider>(
-                                builder: (_, state, __) {
-                                  final parentContext = context;
+                            ] else if (widget.travel.status ==
+                                TravelStatus.ongoing) ...[
+                              PopupMenuItem(
+                                child: ListTile(
+                                  leading: const Icon(FontAwesomeIcons.flag),
+                                  title: Text(as.finish_travel),
+                                  onTap: () async {
+                                    Navigator.of(parentContext).pop();
+                                    await _onTravelFinished(widget.travel);
+                                  },
+                                ),
+                              ),
+                            ],
 
-                                  return PopupMenuButton(
-                                    popUpAnimationStyle: AnimationStyle(
-                                      curve: Curves.easeInOutQuart,
-                                      duration: Duration(milliseconds: 750),
-                                    ),
-                                    icon: const Icon(Icons.more_vert),
-                                    itemBuilder: (context) => [
-                                      if (travel.status ==
-                                          TravelStatus.upcoming) ...[
-                                        PopupMenuItem(
-                                          child: ListTile(
-                                            leading: const Icon(
-                                              FontAwesomeIcons.play,
-                                            ),
-                                            title: Text(as.start_travel),
-                                            onTap: () async {
-                                              Navigator.of(parentContext).pop();
-                                              await _onTravelStarted(travel);
-                                            },
-                                          ),
-                                        ),
-                                      ] else if (travel.status ==
-                                          TravelStatus.ongoing) ...[
-                                        PopupMenuItem(
-                                          child: ListTile(
-                                            leading: const Icon(
-                                              FontAwesomeIcons.flag,
-                                            ),
-                                            title: Text(as.finish_travel),
-                                            onTap: () async {
-                                              Navigator.of(parentContext).pop();
-                                              await _onTravelFinished(travel);
-                                            },
-                                          ),
-                                        ),
-                                      ],
-
-                                      PopupMenuItem(
-                                        child: ListTile(
-                                          leading: const Icon(
-                                            FontAwesomeIcons.route,
-                                          ),
-                                          title: Text(as.view_travel_route),
-                                          onTap: () {
-                                            Navigator.of(parentContext).pop();
-                                            context.push(
-                                              AppRoutes.travelRoute,
-                                              extra: travel,
-                                            );
-                                          },
-                                        ),
-                                      ),
-
-                                      PopupMenuItem(
-                                        child: ListTile(
-                                          onTap: () async {
-                                            Navigator.of(parentContext).pop();
-                                            await _onTravelDeleted(travel);
-                                          },
-                                          leading: const Icon(Icons.delete),
-                                          title: Text(as.delete_travel),
-                                        ),
-                                      ),
-                                    ],
+                            PopupMenuItem(
+                              child: ListTile(
+                                leading: const Icon(FontAwesomeIcons.route),
+                                title: Text(as.view_travel_route),
+                                onTap: () {
+                                  Navigator.of(parentContext).pop();
+                                  context.push(
+                                    AppRoutes.travelRoute,
+                                    extra: widget.travel,
                                   );
                                 },
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const Padding(padding: EdgeInsets.all(8)),
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Column(
-                          spacing: 16,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              travel.travelTitle,
-                              style: TextStyle(fontSize: 18),
-                            ),
-                            Row(
-                              children: [
-                                const Icon(Icons.location_on),
-                                const Padding(padding: EdgeInsets.all(4)),
-                                Builder(
-                                  builder: (context) {
-                                    if (travel.stops.last.place.city! !=
-                                        travel.stops.first.place.city!) {
-                                      return Row(
-                                        children: [
-                                          Text(travel.stops.first.place.city!),
-                                          const Padding(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 5,
-                                            ),
-                                            child: Icon(
-                                              Icons.arrow_forward,
-                                              size: 12,
-                                            ),
-                                          ),
-                                          Text(travel.stops.last.place.city!),
-                                        ],
-                                      );
-                                    }
 
-                                    return Text(travel.stops.first.place.city!);
-                                  },
+                            PopupMenuItem(
+                              child: ListTile(
+                                onTap: () async {
+                                  Navigator.of(parentContext).pop();
+                                  await _onTravelDeleted(widget.travel);
+                                },
+                                leading: const Icon(Icons.delete),
+                                title: Text(as.delete_travel),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const Padding(padding: EdgeInsets.all(8)),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                spacing: 16,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.travel.travelTitle,
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  Row(
+                    children: [
+                      const Icon(Icons.location_on),
+                      const Padding(padding: EdgeInsets.all(4)),
+                      Builder(
+                        builder: (context) {
+                          if (widget.travel.stops.last.place.city! !=
+                              widget.travel.stops.first.place.city!) {
+                            return Row(
+                              children: [
+                                Text(widget.travel.stops.first.place.city!),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  child: Icon(Icons.arrow_forward, size: 12),
                                 ),
+                                Text(widget.travel.stops.last.place.city!),
                               ],
-                            ),
+                            );
+                          }
 
-                            Stack(
-                              children: [
-                                Row(
+                          return Text(widget.travel.stops.first.place.city!);
+                        },
+                      ),
+                    ],
+                  ),
+
+                  Stack(
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.calendar_today),
+                          const Padding(padding: EdgeInsets.all(4)),
+                          Consumer<UserPreferencesProvider>(
+                            builder: (_, state, __) {
+                              return Text.rich(
+                                TextSpan(
                                   children: [
-                                    const Icon(Icons.calendar_today),
-                                    const Padding(padding: EdgeInsets.all(4)),
-                                    Consumer<UserPreferencesProvider>(
-                                      builder: (_, state, __) {
-                                        return Text.rich(
-                                          TextSpan(
-                                            children: [
-                                              TextSpan(
-                                                text: travel.startDate
-                                                    .getMonthDay(
-                                                      state.languageCode,
-                                                    ),
-                                              ),
-                                              const TextSpan(text: ' - '),
-                                              TextSpan(
-                                                text: travel.endDate
-                                                    .getMonthDay(
-                                                      state.languageCode,
-                                                    ),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      },
+                                    TextSpan(
+                                      text: widget.travel.startDate.getMonthDay(
+                                        state.languageCode,
+                                      ),
+                                    ),
+                                    const TextSpan(text: ' - '),
+                                    TextSpan(
+                                      text: widget.travel.endDate.getMonthDay(
+                                        state.languageCode,
+                                      ),
                                     ),
                                   ],
                                 ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
 
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Row(
-                                    spacing: 12,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 4,
-                                          horizontal: 8,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            6,
-                                          ),
-                                          color: Theme.of(
-                                            context,
-                                          ).cardColor.withValues(alpha: 0.7),
-                                          border: BoxBorder.all(
-                                            color: Theme.of(
-                                              context,
-                                            ).iconTheme.color!,
-                                            width: 1,
-                                          ),
-                                        ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          spacing: 4,
-                                          children: [
-                                            Icon(Icons.people),
-                                            Text(
-                                              '${travel.participants.length}',
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 4,
-                                          horizontal: 8,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            6,
-                                          ),
-                                          color: Theme.of(
-                                            context,
-                                          ).cardColor.withValues(alpha: 0.7),
-                                          border: BoxBorder.all(
-                                            color: Theme.of(
-                                              context,
-                                            ).iconTheme.color!,
-                                            width: 1,
-                                          ),
-                                        ),
-                                        child: Text(
-                                          as.stop(travel.stops.length),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Row(
+                          spacing: 12,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 4,
+                                horizontal: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                color: Theme.of(
+                                  context,
+                                ).cardColor.withValues(alpha: 0.7),
+                                border: BoxBorder.all(
+                                  color: Theme.of(context).iconTheme.color!,
+                                  width: 1,
                                 ),
-                              ],
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                spacing: 4,
+                                children: [
+                                  Icon(Icons.people),
+                                  Text('${widget.travel.participants.length}'),
+                                ],
+                              ),
+                            ),
+
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 4,
+                                horizontal: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                color: Theme.of(
+                                  context,
+                                ).cardColor.withValues(alpha: 0.7),
+                                border: BoxBorder.all(
+                                  color: Theme.of(context).iconTheme.color!,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Text(as.stop(widget.travel.stops.length)),
                             ),
                           ],
                         ),
                       ),
                     ],
                   ),
-                ),
-              );
-            },
-          ),
-
-          slivers: [
-            AdaptiveHeightSliverPersistentHeader(
-              floating: true,
-              needRepaint: true,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 32),
-                child: Padding(
-                  padding: const EdgeInsets.all(cardPadding),
-                  child: TextField(
-                    onTapOutside: (_) => FocusScope.of(modalContext).unfocus(),
-                    controller: searchController,
-                    onChanged: (value) async {
-                      await state.searchTravel(searchController.text);
-                    },
-                    decoration: InputDecoration(
-                      /// TODO: intl
-                      hintText: 'Search...',
-                      prefixIcon: const Icon(Icons.search),
-                      suffixIcon: IconButton(
-                        onPressed: () async {
-                          await state.clearSearch();
-                          searchController.clear();
-                        },
-                        icon: const Icon(FontAwesomeIcons.xmark),
-                      ),
-                    ),
-                  ),
-                ),
+                ],
               ),
             ),
           ],
-        );
-      },
+        ),
+      ),
     );
   }
 }
