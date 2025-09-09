@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pdf;
@@ -9,10 +11,10 @@ import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 
 import '../core/extensions/date_extensions.dart';
+import '../core/extensions/place_extensions.dart';
 import '../domain/entities/participant.dart';
 import '../domain/entities/travel.dart';
 import '../l10n/app_localizations.dart';
-import '../presentation/extensions/enums_extensions.dart';
 import '../presentation/providers/user_preferences_provider.dart';
 
 /// Service to generate PDF documents for [Travel] objects
@@ -35,6 +37,8 @@ class PDFService {
   ) async {
     final document = pdf.Document();
 
+    final mapsKey = dotenv.get('MAPS_API_KEY');
+
     // Load the font used for the PDF
     final font = await PdfGoogleFonts.nunitoExtraLight();
 
@@ -44,7 +48,11 @@ class PDFService {
 
     final locale = externalContext.read<UserPreferencesProvider>().languageCode;
 
-    var pageIndex = 0;
+    final cover = await coverPage(
+      context: externalContext,
+      travel: travel,
+      document: document.document,
+    );
 
     final pageTheme = pdf.PageTheme(
       margin: pdf.EdgeInsets.all(pagePadding),
@@ -53,33 +61,62 @@ class PDFService {
     );
 
     // Add the cover page
-    document.addPage(
-      index: pageIndex,
-      pdf.Page(
-        pageTheme: pageTheme,
-        build: (context) {
-          return coverPage(context: externalContext, travel: travel);
-        },
-      ),
-    );
-
-    pageIndex++;
+    document.addPage(pdf.Page(pageTheme: pageTheme, build: (context) => cover));
 
     // Add the participants page
     document.addPage(
-      index: pageIndex,
       pdf.Page(
         pageTheme: pageTheme,
-        build: (context) {
-          return participantsPage(
-            context: externalContext,
-            participants: travel.participants,
-          );
-        },
+        build: (context) => participantsPage(
+          context: externalContext,
+          participants: travel.participants,
+        ),
       ),
     );
 
-    pageIndex++;
+    var markers = '';
+
+    for (final stop in travel.stops) {
+      final latLng = stop.place.latLng;
+      markers +=
+          '&markers=color:red%7Clabel:%7C${latLng.latitude},${latLng.longitude}';
+    }
+
+    const baseUrl = 'https://maps.googleapis.com/maps/api/staticmap';
+
+    final url = '$baseUrl?$markers&size=400x400&format=png&key=$mapsKey';
+
+    File? file;
+
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      debugPrint('Status code: ${response.statusCode}');
+
+      if (response.statusCode == 200) {
+        final dir = await getApplicationDocumentsDirectory();
+        final filePath = '${dir.path}/travel_overview.png';
+        file = File(filePath);
+        await file.writeAsBytes(response.bodyBytes);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    if (file != null) {
+      final fileBytes = await file.readAsBytes();
+      final pdfFile = pdf.MemoryImage(fileBytes);
+
+      // Add the travel overview page
+      document.addPage(
+        pdf.Page(
+          pageTheme: pageTheme,
+          build: (context) => pdf.Column(
+            children: [pdf.Text('Travel Route'), pdf.Image(pdfFile)],
+          ),
+        ),
+      );
+    }
 
     /// TODO: pages with stops details
 
@@ -87,7 +124,6 @@ class PDFService {
 
     // Add last page
     document.addPage(
-      index: pageIndex,
       pdf.Page(pageTheme: pageTheme, build: (context) => lastPage),
     );
 
@@ -96,20 +132,21 @@ class PDFService {
     final filePath = '${dir.path}/${travel.travelTitle}.pdf';
     final pdfBytes = await document.save();
 
-    final file = File(filePath);
-    await file.writeAsBytes(pdfBytes);
+    final pdfFile = File(filePath);
+    await pdfFile.writeAsBytes(pdfBytes);
 
     debugPrint('pdf file saved at: $filePath');
-    return file;
+    return pdfFile;
   }
 
   /// Creates the cover page for the PDF
   ///
   /// Displays the travel title, start/end dates, and transport type
-  pdf.Center coverPage({
+  Future<pdf.Center> coverPage({
     required BuildContext context,
     required Travel travel,
-  }) {
+    required PdfDocument document,
+  }) async {
     final locale = context.read<UserPreferencesProvider>().languageCode;
 
     return pdf.Center(
@@ -125,7 +162,6 @@ class PDFService {
           pdf.Padding(padding: pdf.EdgeInsets.all(24)),
           pdf.Text(travel.startDate.getFullDate(locale)),
           pdf.Text(travel.endDate.getFullDate(locale)),
-          pdf.Text(travel.transportType.getIntlTransportType(context)),
         ],
       ),
     );
