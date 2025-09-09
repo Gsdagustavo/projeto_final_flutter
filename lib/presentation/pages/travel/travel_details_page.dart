@@ -988,6 +988,7 @@ class _ReviewModalState extends State<_ReviewModal> {
                   child: Text(as.send_review),
                 ),
               ),
+              const Padding(padding: EdgeInsets.all(16)),
             ],
           ),
         ),
