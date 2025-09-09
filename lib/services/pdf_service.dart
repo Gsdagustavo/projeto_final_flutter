@@ -197,12 +197,23 @@ class PDFService {
     );
   }
 
+  /// Creates the final page for the PDF
+  ///
+  /// Displays the app's logo, an impact phrase and a label to indicate when
+  /// the document was generated
   Future<pdf.Column> finalPage({required String locale}) async {
     final now = DateTime.now();
     final formatted = now.getFormattedDateWithYear(locale);
 
     final logoBytes = await rootBundle.load('assets/images/app_logo.png');
     final logoImage = pdf.MemoryImage(logoBytes.buffer.asUint8List());
+
+    const phrase =
+        '"UMA VIAGEM NÃO SE MEDE EM MILHAS, MAS EM MOMENTOS. '
+        'CADA PÁGINA DESTE LIVRETO GUARDA MAIS DO QUE PAISAGENS: '
+        'SÃO SORRISOS ESPONTÂNEOS, DESCOBERTAS INESPERADAS, '
+        'CONVERSAS QUE FICARAM NA ALMA E SILÊNCIOS QUE FALARAM '
+        'MAIS QUE PALAVRAS.';
 
     return pdf.Column(
       children: [
@@ -213,11 +224,7 @@ class PDFService {
         ),
         pdf.Padding(padding: pdf.EdgeInsets.all(8)),
         pdf.Text(
-          '"UMA VIAGEM NÃO SE MEDE EM MILHAS, MAS EM MOMENTOS. '
-          'CADA PÁGINA DESTE LIVRETO GUARDA MAIS DO QUE PAISAGENS: '
-          'SÃO SORRISOS ESPONTÂNEOS, DESCOBERTAS INESPERADAS, '
-          'CONVERSAS QUE FICARAM NA ALMA E SILÊNCIOS QUE FALARAM '
-          'MAIS QUE PALAVRAS.',
+          phrase,
           textAlign: pdf.TextAlign.center,
           style: pdf.TextStyle(fontWeight: pdf.FontWeight.bold, fontSize: 16),
         ),
@@ -225,6 +232,8 @@ class PDFService {
         pdf.Divider(),
         pdf.Padding(
           padding: pdf.EdgeInsets.symmetric(vertical: 16),
+
+          /// TODO: intl
           child: pdf.Text('Documento gerado em $formatted'),
         ),
       ],

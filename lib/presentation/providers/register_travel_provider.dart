@@ -113,19 +113,8 @@ class RegisterTravelProvider with ChangeNotifier {
     stop.type = _stops.isEmpty ? TravelStopType.start : TravelStopType.end;
 
     _stops.add(stop);
-
-    for (final (i, s) in _stops.indexed) {
-      if (i == 0) {
-        s.type = TravelStopType.start;
-      } else if (i < _stops.length - 1) {
-        s.type = TravelStopType.stop;
-      } else {
-        s.type = TravelStopType.end;
-      }
-    }
-
+    _updateStopsTypes();
     debugPrint('Travel stop ${stop.toString()} added');
-
     _areStopsValid = _stops.length >= 2;
     _notify();
     return stop;
@@ -136,9 +125,22 @@ class RegisterTravelProvider with ChangeNotifier {
     if (!_stops.contains(stop)) return;
 
     _stops.remove(stop);
+    _updateStopsTypes();
     debugPrint('Stop $stop removed from travel stops list');
     _areStopsValid = _stops.length >= 2;
     _notify();
+  }
+
+  void _updateStopsTypes() {
+    for (final (i, s) in _stops.indexed) {
+      if (i == 0) {
+        s.type = TravelStopType.start;
+      } else if (i == _stops.length - 1) {
+        s.type = TravelStopType.end;
+      } else {
+        s.type = TravelStopType.stop;
+      }
+    }
   }
 
   /// Updates an existing travel stop.
