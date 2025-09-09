@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 
+import '../../core/exceptions/failure.dart';
 import '../../domain/entities/enums.dart';
 import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';

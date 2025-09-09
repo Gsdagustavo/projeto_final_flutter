@@ -44,14 +44,17 @@ class TravelDetailsPage extends StatefulWidget {
 class _TravelDetailsPageState extends State<TravelDetailsPage> {
   String locale = 'en';
 
-  void onShare() async {
+  Future<void> onShare() async {
     final pdf = await PDFService().generatePDFFromTravel(
       widget.travel,
       context,
     );
 
     /// TODO: add error handling
-    if (pdf == null) return;
+    if (pdf == null) {
+      debugPrint('pdf is null');
+      return;
+    }
 
     if (!mounted) return;
 

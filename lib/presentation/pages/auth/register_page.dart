@@ -82,12 +82,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
     if (!mounted) return;
 
-    /// Shows a successful feedback dialog
-    await showDialog(
-      context: context,
-      builder: (context) =>
-          SuccessModal(message: as.account_created_successfully),
-    );
+    /// Shows a successful feedback snackbar
+    showSuccessSnackBar(context, as.account_created_successfully);
 
     if (!mounted) return;
 

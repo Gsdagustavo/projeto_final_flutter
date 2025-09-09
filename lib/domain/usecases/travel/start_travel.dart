@@ -1,5 +1,9 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+
+import '../../../core/exceptions/failure.dart';
 import '../../entities/enums.dart';
+import '../../entities/errors.dart';
 import '../../entities/travel.dart';
 import '../../repositories/travel/travel_repository.dart';
 
@@ -14,22 +18,25 @@ class StartTravel {
   /// Starts the travel by updating its status and start date.
   ///
   /// Throws an [Exception] if the travel has already started or finished.
-  Future<void> call(Travel travel) async {
+  Future<Either<Failure<StartTravelError>, void>> call(Travel travel) async {
     debugPrint('Travel that is going to be started: ${travel.status}');
 
     final now = DateTime.now();
 
     if (travel.status == TravelStatus.ongoing) {
-      throw Exception('Travel has already started');
+      return Left(Failure(StartTravelError.alreadyStarted));
     }
 
     if (travel.status == TravelStatus.finished) {
-      throw Exception('Travel has already been finished');
+      return Left(Failure(StartTravelError.alreadyFinished));
     }
 
     travel.startDate = now;
     travel.status = TravelStatus.ongoing;
 
     await _travelRepository.startTravel(travel);
+    return Right(null);
   }
 }
+
+

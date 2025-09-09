@@ -1,3 +1,7 @@
+import 'package:dartz/dartz.dart';
+
+import '../../../core/exceptions/failure.dart';
+import '../../entities/errors.dart';
 import '../../entities/travel.dart';
 import '../../repositories/travel/travel_repository.dart';
 
@@ -12,14 +16,18 @@ class UpdateTravelTitle {
   /// Updates the travel title after validating it.
   ///
   /// Throws an [Exception] if the title is invalid.
-  Future<void> call(Travel travel, String newTitle) async {
+  Future<Either<Failure<TravelTitleError>, void>> call(
+    Travel travel,
+    String newTitle,
+  ) async {
     if (!_validateTravelTitle(newTitle)) {
-      throw Exception('Invalid travel name');
+      return Left(Failure(TravelTitleError.invalidTravelTitle));
     }
 
     travel.travelTitle = newTitle;
 
     await _travelRepository.updateTravelTitle(travel, newTitle);
+    return Right(null);
   }
 
   /// Validates the travel title.

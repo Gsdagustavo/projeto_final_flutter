@@ -33,7 +33,6 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
 
       centerTitle: true,
-
       actions: [ThemeToggleButton(), ...?actions],
     );
   }

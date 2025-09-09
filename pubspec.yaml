@@ -62,5 +62,6 @@ flutter:
   generate: true
   assets:
     - 'assets/images/'
+    - 'assets/fonts/'
     - 'assets/animations/'
     - '.env'

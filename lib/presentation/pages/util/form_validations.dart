@@ -110,6 +110,7 @@ class FormValidations {
       return _as.err_invalid_review_data;
     }
 
+    /// TODO: intl
     if (review.trim().length > _maxReviewCharacters) {
       return 'Review must have at most $_minReviewCharacters characters';
     }
