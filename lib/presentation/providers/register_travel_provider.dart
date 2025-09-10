@@ -40,7 +40,7 @@ class RegisterTravelProvider with ChangeNotifier {
   /// The stops of the travel.
   final _stops = <TravelStop>[];
 
-  Failure<TravelRegisterError>? _failure;
+  Failure? _failure;
 
   /// Indicates whether any async operation is running.
   bool _isLoading = false;
@@ -79,7 +79,7 @@ class RegisterTravelProvider with ChangeNotifier {
   ///
   /// Calls [onSuccess] if the operation was successful, [onFailure] otherwise.
   void handleTravelRegisterFailure(
-    Either<Failure<TravelRegisterError>, void> res, {
+    Either<Failure, void> res, {
     VoidCallback? onSuccess,
     VoidCallback? onFailure,
   }) {
@@ -277,7 +277,7 @@ class RegisterTravelProvider with ChangeNotifier {
   bool get hasFailure => _failure != null;
 
   /// Returns the current failure, if any.
-  Failure<TravelRegisterError>? get failure => _failure;
+  Failure? get failure => _failure;
 
   void _notify() => notifyListeners();
 }
