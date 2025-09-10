@@ -277,6 +277,16 @@
   "try_again": "Try Again",
   "continue_offline": "Continue Offline",
 
+  "@@travel_pdf": {},
+  "travel_phrase_intro": "A journey is not measured in miles, but in moments.",
+  "travel_phrase_body": "Each page of this booklet holds more than landscapes: it holds spontaneous smiles, unexpected discoveries, conversations that touched the soul, and silences that spoke louder than words.",
+  "document_generated_timestamp": "Document generated on {time}",
+  "@document_generated_timestamp": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+
   "@@util": {},
   "yes": "Yes",
   "no": "No",

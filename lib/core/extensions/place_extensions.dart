@@ -9,3 +9,9 @@ extension PlaceExtensions on Place {
     return LatLng(latitude, longitude);
   }
 }
+
+extension LatLngExtension on LatLng {
+  String toLatLngString() {
+    return '$latitude,$longitude';
+  }
+}

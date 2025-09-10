@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import '../core/extensions/date_extensions.dart';
 import '../core/extensions/place_extensions.dart';
 import '../domain/entities/participant.dart';
 import '../domain/entities/travel.dart';
+import '../domain/entities/travel_stop.dart';
 import '../l10n/app_localizations.dart';
 import '../presentation/providers/user_preferences_provider.dart';
 
@@ -24,6 +26,10 @@ import '../presentation/providers/user_preferences_provider.dart';
 ///
 /// Saves the PDF to the app's document directory.
 class PDFService {
+  static final _mapsKey = dotenv.get('MAPS_API_KEY');
+
+  static const double _pagePadding = 32;
+
   /// Generates a PDF file from a [Travel] instance
   ///
   /// [travel]: The travel data to be included in the PDF
@@ -37,27 +43,28 @@ class PDFService {
   ) async {
     final document = pdf.Document();
 
-    final mapsKey = dotenv.get('MAPS_API_KEY');
-
     // Load the font used for the PDF
     final font = await PdfGoogleFonts.nunitoExtraLight();
 
-    const double pagePadding = 32;
+    if (!externalContext.mounted) return null;
+
+    // AppLocalizations
+    final as = AppLocalizations.of(externalContext)!;
 
     if (!externalContext.mounted) return null;
 
     final locale = externalContext.read<UserPreferencesProvider>().languageCode;
 
+    final pageTheme = pdf.PageTheme(
+      margin: pdf.EdgeInsets.all(_pagePadding),
+      pageFormat: PdfPageFormat.a5,
+      theme: pdf.ThemeData(defaultTextStyle: pdf.TextStyle(font: font)),
+    );
+
     final cover = await coverPage(
       context: externalContext,
       travel: travel,
       document: document.document,
-    );
-
-    final pageTheme = pdf.PageTheme(
-      margin: pdf.EdgeInsets.all(pagePadding),
-      pageFormat: PdfPageFormat.a5,
-      theme: pdf.ThemeData(defaultTextStyle: pdf.TextStyle(font: font)),
     );
 
     // Add the cover page
@@ -74,37 +81,10 @@ class PDFService {
       ),
     );
 
-    var markers = '';
+    final travelRouteImage = await generateMapRouteFile(stops: travel.stops);
 
-    for (final stop in travel.stops) {
-      final latLng = stop.place.latLng;
-      markers +=
-          '&markers=color:red%7Clabel:%7C${latLng.latitude},${latLng.longitude}';
-    }
-
-    const baseUrl = 'https://maps.googleapis.com/maps/api/staticmap';
-
-    final url = '$baseUrl?$markers&size=400x400&format=png&key=$mapsKey';
-
-    File? file;
-
-    try {
-      final response = await http.get(Uri.parse(url));
-
-      debugPrint('Status code: ${response.statusCode}');
-
-      if (response.statusCode == 200) {
-        final dir = await getApplicationDocumentsDirectory();
-        final filePath = '${dir.path}/travel_overview.png';
-        file = File(filePath);
-        await file.writeAsBytes(response.bodyBytes);
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-
-    if (file != null) {
-      final fileBytes = await file.readAsBytes();
+    if (travelRouteImage != null) {
+      final fileBytes = await travelRouteImage.readAsBytes();
       final pdfFile = pdf.MemoryImage(fileBytes);
 
       // Add the travel overview page
@@ -112,20 +92,20 @@ class PDFService {
         pdf.Page(
           pageTheme: pageTheme,
           build: (context) => pdf.Column(
+            crossAxisAlignment: pdf.CrossAxisAlignment.center,
             children: [
               pdf.Text(
-                /// TODO: intl
-                'Travel Route',
-                style: pdf.TextStyle(
-                  fontSize: 24,
-                  fontWeight: pdf.FontWeight.bold,
-                ),
+                as.travel_route,
+                textAlign: pdf.TextAlign.center,
+                style: pdf.TextStyle(fontSize: 32),
               ),
               pdf.Padding(padding: pdf.EdgeInsets.all(12)),
-              pdf.ClipRRect(
-                horizontalRadius: 16,
-                verticalRadius: 16,
-                child: pdf.Image(pdfFile),
+              pdf.Center(
+                child: pdf.ClipRRect(
+                  horizontalRadius: 16,
+                  verticalRadius: 16,
+                  child: pdf.Image(pdfFile),
+                ),
               ),
             ],
           ),
@@ -135,7 +115,9 @@ class PDFService {
 
     /// TODO: pages with stops details
 
-    final lastPage = await finalPage(locale: locale);
+    if (!externalContext.mounted) return null;
+
+    final lastPage = await finalPage(locale: locale, as: as);
 
     // Add last page
     document.addPage(
@@ -143,14 +125,11 @@ class PDFService {
     );
 
     // Save the PDF to the app's documents directory
-    final dir = await getApplicationDocumentsDirectory();
-    final filePath = '${dir.path}/${travel.travelTitle}.pdf';
-    final pdfBytes = await document.save();
+    final pdfFile = await savePDF(
+      document: document,
+      travelTitle: travel.travelTitle,
+    );
 
-    final pdfFile = File(filePath);
-    await pdfFile.writeAsBytes(pdfBytes);
-
-    debugPrint('pdf file saved at: $filePath');
     return pdfFile;
   }
 
@@ -252,19 +231,15 @@ class PDFService {
   ///
   /// Displays the app's logo, an impact phrase and a label to indicate when
   /// the document was generated
-  Future<pdf.Column> finalPage({required String locale}) async {
+  Future<pdf.Column> finalPage({
+    required String locale,
+    required AppLocalizations as,
+  }) async {
     final now = DateTime.now();
     final formatted = now.getFormattedDateWithYear(locale);
 
     final logoBytes = await rootBundle.load('assets/images/app_logo.png');
     final logoImage = pdf.MemoryImage(logoBytes.buffer.asUint8List());
-
-    const phrase =
-        '"UMA VIAGEM NÃO SE MEDE EM MILHAS, MAS EM MOMENTOS. '
-        'CADA PÁGINA DESTE LIVRETO GUARDA MAIS DO QUE PAISAGENS: '
-        'SÃO SORRISOS ESPONTÂNEOS, DESCOBERTAS INESPERADAS, '
-        'CONVERSAS QUE FICARAM NA ALMA E SILÊNCIOS QUE FALARAM '
-        'MAIS QUE PALAVRAS.';
 
     return pdf.Column(
       children: [
@@ -275,19 +250,99 @@ class PDFService {
         ),
         pdf.Padding(padding: pdf.EdgeInsets.all(8)),
         pdf.Text(
-          phrase,
-          textAlign: pdf.TextAlign.center,
-          style: pdf.TextStyle(fontWeight: pdf.FontWeight.bold, fontSize: 16),
+          '"${as.travel_phrase_intro}',
+          textAlign: pdf.TextAlign.start,
+          style: pdf.TextStyle(fontSize: 16),
+        ),
+        pdf.Padding(padding: pdf.EdgeInsets.all(12)),
+        pdf.Text(
+          '${as.travel_phrase_body}"',
+          textAlign: pdf.TextAlign.start,
+          style: pdf.TextStyle(fontSize: 16),
         ),
         pdf.Spacer(),
         pdf.Divider(),
-        pdf.Padding(
-          padding: pdf.EdgeInsets.symmetric(vertical: 16),
-
-          /// TODO: intl
-          child: pdf.Text('Documento gerado em $formatted'),
-        ),
+        pdf.Center(child: pdf.Text(as.document_generated_timestamp(formatted))),
       ],
     );
+  }
+
+  Future<File?> generateMapRouteFile({required List<TravelStop> stops}) async {
+    final mapRouteUrl = await generateRouteUrl(stops, _mapsKey);
+
+    File? file;
+
+    if (mapRouteUrl != null) {
+      try {
+        final response = await http.get(Uri.parse(mapRouteUrl));
+
+        debugPrint('Status code: ${response.statusCode}');
+
+        if (response.statusCode == 200) {
+          final dir = await getApplicationDocumentsDirectory();
+          final filePath = '${dir.path}/travel_overview.png';
+          file = File(filePath);
+          await file.writeAsBytes(response.bodyBytes);
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+    }
+
+    return file;
+  }
+
+  Future<File>? savePDF({
+    required pdf.Document document,
+    required String travelTitle,
+  }) async {
+    final dir = await getApplicationDocumentsDirectory();
+    final filePath = '${dir.path}/$travelTitle.pdf';
+    final pdfBytes = await document.save();
+
+    final pdfFile = File(filePath);
+    await pdfFile.writeAsBytes(pdfBytes);
+    debugPrint('pdf file saved at: $filePath');
+    return pdfFile;
+  }
+
+  Future<String?> generateRouteUrl(List<TravelStop> stops, String key) async {
+    final waypoints = stops
+        .sublist(1, stops.length - 1)
+        .map((p) => p.place.latLng.toLatLngString())
+        .join('|');
+
+    final origin = stops.first.place.latLng.toLatLngString();
+    final destination = stops.last.place.latLng.toLatLngString();
+
+    final directionsUrl =
+        'https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&waypoints=$waypoints&key=$key';
+
+    final directionsRes = await http.get(Uri.parse(directionsUrl));
+
+    if (directionsRes.statusCode != 200) {
+      throw Exception('directions request failed. body: ${directionsRes.body}');
+    }
+
+    final data = jsonDecode(directionsRes.body);
+
+    if (data['routes'].isEmpty) {
+      return null;
+    }
+
+    final encodedPolyline = data['routes'][0]['overview_polyline']['points'];
+
+    final markers = stops
+        .map((p) => 'markers=color:red|${p.place.latLng.toLatLngString()}')
+        .join('&');
+
+    final staticMapUrl =
+        'https://maps.googleapis.com/maps/api/staticmap'
+        '?size=600x400&maptype=roadmap'
+        '&path=color:0xFF0000FF|weight:5|enc:$encodedPolyline'
+        '&$markers'
+        '&key=$key';
+
+    return staticMapUrl;
   }
 }

@@ -1129,6 +1129,24 @@ abstract class AppLocalizations {
   /// **'Continue Offline'**
   String get continue_offline;
 
+  /// No description provided for @travel_phrase_intro.
+  ///
+  /// In en, this message translates to:
+  /// **'A journey is not measured in miles, but in moments.'**
+  String get travel_phrase_intro;
+
+  /// No description provided for @travel_phrase_body.
+  ///
+  /// In en, this message translates to:
+  /// **'Each page of this booklet holds more than landscapes: it holds spontaneous smiles, unexpected discoveries, conversations that touched the soul, and silences that spoke louder than words.'**
+  String get travel_phrase_body;
+
+  /// No description provided for @document_generated_timestamp.
+  ///
+  /// In en, this message translates to:
+  /// **'Document generated on {time}'**
+  String document_generated_timestamp(Object time);
+
   /// No description provided for @yes.
   ///
   /// In en, this message translates to:

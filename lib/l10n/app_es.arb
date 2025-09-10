@@ -279,6 +279,16 @@
   "try_again": "Intentar de nuevo",
   "continue_offline": "Continuar sin conexión",
 
+  "@@travel_pdf": {},
+  "travel_phrase_intro": "Un viaje no se mide en millas, sino en momentos.",
+  "travel_phrase_body": "Cada página de este folleto guarda más que paisajes: guarda sonrisas espontáneas, descubrimientos inesperados, conversaciones que quedaron en el alma y silencios que hablaron más que palabras.",
+  "document_generated_timestamp": "Documento generado el {time}",
+  "@document_generated_timestamp": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+
   "@@util": {},
   "yes": "Sí",
   "no": "No",

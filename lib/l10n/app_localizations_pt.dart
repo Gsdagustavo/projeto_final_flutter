@@ -559,6 +559,17 @@ class AppLocalizationsPt extends AppLocalizations {
   String get continue_offline => 'Continuar offline';
 
   @override
+  String get travel_phrase_intro => 'Uma viagem não se mede em milhas, mas em momentos.';
+
+  @override
+  String get travel_phrase_body => 'Cada página deste livreto guarda mais do que paisagens: são sorrisos espontâneos, descobertas inesperadas, conversas que ficaram na alma e silêncios que falaram mais que palavras.';
+
+  @override
+  String document_generated_timestamp(Object time) {
+    return 'Documento gerado em $time';
+  }
+
+  @override
   String get yes => 'Sim';
 
   @override

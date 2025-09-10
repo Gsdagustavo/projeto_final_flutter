@@ -559,6 +559,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get continue_offline => 'Continue Offline';
 
   @override
+  String get travel_phrase_intro => 'A journey is not measured in miles, but in moments.';
+
+  @override
+  String get travel_phrase_body => 'Each page of this booklet holds more than landscapes: it holds spontaneous smiles, unexpected discoveries, conversations that touched the soul, and silences that spoke louder than words.';
+
+  @override
+  String document_generated_timestamp(Object time) {
+    return 'Document generated on $time';
+  }
+
+  @override
   String get yes => 'Yes';
 
   @override
