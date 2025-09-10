@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'theme_toggle_button.dart';
 
 /// A custom AppBar widget with a floating design and a theme toggle button.
@@ -13,17 +14,18 @@ class FabAppBar extends StatelessWidget {
   /// The text displayed in the AppBar's title.
   final String title;
 
+  static const bool _floating = false;
+  static const bool _snap = false;
+  static const double _expandedHeight = 80;
+
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      floating: false,
-      snap: false,
-      expandedHeight: 120,
+      floating: _floating,
+      snap: _snap,
+      expandedHeight: _expandedHeight,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      title: Text(
-        title,
-        style: Theme.of(context).textTheme.headlineLarge,
-      ),
+      title: Text(title, style: Theme.of(context).textTheme.headlineLarge),
       actions: const [ThemeToggleButton()],
     );
   }
