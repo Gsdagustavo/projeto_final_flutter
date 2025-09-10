@@ -26,9 +26,13 @@ class RegisterTravelProvider with ChangeNotifier {
 
   bool _areStopsValid = false;
 
+  /// The travel start date
   DateTime? _startDate;
+
+  /// The travel end date
   DateTime? _endDate;
 
+  /// The selected photos for the travel
   final _travelPhotos = <File>[];
 
   /// The selected transport type for the travel.
@@ -40,6 +44,7 @@ class RegisterTravelProvider with ChangeNotifier {
   /// The stops of the travel.
   final _stops = <TravelStop>[];
 
+  /// An instance of [Failure] to represent runtime errors.
   Failure? _failure;
 
   /// Indicates whether any async operation is running.
@@ -73,26 +78,6 @@ class RegisterTravelProvider with ChangeNotifier {
 
     _isLoading = false;
     _notify();
-  }
-
-  /// Handles the result of a travel registration operation.
-  ///
-  /// Calls [onSuccess] if the operation was successful, [onFailure] otherwise.
-  void handleTravelRegisterFailure(
-    Either<Failure, void> res, {
-    VoidCallback? onSuccess,
-    VoidCallback? onFailure,
-  }) {
-    res.fold(
-      (failure) {
-        _failure = failure;
-        if (onFailure != null) onFailure();
-      },
-      (r) {
-        _failure = null;
-        if (onSuccess != null) onSuccess();
-      },
-    );
   }
 
   /// Adds a new [TravelStop] to the travel.
@@ -215,6 +200,26 @@ class RegisterTravelProvider with ChangeNotifier {
   void removeTravelPhoto(File file) {
     _travelPhotos.remove(file);
     _notify();
+  }
+
+  /// Handles the result of a travel registration operation.
+  ///
+  /// Calls [onSuccess] if the operation was successful, [onFailure] otherwise.
+  void handleTravelRegisterFailure(
+    Either<Failure, void> res, {
+    VoidCallback? onSuccess,
+    VoidCallback? onFailure,
+  }) {
+    res.fold(
+      (failure) {
+        _failure = failure;
+        if (onFailure != null) onFailure();
+      },
+      (r) {
+        _failure = null;
+        if (onSuccess != null) onSuccess();
+      },
+    );
   }
 
   /// Returns the number of participants.
