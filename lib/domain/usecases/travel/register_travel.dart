@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 
@@ -19,36 +21,96 @@ class RegisterTravel {
   /// Registers a new travel, performing all necessary validations.
   ///
   /// Returns a [Failure] if any validation fails.
-  Future<Either<Failure<TravelRegisterError>, void>> call(Travel travel) async {
-    if (travel.travelTitle.trim().isEmpty) {
-      return Left(
-        Failure<TravelRegisterError>(TravelRegisterError.invalidTravelTitle),
+  Future<Either<Failure, void>> call(Travel travel) async {
+    travel.travelTitle.trim();
+
+    if (travel.startDate.isAfter(travel.endDate)) {
+      log(
+        '[REGISTER TRAVEL USECASE] travel start date cannot be after travel '
+        'end date. start date: ${travel.startDate} '
+        '| end date: ${travel.endDate}',
+        error: Exception('Invalid travel dates'),
+        time: DateTime.now(),
+        name: 'Invalid travel dates',
       );
+
+      return Left(Failure(TravelRegisterError.invalidTravelTitle));
+    }
+
+    if (travel.travelTitle.isEmpty) {
+      log(
+        '[REGISTER TRAVEL USECASE] invalid travel title: ${travel.travelTitle}',
+        error: TravelRegisterError.invalidTravelTitle,
+        time: DateTime.now(),
+        name: 'Invalid travel title',
+      );
+      return Left(Failure(TravelRegisterError.invalidTravelTitle));
     }
 
     if (travel.stops.isEmpty || travel.stops.length < 2) {
-      return Left(
-        Failure<TravelRegisterError>(TravelRegisterError.notEnoughStops),
+      log(
+        '[REGISTER TRAVEL USECASE] not enough stops. '
+        'stops: ${travel.stops.length}',
+        error: TravelRegisterError.notEnoughStops,
+        time: DateTime.now(),
+        name: 'Not enough stops',
       );
+      return Left(Failure(TravelRegisterError.notEnoughStops));
     }
 
     if (travel.participants.isEmpty) {
-      return Left(
-        Failure<TravelRegisterError>(TravelRegisterError.noParticipants),
+      log(
+        '[REGISTER TRAVEL USECASE] no participants',
+        error: TravelRegisterError.noParticipants,
+        time: DateTime.now(),
+        name: 'No participants',
       );
+      return Left(Failure(TravelRegisterError.noParticipants));
     }
 
     if (!isParticipantInfoValid(travel.participants)) {
-      return Left(
-        Failure<TravelRegisterError>(
-          TravelRegisterError.invalidParticipantData,
-        ),
+      log(
+        '[REGISTER TRAVEL USECASE] invalid participant data',
+        error: TravelRegisterError.invalidParticipantData,
+        time: DateTime.now(),
+        name: 'Invalid participant data',
       );
+      return Left(Failure(TravelRegisterError.invalidParticipantData));
     }
 
+    for (var i = 0; i < travel.stops.length; i++) {
+      for (var j = i; j < travel.stops.length; j++) {
+        if (i == j) continue;
+
+        if (travel.stops[i].arriveDate!.isAfter(travel.stops[j].arriveDate!)) {
+          log(
+            '[REGISTER TRAVEL USECASE] invalid travel stop dates '
+            '| stop 1 arrive date: ${travel.stops[i].arriveDate} '
+            '| stop 2 arrive date: ${travel.stops[j].arriveDate}',
+            error: TravelRegisterError.invalidStopDates,
+            time: DateTime.now(),
+            name: 'Invalid travel stop dates',
+          );
+          return Left(Failure(TravelRegisterError.invalidStopDates));
+        }
+
+        if (travel.stops[i].leaveDate!.isAfter(travel.stops[j].arriveDate!)) {
+          log(
+            '[REGISTER TRAVEL USECASE] invalid travel stop dates '
+            '| stop 1 leave date: ${travel.stops[i].leaveDate} '
+            '| stop 2 arrive date: ${travel.stops[j].arriveDate}',
+            error: TravelRegisterError.invalidStopDates,
+            time: DateTime.now(),
+            name: 'Invalid travel stop dates',
+          );
+          return Left(Failure(TravelRegisterError.invalidStopDates));
+        }
+      }
+    }
+
+    travel.stops.map((e) => e.type = TravelStopType.stop);
     travel.stops.first.type = TravelStopType.start;
     travel.stops.last.type = TravelStopType.end;
-    travel.stops.map((e) => e.type = TravelStopType.stop);
 
     final finalTravel = travel.copyWith(
       participants: _validateParticipants(travel.participants),
