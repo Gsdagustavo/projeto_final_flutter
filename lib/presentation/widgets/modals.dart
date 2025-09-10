@@ -432,7 +432,13 @@ SnackBar _baseSnackBar({
   return SnackBar(
     margin: EdgeInsets.all(12),
     padding: EdgeInsets.all(12),
-    content: Row(spacing: 12, children: [icon, Text(message)]),
+    content: Row(
+      spacing: 12,
+      children: [
+        icon,
+        Expanded(child: Text(message)),
+      ],
+    ),
     duration: duration,
     backgroundColor: backgroundColor,
     behavior: behavior,
