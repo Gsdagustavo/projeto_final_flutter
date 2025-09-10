@@ -116,7 +116,7 @@ class RegisterTravel {
       participants: _validateParticipants(travel.participants),
     );
 
-    debugPrint('Travel that is going to be registered: $finalTravel');
+    log('Travel that is going to be registered: $finalTravel');
 
     await _travelRepository.registerTravel(travel: finalTravel);
     return Right(null);

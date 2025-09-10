@@ -21,7 +21,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   /// Resets the database
-  await DBConnection().getDatabase(reset: true);
+  // await DBConnection().getDatabase(reset: true);
   // await DBConnection().printAllTables(db);
 
   /// Initialize Firebase App
@@ -35,8 +35,8 @@ Future<void> main() async {
   final reviewUseCases = ReviewUseCases.create(reviewRepository);
 
   final travels = await generateSampleTravels();
-  await travelUseCases.registerTravel(travels.first);
-  await travelUseCases.registerTravel(travels.last);
+  // await travelUseCases.registerTravel(travels.first);
+  // await travelUseCases.registerTravel(travels.last);
 
   /// Build App
   runApp(

@@ -75,6 +75,7 @@ class TravelModel {
     required List<ParticipantModel> participants,
     required List<TravelStopModel> stops,
     required List<File> photos,
+    required TravelStatus status,
   }) {
     return TravelModel(
       id: map[TravelTable.travelId],
@@ -86,7 +87,7 @@ class TravelModel {
         map[TravelTable.endDate] as int,
       ),
       transportType: TransportType.values[map[TravelTable.transportType]],
-      status: TravelStatus.values[map[TravelTable.status]],
+      status: status,
       participants: participants,
       stops: stops,
       photos: photos,
@@ -101,7 +102,6 @@ class TravelModel {
       TravelTable.startDate: startDate.millisecondsSinceEpoch,
       TravelTable.endDate: endDate.millisecondsSinceEpoch,
       TravelTable.transportType: transportType.index,
-      TravelTable.status: status.index,
     };
   }
 

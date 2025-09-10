@@ -35,17 +35,11 @@ abstract final class TravelTable {
   /// References [TransportTypesTable.transportTypeIndex]
   static const String transportType = TransportTypesTable.transportTypeIndex;
 
-  /// Column name for the travel status.
-  ///
-  /// `INTEGER NOT NULL`
-  static const String status = 'status';
-
   /// SQL command to create the travels table.
   static const String createTable =
   '''
       CREATE TABLE $tableName (
         $travelId TEXT PRIMARY KEY,
-        $status INTEGER NOT NULL,
         $travelTitle TEXT NOT NULL,
         $startDate INTEGER NOT NULL,
         $endDate INTEGER NOT NULL,

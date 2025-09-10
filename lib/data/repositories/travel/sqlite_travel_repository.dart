@@ -30,17 +30,7 @@ class SQLiteTravelRepository implements TravelRepository {
   Future<void> registerTravel({required Travel travel}) async {
     final db = await _db;
 
-    final travelModel = TravelModel(
-      travelTitle: travel.travelTitle,
-      startDate: travel.startDate,
-      endDate: travel.endDate,
-      transportType: travel.transportType,
-      participants: travel.participants
-          .map(ParticipantModel.fromEntity)
-          .toList(),
-      stops: travel.stops.map(TravelStopModel.fromEntity).toList(),
-      photos: travel.photos,
-    );
+    final travelModel = TravelModel.fromEntity(travel);
 
     await db.transaction((txn) async {
       final travelId = travelModel.id;
@@ -88,9 +78,9 @@ class SQLiteTravelRepository implements TravelRepository {
   Future<void> deleteTravel(Travel travel) async {
     final db = await _db;
 
-    await db.transaction((txn) async {
-      final travelModel = TravelModel.fromEntity(travel);
+    final travelModel = TravelModel.fromEntity(travel);
 
+    await db.transaction((txn) async {
       /// Delete from [Travels] table
       await txn.delete(
         TravelTable.tableName,
@@ -150,9 +140,9 @@ class SQLiteTravelRepository implements TravelRepository {
   Future<void> startTravel(Travel travel) async {
     final db = await _db;
 
-    await db.transaction((txn) async {
-      final travelModel = TravelModel.fromEntity(travel);
+    final travelModel = TravelModel.fromEntity(travel);
 
+    await db.transaction((txn) async {
       await txn.update(
         TravelTable.tableName,
         travelModel.toMap(),
@@ -173,9 +163,9 @@ class SQLiteTravelRepository implements TravelRepository {
   Future<void> finishTravel(Travel travel) async {
     final db = await _db;
 
-    await db.transaction((txn) async {
-      final travelModel = TravelModel.fromEntity(travel);
+    final travelModel = TravelModel.fromEntity(travel);
 
+    await db.transaction((txn) async {
       await txn.update(
         TravelTable.tableName,
         travelModel.toMap(),
@@ -196,9 +186,9 @@ class SQLiteTravelRepository implements TravelRepository {
   Future<void> updateTravelTitle(Travel travel, String newTitle) async {
     final db = await _db;
 
-    await db.transaction((txn) async {
-      final travelModel = TravelModel.fromEntity(travel);
+    final travelModel = TravelModel.fromEntity(travel);
 
+    await db.transaction((txn) async {
       await txn.update(
         TravelTable.tableName,
         {TravelTable.travelTitle: travelModel.toMap()[TravelTable.travelTitle]},
@@ -320,12 +310,27 @@ class SQLiteTravelRepository implements TravelRepository {
           photos.add(file);
         }
 
+        /// Travel Status
+        final travelStatusData = await txn.query(
+          TravelTravelStatusTable.tableName,
+          where: '${TravelTravelStatusTable.travelId} = ?',
+          whereArgs: [travelId],
+        );
+
+        if (travelStatusData.isEmpty) return;
+
+        final status =
+            TravelStatus.values[travelStatusData.first[TravelTravelStatusTable
+                    .travelStatusIndex]
+                as int];
+
         travels.add(
           TravelModel.fromMap(
             travelData,
             participants: participants,
             stops: stops,
             photos: photos,
+            status: status,
           ),
         );
       }
@@ -373,25 +378,17 @@ class SQLiteTravelRepository implements TravelRepository {
 
   @override
   Future<List<Travel>> getAllTravels() async {
-    // debugPrint('GET ALL TRAVELS METHOD REPOSITORY CALLED');
     final db = await _db;
 
     final travels = <TravelModel>[];
-
-    // final res = await db.rawQuery(
-    //   'SELECT T.${TravelTable.travelId} FROM ${TravelTable.tableName} as T '
-    //   'JOIN ${TravelParticipantsTable.tableName}
-    //   on ${TravelTable.travelId} = ${TravelParticipantsTable.travelId} '
-    //   'GROUP BY ${TravelTable.travelId}',
-    // );
-    //
-    // debugPrint('RAW QUERY: $res');
 
     await db.transaction((txn) async {
       final travelsResult = await txn.query(TravelTable.tableName);
 
       for (final travelResult in travelsResult) {
         final travelId = travelResult[TravelTable.travelId];
+
+        debugPrint(travelResult.toString());
 
         /// Participants
         final participants = <ParticipantModel>[];
@@ -477,12 +474,27 @@ class SQLiteTravelRepository implements TravelRepository {
           photos.add(file);
         }
 
+        /// Travel Status
+        final travelStatusData = await txn.query(
+          TravelTravelStatusTable.tableName,
+          where: '${TravelTravelStatusTable.travelId} = ?',
+          whereArgs: [travelId],
+        );
+
+        if (travelStatusData.isEmpty) return;
+
+        final status =
+            TravelStatus.values[travelStatusData.first[TravelTravelStatusTable
+                    .travelStatusIndex]
+                as int];
+
         travels.add(
           TravelModel.fromMap(
             travelResult,
             participants: participants,
             stops: stops,
             photos: photos,
+            status: status,
           ),
         );
       }
