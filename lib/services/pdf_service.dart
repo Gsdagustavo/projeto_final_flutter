@@ -112,7 +112,22 @@ class PDFService {
         pdf.Page(
           pageTheme: pageTheme,
           build: (context) => pdf.Column(
-            children: [pdf.Text('Travel Route'), pdf.Image(pdfFile)],
+            children: [
+              pdf.Text(
+                /// TODO: intl
+                'Travel Route',
+                style: pdf.TextStyle(
+                  fontSize: 24,
+                  fontWeight: pdf.FontWeight.bold,
+                ),
+              ),
+              pdf.Padding(padding: pdf.EdgeInsets.all(12)),
+              pdf.ClipRRect(
+                horizontalRadius: 16,
+                verticalRadius: 16,
+                child: pdf.Image(pdfFile),
+              ),
+            ],
           ),
         ),
       );

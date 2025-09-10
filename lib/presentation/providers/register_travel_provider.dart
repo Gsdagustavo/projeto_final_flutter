@@ -48,7 +48,7 @@ class RegisterTravelProvider with ChangeNotifier {
   /// Attempts to register a new [Travel] with the given [travelTitle].
   ///
   /// The travel includes participants, stops, dates, transport type, and photos
-  /// Handles success and failure using [handleFailure].
+  /// Handles success and failure using [handleTravelRegisterFailure].
   Future<void> registerTravel(String travelTitle) async {
     _isLoading = true;
     notifyListeners();
@@ -69,7 +69,7 @@ class RegisterTravelProvider with ChangeNotifier {
 
     final res = await _travelUseCases.registerTravel(travel);
 
-    handleFailure(res, onSuccess: resetForms);
+    handleTravelRegisterFailure(res, onSuccess: resetForms);
 
     _isLoading = false;
     _notify();
@@ -78,7 +78,7 @@ class RegisterTravelProvider with ChangeNotifier {
   /// Handles the result of a travel registration operation.
   ///
   /// Calls [onSuccess] if the operation was successful, [onFailure] otherwise.
-  void handleFailure(
+  void handleTravelRegisterFailure(
     Either<Failure<TravelRegisterError>, void> res, {
     VoidCallback? onSuccess,
     VoidCallback? onFailure,
@@ -181,6 +181,7 @@ class RegisterTravelProvider with ChangeNotifier {
 
   /// Adds a [Participant] to the travel.
   void addParticipant(Participant participant) {
+    _failure = Failure(TravelRegisterError.invalidStopDates);
     _participants.add(participant);
     debugPrint('Participant $participant added');
     _notify();

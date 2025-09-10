@@ -66,6 +66,13 @@
   "ongoing": "En curso",
   "finished": "Finalizado",
 
+  "@@travel_register_error": {},
+  "invalid_title": "Título de viaje inválido",
+  "not_enough_stops": "El viaje debe contener al menos 2 paradas",
+  "no_participants": "El viaje debe contener al menos 1 participante",
+  "invalid_participant_data": "Datos del participante inválidos",
+  "invalid_stop_dates": "Fechas de las paradas inválidas",
+
   "@@home_page": {},
   "my_travels": "Mis viajes",
   "start_travel": "Iniciar viaje",

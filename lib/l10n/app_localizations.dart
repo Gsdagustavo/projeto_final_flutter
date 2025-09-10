@@ -349,6 +349,36 @@ abstract class AppLocalizations {
   /// **'Finished'**
   String get finished;
 
+  /// No description provided for @invalid_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid travel title'**
+  String get invalid_title;
+
+  /// No description provided for @not_enough_stops.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel must contain at least 2 stops'**
+  String get not_enough_stops;
+
+  /// No description provided for @no_participants.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel must contain at least 1 participant'**
+  String get no_participants;
+
+  /// No description provided for @invalid_participant_data.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid participant data'**
+  String get invalid_participant_data;
+
+  /// No description provided for @invalid_stop_dates.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid stops dates'**
+  String get invalid_stop_dates;
+
   /// No description provided for @my_travels.
   ///
   /// In en, this message translates to:

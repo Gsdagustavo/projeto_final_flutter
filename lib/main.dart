@@ -4,8 +4,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 import 'data/local/database/database.dart';
-import 'data/repositories/review/review_repository_local.dart';
-import 'data/repositories/travel/travel_repository_local.dart';
+import 'data/repositories/review/sqlite_review_repository.dart';
+import 'data/repositories/travel/sqlite_travel_repository.dart';
 import 'domain/usecases/review/review_use_cases.dart';
 import 'domain/usecases/travel/travel_usecases.dart';
 import 'presentation/providers/login_provider.dart';
@@ -28,10 +28,10 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   /// Instantiate dependencies needed for dependency injection
-  final travelRepository = TravelRepositoryImpl();
+  final travelRepository = SQLiteTravelRepository();
   final travelUseCases = TravelUseCases.create(travelRepository);
 
-  final reviewRepository = ReviewRepositoryImpl();
+  final reviewRepository = SQLiteReviewRepository();
   final reviewUseCases = ReviewUseCases.create(reviewRepository);
 
   final travels = await generateSampleTravels();

@@ -66,6 +66,13 @@
   "ongoing": "Ongoing",
   "finished": "Finished",
 
+  "@@travel_register_error": {},
+  "invalid_title": "Invalid travel title",
+  "not_enough_stops": "Travel must contain at least 2 stops",
+  "no_participants": "Travel must contain at least 1 participant",
+  "invalid_participant_data": "Invalid participant data",
+  "invalid_stop_dates": "Invalid stops dates",
+
   "@@home_page": {},
   "my_travels": "My Travels",
   "start_travel": "Start Travel",

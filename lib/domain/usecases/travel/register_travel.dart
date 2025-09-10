@@ -22,7 +22,7 @@ class RegisterTravel {
   Future<Either<Failure<TravelRegisterError>, void>> call(Travel travel) async {
     if (travel.travelTitle.trim().isEmpty) {
       return Left(
-        Failure<TravelRegisterError>(TravelRegisterError.invalidTitle),
+        Failure<TravelRegisterError>(TravelRegisterError.invalidTravelTitle),
       );
     }
 
@@ -87,7 +87,7 @@ class RegisterTravel {
 /// Errors that can occur during travel registration.
 enum TravelRegisterError {
   /// The travel title is empty or invalid.
-  invalidTitle,
+  invalidTravelTitle,
 
   /// The travel has fewer than two stops (start and end required).
   notEnoughStops,

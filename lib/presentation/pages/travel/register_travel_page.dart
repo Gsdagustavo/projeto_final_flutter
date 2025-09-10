@@ -75,12 +75,6 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
       return;
     }
 
-    // await showDialog(
-    //   context: context,
-    //   builder: (context) =>
-    //       SuccessModal(message: as.participant_removed(participant.name)),
-    // );
-
     showSuccessSnackBar(context, as.participant_removed(participant.name));
   }
 
@@ -181,8 +175,9 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
 
       await showDialog(
         context: context,
-        builder: (context) =>
-            ErrorModal(message: as.err_register_travel_generic),
+        builder: (context) => ErrorModal(
+          message: state.failure!.type.getIntlTravelRegisterError(context),
+        ),
       );
 
       return;

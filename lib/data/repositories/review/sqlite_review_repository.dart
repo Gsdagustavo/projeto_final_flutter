@@ -23,7 +23,7 @@ import '../../models/review_model.dart';
 import '../../models/travel_stop_model.dart';
 
 /// Concrete implementation of [ReviewRepository], using local SQLite database
-class ReviewRepositoryImpl implements ReviewRepository {
+class SQLiteReviewRepository implements ReviewRepository {
   late final Future<Database> _db = DBConnection().getDatabase();
 
   @override

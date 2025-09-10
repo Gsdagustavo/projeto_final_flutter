@@ -23,7 +23,7 @@ import '../../models/travel_model.dart';
 import '../../models/travel_stop_model.dart';
 
 /// Concrete implementation of [TravelRepository], using local SQLite database
-class TravelRepositoryImpl implements TravelRepository {
+class SQLiteTravelRepository implements TravelRepository {
   late final Future<Database> _db = DBConnection().getDatabase();
 
   @override

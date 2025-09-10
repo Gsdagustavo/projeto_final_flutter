@@ -137,6 +137,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get finished => 'Finished';
 
   @override
+  String get invalid_title => 'Invalid travel title';
+
+  @override
+  String get not_enough_stops => 'Travel must contain at least 2 stops';
+
+  @override
+  String get no_participants => 'Travel must contain at least 1 participant';
+
+  @override
+  String get invalid_participant_data => 'Invalid participant data';
+
+  @override
+  String get invalid_stop_dates => 'Invalid stops dates';
+
+  @override
   String get my_travels => 'My Travels';
 
   @override

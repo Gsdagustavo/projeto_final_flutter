@@ -137,6 +137,21 @@ class AppLocalizationsPt extends AppLocalizations {
   String get finished => 'Concluída';
 
   @override
+  String get invalid_title => 'Título de viagem inválido';
+
+  @override
+  String get not_enough_stops => 'A viagem deve conter pelo menos 2 paradas';
+
+  @override
+  String get no_participants => 'A viagem deve conter pelo menos 1 participante';
+
+  @override
+  String get invalid_participant_data => 'Dados do participante inválidos';
+
+  @override
+  String get invalid_stop_dates => 'Datas das paradas inválidas';
+
+  @override
   String get my_travels => 'Minhas Viagens';
 
   @override
