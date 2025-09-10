@@ -26,6 +26,7 @@ import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
 import '../../widgets/modals.dart';
 import '../util/form_validations.dart';
+import '../util/transport_types_icons.dart';
 import '../util/travel_utils.dart';
 import '../util/ui_utils.dart';
 
@@ -192,7 +193,10 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                         Row(
                           spacing: 8,
                           children: [
-                            const Icon(Icons.airplanemode_active, size: 16),
+                            Icon(
+                              transportTypesIcons[widget.travel.transportType]!,
+                              size: 16,
+                            ),
                             Text(
                               as.transport,
                               style: Theme.of(context).textTheme.bodyLarge,

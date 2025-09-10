@@ -310,7 +310,7 @@ abstract class AppLocalizations {
   /// No description provided for @experience_visit_local_establishments.
   ///
   /// In en, this message translates to:
-  /// **'Visit Local Establishments (Bars, Restaurants, Parks, etc.)'**
+  /// **'Visit Local Establishments'**
   String get experience_visit_local_establishments;
 
   /// No description provided for @experience_contact_with_nature.

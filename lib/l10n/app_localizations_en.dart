@@ -116,7 +116,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get experience_historical_places => 'Visit Historical Places';
 
   @override
-  String get experience_visit_local_establishments => 'Visit Local Establishments (Bars, Restaurants, Parks, etc.)';
+  String get experience_visit_local_establishments => 'Visit Local Establishments';
 
   @override
   String get experience_contact_with_nature => 'Contact With Nature';

@@ -136,5 +136,60 @@ Future<List<Travel>> generateSampleTravels() async {
         ),
       ],
     ),
+    Travel(
+      photos: [],
+      travelTitle: 'Viagem Doidona',
+      startDate: DateTime(2025, 8, 30),
+      endDate: DateTime(2026, 9, 1),
+      transportType: TransportType.car,
+      participants: [
+        Participant(name: 'Ana Silva', age: 25, profilePicture: defaultPfp),
+        Participant(name: 'João Souza', age: 30, profilePicture: defaultPfp),
+      ],
+      stops: [
+        TravelStop(
+          experiences: Experience.values,
+          place: Place(
+            city: 'Rio de Janeiro',
+            state: 'RJ',
+            country: 'Brazil',
+            countryCode: 'BR',
+            latitude: -22.9068,
+            longitude: -43.1729,
+          ),
+          type: TravelStopType.start,
+          arriveDate: DateTime(2025, 8, 30, 9, 0),
+          leaveDate: DateTime(2026, 8, 30, 18, 0),
+        ),
+        TravelStop(
+          experiences: [Experience.visitLocalEstablishments],
+          place: Place(
+            city: 'Niterói',
+            state: 'RJ',
+            country: 'Brazil',
+            countryCode: 'BR',
+            latitude: -22.8832,
+            longitude: -43.1034,
+          ),
+          type: TravelStopType.stop,
+          arriveDate: DateTime(2025, 8, 31, 9, 0),
+          leaveDate: DateTime(2026, 8, 31, 17, 0),
+        ),
+        TravelStop(
+          experiences: [Experience.alternativeCuisines],
+          place: Place(
+            city: 'Angra dos Reis',
+            state: 'RJ',
+            country: 'Brazil',
+            countryCode: 'BR',
+            latitude: -23.0064,
+            longitude: -44.3186,
+          ),
+          type: TravelStopType.end,
+          arriveDate: DateTime(2025, 9, 1, 10, 0),
+          leaveDate: DateTime(2026, 9, 1, 20, 0),
+        ),
+      ],
+    ),
   ];
 }
