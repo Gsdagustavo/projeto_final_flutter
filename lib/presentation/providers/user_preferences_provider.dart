@@ -22,7 +22,7 @@ class UserPreferencesProvider with ChangeNotifier {
   /// language code and theme mode.
   Future<void> _init() async {
     await loadLanguageCode();
-    _isDarkMode = await UserPreferencesService().getMode();
+    _isDarkMode = await UserPreferencesService().isDarkMode();
     notifyListeners();
   }
 

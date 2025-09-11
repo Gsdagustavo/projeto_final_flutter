@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../core/exceptions/invalid_language_code_exception.dart';
+import '../presentation/util/app_router.dart';
 
 /// Service class to manage user preferences such as profile picture,
 /// theme mode, and language.
@@ -15,6 +17,12 @@ class UserPreferencesService {
 
   /// Key used to save dark mode preference
   static const String _darkModeKey = 'is_dark_mode';
+
+  /// Available language codes for the app
+  static const languageCodes = ['en', 'es', 'pt'];
+
+  /// Key used to save the current language code in [SharedPreferences]
+  static const _languageCodeKey = 'languageCode';
 
   /// Retrieves the current saved profile picture.
   ///
@@ -50,31 +58,25 @@ class UserPreferencesService {
 
   /// Returns the current theme mode stored in [SharedPreferences].
   ///
-  /// Returns `true` if dark mode is enabled, `false` otherwise.
-  Future<bool> getMode() async {
+  /// Returns `true` if dark mode is enabled.
+  ///
+  /// If the [_darkModeKey] does not have a value, returns the device's theme
+  /// ([true] for dark mode, [false] for light mode)
+  Future<bool> isDarkMode() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_darkModeKey) ?? false;
+
+    final platformBrightness = MediaQuery.of(
+      AppRouter.navigatorKey.currentContext!,
+    ).platformBrightness;
+
+    return prefs.getBool(_darkModeKey) ?? platformBrightness == Brightness.dark;
   }
-
-  /// Available language codes for the app
-  static const languageCodes = ['en', 'es', 'pt'];
-
-  /// Key used to save the current language code in [SharedPreferences]
-  static const _languageCodeKey = 'languageCode';
 
   /// Saves the given [languageCode] into [SharedPreferences].
   ///
   /// Throws [InvalidLanguageCodeException] if [languageCode] is invalid or
   /// empty.
   Future<void> saveLanguageCode({required String languageCode}) async {
-    if (languageCode.isEmpty) {
-      throw InvalidLanguageCodeException('Language code cannot be empty');
-    }
-
-    if (!languageCodes.contains(languageCode)) {
-      throw InvalidLanguageCodeException('Invalid language code');
-    }
-
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_languageCodeKey, languageCode);
   }
