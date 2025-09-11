@@ -19,8 +19,6 @@ import '../l10n/app_localizations.dart';
 import '../presentation/extensions/enums_extensions.dart';
 import '../presentation/providers/user_preferences_provider.dart';
 
-final _mapsKey = dotenv.get('MAPS_API_KEY');
-
 /// Service to generate PDF documents for [Travel] objects
 ///
 /// Provides methods to create a PDF containing a cover page and a list of
