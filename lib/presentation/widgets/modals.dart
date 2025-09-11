@@ -426,22 +426,13 @@ SnackBar _baseSnackBar({
   required Color backgroundColor,
   required Widget icon,
   required String message,
-  Duration duration = const Duration(seconds: 4),
-  SnackBarBehavior behavior = SnackBarBehavior.floating,
+  Duration duration = const Duration(seconds: 2),
 }) {
   return SnackBar(
-    margin: EdgeInsets.all(12),
     padding: EdgeInsets.all(12),
-    content: Row(
-      spacing: 12,
-      children: [
-        icon,
-        Expanded(child: Text(message)),
-      ],
-    ),
+    content: Row(spacing: 16, children: [icon, Text(message)]),
     duration: duration,
     backgroundColor: backgroundColor,
-    behavior: behavior,
   );
 }
 
