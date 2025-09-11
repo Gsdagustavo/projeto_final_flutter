@@ -14,9 +14,7 @@ import 'package:provider/provider.dart';
 import '../core/extensions/date_extensions.dart';
 import '../core/extensions/place_extensions.dart';
 import '../domain/entities/enums.dart';
-import '../domain/entities/participant.dart';
 import '../domain/entities/travel.dart';
-import '../domain/entities/travel_stop.dart';
 import '../l10n/app_localizations.dart';
 import '../presentation/extensions/enums_extensions.dart';
 import '../presentation/providers/user_preferences_provider.dart';
@@ -30,65 +28,71 @@ final _mapsKey = dotenv.get('MAPS_API_KEY');
 ///
 /// Saves the PDF to the app's document directory.
 class PDFService {
+  final Travel travel;
+  final BuildContext context;
+  final String mapsApiKey;
+
+  const PDFService({
+    required this.travel,
+    required this.context,
+    required this.mapsApiKey,
+  });
+
   static const double _pagePadding = 32;
 
   /// Generates a PDF file from a [Travel] instance
   ///
   /// [travel]: The travel data to be included in the PDF
-  /// [externalContext]: The Flutter [BuildContext] used to access localization
+  /// [context]: The Flutter [BuildContext] used to access localization
   /// and user preferences
   ///
   /// Returns a [File] representing the saved PDF, or null if an error occurs
-  Future<File?> generatePDFFromTravel(
-    Travel travel,
-    BuildContext externalContext,
-  ) async {
-    final pdfUtils = PDFUtils();
-    final pdfWidgets = PDFWidgets();
-
+  Future<File?> generatePDFFromTravel() async {
+    // Initialize pdf document
     final document = pdf.Document();
+
+    // AppLocalizations
+    final as = AppLocalizations.of(context)!;
 
     // Load the font used for the PDF
     final font = await PdfGoogleFonts.nunitoExtraLight();
 
-    if (!externalContext.mounted) return null;
-
-    // AppLocalizations
-    final as = AppLocalizations.of(externalContext)!;
-
-    if (!externalContext.mounted) return null;
-
-    final locale = externalContext.read<UserPreferencesProvider>().languageCode;
-
+    // PDF page theme
     final pageTheme = pdf.PageTheme(
       margin: pdf.EdgeInsets.all(_pagePadding),
       pageFormat: PdfPageFormat.a5,
       theme: pdf.ThemeData(defaultTextStyle: pdf.TextStyle(font: font)),
     );
 
-    final cover = await coverPage(
-      context: externalContext,
+    if (!context.mounted) return null;
+
+    // Locale
+    final locale = context.read<UserPreferencesProvider>().languageCode;
+
+    final pdfUtils = _PDFUtils(travel: travel, mapsApiKey: mapsApiKey);
+    final pdfPages = _PDFPages(
       travel: travel,
-      document: document.document,
+      as: as,
+      context: context,
+      locale: locale,
+      pageTheme: pageTheme,
     );
+
+    if (!context.mounted) return null;
+
+    // PDF cover page
+    final coverPage = pdfPages.coverPage();
 
     // Add the cover page
-    document.addPage(pdf.Page(pageTheme: pageTheme, build: (context) => cover));
+    document.addPage(coverPage);
+
+    // PDF participants page
+    final participantsPage = pdfPages.participantsPage();
 
     // Add the participants page
-    document.addPage(
-      pdf.Page(
-        pageTheme: pageTheme,
-        build: (context) => participantsPage(
-          context: externalContext,
-          participants: travel.participants,
-        ),
-      ),
-    );
+    document.addPage(participantsPage);
 
-    final travelRouteImage = await pdfUtils.generateMapRouteFile(
-      stops: travel.stops,
-    );
+    final travelRouteImage = await pdfUtils.generateMapRouteFile();
 
     if (travelRouteImage != null) {
       final fileBytes = await travelRouteImage.readAsBytes();
@@ -120,144 +124,145 @@ class PDFService {
       );
     }
 
-    if (!externalContext.mounted) return null;
+    if (!context.mounted) return null;
 
-    /// TODO: pages with stops details
-    final pages = generateStopsPages(
-      stops: travel.stops,
-      pageTheme: pageTheme,
-      locale: locale,
-      as: as,
-      externalContext: externalContext,
-    );
+    // PDF stops pages
+    final stopsPages = pdfPages.generateStopsPages();
 
-    for (final page in pages) {
+    // Add stops pages to PDF
+    for (final page in stopsPages) {
       document.addPage(page);
     }
 
-    final lastPage = await finalPage(locale: locale, as: as);
+    // PDF last page
+    final lastPage = await pdfPages.finalPage();
 
-    // Add last page
-    document.addPage(
-      pdf.Page(pageTheme: pageTheme, build: (context) => lastPage),
-    );
+    // Add PDF last page
+    document.addPage(lastPage);
 
     // Save the PDF to the app's documents directory
-    final pdfFile = await pdfUtils.savePDF(
-      document: document,
-      travelTitle: travel.travelTitle,
-    );
+    final pdfFile = await pdfUtils.savePDF(document: document);
 
     return pdfFile;
   }
+}
 
-  /// Creates the cover page for the PDF
-  ///
-  /// Displays the travel title, start/end dates, and transport type
-  Future<pdf.Center> coverPage({
-    required BuildContext context,
-    required Travel travel,
-    required PdfDocument document,
-  }) async {
-    final locale = context.read<UserPreferencesProvider>().languageCode;
+class _PDFPages {
+  final Travel travel;
+  final AppLocalizations as;
+  final BuildContext context;
+  final String locale;
+  final pdf.PageTheme pageTheme;
 
-    return pdf.Center(
-      child: pdf.Column(
-        crossAxisAlignment: pdf.CrossAxisAlignment.center,
-        mainAxisAlignment: pdf.MainAxisAlignment.center,
-        children: [
-          pdf.Text(
-            travel.travelTitle,
-            textAlign: pdf.TextAlign.center,
-            style: pdf.TextStyle(fontSize: 40),
+  const _PDFPages({
+    required this.travel,
+    required this.as,
+    required this.context,
+    required this.locale,
+    required this.pageTheme,
+  });
+
+  pdf.Page _basePage({required pdf.BuildCallback build}) {
+    return pdf.Page(pageTheme: pageTheme, build: build);
+  }
+
+  pdf.Page coverPage() {
+    return _basePage(
+      build: (context) {
+        return pdf.Center(
+          child: pdf.Column(
+            crossAxisAlignment: pdf.CrossAxisAlignment.center,
+            mainAxisAlignment: pdf.MainAxisAlignment.center,
+            children: [
+              pdf.Text(
+                travel.travelTitle,
+                textAlign: pdf.TextAlign.center,
+                style: pdf.TextStyle(fontSize: 40),
+              ),
+              pdf.Padding(padding: pdf.EdgeInsets.all(24)),
+              pdf.Text(travel.startDate.getFullDate(locale)),
+              pdf.Text(travel.endDate.getFullDate(locale)),
+            ],
           ),
-          pdf.Padding(padding: pdf.EdgeInsets.all(24)),
-          pdf.Text(travel.startDate.getFullDate(locale)),
-          pdf.Text(travel.endDate.getFullDate(locale)),
-        ],
-      ),
+        );
+      },
     );
   }
 
   /// Creates the participants page for the PDF
   ///
   /// Displays each participant's profile picture and name
-  pdf.Column participantsPage({
-    required BuildContext context,
-    required List<Participant> participants,
-  }) {
-    final as = AppLocalizations.of(context)!;
+  pdf.Page participantsPage() {
+    return _basePage(
+      build: (context) {
+        return pdf.Column(
+          mainAxisSize: pdf.MainAxisSize.min,
+          crossAxisAlignment: pdf.CrossAxisAlignment.center,
+          children: [
+            pdf.Text(
+              as.participants,
+              textAlign: pdf.TextAlign.center,
+              style: pdf.TextStyle(fontSize: 32),
+            ),
 
-    return pdf.Column(
-      mainAxisSize: pdf.MainAxisSize.min,
-      crossAxisAlignment: pdf.CrossAxisAlignment.center,
-      children: [
-        pdf.Text(
-          as.participants,
-          textAlign: pdf.TextAlign.center,
-          style: pdf.TextStyle(fontSize: 32),
-        ),
+            pdf.Padding(padding: pdf.EdgeInsets.all(16)),
 
-        pdf.Padding(padding: pdf.EdgeInsets.all(16)),
+            pdf.Expanded(
+              child: pdf.ListView.separated(
+                direction: pdf.Axis.vertical,
+                itemBuilder: (context, index) {
+                  final participant = travel.participants[index];
+                  final image = pdf.MemoryImage(
+                    participant.profilePicture
+                        .readAsBytesSync()
+                        .buffer
+                        .asUint8List(),
+                  );
 
-        pdf.Expanded(
-          child: pdf.ListView.separated(
-            direction: pdf.Axis.vertical,
-            itemBuilder: (context, index) {
-              final participant = participants[index];
-              final image = pdf.MemoryImage(
-                participant.profilePicture
-                    .readAsBytesSync()
-                    .buffer
-                    .asUint8List(),
-              );
-
-              return pdf.Container(
-                padding: pdf.EdgeInsets.all(12),
-                decoration: pdf.BoxDecoration(
-                  border: pdf.Border.all(width: 1, color: PdfColor(0, 0, 0)),
-                  borderRadius: pdf.BorderRadius.circular(12),
-                ),
-                child: pdf.Row(
-                  children: [
-                    pdf.Image(
-                      image,
-                      width: 32,
-                      height: 32,
-                      fit: pdf.BoxFit.cover,
+                  return pdf.Container(
+                    padding: pdf.EdgeInsets.all(12),
+                    decoration: pdf.BoxDecoration(
+                      border: pdf.Border.all(
+                        width: 1,
+                        color: PdfColor(0, 0, 0),
+                      ),
+                      borderRadius: pdf.BorderRadius.circular(12),
                     ),
-                    pdf.Padding(padding: pdf.EdgeInsets.all(6)),
-                    pdf.Text(
-                      participant.name,
-                      style: pdf.TextStyle(fontSize: 20),
+                    child: pdf.Row(
+                      children: [
+                        pdf.Image(
+                          image,
+                          width: 32,
+                          height: 32,
+                          fit: pdf.BoxFit.cover,
+                        ),
+                        pdf.Padding(padding: pdf.EdgeInsets.all(6)),
+                        pdf.Text(
+                          participant.name,
+                          style: pdf.TextStyle(fontSize: 20),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              );
-            },
-            separatorBuilder: (context, index) {
-              return pdf.Padding(padding: pdf.EdgeInsets.all(8));
-            },
-            itemCount: participants.length,
-          ),
-        ),
-      ],
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return pdf.Padding(padding: pdf.EdgeInsets.all(8));
+                },
+                itemCount: travel.participants.length,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
-  List<pdf.Page> generateStopsPages({
-    required List<TravelStop> stops,
-    required pdf.PageTheme pageTheme,
-    required String locale,
-    required AppLocalizations as,
-    required BuildContext externalContext,
-  }) {
+  List<pdf.Page> generateStopsPages() {
     final pages = <pdf.Page>[];
 
-    for (final stop in stops) {
-      final page = pdf.Page(
-        pageTheme: pageTheme,
-        build: (context) {
+    for (final stop in travel.stops) {
+      final page = _basePage(
+        build: (_) {
           return pdf.Column(
             children: [
               /// Stop city
@@ -295,8 +300,8 @@ class PDFService {
                 spacing: 6,
                 runSpacing: 6,
                 children: List.generate(stop.experiences!.length, (index) {
-                  return PDFWidgets().experienceContainer(
-                    externalContext,
+                  return _PDFWidgets().experienceContainer(
+                    context,
                     stop.experiences![index],
                   );
                 }),
@@ -318,44 +323,47 @@ class PDFService {
   ///
   /// Displays the app's logo, an impact phrase and a label to indicate when
   /// the document was generated
-  Future<pdf.Column> finalPage({
-    required String locale,
-    required AppLocalizations as,
-  }) async {
+  Future<pdf.Page> finalPage() async {
     final now = DateTime.now();
     final formatted = now.getFormattedDateWithYear(locale);
 
     final logoBytes = await rootBundle.load('assets/images/app_logo.png');
     final logoImage = pdf.MemoryImage(logoBytes.buffer.asUint8List());
 
-    return pdf.Column(
-      children: [
-        pdf.ClipRRect(
-          horizontalRadius: 16,
-          verticalRadius: 16,
-          child: pdf.Image(logoImage, fit: pdf.BoxFit.contain, height: 275),
-        ),
-        pdf.Padding(padding: pdf.EdgeInsets.all(8)),
-        pdf.Text(
-          '"${as.travel_phrase_intro}',
-          textAlign: pdf.TextAlign.start,
-          style: pdf.TextStyle(fontSize: 16),
-        ),
-        pdf.Padding(padding: pdf.EdgeInsets.all(12)),
-        pdf.Text(
-          '${as.travel_phrase_body}"',
-          textAlign: pdf.TextAlign.start,
-          style: pdf.TextStyle(fontSize: 16),
-        ),
-        pdf.Spacer(),
-        pdf.Divider(),
-        pdf.Center(child: pdf.Text(as.document_generated_timestamp(formatted))),
-      ],
+    return _basePage(
+      build: (context) {
+        return pdf.Column(
+          children: [
+            pdf.ClipRRect(
+              horizontalRadius: 16,
+              verticalRadius: 16,
+              child: pdf.Image(logoImage, fit: pdf.BoxFit.contain, height: 275),
+            ),
+            pdf.Padding(padding: pdf.EdgeInsets.all(8)),
+            pdf.Text(
+              '"${as.travel_phrase_intro}',
+              textAlign: pdf.TextAlign.start,
+              style: pdf.TextStyle(fontSize: 16),
+            ),
+            pdf.Padding(padding: pdf.EdgeInsets.all(12)),
+            pdf.Text(
+              '${as.travel_phrase_body}"',
+              textAlign: pdf.TextAlign.start,
+              style: pdf.TextStyle(fontSize: 16),
+            ),
+            pdf.Spacer(),
+            pdf.Divider(),
+            pdf.Center(
+              child: pdf.Text(as.document_generated_timestamp(formatted)),
+            ),
+          ],
+        );
+      },
     );
   }
 }
 
-class PDFWidgets {
+class _PDFWidgets {
   pdf.Container experienceContainer(
     BuildContext context,
     Experience experience,
@@ -374,9 +382,14 @@ class PDFWidgets {
   }
 }
 
-class PDFUtils {
-  Future<File?> generateMapRouteFile({required List<TravelStop> stops}) async {
-    final mapRouteUrl = await generateRouteUrl(stops, _mapsKey);
+class _PDFUtils {
+  final Travel travel;
+  final String mapsApiKey;
+
+  const _PDFUtils({required this.travel, required this.mapsApiKey});
+
+  Future<File?> generateMapRouteFile() async {
+    final mapRouteUrl = await generateRouteUrl();
 
     File? file;
 
@@ -400,12 +413,9 @@ class PDFUtils {
     return file;
   }
 
-  Future<File>? savePDF({
-    required pdf.Document document,
-    required String travelTitle,
-  }) async {
+  Future<File>? savePDF({required pdf.Document document}) async {
     final dir = await getApplicationDocumentsDirectory();
-    final filePath = '${dir.path}/$travelTitle.pdf';
+    final filePath = '${dir.path}/${travel.travelTitle}.pdf';
     final pdfBytes = await document.save();
 
     final pdfFile = File(filePath);
@@ -414,17 +424,17 @@ class PDFUtils {
     return pdfFile;
   }
 
-  Future<String?> generateRouteUrl(List<TravelStop> stops, String key) async {
-    final waypoints = stops
-        .sublist(1, stops.length - 1)
+  Future<String?> generateRouteUrl() async {
+    final waypoints = travel.stops
+        .sublist(1, travel.stops.length - 1)
         .map((p) => p.place.latLng.toLatLngString())
         .join('|');
 
-    final origin = stops.first.place.latLng.toLatLngString();
-    final destination = stops.last.place.latLng.toLatLngString();
+    final origin = travel.stops.first.place.latLng.toLatLngString();
+    final destination = travel.stops.last.place.latLng.toLatLngString();
 
     final directionsUrl =
-        'https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&waypoints=$waypoints&key=$key';
+        'https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&waypoints=$waypoints&key=$mapsApiKey';
 
     final directionsRes = await http.get(Uri.parse(directionsUrl));
 
@@ -440,7 +450,7 @@ class PDFUtils {
 
     final encodedPolyline = data['routes'][0]['overview_polyline']['points'];
 
-    final markers = stops
+    final markers = travel.stops
         .map((p) => 'markers=color:red|${p.place.latLng.toLatLngString()}')
         .join('&');
 
@@ -449,7 +459,7 @@ class PDFUtils {
         '?size=600x400&maptype=roadmap'
         '&path=color:0xFF0000FF|weight:5|enc:$encodedPolyline'
         '&$markers'
-        '&key=$key';
+        '&key=$mapsApiKey';
 
     return staticMapUrl;
   }

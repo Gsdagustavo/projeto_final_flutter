@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating/flutter_rating.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -46,10 +47,15 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
   String locale = 'en';
 
   Future<void> onShare() async {
-    final pdf = await PDFService().generatePDFFromTravel(
-      widget.travel,
-      context,
+    final mapsApiKey = dotenv.get('MAPS_API_KEY');
+
+    final pdfService = PDFService(
+      travel: widget.travel,
+      context: context,
+      mapsApiKey: mapsApiKey,
     );
+
+    final pdf = await pdfService.generatePDFFromTravel();
 
     /// TODO: add error handling
     if (pdf == null) {
