@@ -26,19 +26,17 @@ class DBConnection {
   static const int _dbVersion = 1;
 
   /// Returns an instance of a Database
-  Future<Database> getDatabase({bool reset = false}) async {
+  ///
+  /// If [delete] is [true], deletes the database from the device and recreates
+  /// it by calling the [_onCreate] method
+  Future<Database> getDatabase({bool delete = false}) async {
     final dbPath = join(await getDatabasesPath(), _dbName);
-    return openDatabase(
-      dbPath,
-      version: _dbVersion,
-      onCreate: _onCreate,
-      onOpen: (db) async {
-        if (reset) {
-          await clearDatabase(db);
-          await _onCreate(db, _dbVersion);
-        }
-      },
-    );
+
+    if (delete) {
+      await deleteDatabase(dbPath);
+    }
+
+    return openDatabase(dbPath, version: _dbVersion, onCreate: _onCreate);
   }
 
   /// Defines what to do when the database is created
@@ -97,23 +95,6 @@ class DBConnection {
     );
 
     debugPrint('_insertDefaultValuesIntoTables method finished');
-  }
-
-  /// Cleans the database
-  Future<void> clearDatabase(Database db) async {
-    debugPrint('Clear database method called');
-
-    final tables = await db.rawQuery(
-      "SELECT name FROM sqlite_master WHERE type='table' AND "
-      "name NOT LIKE 'sqlite_%';",
-    );
-
-    for (var table in tables) {
-      final tableName = table['name'] as String;
-      await db.execute('DROP TABLE IF EXISTS $tableName');
-    }
-
-    debugPrint('Database cleansed');
   }
 
   /// Prints all database tables and their rows
