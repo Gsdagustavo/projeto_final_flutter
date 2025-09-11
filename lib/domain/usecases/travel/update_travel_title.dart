@@ -4,7 +4,6 @@ import '../../../core/exceptions/failure.dart';
 import '../../entities/errors.dart';
 import '../../entities/travel.dart';
 import '../../repositories/travel/travel_repository.dart';
-import 'register_travel.dart';
 
 /// Use case for updating the title of a [Travel].
 class UpdateTravelTitle {

@@ -57,7 +57,7 @@ Future<void> main() async {
   await dotenv.load(fileName: '.env');
 }
 
-Future<void> testDB(TravelUseCases travelUseCases) async {
+Future<void> _resetTestDB(TravelUseCases travelUseCases) async {
   final db = await DBConnection().getDatabase(delete: true);
   await DBConnection().printAllTables(db);
 
