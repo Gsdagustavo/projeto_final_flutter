@@ -1,3 +1,6 @@
+import 'package:dartz/dartz.dart';
+
+import '../../../core/exceptions/failure.dart';
 import '../../entities/review.dart';
 import '../../repositories/review/review_repository.dart';
 
@@ -15,7 +18,17 @@ class AddReview {
   ///
   /// [review]: The [Review] object to be added.
   /// Returns a [Future] that completes when the operation is done.
-  Future<void> call({required Review review}) async {
-    await _reviewRepository.addReview(review: review);
+  Future<Either<Failure, void>> call({required Review review}) async {
+    if (review.description.trim().isEmpty && review.images.isEmpty) {
+      return Left(
+        Failure('Review needs to have at least a description or an image'),
+      );
+    }
+
+    await _reviewRepository.addReview(
+      review: review.copyWith(description: review.description.trim()),
+    );
+
+    return Right(null);
   }
 }

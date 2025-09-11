@@ -3,20 +3,16 @@
   "language_en": "English",
   "language_pt": "Português",
   "language_es": "Español",
-
   "@@login_page": {},
   "login": "Login",
   "password": "Password",
   "forgot_your_password": "Forgot your password?",
-
   "@@forgot_your_password_page": {},
   "insert_your_email": "Insert your email",
   "send_recovery_code": "Send recovery code",
   "email": "Email",
-
   "@@register": {},
   "register": "Register",
-
   "@@auth_messages": {},
   "logged_in_successfully": "Logged in successfully!",
   "account_created_successfully": "Account created successfully!",
@@ -29,7 +25,6 @@
   },
   "invalid_email": "Invalid email",
   "invalid_password": "Invalid password",
-
   "@@settings_page": {},
   "account": "Account",
   "account_creation": "Account creation",
@@ -37,19 +32,16 @@
   "logout": "Logout",
   "logout_confirmation": "Do you really want to logout?",
   "language": "Language",
-
   "@@transport_types": {},
   "transport_type_car": "Car",
   "transport_type_bike": "Bike",
   "transport_type_bus": "Bus",
   "transport_type_plane": "Plane",
   "transport_type_cruise": "Cruise",
-
   "@travel_stop_types": {},
   "travel_stop_type_start": "Start",
   "travel_stop_type_stop": "Stop",
   "travel_stop_type_end": "End",
-
   "@@experiences": {},
   "experience": "Experience",
   "experiences": "Experiences",
@@ -60,19 +52,16 @@
   "experience_contact_with_nature": "Contact With Nature",
   "experience_social_events": "Social Events",
   "other": "Other",
-
   "@@travel_status": {},
   "upcoming": "Upcoming",
   "ongoing": "Ongoing",
   "finished": "Finished",
-
   "@@travel_register_error": {},
   "invalid_title": "Invalid travel title",
   "not_enough_stops": "Travel must contain at least 2 stops",
   "no_participants": "Travel must contain at least 1 participant",
   "invalid_participant_data": "Invalid participant data",
   "invalid_stop_dates": "Invalid stops dates",
-
   "@@home_page": {},
   "my_travels": "My Travels",
   "start_travel": "Start Travel",
@@ -85,14 +74,7 @@
     }
   },
   "travel_started_successfully": "Travel Started Successfully!",
-  "travel_has_already_started": "The Travel {travel} has already been started",
-  "@@travel_has_already_started": {
-    "placeholders": {
-      "travel": {
-        "type": "String"
-      }
-    }
-  },
+  "travel_has_already_started": "This travel has already been started",
   "finish_travel": "Finish Travel",
   "finish_travel_confirmation": "Finish Travel {travel}?",
   "@@finish_travel_confirmation": {
@@ -102,23 +84,9 @@
       }
     }
   },
+  "travel_already_finished": "This travel has already been finished",
   "travel_finished_successfully": "Travel Finished Successfully!",
-  "travel_has_already_finished": "The Travel {travel} has already been finished",
-  "@@travel_has_already_finished": {
-    "placeholders": {
-      "travel": {
-        "type": "String"
-      }
-    }
-  },
-  "travel_not_started_yet": "The Travel {travel} has not started yet",
-  "@@travel_not_stated_yet": {
-    "placeholders": {
-      "travel": {
-        "type": "String"
-      }
-    }
-  },
+  "travel_not_started_yet": "This travel has not started yet",
   "delete_travel": "Delete Travel",
   "delete_travel_confirmation": "Do you really want to delete the travel {travel}?",
   "@@delete_travel_confirmation": {
@@ -142,7 +110,6 @@
   "title_register_travel": "Register Travel",
   "title_settings": "Settings",
   "title_map_select_travel_stops": "Select Travel Stops",
-
   "@@register_travel_page": {},
   "travel_title_label": "Travel Title",
   "travel_details": "Travel Details",
@@ -210,7 +177,6 @@
   "could_not_add_travel_photo": "Could not add travel photo",
   "invalid_travel_data": "Invalid Travel Data",
   "travel_registered_successfully": "Your Travel was successfully registered!",
-
   "@@google_map": {},
   "travel_stop": "Travel Stop",
   "search_for_places": "Search for places",
@@ -225,7 +191,6 @@
   "leave_date": "Leave Date",
   "err_you_must_select_arrive_date_first": "You must select the Arrive Date first!",
   "finish": "Finish",
-
   "@@travel_details": {},
   "duration": "Duration",
   "days": "days",
@@ -262,7 +227,6 @@
   "delete_review_confirmation": "Do you really want to delete this review?",
   "review_deleted_successfully": "Review Deleted Successfully!",
   "review_requires_content": "You must add at least one image or write a description before submitting your review. Reviews cannot be empty.",
-
   "@@modals": {},
   "success": "Success!",
   "great": "Great!",
@@ -276,7 +240,6 @@
   "no_internet_message": "You're currently offline. Some features may not be available until you reconnect to the internet",
   "try_again": "Try Again",
   "continue_offline": "Continue Offline",
-
   "@@travel_pdf": {},
   "travel_phrase_intro": "A journey is not measured in miles, but in moments.",
   "travel_phrase_body": "Each page of this booklet holds more than landscapes: it holds spontaneous smiles, unexpected discoveries, conversations that touched the soul, and silences that spoke louder than words.",
@@ -286,7 +249,6 @@
       "time": {}
     }
   },
-
   "@@util": {},
   "yes": "Yes",
   "no": "No",

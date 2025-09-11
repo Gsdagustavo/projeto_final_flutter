@@ -20,10 +20,6 @@ import 'presentation/widgets/my_app.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  /// Resets the database
-  final db = await DBConnection().getDatabase(delete: true);
-  await DBConnection().printAllTables(db);
-
   /// Initialize Firebase App
   await Firebase.initializeApp();
 
@@ -34,9 +30,7 @@ Future<void> main() async {
   final reviewRepository = SQLiteReviewRepository();
   final reviewUseCases = ReviewUseCases.create(reviewRepository);
 
-  final travels = await generateSampleTravels();
-
-  travels.forEach(travelUseCases.registerTravel.call);
+  // await testDB(travelUseCases);
 
   /// Build App
   runApp(
@@ -61,4 +55,12 @@ Future<void> main() async {
 
   /// Initialize dotenv
   await dotenv.load(fileName: '.env');
+}
+
+Future<void> testDB(TravelUseCases travelUseCases) async {
+  final db = await DBConnection().getDatabase(delete: true);
+  await DBConnection().printAllTables(db);
+
+  final travels = await generateSampleTravels();
+  travels.forEach(travelUseCases.registerTravel.call);
 }

@@ -4,6 +4,7 @@ import '../../../core/exceptions/failure.dart';
 import '../../entities/errors.dart';
 import '../../entities/travel.dart';
 import '../../repositories/travel/travel_repository.dart';
+import 'register_travel.dart';
 
 /// Use case for updating the title of a [Travel].
 class UpdateTravelTitle {
@@ -16,12 +17,12 @@ class UpdateTravelTitle {
   /// Updates the travel title after validating it.
   ///
   /// Throws an [Exception] if the title is invalid.
-  Future<Either<Failure<TravelTitleError>, void>> call(
+  Future<Either<Failure<TravelError>, void>> call(
     Travel travel,
     String newTitle,
   ) async {
     if (!_validateTravelTitle(newTitle)) {
-      return Left(Failure(TravelTitleError.invalidTravelTitle));
+      return Left(Failure(TravelError.invalidTravelTitle));
     }
 
     travel.travelTitle = newTitle;

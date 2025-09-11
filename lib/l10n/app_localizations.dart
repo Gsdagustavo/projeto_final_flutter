@@ -406,8 +406,8 @@ abstract class AppLocalizations {
   /// No description provided for @travel_has_already_started.
   ///
   /// In en, this message translates to:
-  /// **'The Travel {travel} has already been started'**
-  String travel_has_already_started(Object travel);
+  /// **'This travel has already been started'**
+  String get travel_has_already_started;
 
   /// No description provided for @finish_travel.
   ///
@@ -421,23 +421,23 @@ abstract class AppLocalizations {
   /// **'Finish Travel {travel}?'**
   String finish_travel_confirmation(Object travel);
 
+  /// No description provided for @travel_already_finished.
+  ///
+  /// In en, this message translates to:
+  /// **'This travel has already been finished'**
+  String get travel_already_finished;
+
   /// No description provided for @travel_finished_successfully.
   ///
   /// In en, this message translates to:
   /// **'Travel Finished Successfully!'**
   String get travel_finished_successfully;
 
-  /// No description provided for @travel_has_already_finished.
-  ///
-  /// In en, this message translates to:
-  /// **'The Travel {travel} has already been finished'**
-  String travel_has_already_finished(Object travel);
-
   /// No description provided for @travel_not_started_yet.
   ///
   /// In en, this message translates to:
-  /// **'The Travel {travel} has not started yet'**
-  String travel_not_started_yet(Object travel);
+  /// **'This travel has not started yet'**
+  String get travel_not_started_yet;
 
   /// No description provided for @delete_travel.
   ///

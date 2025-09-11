@@ -18,17 +18,17 @@ class FinishTravel {
   /// Finishes the travel by updating its status and end date.
   ///
   /// Throws an [Exception] if the travel has not started or is already finished
-  Future<Either<Failure<StartTravelError>, void>> call(Travel travel) async {
+  Future<Either<Failure<TravelError>, void>> call(Travel travel) async {
     debugPrint('Travel that is going to be finished: ${travel.status}');
 
     final now = DateTime.now();
 
     if (travel.status == TravelStatus.upcoming) {
-      return Left(Failure(StartTravelError.notStartedYet));
+      return Left(Failure(TravelError.notStartedYet));
     }
 
     if (travel.status == TravelStatus.finished) {
-      return Left(Failure(StartTravelError.alreadyFinished));
+      return Left(Failure(TravelError.alreadyFinished));
     }
 
     travel.endDate = now;

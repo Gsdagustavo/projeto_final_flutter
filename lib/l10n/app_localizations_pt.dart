@@ -163,33 +163,27 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get travel_started_successfully => 'Viagem iniciada com sucesso!';
+  String get travel_started_successfully => 'Essa Viagem iniciada com sucesso!';
 
   @override
-  String travel_has_already_started(Object travel) {
-    return 'A Viagem $travel já foi iniciada';
-  }
+  String get travel_has_already_started => 'Essa Viagem já foi iniciada';
 
   @override
   String get finish_travel => 'Finalizar Viagem';
 
   @override
   String finish_travel_confirmation(Object travel) {
-    return 'Finalizar Viagem $travel?';
+    return 'Finalizar a Viagem?';
   }
+
+  @override
+  String get travel_already_finished => 'Essa Viagem já foi finalizada';
 
   @override
   String get travel_finished_successfully => 'Viagem finalizada com sucesso!';
 
   @override
-  String travel_has_already_finished(Object travel) {
-    return 'A Viagem $travel já foi finalizada';
-  }
-
-  @override
-  String travel_not_started_yet(Object travel) {
-    return 'A Viagem $travel ainda não começou';
-  }
+  String get travel_not_started_yet => 'Essa Viagem ainda não começou';
 
   @override
   String get delete_travel => 'Excluir Viagem';

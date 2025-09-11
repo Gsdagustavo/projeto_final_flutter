@@ -166,9 +166,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get travel_started_successfully => 'Travel Started Successfully!';
 
   @override
-  String travel_has_already_started(Object travel) {
-    return 'The Travel $travel has already been started';
-  }
+  String get travel_has_already_started => 'This travel has already been started';
 
   @override
   String get finish_travel => 'Finish Travel';
@@ -179,17 +177,13 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get travel_already_finished => 'This travel has already been finished';
+
+  @override
   String get travel_finished_successfully => 'Travel Finished Successfully!';
 
   @override
-  String travel_has_already_finished(Object travel) {
-    return 'The Travel $travel has already been finished';
-  }
-
-  @override
-  String travel_not_started_yet(Object travel) {
-    return 'The Travel $travel has not started yet';
-  }
+  String get travel_not_started_yet => 'This travel has not started yet';
 
   @override
   String get delete_travel => 'Delete Travel';

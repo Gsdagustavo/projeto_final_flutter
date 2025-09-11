@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 
 import '../../core/exceptions/failure.dart';
 import '../../domain/entities/enums.dart';
+import '../../domain/entities/errors.dart';
 import '../../domain/entities/participant.dart';
 import '../../domain/entities/travel.dart';
 import '../../domain/entities/travel_stop.dart';
-import '../../domain/usecases/travel/register_travel.dart';
 import '../../domain/usecases/travel/travel_usecases.dart';
 import '../../services/file_service.dart';
 
@@ -90,7 +90,7 @@ class RegisterTravelProvider with ChangeNotifier {
     if (_stops.isNotEmpty) {
       if ((stop.arriveDate!.isBefore(_stops.last.leaveDate!)) ||
           (stop.leaveDate!.isAfter(_endDate!))) {
-        _failure = Failure(TravelRegisterError.invalidStopDates);
+        _failure = Failure(TravelError.invalidStopDates);
         _notify();
         return null;
       }
@@ -117,6 +117,10 @@ class RegisterTravelProvider with ChangeNotifier {
     _notify();
   }
 
+  /// Iterates through all travel stops and sets their types based on their
+  /// index position on the list
+  ///
+  /// First stop is [start], middle stops are [stop] and the last stop is [end]
   void _updateStopsTypes() {
     for (final (i, s) in _stops.indexed) {
       if (i == 0) {
@@ -166,7 +170,7 @@ class RegisterTravelProvider with ChangeNotifier {
 
   /// Adds a [Participant] to the travel.
   void addParticipant(Participant participant) {
-    _failure = Failure(TravelRegisterError.invalidStopDates);
+    _failure = Failure(TravelError.invalidStopDates);
     _participants.add(participant);
     debugPrint('Participant $participant added');
     _notify();

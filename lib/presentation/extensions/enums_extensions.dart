@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/enums.dart';
-import '../../domain/usecases/travel/register_travel.dart';
+import '../../domain/entities/errors.dart';
 import '../../l10n/app_localizations.dart';
 
 /// This extension is a simple way to return the localized version of
@@ -88,22 +88,28 @@ extension TravelStatusIntlString on TravelStatus {
 
 /// This extension is a simple way to return the localized version of
 /// the [TravelStopType] enum
-extension TravelRegisterErrorIntlString  on TravelRegisterError {
+extension TravelErrorIntlString on TravelError {
   /// Returns the localized [TravelStopType]
-  String getIntlTravelRegisterError(BuildContext context) {
+  String getIntlTravelError(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
 
     switch (this) {
-      case TravelRegisterError.invalidParticipantData:
+      case TravelError.invalidParticipantData:
         return loc.err_invalid_participant_data;
-      case TravelRegisterError.invalidStopDates:
+      case TravelError.invalidStopDates:
         return loc.invalid_stop_dates;
-      case TravelRegisterError.invalidTravelTitle:
+      case TravelError.invalidTravelTitle:
         return loc.invalid_travel_title;
-      case TravelRegisterError.noParticipants:
+      case TravelError.noParticipants:
         return loc.no_participants_registered;
-      case TravelRegisterError.notEnoughStops:
+      case TravelError.notEnoughStops:
         return loc.not_enough_stops;
+      case TravelError.notStartedYet:
+        throw loc.travel_not_started_yet;
+      case TravelError.alreadyStarted:
+        throw loc.travel_has_already_started;
+      case TravelError.alreadyFinished:
+        throw loc.travel_already_finished;
     }
   }
 }

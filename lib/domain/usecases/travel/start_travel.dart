@@ -18,17 +18,17 @@ class StartTravel {
   /// Starts the travel by updating its status and start date.
   ///
   /// Throws an [Exception] if the travel has already started or finished.
-  Future<Either<Failure<StartTravelError>, void>> call(Travel travel) async {
+  Future<Either<Failure<TravelError>, void>> call(Travel travel) async {
     debugPrint('Travel that is going to be started: ${travel.status}');
 
     final now = DateTime.now();
 
     if (travel.status == TravelStatus.ongoing) {
-      return Left(Failure(StartTravelError.alreadyStarted));
+      return Left(Failure(TravelError.alreadyStarted));
     }
 
     if (travel.status == TravelStatus.finished) {
-      return Left(Failure(StartTravelError.alreadyFinished));
+      return Left(Failure(TravelError.alreadyFinished));
     }
 
     travel.startDate = now;

@@ -84,41 +84,13 @@
       }
     }
   },
-  "travel_started_successfully": "Viagem iniciada com sucesso!",
-  "travel_has_already_started": "A Viagem {travel} já foi iniciada",
-  "@@travel_has_already_started": {
-    "placeholders": {
-      "travel": {
-        "type": "String"
-      }
-    }
-  },
+  "travel_started_successfully": "Essa Viagem iniciada com sucesso!",
+  "travel_has_already_started": "Essa Viagem já foi iniciada",
   "finish_travel": "Finalizar Viagem",
-  "finish_travel_confirmation": "Finalizar Viagem {travel}?",
-  "@@finish_travel_confirmation": {
-    "placeholders": {
-      "travel": {
-        "type": "String"
-      }
-    }
-  },
+  "finish_travel_confirmation": "Finalizar a Viagem?",
   "travel_finished_successfully": "Viagem finalizada com sucesso!",
-  "travel_has_already_finished": "A Viagem {travel} já foi finalizada",
-  "@@travel_has_already_finished": {
-    "placeholders": {
-      "travel": {
-        "type": "String"
-      }
-    }
-  },
-  "travel_not_started_yet": "A Viagem {travel} ainda não começou",
-  "@@travel_not_started_yet": {
-    "placeholders": {
-      "travel": {
-        "type": "String"
-      }
-    }
-  },
+  "travel_already_finished": "Essa Viagem já foi finalizada",
+  "travel_not_started_yet": "Essa Viagem ainda não começou",
   "delete_travel": "Excluir Viagem",
   "delete_travel_confirmation": "Você realmente deseja excluir a viagem {travel}?",
   "@@delete_travel_confirmation": {
@@ -136,7 +108,6 @@
       "count": {}
     }
   },
-
 
   "@@pages_titles": {},
   "title_home": "Início",

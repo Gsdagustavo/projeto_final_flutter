@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import '../../../core/exceptions/failure.dart';
 import '../../../core/extensions/string_extensions.dart';
 import '../../entities/enums.dart';
+import '../../entities/errors.dart';
 import '../../entities/participant.dart';
 import '../../entities/travel.dart';
 import '../../repositories/travel/travel_repository.dart';
@@ -34,48 +35,48 @@ class RegisterTravel {
         name: 'Invalid travel dates',
       );
 
-      return Left(Failure(TravelRegisterError.invalidTravelTitle));
+      return Left(Failure(TravelError.invalidTravelTitle));
     }
 
     if (travel.travelTitle.isEmpty) {
       log(
         '[REGISTER TRAVEL USECASE] invalid travel title: ${travel.travelTitle}',
-        error: TravelRegisterError.invalidTravelTitle,
+        error: TravelError.invalidTravelTitle,
         time: DateTime.now(),
         name: 'Invalid travel title',
       );
-      return Left(Failure(TravelRegisterError.invalidTravelTitle));
+      return Left(Failure(TravelError.invalidTravelTitle));
     }
 
     if (travel.stops.isEmpty || travel.stops.length < 2) {
       log(
         '[REGISTER TRAVEL USECASE] not enough stops. '
         'stops: ${travel.stops.length}',
-        error: TravelRegisterError.notEnoughStops,
+        error: TravelError.notEnoughStops,
         time: DateTime.now(),
         name: 'Not enough stops',
       );
-      return Left(Failure(TravelRegisterError.notEnoughStops));
+      return Left(Failure(TravelError.notEnoughStops));
     }
 
     if (travel.participants.isEmpty) {
       log(
         '[REGISTER TRAVEL USECASE] no participants',
-        error: TravelRegisterError.noParticipants,
+        error: TravelError.noParticipants,
         time: DateTime.now(),
         name: 'No participants',
       );
-      return Left(Failure(TravelRegisterError.noParticipants));
+      return Left(Failure(TravelError.noParticipants));
     }
 
     if (!isParticipantInfoValid(travel.participants)) {
       log(
         '[REGISTER TRAVEL USECASE] invalid participant data',
-        error: TravelRegisterError.invalidParticipantData,
+        error: TravelError.invalidParticipantData,
         time: DateTime.now(),
         name: 'Invalid participant data',
       );
-      return Left(Failure(TravelRegisterError.invalidParticipantData));
+      return Left(Failure(TravelError.invalidParticipantData));
     }
 
     for (var i = 0; i < travel.stops.length; i++) {
@@ -87,11 +88,11 @@ class RegisterTravel {
             '[REGISTER TRAVEL USECASE] invalid travel stop dates '
             '| stop 1 arrive date: ${travel.stops[i].arriveDate} '
             '| stop 2 arrive date: ${travel.stops[j].arriveDate}',
-            error: TravelRegisterError.invalidStopDates,
+            error: TravelError.invalidStopDates,
             time: DateTime.now(),
             name: 'Invalid travel stop dates',
           );
-          return Left(Failure(TravelRegisterError.invalidStopDates));
+          return Left(Failure(TravelError.invalidStopDates));
         }
 
         if (travel.stops[i].leaveDate!.isAfter(travel.stops[j].arriveDate!)) {
@@ -99,11 +100,11 @@ class RegisterTravel {
             '[REGISTER TRAVEL USECASE] invalid travel stop dates '
             '| stop 1 leave date: ${travel.stops[i].leaveDate} '
             '| stop 2 arrive date: ${travel.stops[j].arriveDate}',
-            error: TravelRegisterError.invalidStopDates,
+            error: TravelError.invalidStopDates,
             time: DateTime.now(),
             name: 'Invalid travel stop dates',
           );
-          return Left(Failure(TravelRegisterError.invalidStopDates));
+          return Left(Failure(TravelError.invalidStopDates));
         }
       }
     }
@@ -144,22 +145,4 @@ class RegisterTravel {
         }) &&
         participants.isNotEmpty;
   }
-}
-
-/// Errors that can occur during travel registration.
-enum TravelRegisterError {
-  /// The travel title is empty or invalid.
-  invalidTravelTitle,
-
-  /// The travel has fewer than two stops (start and end required).
-  notEnoughStops,
-
-  /// The travel has no participants.
-  noParticipants,
-
-  /// One or more participants have invalid data (e.g., age, name).
-  invalidParticipantData,
-
-  /// Invalid or inconsistent stop dates.
-  invalidStopDates,
 }
