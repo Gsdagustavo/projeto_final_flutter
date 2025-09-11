@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 import 'package:persistent_header_adaptive/persistent_header_adaptive.dart';
 import 'package:provider/provider.dart';
 
@@ -46,6 +48,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
 
+    debugPrint('home page build called');
+
     return Consumer<TravelListProvider>(
       builder: (_, state, __) {
         if (state.isLoading) {
@@ -55,13 +59,66 @@ class _HomePageState extends State<HomePage> {
         return FabPage(
           title: as.title_home,
           floatingActionButton: FloatingActionButton(
-            onPressed: () async => await state.update(),
+            // onPressed: () async => await state.update(),
+            onPressed: () => setState(() {}),
           ),
-          body: FabAnimatedList<Travel>(
-            itemData: state.travels,
-            itemEquality: (a, b) => a.id == b.id,
-            itemBuilder: (context, travel) {
-              return _TravelListItem(travel: travel);
+          body: Builder(
+            builder: (context) {
+              if (state.travels.isEmpty) {
+                return Column(
+                  children: [
+                    Lottie.asset('assets/animations/paperplane.json'),
+
+                    Padding(
+                      padding: const EdgeInsets.all(32.0),
+                      child: Column(
+                        spacing: 16,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Nenhuma viagem cadastrada',
+                            style: Theme.of(context).textTheme.headlineSmall,
+                            textAlign: TextAlign.center,
+                          ),
+
+                          Text.rich(
+                            textAlign: TextAlign.center,
+                            TextSpan(
+                              style: Theme.of(context).textTheme.bodyMedium,
+                              children: [
+                                TextSpan(text: 'Use a '),
+                                TextSpan(
+                                  text: 'página de registro de viagem',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      context.go(AppRoutes.registerTravel);
+                                    },
+                                ),
+                                TextSpan(
+                                  text: ' para registrar uma agora mesmo',
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              }
+
+              return FabAnimatedList<Travel>(
+                itemData: state.travels,
+                itemEquality: (a, b) => a.id == b.id,
+                itemBuilder: (context, travel) {
+                  return _TravelListItem(travel: travel);
+                },
+              );
             },
           ),
 
