@@ -12,10 +12,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get language_en => 'English';
 
   @override
-  String get language_pt => 'Portuguese';
+  String get language_pt => 'Português';
 
   @override
-  String get language_es => 'Spanish';
+  String get language_es => 'Español';
 
   @override
   String get login => 'Login';

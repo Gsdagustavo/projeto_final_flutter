@@ -1,8 +1,8 @@
 {
   "@@locale": "en",
   "language_en": "English",
-  "language_pt": "Portuguese",
-  "language_es": "Spanish",
+  "language_pt": "Português",
+  "language_es": "Español",
 
   "@@login_page": {},
   "login": "Login",

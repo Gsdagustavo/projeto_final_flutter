@@ -106,13 +106,13 @@ abstract class AppLocalizations {
   /// No description provided for @language_pt.
   ///
   /// In en, this message translates to:
-  /// **'Portuguese'**
+  /// **'Português'**
   String get language_pt;
 
   /// No description provided for @language_es.
   ///
   /// In en, this message translates to:
-  /// **'Spanish'**
+  /// **'Español'**
   String get language_es;
 
   /// No description provided for @login.
