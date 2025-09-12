@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../core/constants/api_keys.dart';
 import '../../../core/extensions/place_extensions.dart';
 import '../../../domain/entities/travel.dart';
 import '../../widgets/my_app_bar.dart';
@@ -23,7 +24,9 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
   GoogleMapController? _controller;
 
   var _polylines = <Polyline>{};
-  final _polylinePoints = PolylinePoints(apiKey: dotenv.env['MAPS_API_KEY']!);
+  final _polylinePoints = PolylinePoints(
+    apiKey: dotenv.get(ApiKeys.mapsApiKey),
+  );
 
   LatLngBounds _calculateBounds(List<LatLng> points) {
     var minLat = points.first.latitude;

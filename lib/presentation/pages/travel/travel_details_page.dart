@@ -10,6 +10,7 @@ import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../core/constants/api_keys.dart';
 import '../../../core/extensions/date_extensions.dart';
 import '../../../domain/entities/participant.dart';
 import '../../../domain/entities/review.dart';
@@ -50,7 +51,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
   String locale = 'en';
 
   Future<void> onShare() async {
-    final mapsApiKey = dotenv.get('MAPS_API_KEY');
+    final mapsApiKey = dotenv.get(ApiKeys.mapsApiKey);
 
     final pdfService = PDFService(
       travel: widget.travel,

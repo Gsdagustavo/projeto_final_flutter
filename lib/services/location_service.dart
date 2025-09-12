@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
+import '../core/constants/api_keys.dart';
 import '../data/models/place_model.dart';
 import '../domain/entities/place.dart';
 
@@ -18,7 +19,7 @@ import '../domain/entities/place.dart';
 /// - Get suggestions for place names using Google Places API.
 class LocationService {
   /// API key for Google Maps obtained from environment variables.
-  static final String _mapsApiKey = dotenv.get('MAPS_API_KEY');
+  static final String _mapsApiKey = dotenv.get(ApiKeys.mapsApiKey);
 
   /// Base URL for the Google Geocoding API.
   static const String _apiUrl =
