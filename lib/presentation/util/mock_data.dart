@@ -5,18 +5,6 @@ import '../../domain/entities/travel.dart';
 import '../../domain/entities/travel_stop.dart';
 import '../../services/file_service.dart';
 
-/// Generates a list of sample [Travel] objects with predefined participants,
-/// stops, and travel details. Useful for testing, previews, or UI demos.
-///
-/// Each travel includes:
-/// - A title
-/// - Start and end dates
-/// - Transport type
-/// - Status (upcoming)
-/// - Participants with default profile pictures
-/// - Stops with associated places and experiences
-///
-/// Returns a [Future] of a [List] of [Travel] objects.
 Future<List<Travel>> generateSampleTravels() async {
   final defaultPfp = await FileService().getDefaultProfilePictureFile();
 

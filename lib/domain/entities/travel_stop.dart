@@ -1,4 +1,5 @@
 import 'package:uuid/uuid.dart';
+
 import 'enums.dart';
 import 'place.dart';
 import 'review.dart';
@@ -82,11 +83,10 @@ class TravelStop {
     );
   }
 
-
   @override
   String toString() {
-    return 'TravelStop{id: $id, arriveDate: $arriveDate, '
-        'leaveDate: $leaveDate, type: $type, experiences: $experiences, '
-        'place: $place}';
+    return 'TravelStop{id: $id, arriveDate: $arriveDate, leaveDate: $leaveDate,'
+        ' type: $type, experiences: $experiences, place: $place, '
+        'reviews: $reviews}';
   }
 }

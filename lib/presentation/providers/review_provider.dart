@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 import '../../domain/entities/review.dart';
 import '../../domain/entities/travel.dart';
+import '../../domain/entities/travel_stop.dart';
 import '../../domain/usecases/review/review_use_cases.dart';
 
 /// A [ChangeNotifier] provider responsible for managing reviews, including
@@ -18,7 +19,9 @@ class ReviewProvider with ChangeNotifier {
   /// Adds a [review] to the repository and updates the internal list of reviews
   ///
   /// Notifies listeners after the review is added.
-  Future<void> addReview(Review review) async {
+  Future<void> addReview({
+    required Review review,
+  }) async {
     await _reviewUseCases.addReview(review: review);
     _reviews.add(review);
     notifyListeners();
@@ -28,7 +31,14 @@ class ReviewProvider with ChangeNotifier {
   ///reviews
   ///
   /// Notifies listeners after the review is deleted.
-  Future<void> deleteReview(Review review) async {
+  Future<void> deleteReview({
+    required TravelStop stop,
+    required Review review,
+  }) async {
+    debugPrint(
+      'travel list provider review list contains review passed on delete review function: ${_reviews.contains(review)}',
+    );
+
     await _reviewUseCases.deleteReview(review: review);
     _reviews.remove(review);
     notifyListeners();

@@ -25,7 +25,7 @@ class ReviewModel {
   final DateTime reviewDate;
 
   /// Travel stop to which the review is related.
-  final TravelStopModel travelStop;
+  final String travelStopId;
 
   /// Number of stars given in the review.
   final int stars;
@@ -39,7 +39,7 @@ class ReviewModel {
   /// [description] is the review content.
   /// [author] is the participant who wrote the review.
   /// [reviewDate] is the date of the review.
-  /// [travelStop] is the related travel stop.
+  /// [travelStopId] is the related travel stop.
   /// [stars] is the rating.
   /// [images] is the list of images attached.
   const ReviewModel({
@@ -47,7 +47,7 @@ class ReviewModel {
     required this.description,
     required this.author,
     required this.reviewDate,
-    required this.travelStop,
+    required this.travelStopId,
     required this.stars,
     required this.images,
   });
@@ -58,7 +58,7 @@ class ReviewModel {
     String? description,
     ParticipantModel? author,
     DateTime? reviewDate,
-    TravelStopModel? travelStop,
+    String? travelStopId,
     int? stars,
     List<File>? images,
   }) {
@@ -67,7 +67,7 @@ class ReviewModel {
       description: description ?? this.description,
       author: author ?? this.author,
       reviewDate: reviewDate ?? this.reviewDate,
-      travelStop: travelStop ?? this.travelStop,
+      travelStopId: travelStopId ?? this.travelStopId,
       stars: stars ?? this.stars,
       images: images ?? this.images,
     );
@@ -79,7 +79,7 @@ class ReviewModel {
       ReviewsTable.reviewId: id,
       ReviewsTable.description: description,
       ReviewsTable.reviewDate: reviewDate.millisecondsSinceEpoch,
-      ReviewsTable.travelStopId: travelStop.id,
+      ReviewsTable.travelStopId: travelStopId,
       ReviewsTable.stars: stars,
       ReviewsTable.participantId: author.id,
     };
@@ -104,7 +104,7 @@ class ReviewModel {
       reviewDate: DateTime.fromMillisecondsSinceEpoch(
         map[ReviewsTable.reviewDate] as int,
       ),
-      travelStop: travelStop,
+      travelStopId: map[ReviewsTable.travelStopId] as String,
       stars: map[ReviewsTable.stars] as int,
       images: images,
     );
@@ -113,10 +113,11 @@ class ReviewModel {
   /// Converts this [ReviewModel] to a domain [Review] entity.
   Review toEntity() {
     return Review(
+      id: id,
       description: description,
       author: author.toEntity(),
       reviewDate: reviewDate,
-      travelStop: travelStop.toEntity(),
+      travelStopId: travelStopId,
       stars: stars,
       images: images,
     );
@@ -129,7 +130,7 @@ class ReviewModel {
       description: review.description,
       author: ParticipantModel.fromEntity(review.author),
       reviewDate: review.reviewDate,
-      travelStop: TravelStopModel.fromEntity(review.travelStop),
+      travelStopId: review.travelStopId,
       stars: review.stars,
       images: review.images,
     );
@@ -138,7 +139,7 @@ class ReviewModel {
   @override
   String toString() {
     return 'ReviewModel{id: $id, description: $description, '
-        'author: $author, reviewDate: $reviewDate, travelStop: $travelStop, '
+        'author: $author, reviewDate: $reviewDate, travelStop: $travelStopId, '
         'stars: $stars, images: $images}';
   }
 }

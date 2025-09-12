@@ -74,6 +74,46 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
     );
   }
 
+  Future<void> _onReviewDeleted({
+    required TravelStop stop,
+    required Review review,
+  }) async {
+    final as = AppLocalizations.of(context)!;
+
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => DeleteModal(
+        title: as.delete_review,
+        message: as.delete_review_confirmation,
+      ),
+    );
+
+    if (result == null || !result) {
+      return;
+    }
+
+    if (!mounted) return;
+
+    final state = context.read<ReviewProvider>();
+
+    await showLoadingDialog(
+      context: context,
+      function: () async {
+        await state.deleteReview(stop: stop, review: review);
+      },
+    );
+
+    if (state.hasError) {
+      if (!mounted) return;
+      showErrorSnackBar(context, state.errorMessage!);
+      return;
+    }
+
+    if (!mounted) return;
+
+    showSuccessSnackBar(context, as.review_deleted_successfully);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -432,9 +472,117 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                             FabAnimatedList(
                               itemData: state.reviews,
                               itemBuilder: (context, review) {
-                                return _ReviewListItem(
-                                  review: review,
-                                  locale: locale,
+                                final stop = widget.travel.stops.firstWhere(
+                                  (element) =>
+                                      element.id == review.travelStopId,
+                                );
+
+                                return ListTile(
+                                  isThreeLine: true,
+                                  leading: FabCircleAvatar(
+                                    child: InstaImageViewer(
+                                      child: Image.file(
+                                        review.author.profilePicture,
+                                      ),
+                                    ),
+                                  ),
+
+                                  title: Text(
+                                    review.author.name,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleLarge,
+                                  ),
+
+                                  trailing: IconButton(
+                                    onPressed: () async {
+                                      return await _onReviewDeleted(
+                                        review: review,
+                                        stop: stop,
+                                      );
+                                    },
+                                    icon: const Icon(FontAwesomeIcons.xmark),
+                                  ),
+
+                                  subtitle: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    spacing: 8,
+                                    children: [
+                                      SingleChildScrollView(
+                                        physics: const BouncingScrollPhysics(),
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          spacing: 8,
+                                          children: [
+                                            StarRating(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              starCount: 5,
+                                              rating: review.stars.toDouble(),
+                                              size: 18,
+                                            ),
+                                            Text(
+                                              review.reviewDate.getMonthDay(
+                                                locale,
+                                              ),
+                                            ),
+                                            const Icon(Icons.circle, size: 4),
+                                            const Icon(
+                                              Icons.location_on,
+                                              size: 12,
+                                            ),
+                                            Text(stop.place.city ?? ''),
+                                          ],
+                                        ),
+                                      ),
+                                      Builder(
+                                        builder: (context) {
+                                          if (review.description.isEmpty) {
+                                            return SizedBox.shrink();
+                                          }
+
+                                          return Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 12,
+                                              vertical: 6,
+                                            ),
+                                            child: Text(review.description),
+                                          );
+                                        },
+                                      ),
+
+                                      if (review.images.isNotEmpty) ...[
+                                        const SizedBox(height: 8),
+                                        SizedBox(
+                                          height: 100,
+                                          child: FabAnimatedList(
+                                            scrollDirection: Axis.horizontal,
+                                            itemData: review.images,
+                                            itemBuilder: (context, photo) {
+                                              return Padding(
+                                                padding: const EdgeInsets.only(
+                                                  right: 16,
+                                                ),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  child: InstaImageViewer(
+                                                    child: Image.file(
+                                                      photo,
+                                                      fit: BoxFit.cover,
+                                                      width: 100,
+                                                      height: 100,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ],
+                                  ),
                                 );
                               },
                             ),
@@ -566,143 +714,6 @@ class _StopStepperWidgetState extends State<_StopStepperWidget> {
   }
 }
 
-class _ReviewListItem extends StatefulWidget {
-  const _ReviewListItem({required this.review, required this.locale});
-
-  final Review review;
-  final String locale;
-
-  @override
-  State<_ReviewListItem> createState() => _ReviewListItemState();
-}
-
-class _ReviewListItemState extends State<_ReviewListItem> {
-  Future<void> _onReviewDeleted() async {
-    final as = AppLocalizations.of(context)!;
-
-    final result = await showDialog<bool>(
-      context: context,
-      builder: (context) => DeleteModal(
-        title: as.delete_review,
-        message: as.delete_review_confirmation,
-      ),
-    );
-
-    if (result == null || !result) {
-      return;
-    }
-
-    if (!mounted) return;
-
-    final state = context.read<ReviewProvider>();
-
-    await showLoadingDialog(
-      context: context,
-      function: () async => await state.deleteReview(widget.review),
-    );
-
-    if (state.hasError) {
-      if (!mounted) return;
-      showErrorSnackBar(context, state.errorMessage!);
-      return;
-    }
-
-    if (!mounted) return;
-
-    showSuccessSnackBar(context, as.review_deleted_successfully);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      isThreeLine: true,
-      leading: FabCircleAvatar(
-        child: InstaImageViewer(
-          child: Image.file(widget.review.author.profilePicture),
-        ),
-      ),
-
-      title: Text(
-        widget.review.author.name,
-        style: Theme.of(context).textTheme.titleLarge,
-      ),
-
-      trailing: IconButton(
-        onPressed: _onReviewDeleted,
-        icon: const Icon(FontAwesomeIcons.xmark),
-      ),
-
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 8,
-        children: [
-          SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              spacing: 8,
-              children: [
-                StarRating(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  starCount: 5,
-                  rating: widget.review.stars.toDouble(),
-                  size: 18,
-                ),
-                Text(widget.review.reviewDate.getMonthDay(widget.locale)),
-                const Icon(Icons.circle, size: 4),
-                const Icon(Icons.location_on, size: 12),
-                Text(widget.review.travelStop.place.city ?? ''),
-              ],
-            ),
-          ),
-          Builder(
-            builder: (context) {
-              if (widget.review.description.isEmpty) {
-                return SizedBox.shrink();
-              }
-
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                child: Text(widget.review.description),
-              );
-            },
-          ),
-
-          if (widget.review.images.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            SizedBox(
-              height: 100,
-              child: FabAnimatedList(
-                scrollDirection: Axis.horizontal,
-                itemData: widget.review.images,
-                itemBuilder: (context, photo) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 16),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: InstaImageViewer(
-                        child: Image.file(
-                          photo,
-                          fit: BoxFit.cover,
-                          width: 100,
-                          height: 100,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
 class _ReviewModal extends StatefulWidget {
   const _ReviewModal({required this.travel, required this.stop});
 
@@ -762,14 +773,16 @@ class _ReviewModalState extends State<_ReviewModal> {
       description: _reviewController.text,
       author: _author!,
       reviewDate: DateTime.now(),
-      travelStop: widget.stop,
+      travelStopId: widget.stop.id,
       stars: _reviewRate.toInt(),
       images: _images,
     );
 
     await showLoadingDialog(
       context: context,
-      function: () async => await state.addReview(review),
+      function: () async {
+        await state.addReview(review: review);
+      },
     );
 
     reviewDescriptionFocusNode.unfocus();

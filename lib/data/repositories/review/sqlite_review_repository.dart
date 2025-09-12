@@ -78,14 +78,20 @@ class SQLiteReviewRepository implements ReviewRepository {
 
   @override
   Future<void> deleteReview({required Review review}) async {
+    debugPrint('delete review method called in repository');
+
     final db = await _db;
 
     await db.transaction((txn) async {
       /// Delete from [ReviewsTable]
-      await txn.delete(
+      final rowsAffected = await txn.delete(
         ReviewsTable.tableName,
         where: '${ReviewsTable.reviewId} = ?',
         whereArgs: [review.id],
+      );
+
+      debugPrint(
+        'Review with ID ${review.id} deleted from database. Rows affected: $rowsAffected',
       );
 
       /// Delete from [ReviewsPhotosTable]

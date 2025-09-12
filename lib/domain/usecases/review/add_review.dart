@@ -25,9 +25,7 @@ class AddReview {
       );
     }
 
-    await _reviewRepository.addReview(
-      review: review.copyWith(description: review.description.trim()),
-    );
+    await _reviewRepository.addReview(review: review);
 
     return Right(null);
   }

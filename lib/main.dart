@@ -30,7 +30,7 @@ Future<void> main() async {
   final reviewRepository = SQLiteReviewRepository();
   final reviewUseCases = ReviewUseCases.create(reviewRepository);
 
-  // await testDB(travelUseCases);
+  await _resetTestDB(travelUseCases);
 
   /// Build App
   runApp(
