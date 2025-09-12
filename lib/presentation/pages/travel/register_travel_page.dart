@@ -16,7 +16,7 @@ import '../../extensions/enums_extensions.dart';
 import '../../providers/register_travel_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../util/app_routes.dart';
-import '../../util/assets_paths.dart';
+import '../../../core/constants/assets_paths.dart';
 import '../../widgets/fab_animated_list.dart';
 import '../../widgets/fab_circle_avatar.dart';
 import '../../widgets/fab_page.dart';

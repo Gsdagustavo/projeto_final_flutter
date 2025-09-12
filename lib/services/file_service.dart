@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../presentation/util/assets_paths.dart';
+import '../core/constants/assets_paths.dart';
 
 /// A service for handling file-related operations such as
 /// retrieving the default profile picture and picking images from the gallery.
