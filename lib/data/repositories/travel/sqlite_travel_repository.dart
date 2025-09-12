@@ -198,6 +198,135 @@ class SQLiteTravelRepository implements TravelRepository {
     });
   }
 
+  @override
+  Future<Travel?> getTravelById({required String travelId}) async {
+    final db = await _db;
+
+    final travel = await db.transaction((txn) async {
+      final travelsResult = await txn.query(
+        TravelTable.tableName,
+        where: '${TravelTable.travelId} = ?',
+        whereArgs: [travelId],
+      );
+
+      if (travelsResult.isEmpty) return null;
+
+      final travelResult = travelsResult.first;
+
+      debugPrint(travelResult.toString());
+
+      /// Participants
+      final participants = <ParticipantModel>[];
+
+      final participantsData = await txn.query(
+        ParticipantsTable.tableName,
+        where: '${ParticipantsTable.travelId} = ?',
+        whereArgs: [travelId],
+      );
+
+      for (final participantData in participantsData) {
+        final participant = ParticipantModel.fromMap(participantData);
+        participants.add(participant);
+      }
+
+      /// Stops
+      final stops = <TravelStopModel>[];
+
+      final stopData = await txn.query(
+        TravelStopTable.tableName,
+        where: '${TravelStopTable.travelId} = ?',
+        whereArgs: [travelId],
+      );
+
+      for (final stop in stopData) {
+        final stopId = stop[TravelStopTable.travelStopId];
+        final placeId = stop[TravelStopTable.placeId];
+
+        if (stopId == null || placeId == null) return null;
+
+        final experiences = <Experience>[];
+        final experiencesMap = await txn.query(
+          TravelStopExperiencesTable.tableName,
+          where: '${TravelStopExperiencesTable.travelStopId} = ?',
+          whereArgs: [stopId],
+        );
+
+        for (final experienceMap in experiencesMap) {
+          debugPrint(experienceMap.toString());
+
+          final experience = Experience
+              .values[experienceMap[ExperiencesTable.experienceIndex] as int];
+          experiences.add(experience);
+        }
+
+        final placeMap = await txn.query(
+          PlacesTable.tableName,
+          where: '${PlacesTable.placeId} = ?',
+          whereArgs: [placeId],
+        );
+
+        if (placeMap.isEmpty) continue;
+
+        final placeModel = PlaceModel.fromMap(placeMap.first);
+
+        final travelStopModel = TravelStopModel.fromMap(
+          stop,
+          experiences,
+          [],
+          placeModel,
+        );
+
+        stops.add(travelStopModel);
+      }
+
+      /// Photos
+      final photos = <File>[];
+
+      final travelPhotosData = await txn.query(
+        PhotosTable.tableName,
+        where: '${PhotosTable.travelId} = ?',
+        whereArgs: [travelId],
+      );
+
+      for (final photoData in travelPhotosData) {
+        final bytes = photoData[PhotosTable.photo] as Uint8List;
+
+        // debugPrint(bytes.toString());
+
+        final filename = '${photoData[PhotosTable.photoId]}.png';
+        final file = File('${Directory.systemTemp.path}/$filename');
+        file.writeAsBytesSync(bytes);
+        photos.add(file);
+      }
+
+      /// Travel Status
+      final travelStatusData = await txn.query(
+        TravelTravelStatusTable.tableName,
+        where: '${TravelTravelStatusTable.travelId} = ?',
+        whereArgs: [travelId],
+      );
+
+      if (travelStatusData.isEmpty) return null;
+
+      final status =
+          TravelStatus.values[travelStatusData.first[TravelTravelStatusTable
+                  .travelStatusIndex]
+              as int];
+
+      return TravelModel.fromMap(
+        travelResult,
+        participants: participants,
+        stops: stops,
+        photos: photos,
+        status: status,
+      ).toEntity();
+    });
+
+    debugPrint('Travel found in repo: $travel');
+
+    return travel;
+  }
+
   Map<String, dynamic> _toTravelTravelStatusMap(
     String travelId,
     int statusIndex,

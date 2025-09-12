@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../../../data/models/travel_model.dart';
 import '../../entities/travel.dart';
 
@@ -41,4 +43,9 @@ abstract interface class TravelRepository {
   /// [title]: The title string to search for.
   /// Returns a [List] of [TravelModel] objects matching the title.
   Future<List<TravelModel>> findTravelsByTitle(String title);
+
+  /// Searches for a travel by its ID
+  ///
+  /// [travelId]: The title string to search for.
+  Future<Travel?> getTravelById({required String travelId});
 }

@@ -70,6 +70,7 @@ class AppRouter {
         path: AppRoutes.travelDetails,
         pageBuilder: (context, state) {
           final travel = state.extra as Travel;
+          debugPrint('travel passed to travel details page: $travel');
           return NoTransitionPage(child: TravelDetailsPage(travel: travel));
         },
       ),

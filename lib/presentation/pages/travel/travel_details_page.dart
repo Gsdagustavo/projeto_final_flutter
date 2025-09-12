@@ -781,7 +781,7 @@ class _ReviewModalState extends State<_ReviewModal> {
     await showLoadingDialog(
       context: context,
       function: () async {
-        await state.addReview(review: review);
+        await state.addReview(review: review, stop: widget.stop);
       },
     );
 

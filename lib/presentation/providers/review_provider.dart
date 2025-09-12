@@ -21,9 +21,11 @@ class ReviewProvider with ChangeNotifier {
   /// Notifies listeners after the review is added.
   Future<void> addReview({
     required Review review,
+    required TravelStop stop,
   }) async {
     await _reviewUseCases.addReview(review: review);
     _reviews.add(review);
+    stop.reviews?.add(review);
     notifyListeners();
   }
 
@@ -35,12 +37,9 @@ class ReviewProvider with ChangeNotifier {
     required TravelStop stop,
     required Review review,
   }) async {
-    debugPrint(
-      'travel list provider review list contains review passed on delete review function: ${_reviews.contains(review)}',
-    );
-
     await _reviewUseCases.deleteReview(review: review);
     _reviews.remove(review);
+    stop.reviews?.remove(review);
     notifyListeners();
   }
 
