@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating/flutter_rating.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -21,6 +22,7 @@ import '../../extensions/enums_extensions.dart';
 import '../../providers/review_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
+import '../../util/app_routes.dart';
 import '../../util/assets_paths.dart';
 import '../../widgets/fab_animated_list.dart';
 import '../../widgets/fab_circle_avatar.dart';
@@ -394,6 +396,17 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                       Text(
                         as.travel_route,
                         style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        icon: const Icon(FontAwesomeIcons.route),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          context.push(
+                            AppRoutes.travelRoute,
+                            extra: widget.travel,
+                          );
+                        },
                       ),
                     ],
                   ),
