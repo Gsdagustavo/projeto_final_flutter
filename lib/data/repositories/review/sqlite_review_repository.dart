@@ -90,10 +90,6 @@ class SQLiteReviewRepository implements ReviewRepository {
         whereArgs: [review.id],
       );
 
-      debugPrint(
-        'Review with ID ${review.id} deleted from database. Rows affected: $rowsAffected',
-      );
-
       /// Delete from [ReviewsPhotosTable]
       await txn.delete(
         ReviewsPhotosTable.tableName,

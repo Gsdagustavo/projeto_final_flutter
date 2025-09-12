@@ -12,7 +12,7 @@ class Assets {
   static const String entitiesTravel = 'lib/domain/entities/travel.dart';
   static const String entitiesTravelStop =
       'lib/domain/entities/travel_stop.dart';
-  static const String generatedAssets = 'lib/generated/assets.dart';
+  static const String generatedAssets = 'lib/generated/assets_paths.dart';
   static const String l10nAppEn = 'lib/l10n/app_en.arb';
   static const String l10nAppEs = 'lib/l10n/app_es.arb';
   static const String l10nAppLocalizations = 'lib/l10n/app_localizations.dart';

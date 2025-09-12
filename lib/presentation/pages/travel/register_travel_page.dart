@@ -16,6 +16,7 @@ import '../../extensions/enums_extensions.dart';
 import '../../providers/register_travel_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../util/app_routes.dart';
+import '../../util/assets_paths.dart';
 import '../../widgets/fab_animated_list.dart';
 import '../../widgets/fab_circle_avatar.dart';
 import '../../widgets/fab_page.dart';
@@ -955,7 +956,7 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                       return InstaImageViewer(
                         child: FabCircleAvatar(
                           backgroundImage: AssetImage(
-                            'assets/images/default_profile_picture.png',
+                            AssetsPaths.defaultProfilePicturePath,
                           ),
                         ),
                       );

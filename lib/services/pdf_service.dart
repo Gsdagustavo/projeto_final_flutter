@@ -68,6 +68,8 @@ class PDFService {
     final pageTheme = pdf.PageTheme(
       margin: pdf.EdgeInsets.all(_pagePadding),
       pageFormat: PdfPageFormat.a5,
+      orientation: pdf.PageOrientation.portrait,
+      clip: true,
       theme: pdf.ThemeData(defaultTextStyle: pdf.TextStyle(font: font)),
     );
 
@@ -272,6 +274,11 @@ class _PDFPages {
   /// - Experiences (as tags/labels)
   List<pdf.Page> generateStopsPages() {
     final pages = <pdf.Page>[];
+
+    for (final stop in travel.stops) {
+      debugPrint('Stop: $stop');
+    }
+
     for (final stop in travel.stops) {
       final page = _basePage(
         build: (_) {
@@ -300,6 +307,102 @@ class _PDFPages {
                   );
                 }),
               ),
+
+              if (stop.reviews!.isNotEmpty)
+                pdf.Column(
+                  children: [
+                    pdf.Align(
+                      alignment: pdf.Alignment.centerLeft,
+                      child: pdf.Text(
+                        as.reviews,
+                        style: pdf.TextStyle(fontSize: 20),
+                      ),
+                    ),
+                    pdf.Padding(padding: pdf.EdgeInsets.all(8)),
+
+                    for (final review in stop.reviews!)
+                      pdf.Container(
+                        decoration: pdf.BoxDecoration(
+                          borderRadius: pdf.BorderRadius.circular(12),
+                          border: pdf.Border.all(
+                            width: 1,
+                            color: PdfColors.grey,
+                          ),
+                        ),
+                        margin: pdf.EdgeInsets.only(top: 8),
+                        padding: pdf.EdgeInsets.all(16),
+                        child: pdf.Column(
+                          crossAxisAlignment: pdf.CrossAxisAlignment.start,
+                          mainAxisAlignment: pdf.MainAxisAlignment.start,
+                          children: [
+                            pdf.Row(
+                              mainAxisAlignment: pdf.MainAxisAlignment.start,
+                              crossAxisAlignment: pdf.CrossAxisAlignment.start,
+                              children: [
+                                pdf.SizedBox(
+                                  height: 32,
+                                  width: 32,
+                                  child: pdf.ClipRRect(
+                                    verticalRadius: 12,
+                                    horizontalRadius: 12,
+                                    child: pdf.Image(
+                                      pdf.MemoryImage(
+                                        review.author.profilePicture
+                                            .readAsBytesSync(),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                pdf.Padding(padding: pdf.EdgeInsets.all(8)),
+                                pdf.Column(
+                                  mainAxisAlignment:
+                                      pdf.MainAxisAlignment.start,
+                                  crossAxisAlignment:
+                                      pdf.CrossAxisAlignment.start,
+                                  children: [
+                                    pdf.Text(
+                                      review.author.name,
+                                      style: pdf.TextStyle(fontSize: 20),
+                                    ),
+                                    pdf.Text(
+                                      review.reviewDate.getFormattedDate(
+                                        locale,
+                                      ),
+                                      style: pdf.TextStyle(fontSize: 16),
+                                    ),
+                                  ],
+                                ),
+                                pdf.Padding(padding: pdf.EdgeInsets.all(8)),
+                                pdf.Text(
+                                  '${review.stars} stars',
+                                  style: pdf.TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
+                            pdf.Padding(padding: pdf.EdgeInsets.all(4)),
+                            pdf.Text(
+                              review.description,
+                              style: pdf.TextStyle(fontSize: 18),
+                            ),
+                            pdf.Padding(padding: pdf.EdgeInsets.all(4)),
+                            pdf.GridView(
+                              children: [
+                                for (final image in review.images)
+                                  pdf.ClipRRect(
+                                    child: pdf.Image(
+                                      pdf.MemoryImage(image.readAsBytesSync()),
+                                    ),
+                                    horizontalRadius: 12,
+                                    verticalRadius: 12,
+                                  ),
+                              ],
+                              crossAxisCount: 2,
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
             ],
           );
         },

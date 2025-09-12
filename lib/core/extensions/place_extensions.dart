@@ -10,7 +10,9 @@ extension PlaceExtensions on Place {
   }
 }
 
+/// Extension methods for the [LatLng] class
 extension LatLngExtension on LatLng {
+  /// Returns the [String] version of the [LatLng]
   String toLatLngString() {
     return '$latitude,$longitude';
   }

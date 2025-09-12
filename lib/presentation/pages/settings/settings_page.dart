@@ -12,12 +12,13 @@ import '../../../services/user_preferences_service.dart';
 import '../../providers/login_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../util/app_routes.dart';
+import '../../util/assets_paths.dart';
 import '../../widgets/fab_circle_avatar.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
 import '../../widgets/modals.dart';
 
-  /// The Home Page of the app
+/// The Home Page of the app
 class SettingsPage extends StatefulWidget {
   /// Constant constructor
   const SettingsPage({super.key});
@@ -44,7 +45,7 @@ class _SettingsPageState extends State<SettingsPage> {
     final loginProvider = Provider.of<LoginProvider>(modalContext);
     final user = loginProvider.loggedUser;
 
-    const defaultPfpPath = 'assets/images/default_profile_picture.png';
+    const defaultPfpPath = AssetsPaths.defaultProfilePicturePath;
 
     final Widget backgroundImage;
     if (_profilePicture != null) {
