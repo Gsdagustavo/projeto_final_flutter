@@ -43,7 +43,7 @@ abstract final class PlacesTable {
 
   /// SQL command to create the places table
   static const String createTable =
-  '''
+      '''
       CREATE TABLE $tableName(
         $placeId TEXT PRIMARY KEY, 
         $city TEXT,

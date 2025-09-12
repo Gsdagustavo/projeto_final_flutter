@@ -1,5 +1,3 @@
-
-
 /// This extension contains some util methods on [String] class
 extension StringFormatExtension on String {
   /// Returns the uppercase first letter of a string

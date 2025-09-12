@@ -47,11 +47,13 @@ Future<T?> showLoadingDialog<T>({
 }) async {
   final rootContext = Navigator.of(context, rootNavigator: true).context;
 
-  unawaited(showDialog(
-    context: rootContext,
-    barrierDismissible: false,
-    builder: (_) => const Center(child: LoadingDialog()),
-  ));
+  unawaited(
+    showDialog(
+      context: rootContext,
+      barrierDismissible: false,
+      builder: (_) => const Center(child: LoadingDialog()),
+    ),
+  );
 
   await Future.delayed(const Duration(milliseconds: _loadingDialogDelay));
 

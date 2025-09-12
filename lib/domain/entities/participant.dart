@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:uuid/uuid.dart';
 
 /// Represents a [Participant] of a [Travel].

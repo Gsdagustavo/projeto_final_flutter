@@ -23,6 +23,8 @@ Future<void> main() async {
   /// Initialize Firebase App
   await Firebase.initializeApp();
 
+  // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
   /// Instantiate dependencies needed for dependency injection
   final travelRepository = SQLiteTravelRepository();
   final travelUseCases = TravelUseCases.create(travelRepository);

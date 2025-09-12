@@ -15,7 +15,7 @@ abstract final class TransportTypesTable {
 
   /// SQL command to create the transportTypes table.
   static const String createTable =
-  '''
+      '''
       CREATE TABLE $tableName (
         $transportTypeIndex INTEGER PRIMARY KEY
       );

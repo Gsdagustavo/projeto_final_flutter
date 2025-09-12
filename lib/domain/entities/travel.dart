@@ -69,18 +69,13 @@ class Travel {
   ///
   /// If the start and end date are the same day, returns 1.
   int get totalDuration {
-    final diff = endDate
-        .difference(startDate)
-        .inDays;
+    final diff = endDate.difference(startDate).inDays;
     return diff == 0 ? 1 : diff;
   }
 
   /// Returns the total number of unique countries visited in this travel.
   int get numCountries {
-    return stops
-        .map((e) => e.place.country)
-        .toSet()
-        .length;
+    return stops.map((e) => e.place.country).toSet().length;
   }
 
   /// Returns a list of unique countries visited in this travel.
@@ -116,9 +111,9 @@ class Travel {
 
   @override
   String toString() {
-  return 'Travel{travelId: $id, travelTitle: $travelTitle, '
-  'startDate: $startDate, endDate: $endDate, '
-  'transportType: $transportType, participants: $participants, '
-  'stops: $stops, status: $status, photos: $photos}';
+    return 'Travel{travelId: $id, travelTitle: $travelTitle, '
+        'startDate: $startDate, endDate: $endDate, '
+        'transportType: $transportType, participants: $participants, '
+        'stops: $stops, status: $status, photos: $photos}';
   }
 }

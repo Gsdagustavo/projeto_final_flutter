@@ -722,11 +722,17 @@ Future<void> _showParticipantModal(
     },
   );
 
+  if (!context.mounted) return;
+
+  final as = AppLocalizations.of(context)!;
+
   if (result != null) {
     if (participant == null) {
       state.addParticipant(result);
+      showSuccessSnackBar(context, as.participant_added);
     } else {
       state.updateParticipant(participant, result);
+      showSuccessSnackBar(context, as.participant_updated);
     }
   }
 }
@@ -780,10 +786,6 @@ class _ParticipantModalState extends State<_ParticipantModal> {
       profilePicture:
           _profilePicture ?? await FileService().getDefaultProfilePictureFile(),
     );
-
-    if (!mounted) return;
-
-    showSuccessSnackBar(context, as.participant_added);
 
     if (!mounted) return;
 
@@ -873,7 +875,6 @@ class _ParticipantModalState extends State<_ParticipantModal> {
                       /// Participant text form fields
                       Form(
                         key: _formKey,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         child: Column(
                           children: [
                             TextFormField(

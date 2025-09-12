@@ -52,9 +52,12 @@ class FormValidations {
   /// Notes:
   /// - Minimum length validation is commented out but may be reintroduced.
   String? travelTitleValidator(String? travelTitle) {
-    if (travelTitle == null || travelTitle.trim().isEmpty) {
+    if (travelTitle == null ||
+        travelTitle.trim().isEmpty ||
+        travelTitle.trim().length < 3) {
       return _as.invalid_travel_title;
     }
+
     return null;
   }
 
@@ -65,10 +68,11 @@ class FormValidations {
   /// - A localized error message otherwise.
   String? participantNameValidator(String? participantName) {
     if (participantName == null ||
-        participantName.isEmpty ||
-        participantName.length < 3) {
+        participantName.trim().isEmpty ||
+        participantName.trim().length < 3) {
       return _as.err_invalid_participant_name;
     }
+
     return null;
   }
 

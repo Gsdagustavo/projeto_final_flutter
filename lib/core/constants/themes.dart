@@ -148,10 +148,7 @@ class AppTheme {
         shadowColor: Colors.black.withValues(alpha: 0.1),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
-          side: BorderSide(
-            color: const Color(0x1A000000),
-            width: 1,
-          ),
+          side: BorderSide(color: const Color(0x1A000000), width: 1),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -173,10 +170,7 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: const Color(0xFF030213),
-          side: const BorderSide(
-            color: Color(0x1A000000),
-            width: 1,
-          ),
+          side: const BorderSide(color: Color(0x1A000000), width: 1),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -207,10 +201,7 @@ class AppTheme {
         fillColor: const Color(0xFFF3F3F5),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(
-            color: Color(0x1A000000),
-            width: 1,
-          ),
+          borderSide: const BorderSide(color: Color(0x1A000000), width: 1),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
@@ -218,17 +209,11 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(
-            color: Color(0xFF030213),
-            width: 2,
-          ),
+          borderSide: const BorderSide(color: Color(0xFF030213), width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(
-            color: Color(0xFFD4183D),
-            width: 1,
-          ),
+          borderSide: const BorderSide(color: Color(0xFFD4183D), width: 1),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 12,
@@ -417,10 +402,7 @@ class AppTheme {
         margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
-          side: const BorderSide(
-            color: Color(0xFF434343),
-            width: 1,
-          ),
+          side: const BorderSide(color: Color(0xFF434343), width: 1),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -442,10 +424,7 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: const Color(0xFFFAFAFA),
-          side: const BorderSide(
-            color: Color(0xFF434343),
-            width: 1,
-          ),
+          side: const BorderSide(color: Color(0xFF434343), width: 1),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -476,10 +455,7 @@ class AppTheme {
         fillColor: const Color(0xFF434343),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(
-            color: Color(0xFF434343),
-            width: 1,
-          ),
+          borderSide: const BorderSide(color: Color(0xFF434343), width: 1),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
@@ -487,17 +463,11 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(
-            color: Color(0xFFFAFAFA),
-            width: 2,
-          ),
+          borderSide: const BorderSide(color: Color(0xFFFAFAFA), width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(
-            color: Color(0xFFEF4444),
-            width: 1,
-          ),
+          borderSide: const BorderSide(color: Color(0xFFEF4444), width: 1),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 12,

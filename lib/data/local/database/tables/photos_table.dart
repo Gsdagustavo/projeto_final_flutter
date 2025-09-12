@@ -25,7 +25,7 @@ abstract final class PhotosTable {
 
   /// SQL command to create the photos table.
   static const String createTable =
-  '''
+      '''
       CREATE TABLE IF NOT EXISTS $tableName (
         $photoId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         $photo BLOB NOT NULL,

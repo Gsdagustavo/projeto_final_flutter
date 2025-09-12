@@ -14,7 +14,7 @@ abstract final class TravelStatusTable {
 
   /// SQL command to create the travelStatus table
   static const String createTable =
-  '''
+      '''
       CREATE TABLE $tableName (
         $travelStatusIndex INTEGER PRIMARY KEY
       );

@@ -35,7 +35,7 @@ abstract final class ParticipantsTable {
 
   /// SQL command to create the participants table.
   static const String createTable =
-  '''
+      '''
       CREATE TABLE $tableName (
         $participantId TEXT PRIMARY KEY,
         $travelId TEXT NOT NULL,

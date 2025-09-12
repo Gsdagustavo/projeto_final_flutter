@@ -38,5 +38,3 @@ class StartTravel {
     return Right(null);
   }
 }
-
-

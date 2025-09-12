@@ -37,7 +37,7 @@ abstract final class TravelTable {
 
   /// SQL command to create the travels table.
   static const String createTable =
-  '''
+      '''
       CREATE TABLE $tableName (
         $travelId TEXT PRIMARY KEY,
         $travelTitle TEXT NOT NULL,

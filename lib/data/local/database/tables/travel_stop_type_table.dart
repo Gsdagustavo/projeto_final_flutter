@@ -15,7 +15,7 @@ abstract final class TravelStopTypeTable {
 
   /// SQL command to create the travelStopType table.
   static const String createTable =
-  '''
+      '''
       CREATE TABLE $tableName (
         $travelStopTypeIndex INTEGER PRIMARY KEY
       );

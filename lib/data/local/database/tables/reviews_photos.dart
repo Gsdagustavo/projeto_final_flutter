@@ -8,11 +8,11 @@ import 'reviews_table.dart';
 abstract final class ReviewsPhotosTable {
   /// Name of the reviewsPhotos table in the database.
   static const String tableName = 'reviewsPhotos';
+
   /// Column name for the Photo ID.
   ///
   /// `INTEGER PRIMARY KEY AUTOINCREMENT`
   static const String photoId = 'photoId';
-
 
   /// Column name for the Photo data.
   ///
@@ -26,7 +26,7 @@ abstract final class ReviewsPhotosTable {
 
   /// SQL command to create the reviewsPhotos table.
   static const String createTable =
-  '''
+      '''
       CREATE TABLE $tableName (
         $photoId INTEGER PRIMARY KEY AUTOINCREMENT,
         $reviewId TEXT NOT NULL,

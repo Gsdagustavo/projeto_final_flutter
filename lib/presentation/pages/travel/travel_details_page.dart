@@ -21,6 +21,7 @@ import '../../extensions/enums_extensions.dart';
 import '../../providers/review_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
+import '../../util/assets_paths.dart';
 import '../../widgets/fab_animated_list.dart';
 import '../../widgets/fab_circle_avatar.dart';
 import '../../widgets/fab_page.dart';
@@ -145,7 +146,7 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
             builder: (context) {
               if (widget.travel.photos.isEmpty) {
                 return InstaImageViewer(
-                  child: Image.asset('assets/images/placeholder.png'),
+                  child: Image.asset(AssetsPaths.placeholderImage),
                 );
               }
 

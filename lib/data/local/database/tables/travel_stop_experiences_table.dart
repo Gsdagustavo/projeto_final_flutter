@@ -22,7 +22,7 @@ abstract final class TravelStopExperiencesTable {
 
   /// SQL command to create the travelStopExperiences table.
   static const String createTable =
-  '''
+      '''
       CREATE TABLE $tableName (
         $travelStopId TEXT NOT NULL,
         $experienceIndex INTEGER NOT NULL,

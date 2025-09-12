@@ -41,7 +41,7 @@ abstract final class ReviewsTable {
 
   /// SQL command to create the reviews table.
   static const String createTable =
-  '''
+      '''
       CREATE TABLE $tableName (
         $reviewId TEXT PRIMARY KEY,
         $description TEXT,

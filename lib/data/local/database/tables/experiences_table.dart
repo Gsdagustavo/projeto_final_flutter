@@ -15,7 +15,7 @@ abstract final class ExperiencesTable {
 
   /// SQL command to create the experiences table.
   static const String createTable =
-  '''
+      '''
       CREATE TABLE $tableName (
         $experienceIndex INTEGER PRIMARY KEY
       );

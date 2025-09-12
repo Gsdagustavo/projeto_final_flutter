@@ -31,7 +31,6 @@ class PlaceModel {
   /// Longitude coordinate
   final double longitude;
 
-
   /// Named constructor for [PlaceModel].
   ///
   /// Creates a [PlaceModel] with optional [id], [city], [state], [country],
@@ -54,7 +53,6 @@ class PlaceModel {
     required this.latitude,
     required this.longitude,
   }) : id = id ?? Uuid().v4();
-
 
   /// Creates a [PlaceModel] from JSON data returned by Google Places API
   factory PlaceModel.fromJson(Map<String, dynamic> json) {

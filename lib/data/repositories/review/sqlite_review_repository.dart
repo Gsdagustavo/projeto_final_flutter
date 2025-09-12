@@ -84,7 +84,7 @@ class SQLiteReviewRepository implements ReviewRepository {
 
     await db.transaction((txn) async {
       /// Delete from [ReviewsTable]
-      final rowsAffected = await txn.delete(
+      await txn.delete(
         ReviewsTable.tableName,
         where: '${ReviewsTable.reviewId} = ?',
         whereArgs: [review.id],
