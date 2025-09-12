@@ -614,19 +614,16 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
-                              childAspectRatio: 1,
-                              crossAxisSpacing: 8,
-                              mainAxisSpacing: 8,
+                              // childAspectRatio: 1,
+                              // crossAxisSpacing: 8,
+                              // mainAxisSpacing: 8,
                             ),
                         itemBuilder: (context, index) {
                           final image = state.travelPhotos[index];
                           return Stack(
                             children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: InstaImageViewer(
-                                  child: Image.file(image, fit: BoxFit.cover),
-                                ),
+                              InstaImageViewer(
+                                child: Image.file(image, fit: BoxFit.cover),
                               ),
                               Positioned(
                                 left: 4,
@@ -952,14 +949,24 @@ class _ParticipantModalState extends State<_ParticipantModal> {
               SizedBox(
                 width: 128,
                 height: 128,
-                child: FabCircleAvatar(
-                  child: _profilePicture != null
-                      ? InstaImageViewer(child: Image.file(_profilePicture!))
-                      : InstaImageViewer(
-                          child: Image.asset(
+                child: Builder(
+                  builder: (context) {
+                    if (_profilePicture == null) {
+                      return InstaImageViewer(
+                        child: FabCircleAvatar(
+                          backgroundImage: AssetImage(
                             'assets/images/default_profile_picture.png',
                           ),
                         ),
+                      );
+                    }
+
+                    return InstaImageViewer(
+                      child: FabCircleAvatar(
+                        backgroundImage: FileImage(_profilePicture!),
+                      ),
+                    );
+                  },
                 ),
               ),
 
