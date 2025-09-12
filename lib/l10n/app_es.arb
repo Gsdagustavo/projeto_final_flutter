@@ -3,20 +3,16 @@
   "language_en": "English",
   "language_pt": "Português",
   "language_es": "Español",
-
   "@@login_page": {},
   "login": "Iniciar sesión",
   "password": "Contraseña",
   "forgot_your_password": "¿Olvidaste tu contraseña?",
-
   "@@forgot_your_password_page": {},
   "insert_your_email": "Ingresa tu email",
   "send_recovery_code": "Enviar código de recuperación",
   "email": "Correo electrónico",
-
   "@@register": {},
   "register": "Registrarse",
-
   "@@auth_messages": {},
   "logged_in_successfully": "¡Inicio de sesión exitoso!",
   "account_created_successfully": "¡Cuenta creada con éxito!",
@@ -29,7 +25,6 @@
   },
   "invalid_email": "Correo electrónico inválido",
   "invalid_password": "Contraseña inválida",
-
   "@@settings_page": {},
   "account": "Cuenta",
   "account_creation": "Creación de cuenta",
@@ -37,19 +32,16 @@
   "logout": "Salir",
   "logout_confirmation": "¿Realmente quieres cerrar sesión?",
   "language": "Idioma",
-
   "@@transport_types": {},
   "transport_type_car": "Auto",
   "transport_type_bike": "Bicicleta",
   "transport_type_bus": "Autobús",
   "transport_type_plane": "Avión",
   "transport_type_cruise": "Crucero",
-
   "@travel_stop_types": {},
   "travel_stop_type_start": "Inicio",
   "travel_stop_type_stop": "Parada",
   "travel_stop_type_end": "Fin",
-
   "@@experiences": {},
   "experience": "Experiencia",
   "experiences": "Experiencias",
@@ -60,19 +52,16 @@
   "experience_contact_with_nature": "Contacto con la Naturaleza",
   "experience_social_events": "Eventos sociales",
   "other": "Otro",
-
   "@@travel_status": {},
   "upcoming": "Próximo",
   "ongoing": "En curso",
   "finished": "Finalizado",
-
   "@@travel_register_error": {},
   "invalid_title": "Título de viaje inválido",
   "not_enough_stops": "El viaje debe contener al menos 2 paradas",
   "no_participants": "El viaje debe contener al menos 1 participante",
   "invalid_participant_data": "Datos del participante inválidos",
   "invalid_stop_dates": "Fechas de las paradas inválidas",
-
   "@@home_page": {},
   "my_travels": "Mis viajes",
   "start_travel": "Iniciar viaje",
@@ -115,13 +104,11 @@
       "count": {}
     }
   },
-
   "@@pages_titles": {},
   "title_home": "Inicio",
   "title_register_travel": "Registrar Viaje",
   "title_settings": "Configuración",
   "title_map_select_travel_stops": "Seleccionar Paradas",
-
   "@@register_travel_page": {},
   "travel_title_label": "Título del Viaje",
   "travel_details": "Detalles del viaje",
@@ -190,7 +177,6 @@
   "could_not_add_travel_photo": "Não foi possível adicionar a foto da viagem",
   "invalid_travel_data": "¡Datos de viaje no válidos!",
   "travel_registered_successfully": "Viaje registrado con éxito",
-
   "@@google_map": {},
   "travel_stop": "Parada del viaje",
   "search_for_places": "Procurar lugares",
@@ -205,8 +191,8 @@
   "leave_date": "Fecha de salida",
   "err_you_must_select_arrive_date_first": "¡Debes seleccionar primero la fecha de llegada!",
   "finish": "Finalizar",
-
   "@@travel_details": {},
+  "err_pdf_generation": "Ocurrió un error inesperado al intentar generar el PDF del viaje",
   "duration": "Duración",
   "days": "días",
   "transport": "Transporte",
@@ -242,7 +228,6 @@
   "delete_review_confirmation": "¿Realmente desea eliminar esta reseña?",
   "review_deleted_successfully": "¡Reseña eliminada con éxito!",
   "review_requires_content": "Debes agregar al menos una imagen o escribir una descripción antes de enviar tu reseña. Las reseñas no pueden estar vacías.",
-
   "@@modals": {},
   "success": "¡Éxito!",
   "great": "¡Genial!",
@@ -256,7 +241,6 @@
   "no_internet_message": "Actualmente estás sin conexión. Algunas funciones pueden no estar disponibles hasta que te reconectes a internet",
   "try_again": "Intentar de nuevo",
   "continue_offline": "Continuar sin conexión",
-
   "@@travel_pdf": {},
   "travel_phrase_intro": "Un viaje no se mide en millas, sino en momentos.",
   "travel_phrase_body": "Cada página de este folleto guarda más que paisajes: guarda sonrisas espontáneas, descubrimientos inesperados, conversaciones que quedaron en el alma y silencios que hablaron más que palabras.",
@@ -266,7 +250,6 @@
       "time": {}
     }
   },
-
   "@@util": {},
   "yes": "Sí",
   "no": "No",

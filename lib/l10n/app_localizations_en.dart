@@ -422,6 +422,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get finish => 'Finish';
 
   @override
+  String get err_pdf_generation => 'An unexpected error occurred while trying to generate the Travel PDF';
+
+  @override
   String get duration => 'Duration';
 
   @override

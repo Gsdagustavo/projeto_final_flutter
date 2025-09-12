@@ -883,6 +883,12 @@ abstract class AppLocalizations {
   /// **'Finish'**
   String get finish;
 
+  /// No description provided for @err_pdf_generation.
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred while trying to generate the Travel PDF'**
+  String get err_pdf_generation;
+
   /// No description provided for @duration.
   ///
   /// In en, this message translates to:

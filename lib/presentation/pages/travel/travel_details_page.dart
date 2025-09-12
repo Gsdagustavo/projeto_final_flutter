@@ -55,17 +55,19 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
       mapsApiKey: mapsApiKey,
     );
 
-    final pdf = await pdfService.generatePDFFromTravel();
-
-    /// TODO: add error handling
-    if (pdf == null) {
-      debugPrint('pdf is null');
-      return;
-    }
+    final pdf = await showLoadingDialog(
+      context: context,
+      function: () async => await pdfService.generatePDFFromTravel(),
+    );
 
     if (!mounted) return;
 
     final as = AppLocalizations.of(context)!;
+
+    if (pdf == null) {
+      showErrorSnackBar(context, as.err_pdf_generation);
+      return;
+    }
 
     await SharePlus.instance.share(
       ShareParams(title: as.share_your_travel, files: [XFile(pdf.path)]),

@@ -104,7 +104,6 @@
       "count": {}
     }
   },
-
   "@@pages_titles": {},
   "title_home": "Home",
   "title_register_travel": "Register Travel",
@@ -192,6 +191,7 @@
   "err_you_must_select_arrive_date_first": "You must select the Arrive Date first!",
   "finish": "Finish",
   "@@travel_details": {},
+  "err_pdf_generation": "An unexpected error occurred while trying to generate the Travel PDF",
   "duration": "Duration",
   "days": "days",
   "transport": "Transport",

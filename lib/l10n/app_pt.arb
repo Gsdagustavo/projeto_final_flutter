@@ -3,20 +3,16 @@
   "language_en": "English",
   "language_pt": "Português",
   "language_es": "Español",
-
   "@@login_page": {},
   "login": "Entrar",
   "password": "Senha",
   "forgot_your_password": "Esqueceu sua senha?",
-
   "@@forgot_your_password_page": {},
   "insert_your_email": "Insira seu email",
   "send_recovery_code": "Enviar código de recuperação",
   "email": "Email",
-
   "@@register": {},
   "register": "Registrar",
-
   "@@auth_messages": {},
   "logged_in_successfully": "Login realizado com sucesso!",
   "account_created_successfully": "Conta criada com sucesso!",
@@ -29,7 +25,6 @@
   },
   "invalid_email": "Email inválido",
   "invalid_password": "Senha inválida",
-
   "@@settings_page": {},
   "account": "Conta",
   "account_creation": "Criação da conta",
@@ -37,19 +32,16 @@
   "logout": "Sair",
   "logout_confirmation": "Você realmente quer sair?",
   "language": "Idioma",
-
   "@@transport_types": {},
   "transport_type_car": "Carro",
   "transport_type_bike": "Bicicleta",
   "transport_type_bus": "Ônibus",
   "transport_type_plane": "Avião",
   "transport_type_cruise": "Navio de cruzeiro",
-
   "@travel_stop_types": {},
   "travel_stop_type_start": "Início",
   "travel_stop_type_stop": "Parada",
   "travel_stop_type_end": "Fim",
-
   "@@experiences": {},
   "experience": "Experiência",
   "experiences": "Experiências",
@@ -60,19 +52,16 @@
   "experience_contact_with_nature": "Contato com a Natureza",
   "experience_social_events": "Eventos sociais",
   "other": "Outro",
-
   "@@travel_status": {},
   "upcoming": "Futura",
   "ongoing": "Em andamento",
   "finished": "Concluída",
-
   "@@travel_register_error": {},
   "invalid_title": "Título de viagem inválido",
   "not_enough_stops": "A viagem deve conter pelo menos 2 paradas",
   "no_participants": "A viagem deve conter pelo menos 1 participante",
   "invalid_participant_data": "Dados do participante inválidos",
   "invalid_stop_dates": "Datas das paradas inválidas",
-
   "@@home_page": {},
   "my_travels": "Minhas Viagens",
   "start_travel": "Iniciar Viagem",
@@ -108,13 +97,11 @@
       "count": {}
     }
   },
-
   "@@pages_titles": {},
   "title_home": "Início",
   "title_register_travel": "Registrar Viagem",
   "title_settings": "Configurações",
   "title_map_select_travel_stops": "Selecionar Paradas",
-
   "@@register_travel_page": {},
   "travel_title_label": "Título da Viagem",
   "travel_details": "Detalhes da viagem",
@@ -183,7 +170,6 @@
   "could_not_add_travel_photo": "Não foi possível adicionar a foto da viagem",
   "invalid_travel_data": "A viagem contém dados inválidos",
   "travel_registered_successfully": "Viagem registrada com sucesso",
-
   "@@google_map": {},
   "travel_stop": "Parada da Viagem",
   "search_for_places": "Procurar lugares",
@@ -198,8 +184,8 @@
   "leave_date": "Data de Saída",
   "err_you_must_select_arrive_date_first": "Você deve selecionar a data de chegada primeiro!",
   "finish": "Finalizar",
-
   "@@travel_details": {},
+  "err_pdf_generation": "Ocorreu um erro inesperado ao tentar gerar o PDF da viagem",
   "duration": "Duração",
   "days": "dias",
   "transport": "Transporte",
@@ -234,7 +220,6 @@
   "delete_review_confirmation": "Você realmente deseja excluir esta avaliação?",
   "review_deleted_successfully": "Avaliação excluída com sucesso!",
   "review_requires_content": "Você precisa adicionar pelo menos uma imagem ou escrever uma descrição antes de enviar sua avaliação. Avaliações não podem ficar vazias.",
-
   "@@modals": {},
   "success": "Sucesso!",
   "great": "Ótimo!",
@@ -248,7 +233,6 @@
   "no_internet_message": "Você está offline no momento. Alguns recursos podem não estar disponíveis até que você se reconecte à internet",
   "try_again": "Tentar novamente",
   "continue_offline": "Continuar offline",
-
   "@@travel_pdf": {},
   "travel_phrase_intro": "Uma viagem não se mede em milhas, mas em momentos.",
   "travel_phrase_body": "Cada página deste livreto guarda mais do que paisagens: são sorrisos espontâneos, descobertas inesperadas, conversas que ficaram na alma e silêncios que falaram mais que palavras.",
@@ -258,7 +242,6 @@
       "time": {}
     }
   },
-
   "@@util": {},
   "yes": "Sim",
   "no": "Não",
