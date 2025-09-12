@@ -58,10 +58,6 @@ class _HomePageState extends State<HomePage> {
 
         return FabPage(
           title: as.title_home,
-          floatingActionButton: FloatingActionButton(
-            // onPressed: () async => await state.update(),
-            onPressed: () => setState(() {}),
-          ),
           body: Builder(
             builder: (context) {
               if (state.travels.isEmpty) {

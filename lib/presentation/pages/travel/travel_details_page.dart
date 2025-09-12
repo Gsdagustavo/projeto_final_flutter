@@ -133,13 +133,6 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
 
     return FabPage(
       title: widget.travel.travelTitle,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await context.read<ReviewProvider>().getReviewsByTravel(
-            widget.travel,
-          );
-        },
-      ),
       body: Column(
         spacing: 8,
         children: [
