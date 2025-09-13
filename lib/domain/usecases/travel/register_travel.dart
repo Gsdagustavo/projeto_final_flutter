@@ -22,7 +22,7 @@ class RegisterTravel {
   /// Registers a new travel, performing all necessary validations.
   ///
   /// Returns a [Failure] if any validation fails.
-  Future<Either<Failure, void>> call(Travel travel) async {
+  Future<Either<Failure<TravelError>, void>> call(Travel travel) async {
     travel.travelTitle.trim();
 
     if (travel.startDate.isAfter(travel.endDate)) {
@@ -48,17 +48,6 @@ class RegisterTravel {
       return Left(Failure(TravelError.invalidTravelTitle));
     }
 
-    if (travel.stops.isEmpty || travel.stops.length < 2) {
-      log(
-        '[REGISTER TRAVEL USECASE] not enough stops. '
-        'stops: ${travel.stops.length}',
-        error: TravelError.notEnoughStops,
-        time: DateTime.now(),
-        name: 'Not enough stops',
-      );
-      return Left(Failure(TravelError.notEnoughStops));
-    }
-
     if (travel.participants.isEmpty) {
       log(
         '[REGISTER TRAVEL USECASE] no participants',
@@ -77,6 +66,17 @@ class RegisterTravel {
         name: 'Invalid participant data',
       );
       return Left(Failure(TravelError.invalidParticipantData));
+    }
+
+    if (travel.stops.isEmpty || travel.stops.length < 2) {
+      log(
+        '[REGISTER TRAVEL USECASE] not enough stops. '
+        'stops: ${travel.stops.length}',
+        error: TravelError.notEnoughStops,
+        time: DateTime.now(),
+        name: 'Not enough stops',
+      );
+      return Left(Failure(TravelError.notEnoughStops));
     }
 
     for (var i = 0; i < travel.stops.length; i++) {
