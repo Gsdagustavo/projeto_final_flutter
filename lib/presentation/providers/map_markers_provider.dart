@@ -5,8 +5,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../core/extensions/place_extensions.dart';
 import '../../core/extensions/travel_stop_extensions.dart';
 import '../../domain/entities/travel_stop.dart';
-import '../pages/travel/travel_map_page.dart';
-import '../pages/util/travel_utils.dart';
 
 /// A provider that manages the set of [Marker]s displayed on the map.
 ///
@@ -25,11 +23,11 @@ class MapMarkersProvider with ChangeNotifier {
   /// Parameters:
   /// - [context]: The [BuildContext] used for showing the modal on marker tap.
   /// - [stops]: An optional list of [TravelStop]s to render as markers.
-  void resetMarkers(BuildContext context, [List<TravelStop>? stops]) {
+  void resetMarkers({
+    required List<TravelStop>? stops,
+    required Future<void> Function(TravelStop) onTap,
+  }) {
     _markers.clear();
-
-    debugPrint('Reset markers called on MapMarkersProvider');
-    debugPrint('Len stops passed to reset markers: ${stops?.length}');
 
     if (stops != null && stops.isNotEmpty) {
       for (final stop in stops) {
@@ -40,7 +38,7 @@ class MapMarkersProvider with ChangeNotifier {
             markerId: stop.toMarkerId(),
             infoWindow: InfoWindow(title: stop.place.toString()),
             position: pos,
-            onTap: () async => await showTravelStopModal(pos),
+            onTap: () => onTap(stop),
           ),
         );
       }

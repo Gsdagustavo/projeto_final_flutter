@@ -69,7 +69,12 @@ class _TravelMapPageState extends State<TravelMapPage> {
         listen: false,
       );
 
-      markersState.resetMarkers(context, travelState.stops);
+      markersState.resetMarkers(
+        stops: travelState.stops,
+        onTap: (stop) async {
+          await showTravelStopModal(stop.place.latLng);
+        },
+      );
     });
   }
 
