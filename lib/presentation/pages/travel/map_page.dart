@@ -89,6 +89,11 @@ class _TravelMapState extends State<TravelMap> {
     await _mapController?.animateCamera(
       CameraUpdate.newLatLngZoom(position, _defaultZoom),
     );
+
+    if (mounted) {
+      FocusScope.of(context).requestFocus(FocusNode());
+    }
+
     await showTravelStopModal(position);
   }
 
@@ -274,6 +279,7 @@ class _TravelMapState extends State<TravelMap> {
 /// If [stop] is provided, the modal will edit that stop.
 Future<void> showTravelStopModal(LatLng position, [TravelStop? stop]) async {
   final context = AppRouter.navigatorKey.currentContext;
+
   if (context == null || !context.mounted) return;
 
   final Place? place;
@@ -314,8 +320,6 @@ Future<void> showTravelStopModal(LatLng position, [TravelStop? stop]) async {
   );
 
   if (!context.mounted) return;
-
-  FocusScope.of(context).unfocus();
 
   final state = context.read<RegisterTravelProvider>();
 
