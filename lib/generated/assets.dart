@@ -72,7 +72,7 @@ class Assets {
       'lib/data/local/database/util/experiences_util.dart';
   static const String widgetsBottomNavigationBar =
       'lib/presentation/widgets/bottom_navigation_bar.dart';
-  static const String widgetsMap = 'lib/presentation/widgets/map_page.dart';
+  static const String widgetsMap = 'lib/presentation/widgets/travel_map_page.dart';
   static const String widgetsMyApp = 'lib/presentation/widgets/my_app.dart';
   static const String widgetsMyAppBar =
       'lib/presentation/widgets/my_app_bar.dart';

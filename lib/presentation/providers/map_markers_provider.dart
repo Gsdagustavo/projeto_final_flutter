@@ -5,7 +5,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../core/extensions/place_extensions.dart';
 import '../../core/extensions/travel_stop_extensions.dart';
 import '../../domain/entities/travel_stop.dart';
-import '../pages/travel/map_page.dart';
+import '../pages/travel/travel_map_page.dart';
+import '../pages/util/travel_utils.dart';
 
 /// A provider that manages the set of [Marker]s displayed on the map.
 ///

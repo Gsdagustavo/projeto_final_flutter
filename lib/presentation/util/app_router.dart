@@ -10,7 +10,7 @@ import '../pages/auth/register_page.dart';
 import '../pages/auth/splash_screen.dart';
 import '../pages/home/home_page.dart';
 import '../pages/settings/settings_page.dart';
-import '../pages/travel/map_page.dart';
+import '../pages/travel/travel_map_page.dart';
 import '../pages/travel/register_travel_page.dart';
 import '../pages/travel/travel_details_page.dart';
 import '../pages/travel/travel_route_page.dart';
@@ -76,7 +76,7 @@ class AppRouter {
       ),
       GoRoute(
         path: AppRoutes.travelMap,
-        pageBuilder: (context, state) => NoTransitionPage(child: TravelMap()),
+        pageBuilder: (context, state) => NoTransitionPage(child: TravelMapPage()),
       ),
       GoRoute(
         path: AppRoutes.travelRoute,
