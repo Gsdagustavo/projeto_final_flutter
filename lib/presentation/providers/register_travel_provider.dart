@@ -45,7 +45,7 @@ class RegisterTravelProvider with ChangeNotifier {
   final _stops = <TravelStop>[];
 
   /// An instance of [Failure] to represent runtime errors.
-  Failure? _failure;
+  Failure<TravelError>? _failure;
 
   /// Indicates whether any async operation is running.
   bool _isLoading = false;
@@ -57,6 +57,12 @@ class RegisterTravelProvider with ChangeNotifier {
   Future<void> registerTravel(String travelTitle) async {
     _isLoading = true;
     notifyListeners();
+
+    if (_startDate == null || _endDate == null) {
+      _failure = Failure<TravelError>(TravelError.invalidStopDates);
+      _notify();
+      return;
+    }
 
     debugPrint('Registering travel with title $travelTitle');
 
@@ -210,7 +216,7 @@ class RegisterTravelProvider with ChangeNotifier {
   ///
   /// Calls [onSuccess] if the operation was successful, [onFailure] otherwise.
   void handleTravelRegisterFailure(
-    Either<Failure, void> res, {
+    Either<Failure<TravelError>, void> res, {
     VoidCallback? onSuccess,
     VoidCallback? onFailure,
   }) {
@@ -240,14 +246,6 @@ class RegisterTravelProvider with ChangeNotifier {
 
   /// Returns the list of travel photos.
   List<File> get travelPhotos => _travelPhotos;
-
-  /// Returns whether the travel form is valid.
-  bool get isTravelValid {
-    return _areStopsValid &&
-        _travelUseCases.registerTravel.isParticipantInfoValid(participants) &&
-        _startDate != null &&
-        _endDate != null;
-  }
 
   /// Returns whether there are at least 2 valid stops.
   bool get areStopsValid => _areStopsValid;
@@ -286,7 +284,7 @@ class RegisterTravelProvider with ChangeNotifier {
   bool get hasFailure => _failure != null;
 
   /// Returns the current failure, if any.
-  Failure? get failure => _failure;
+  Failure<TravelError>? get failure => _failure;
 
   void _notify() => notifyListeners();
 }

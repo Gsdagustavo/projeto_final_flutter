@@ -7,6 +7,7 @@ import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/constants/assets_paths.dart';
 import '../../../domain/entities/enums.dart';
 import '../../../domain/entities/participant.dart';
 import '../../../domain/entities/travel_stop.dart';
@@ -16,7 +17,6 @@ import '../../extensions/enums_extensions.dart';
 import '../../providers/register_travel_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../util/app_routes.dart';
-import '../../../core/constants/assets_paths.dart';
 import '../../widgets/fab_animated_list.dart';
 import '../../widgets/fab_circle_avatar.dart';
 import '../../widgets/fab_page.dart';
@@ -85,6 +85,8 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
   }
 
   Future<void> _pickDate({required bool isStart}) async {
+    FocusScope.of(context).requestFocus(FocusNode());
+
     final state = context.read<RegisterTravelProvider>();
 
     final initialDate = DateTime.now();
@@ -131,6 +133,10 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
         }
       });
     }
+
+    if (!mounted) return;
+
+    FocusScope.of(context).requestFocus(FocusNode());
   }
 
   void _onImagePicked() async {
@@ -155,7 +161,9 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
     context.read<RegisterTravelProvider>().removeTravelPhoto(image);
   }
 
-  Future<void> onTravelRegistered() async {
+  Future<void> _onTravelRegistered() async {
+    FocusScope.of(context).requestFocus(FocusNode());
+
     final as = AppLocalizations.of(context)!;
 
     final state = context.read<RegisterTravelProvider>();
@@ -174,11 +182,9 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
     if (state.hasFailure) {
       if (!mounted) return;
 
-      await showDialog(
-        context: context,
-        builder: (context) => ErrorModal(
-          message: state.failure!.type.getIntlTravelRegisterError(context),
-        ),
+      showErrorSnackBar(
+        context,
+        state.failure!.type.getIntlTravelError(context),
       );
 
       return;
@@ -198,6 +204,10 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
       _startDateController.clear();
       _endDateController.clear();
     });
+
+    if (!mounted) return;
+
+    FocusScope.of(context).requestFocus(FocusNode());
   }
 
   @override
@@ -210,6 +220,7 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
 
   @override
   void dispose() {
+    _travelTitleController.dispose();
     _participantNameController.dispose();
     _participantAgeController.dispose();
     super.dispose();
@@ -251,12 +262,9 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                   const Padding(padding: EdgeInsets.all(2)),
                   Form(
                     key: _travelTitleFormKey,
-
-                    /// Travel title field
                     child: TextFormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       textCapitalization: TextCapitalization.words,
-                      onTapOutside: (_) => FocusScope.of(context).unfocus(),
                       controller: _travelTitleController,
                       validator: validations.travelTitleValidator,
                       decoration: InputDecoration(
@@ -666,7 +674,6 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
             padding: const EdgeInsets.all(cardPadding),
             child: Consumer<RegisterTravelProvider>(
               builder: (_, state, __) {
-                final isTravelValid = state.isTravelValid;
                 final baseColor = Theme.of(
                   context,
                 ).elevatedButtonTheme.style!.backgroundColor!.resolve({})!;
@@ -674,23 +681,22 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                 return SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: isTravelValid
-                          ? baseColor
-                          : baseColor.withValues(alpha: 0.3),
-                    ),
                     onPressed: () async {
                       if (!_travelTitleFormKey.currentState!.validate()) {
                         showErrorSnackBar(context, as.invalid_travel_title);
                         return;
                       }
 
-                      if (!state.isTravelValid) {
-                        showErrorSnackBar(context, as.invalid_travel_data);
-                        return;
-                      }
+                      await _onTravelRegistered();
 
-                      await onTravelRegistered();
+                      if (!context.mounted) return;
+
+                      if (state.hasFailure) {
+                        showErrorSnackBar(
+                          context,
+                          state.failure!.type.getIntlTravelError(context),
+                        );
+                      }
                     },
                     child: Text(as.title_register_travel),
                   ),
@@ -709,6 +715,8 @@ Future<void> _showParticipantModal(
   BuildContext context, {
   Participant? participant,
 }) async {
+  FocusScope.of(context).requestFocus(FocusNode());
+
   final state = context.read<RegisterTravelProvider>();
 
   if (participant != null && !state.participants.contains(participant)) return;
@@ -735,6 +743,8 @@ Future<void> _showParticipantModal(
       showSuccessSnackBar(context, as.participant_updated);
     }
   }
+
+  FocusScope.of(context).requestFocus(FocusNode());
 }
 
 class _ParticipantModal extends StatefulWidget {
