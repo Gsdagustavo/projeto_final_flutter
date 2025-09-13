@@ -20,7 +20,6 @@ import '../../providers/user_preferences_provider.dart';
 import '../../util/app_router.dart';
 import '../../widgets/loading_dialog.dart';
 import '../../widgets/modals.dart';
-import '../travel/travel_map_page.dart';
 import 'ui_utils.dart';
 
 /// Handles the deletion of a [Travel].
@@ -378,13 +377,13 @@ class _TravelStopModalState extends State<_TravelStopModal> {
             padding: const EdgeInsets.all(cardPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 18,
+              spacing: 12,
               children: [
                 Row(
                   children: [
                     const Icon(Icons.location_on),
                     Text(
-                      as.add_stop,
+                      useStop ? as.update_stop : as.add_stop,
                       style: Theme.of(context).textTheme.displaySmall,
                     ),
                     const Spacer(),
@@ -409,7 +408,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
                       ),
                   ],
                 ),
-                const Padding(padding: EdgeInsets.all(4)),
+                const Padding(padding: EdgeInsets.all(2)),
                 Text(
                   placeInfo,
                   style: Theme.of(context).textTheme.displaySmall,
@@ -460,6 +459,7 @@ class _TravelStopModalState extends State<_TravelStopModal> {
                     ),
                   ],
                 ),
+                Padding(padding: EdgeInsets.all(6)),
                 Text(
                   as.planned_experiences,
                   style: Theme.of(context).textTheme.displaySmall,
