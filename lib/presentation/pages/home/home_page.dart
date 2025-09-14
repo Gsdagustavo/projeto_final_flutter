@@ -7,6 +7,7 @@ import 'package:persistent_header_adaptive/persistent_header_adaptive.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/assets_paths.dart';
+import '../../../core/constants/themes.dart';
 import '../../../core/extensions/date_extensions.dart';
 import '../../../domain/entities/enums.dart';
 import '../../../domain/entities/travel.dart';
@@ -393,11 +394,30 @@ class _TravelListItemState extends State<_TravelListItem> {
                           ),
                           Row(
                             children: [
-                              Row(
-                                children: [
-                                  const Icon(Icons.people),
-                                  Text('${widget.travel.participants.length}'),
-                                ],
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 4,
+                                  horizontal: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                  color: Theme.of(
+                                    context,
+                                  ).cardColor.withAlpha(180),
+                                  border: Border.all(
+                                    color: Theme.of(context).iconTheme.color!,
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.people),
+                                    const Padding(padding: EdgeInsets.all(2)),
+                                    Text(
+                                      '${widget.travel.participants.length}',
+                                    ),
+                                  ],
+                                ),
                               ),
                               const Padding(padding: EdgeInsets.all(8)),
                               Container(
@@ -444,28 +464,19 @@ class _TravelStatusWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color color;
-    switch (status) {
-      case TravelStatus.upcoming:
-        color = Colors.lightBlueAccent.shade400.withAlpha(200);
-        break;
-      case TravelStatus.ongoing:
-        color = Colors.green.withAlpha(200);
-        break;
-      case TravelStatus.finished:
-        color = Colors.grey.withAlpha(200);
-        break;
-    }
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: color,
+        color: AppTheme.getTravelStatusColor(status, isDark: isDark),
         borderRadius: BorderRadius.circular(6),
       ),
       child: Text(
         status.getIntlTravelStatus(context),
-        style: Theme.of(context).textTheme.labelLarge,
+        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+          color: AppTheme.getTravelStatusTextColor(isDark: isDark),
+        ),
       ),
     );
   }

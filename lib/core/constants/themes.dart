@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../domain/entities/enums.dart';
+
 /// Defines the application's theme configurations, including light and dark
 /// themes, color schemes, typography, and component styling.
 class AppTheme {
@@ -29,21 +31,31 @@ class AppTheme {
   /// app bar, bottom navigation bar, switches, and chips for light mode.
   static ThemeData get lightTheme {
     const lightColorScheme = ColorScheme.light(
-      primary: Color(0xFF030213),
+      primary: Color(0xFF4A5568),
+      // Softer dark gray instead of almost black
       onPrimary: Colors.white,
-      secondary: Color(0xFFF1F2F6),
-      onSecondary: Color(0xFF030213),
-      surface: Colors.white,
-      onSurface: Color(0xFF252525),
-      error: Color(0xFFD4183D),
+      secondary: Color(0xFFF7FAFC),
+      // Slightly warmer light background
+      onSecondary: Color(0xFF2D3748),
+      // Softer dark text
+      surface: Color(0xFFFFFFFE),
+      // Slightly off-white for warmth
+      onSurface: Color(0xFF2D3748),
+      // Softer dark text instead of harsh black
+      error: Color(0xFFE53E3E),
+      // Slightly softer red
       onError: Colors.white,
-      outline: Color(0x1A000000),
-      outlineVariant: Color(0xFFECECF0),
-      surfaceContainerHighest: Color(0xFFE9EBEF),
-      onSurfaceVariant: Color(0xFF030213),
-      inversePrimary: Color(0xFFFAFAFA),
-      inverseSurface: Color(0xFF252525),
-      onInverseSurface: Color(0xFFFAFAFA),
+      outline: Color(0x33000000),
+      // More visible outline
+      outlineVariant: Color(0xFFE2E8F0),
+      // Warmer gray
+      surfaceContainerHighest: Color(0xFFF1F5F9),
+      // Warmer container color
+      onSurfaceVariant: Color(0xFF4A5568),
+      // Consistent with primary
+      inversePrimary: Color(0xFFFFFFFE),
+      inverseSurface: Color(0xFF2D3748),
+      onInverseSurface: Color(0xFFFFFFFE),
     );
 
     return ThemeData(
@@ -54,106 +66,111 @@ class AppTheme {
           fontSize: 32.0,
           fontWeight: FontWeight.w500,
           height: 1.5,
-          color: Color(0xFF252525),
+          color: Color(0xFF1A202C), // Softer dark text
         ),
         displayMedium: TextStyle(
           fontSize: 28.0,
           fontWeight: FontWeight.w500,
           height: 1.5,
-          color: Color(0xFF252525),
+          color: Color(0xFF1A202C),
         ),
         displaySmall: TextStyle(
           fontSize: 24.0,
           fontWeight: FontWeight.w500,
           height: 1.5,
-          color: Color(0xFF252525),
+          color: Color(0xFF1A202C),
         ),
         headlineLarge: TextStyle(
           fontSize: 32.0,
           fontWeight: FontWeight.w500,
           height: 1.5,
-          color: Color(0xFF252525),
+          color: Color(0xFF1A202C),
         ),
         headlineMedium: TextStyle(
           fontSize: 20.0,
           fontWeight: FontWeight.w500,
           height: 1.5,
-          color: Color(0xFF252525),
+          color: Color(0xFF1A202C),
         ),
         headlineSmall: TextStyle(
           fontSize: 18.0,
           fontWeight: FontWeight.w500,
           height: 1.5,
-          color: Color(0xFF252525),
+          color: Color(0xFF1A202C),
         ),
         titleLarge: TextStyle(
           fontSize: 16.0,
           fontWeight: FontWeight.w500,
           height: 1.5,
-          color: Color(0xFF252525),
+          color: Color(0xFF2D3748),
         ),
         titleMedium: TextStyle(
           fontSize: 14.0,
           fontWeight: FontWeight.w500,
           height: 1.5,
-          color: Color(0xFF252525),
+          color: Color(0xFF2D3748),
         ),
         titleSmall: TextStyle(
           fontSize: 12.0,
           fontWeight: FontWeight.w500,
           height: 1.5,
-          color: Color(0xFF252525),
+          color: Color(0xFF2D3748),
         ),
         bodyLarge: TextStyle(
           fontSize: 16.0,
           fontWeight: FontWeight.w400,
           height: 1.5,
-          color: Color(0xFF252525),
+          color: Color(0xFF2D3748),
         ),
         bodyMedium: TextStyle(
           fontSize: 14.0,
           fontWeight: FontWeight.w400,
           height: 1.5,
-          color: Color(0xFF252525),
+          color: Color(0xFF2D3748),
         ),
         bodySmall: TextStyle(
           fontSize: 12.0,
           fontWeight: FontWeight.w400,
           height: 1.5,
-          color: Color(0xFF717182),
+          color: Color(0xFF718096), // Softer gray for secondary text
         ),
         labelLarge: TextStyle(
           fontSize: 14.0,
           fontWeight: FontWeight.w500,
           height: 1.5,
-          color: Color(0xFF252525),
+          color: Color(0xFF2D3748),
         ),
         labelMedium: TextStyle(
           fontSize: 12.0,
           fontWeight: FontWeight.w500,
           height: 1.5,
-          color: Color(0xFF252525),
+          color: Color(0xFF2D3748),
         ),
         labelSmall: TextStyle(
           fontSize: 10.0,
           fontWeight: FontWeight.w500,
           height: 1.5,
-          color: Color(0xFF717182),
+          color: Color(0xFF718096),
         ),
       ),
       cardTheme: CardThemeData(
-        color: Colors.white,
+        color: Color(0xFFFFFFFE),
         elevation: 2,
         margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        shadowColor: Colors.black.withValues(alpha: 0.1),
+        shadowColor: Colors.black.withValues(alpha: 0.08),
+        // Softer shadow
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
-          side: BorderSide(color: const Color(0x1A000000), width: 1),
+          side: BorderSide(
+            color: const Color(0xFFE2E8F0),
+            width: 1,
+          ), // Softer border
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF030213),
+          backgroundColor: const Color(0xFF4A5568),
+          // Softer button color
           foregroundColor: Colors.white,
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -169,8 +186,10 @@ class AppTheme {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: const Color(0xFF030213),
-          side: const BorderSide(color: Color(0x1A000000), width: 1),
+          foregroundColor: const Color(0xFF4A5568),
+          // Softer outline button text
+          side: const BorderSide(color: Color(0xFF4A5568), width: 1),
+          // Matching border
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -184,7 +203,7 @@ class AppTheme {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: const Color(0xFF030213),
+          foregroundColor: const Color(0xFF4A5568), // Softer text button color
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -198,51 +217,62 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: const Color(0xFFF3F3F5),
+        fillColor: const Color(0xFFF7FAFC),
+        // Warmer input background
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Color(0x1A000000), width: 1),
+          borderSide: const BorderSide(
+            color: Color(0xFFE2E8F0),
+            width: 1,
+          ), // Softer border
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Color(0x1A000000), width: 1),
+          borderSide: const BorderSide(color: Color(0xFFE2E8F0), width: 1),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Color(0xFF030213), width: 2),
+          borderSide: const BorderSide(
+            color: Color(0xFF4A5568),
+            width: 2,
+          ), // Softer focus border
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Color(0xFFD4183D), width: 1),
+          borderSide: const BorderSide(color: Color(0xFFE53E3E), width: 1),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 12,
           vertical: 12,
         ),
         hintStyle: const TextStyle(
-          color: Color(0xFF717182),
+          color: Color(0xFF718096), // Softer hint text
           fontSize: 14,
           fontWeight: FontWeight.w400,
         ),
       ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.white,
-        foregroundColor: Color(0xFF252525),
+        backgroundColor: Color(0xFFFFFFFE),
+        // Slightly off-white
+        foregroundColor: Color(0xFF2D3748),
+        // Softer app bar text
         elevation: 0,
         scrolledUnderElevation: 1,
         shadowColor: Colors.black,
-        surfaceTintColor: Colors.white,
+        surfaceTintColor: Color(0xFFFFFFFE),
         titleTextStyle: TextStyle(
-          color: Color(0xFF252525),
+          color: Color(0xFF2D3748),
           fontSize: 20,
           fontWeight: FontWeight.w500,
           height: 1.5,
         ),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: Colors.white,
-        selectedItemColor: Color(0xFF030213),
-        unselectedItemColor: Color(0xFF717182),
+        backgroundColor: Color(0xFFFFFFFE),
+        selectedItemColor: Color(0xFF4A5568),
+        // Softer selected color
+        unselectedItemColor: Color(0xFF718096),
+        // Softer unselected color
         type: BottomNavigationBarType.fixed,
         elevation: 8,
         selectedLabelStyle: TextStyle(
@@ -257,16 +287,18 @@ class AppTheme {
       switchTheme: SwitchThemeData(
         trackColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return const Color(0xFF030213);
+            return const Color(
+              0xFF3B82F6,
+            ); // Blue switch track matching active buttons
           }
-          return const Color(0xFFCBCED4);
+          return const Color(0xFFCBD5E0); // Darker inactive track
         }),
         thumbColor: WidgetStateProperty.all(Colors.white),
       ),
       chipTheme: ChipThemeData(
-        backgroundColor: const Color(0xFFE9EBEF),
+        backgroundColor: const Color(0xFFE2E8F0), // Darker chip background
         labelStyle: const TextStyle(
-          color: Color(0xFF030213),
+          color: Color(0xFF3B82F6), // Blue chip text matching active buttons
           fontSize: 12,
           fontWeight: FontWeight.w500,
         ),
@@ -544,16 +576,16 @@ class AppTheme {
   /// colors
   ///
   /// Defaults to the finished travel color if the status is unrecognized.
-  static Color getTravelStatusColor(String status, {required bool isDark}) {
-    switch (status.toLowerCase()) {
-      case 'upcoming':
+  static Color getTravelStatusColor(
+    TravelStatus status, {
+    required bool isDark,
+  }) {
+    switch (status) {
+      case TravelStatus.upcoming:
         return isDark ? travelUpcomingDark : travelUpcomingLight;
-      case 'ongoing':
+      case TravelStatus.ongoing:
         return isDark ? travelOngoingDark : travelOngoingLight;
-      case 'finished':
-      case 'completed':
-        return isDark ? travelFinishedDark : travelFinishedLight;
-      default:
+      case TravelStatus.finished:
         return isDark ? travelFinishedDark : travelFinishedLight;
     }
   }
@@ -561,10 +593,9 @@ class AppTheme {
   /// Returns a contrasting text color for the given travel status,
   /// ensuring sufficient readability against the status background color.
   ///
-  /// - [status] is the current travel status.
   /// - [isDark] determines whether to return a color suitable for dark mode or
   /// light mode.
-  static Color getTravelStatusTextColor(String status, {required bool isDark}) {
+  static Color getTravelStatusTextColor({required bool isDark}) {
     return isDark ? const Color(0xFFF3F4F6) : Colors.white;
   }
 }
