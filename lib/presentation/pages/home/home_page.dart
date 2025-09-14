@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -17,6 +16,7 @@ import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../util/app_routes.dart';
 import '../../widgets/fab_animated_list.dart';
+import '../../widgets/fab_carousel_slider.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
 import '../../widgets/modals.dart';
@@ -166,8 +166,6 @@ class _TravelListItem extends StatefulWidget {
 }
 
 class _TravelListItemState extends State<_TravelListItem> {
-  int _currentIndex = 0;
-
   Future<void> _onTravelStarted(Travel travel) async {
     final as = AppLocalizations.of(context)!;
     final result = await showDialog<bool>(
@@ -242,33 +240,9 @@ class _TravelListItemState extends State<_TravelListItem> {
             Stack(
               children: [
                 if (images.isNotEmpty)
-                  CarouselSlider(
-                    items: images
-                        .map(
-                          (img) => ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(12),
-                              topRight: Radius.circular(12),
-                            ),
-                            child: Image.file(
-                              img!,
-                              width: double.infinity,
-                              height: 180,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        )
-                        .toList(),
-                    options: CarouselOptions(
-                      height: 180,
-                      viewportFraction: 1.0,
-                      enableInfiniteScroll: false,
-                      onPageChanged: (index, reason) {
-                        setState(() {
-                          _currentIndex = index;
-                        });
-                      },
-                    ),
+                  FabCarouselSlider(
+                    photos: widget.travel.photos,
+                    useImageViewer: false,
                   )
                 else
                   ClipRRect(
@@ -281,29 +255,6 @@ class _TravelListItemState extends State<_TravelListItem> {
                       width: double.infinity,
                       height: 180,
                       fit: BoxFit.cover,
-                    ),
-                  ),
-
-                if (images.isNotEmpty)
-                  Positioned(
-                    bottom: 8,
-                    left: 0,
-                    right: 0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: images.asMap().entries.map((entry) {
-                        return Container(
-                          width: _currentIndex == entry.key ? 10 : 6,
-                          height: 6,
-                          margin: const EdgeInsets.symmetric(horizontal: 3),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: _currentIndex == entry.key
-                                ? Colors.white
-                                : Colors.white54,
-                          ),
-                        );
-                      }).toList(),
                     ),
                   ),
 

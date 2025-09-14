@@ -26,6 +26,7 @@ import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../util/app_routes.dart';
 import '../../widgets/fab_animated_list.dart';
+import '../../widgets/fab_carousel_slider.dart';
 import '../../widgets/fab_circle_avatar.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';
@@ -49,6 +50,8 @@ class TravelDetailsPage extends StatefulWidget {
 
 class _TravelDetailsPageState extends State<TravelDetailsPage> {
   String locale = 'en';
+
+  int _currentPhotoIndex = 0;
 
   Future<void> onShare() async {
     final mapsApiKey = dotenv.get(ApiKeys.mapsApiKey);
@@ -144,23 +147,25 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
             alignment: Alignment.centerRight,
             child: IconButton(onPressed: onShare, icon: Icon(Icons.share)),
           ),
-
           Builder(
             builder: (context) {
-              if (widget.travel.photos.isEmpty) {
+              final photos = widget.travel.photos;
+
+              if (photos.isEmpty) {
                 return InstaImageViewer(
-                  child: Image.asset(AssetsPaths.placeholderImage),
+                  child: Image.asset(
+                    AssetsPaths.placeholderImage,
+                    width: double.infinity,
+                    height: 200,
+                    fit: BoxFit.cover,
+                  ),
                 );
               }
 
-              return InstaImageViewer(
-                child: Image.file(widget.travel.photos.first!),
-              );
+              return FabCarouselSlider(photos: photos);
             },
           ),
-
           _TravelTitleWidget(travel: widget.travel),
-
           Row(
             mainAxisSize: MainAxisSize.max,
             children: [
