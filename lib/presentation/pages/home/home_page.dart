@@ -257,13 +257,11 @@ class _TravelListItemState extends State<_TravelListItem> {
                       fit: BoxFit.cover,
                     ),
                   ),
-
                 Positioned(
                   top: 12,
                   left: 12,
                   child: _TravelStatusWidget(status: widget.travel.status),
                 ),
-
                 Positioned(
                   right: 12,
                   top: 12,
@@ -345,7 +343,6 @@ class _TravelListItemState extends State<_TravelListItem> {
                 ),
               ],
             ),
-
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(
@@ -355,12 +352,12 @@ class _TravelListItemState extends State<_TravelListItem> {
                     widget.travel.travelTitle,
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
-                  const SizedBox(height: 6),
-
+                  const Padding(padding: EdgeInsets.all(8)),
                   Row(
                     children: [
                       const Icon(Icons.location_on),
-                      const SizedBox(width: 4),
+                      const Padding(padding: EdgeInsets.all(4)),
+                      const Padding(padding: EdgeInsets.all(4)),
                       Builder(
                         builder: (context) {
                           final startCity =
@@ -384,9 +381,7 @@ class _TravelListItemState extends State<_TravelListItem> {
                       ),
                     ],
                   ),
-
-                  const SizedBox(height: 8),
-
+                  const Padding(padding: EdgeInsets.all(8)),
                   Consumer<UserPreferencesProvider>(
                     builder: (_, prefs, __) {
                       return Row(
@@ -404,7 +399,7 @@ class _TravelListItemState extends State<_TravelListItem> {
                                   Text('${widget.travel.participants.length}'),
                                 ],
                               ),
-                              const SizedBox(width: 8),
+                              const Padding(padding: EdgeInsets.all(8)),
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 4,

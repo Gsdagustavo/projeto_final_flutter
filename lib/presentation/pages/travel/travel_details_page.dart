@@ -51,8 +51,6 @@ class TravelDetailsPage extends StatefulWidget {
 class _TravelDetailsPageState extends State<TravelDetailsPage> {
   String locale = 'en';
 
-  int _currentPhotoIndex = 0;
-
   Future<void> onShare() async {
     final mapsApiKey = dotenv.get(ApiKeys.mapsApiKey);
 
@@ -566,7 +564,9 @@ class _TravelDetailsPageState extends State<TravelDetailsPage> {
                                       ),
 
                                       if (review.images.isNotEmpty) ...[
-                                        const SizedBox(height: 8),
+                                        const Padding(
+                                          padding: EdgeInsets.all(8),
+                                        ),
                                         SizedBox(
                                           height: 100,
                                           child: FabAnimatedList(
