@@ -242,6 +242,14 @@
       "time": {}
     }
   },
+  "continued_on_next_page": "Continua na próxima página... mais {reviews} avaliações",
+  "@@continued_on_next_page": {
+    "placeholders": {
+      "reviews": {}
+    }
+  },
+  "reviews_continued": "Avaliações (continuação)",
+  "no_reviews_for_this_stop": "Ainda não há avaliações para esta parada",
   "@@util": {},
   "yes": "Sim",
   "no": "Não",

@@ -250,6 +250,14 @@
       "time": {}
     }
   },
+  "continued_on_next_page": "Continúa en la siguiente página... {reviews} reseñas más",
+  "@@continued_on_next_page": {
+    "placeholders": {
+      "reviews": {}
+    }
+  },
+  "reviews_continued": "Reseñas (continuación)",
+  "no_reviews_for_this_stop": "Aún no hay reseñas para esta parada",
   "@@util": {},
   "yes": "Sí",
   "no": "No",

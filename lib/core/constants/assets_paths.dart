@@ -14,4 +14,7 @@ class AssetsPaths {
   /// Can be used as a temporary image while loading network images
   /// or for empty content placeholders.
   static const placeholderImage = 'assets/images/placeholder.png';
+
+  /// Path to a app logo image.
+  static const appLogo = 'assets/images/app_logo.png';
 }

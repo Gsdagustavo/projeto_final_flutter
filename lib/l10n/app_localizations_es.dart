@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -117,8 +116,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get experience_historical_places => 'Visitar Lugares Históricos';
 
   @override
-  String get experience_visit_local_establishments =>
-      'Visitar Establecimientos Locales';
+  String get experience_visit_local_establishments => 'Visitar Establecimientos Locales';
 
   @override
   String get experience_contact_with_nature => 'Contacto con la Naturaleza';
@@ -145,8 +143,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get not_enough_stops => 'El viaje debe contener al menos 2 paradas';
 
   @override
-  String get no_participants =>
-      'El viaje debe contener al menos 1 participante';
+  String get no_participants => 'El viaje debe contener al menos 1 participante';
 
   @override
   String get invalid_participant_data => 'Datos del participante inválidos';
@@ -256,8 +253,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get end_date => 'Fecha de Fin del Viaje';
 
   @override
-  String get err_invalid_date_snackbar =>
-      '¡Debes seleccionar una fecha de inicio primero!';
+  String get err_invalid_date_snackbar => '¡Debes seleccionar una fecha de inicio primero!';
 
   @override
   String get participants => 'Participantes';
@@ -324,19 +320,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get add_stop => 'Agregar parada';
 
   @override
-  String get remove_stop_confirmation =>
-      '¿Realmente desea eliminar esta parada?';
+  String get remove_stop_confirmation => '¿Realmente desea eliminar esta parada?';
 
   @override
   String get planned_experiences => 'Experiencias planificadas';
 
   @override
-  String get err_register_travel_generic =>
-      'Ocurrió un error al registrar el viaje';
+  String get err_register_travel_generic => 'Ocurrió un error al registrar el viaje';
 
   @override
-  String get long_press_to_add_stops =>
-      'Mantén presionado para agregar paradas';
+  String get long_press_to_add_stops => 'Mantén presionado para agregar paradas';
 
   @override
   String get travel_map => 'Mapa del Viaje';
@@ -348,19 +341,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get route_planning => 'Planificación de Ruta';
 
   @override
-  String get route_planning_label =>
-      'Planifica la ruta y las paradas de tu viaje';
+  String get route_planning_label => 'Planifica la ruta y las paradas de tu viaje';
 
   @override
   String get registered_stops => 'Paradas Registradas';
 
   @override
-  String get no_stops_registered =>
-      'No hay paradas registradas aún. Usa el mapa para planificar tu ruta entre diferentes ciudades y países';
+  String get no_stops_registered => 'No hay paradas registradas aún. Usa el mapa para planificar tu ruta entre diferentes ciudades y países';
 
   @override
-  String get use_the_map_add_waypoints =>
-      'Usa el mapa para modificar tu ruta o agregar más paradas';
+  String get use_the_map_add_waypoints => 'Usa el mapa para modificar tu ruta o agregar más paradas';
 
   @override
   String get travel_photos => 'Fotos del Viaje';
@@ -378,15 +368,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get choose_photos => 'Elegir Fotos';
 
   @override
-  String get add_photos_label =>
-      'Agrega fotos para hacer tu viaje más memorable y visualmente atractivo';
+  String get add_photos_label => 'Agrega fotos para hacer tu viaje más memorable y visualmente atractivo';
 
   @override
   String get travel_photo_added => 'Foto da viagem adicionada';
 
   @override
-  String get could_not_add_travel_photo =>
-      'Não foi possível adicionar a foto da viagem';
+  String get could_not_add_travel_photo => 'Não foi possível adicionar a foto da viagem';
 
   @override
   String get invalid_travel_data => '¡Datos de viaje no válidos!';
@@ -413,8 +401,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get stop_registered_successfully => '¡Parada registrada con éxito!';
 
   @override
-  String get err_register_stop =>
-      'Ocurrió un error al intentar registrar la parada';
+  String get err_register_stop => 'Ocurrió un error al intentar registrar la parada';
 
   @override
   String get update_stop => 'Actualizar parada';
@@ -429,15 +416,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get leave_date => 'Fecha de salida';
 
   @override
-  String get err_you_must_select_arrive_date_first =>
-      '¡Debes seleccionar primero la fecha de llegada!';
+  String get err_you_must_select_arrive_date_first => '¡Debes seleccionar primero la fecha de llegada!';
 
   @override
   String get finish => 'Finalizar';
 
   @override
-  String get err_pdf_generation =>
-      'Ocurrió un error inesperado al intentar generar el PDF del viaje';
+  String get err_pdf_generation => 'Ocurrió un error inesperado al intentar generar el PDF del viaje';
 
   @override
   String get duration => 'Duración';
@@ -508,8 +493,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get remove_review => 'Eliminar reseña';
 
   @override
-  String get remove_review_confirmation =>
-      '¿Realmente deseas eliminar esta reseña?';
+  String get remove_review_confirmation => '¿Realmente deseas eliminar esta reseña?';
 
   @override
   String get err_invalid_review_data => 'Datos de la reseña inválidos';
@@ -527,15 +511,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get delete_review => 'Eliminar reseña';
 
   @override
-  String get delete_review_confirmation =>
-      '¿Realmente desea eliminar esta reseña?';
+  String get delete_review_confirmation => '¿Realmente desea eliminar esta reseña?';
 
   @override
   String get review_deleted_successfully => '¡Reseña eliminada con éxito!';
 
   @override
-  String get review_requires_content =>
-      'Debes agregar al menos una imagen o escribir una descripción antes de enviar tu reseña. Las reseñas no pueden estar vacías.';
+  String get review_requires_content => 'Debes agregar al menos una imagen o escribir una descripción antes de enviar tu reseña. Las reseñas no pueden estar vacías.';
 
   @override
   String get success => '¡Éxito!';
@@ -553,8 +535,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get sign_out_question => '¿Cerrar sesión?';
 
   @override
-  String get sign_out_confirmation =>
-      '¿Está seguro de que desea cerrar sesión? Necesitará iniciar sesión nuevamente para acceder a sus viajes';
+  String get sign_out_confirmation => '¿Está seguro de que desea cerrar sesión? Necesitará iniciar sesión nuevamente para acceder a sus viajes';
 
   @override
   String get sign_out => 'Cerrar sesión';
@@ -566,8 +547,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get no_internet => 'Sin conexión a internet';
 
   @override
-  String get no_internet_message =>
-      'Actualmente estás sin conexión. Algunas funciones pueden no estar disponibles hasta que te reconectes a internet';
+  String get no_internet_message => 'Actualmente estás sin conexión. Algunas funciones pueden no estar disponibles hasta que te reconectes a internet';
 
   @override
   String get try_again => 'Intentar de nuevo';
@@ -576,17 +556,26 @@ class AppLocalizationsEs extends AppLocalizations {
   String get continue_offline => 'Continuar sin conexión';
 
   @override
-  String get travel_phrase_intro =>
-      'Un viaje no se mide en millas, sino en momentos.';
+  String get travel_phrase_intro => 'Un viaje no se mide en millas, sino en momentos.';
 
   @override
-  String get travel_phrase_body =>
-      'Cada página de este folleto guarda más que paisajes: guarda sonrisas espontáneas, descubrimientos inesperados, conversaciones que quedaron en el alma y silencios que hablaron más que palabras.';
+  String get travel_phrase_body => 'Cada página de este folleto guarda más que paisajes: guarda sonrisas espontáneas, descubrimientos inesperados, conversaciones que quedaron en el alma y silencios que hablaron más que palabras.';
 
   @override
   String document_generated_timestamp(Object time) {
     return 'Documento generado el $time';
   }
+
+  @override
+  String continued_on_next_page(Object reviews) {
+    return 'Continúa en la siguiente página... $reviews reseñas más';
+  }
+
+  @override
+  String get reviews_continued => 'Reseñas (continuación)';
+
+  @override
+  String get no_reviews_for_this_stop => 'Aún no hay reseñas para esta parada';
 
   @override
   String get yes => 'Sí';

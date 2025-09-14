@@ -10,10 +10,13 @@ import 'package:pdf/widgets.dart' as pdf;
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 
+import '../core/constants/assets_paths.dart';
 import '../core/extensions/date_extensions.dart';
 import '../core/extensions/place_extensions.dart';
 import '../domain/entities/enums.dart';
+import '../domain/entities/review.dart';
 import '../domain/entities/travel.dart';
+import '../domain/entities/travel_stop.dart';
 import '../l10n/app_localizations.dart';
 import '../presentation/extensions/enums_extensions.dart';
 import '../presentation/providers/user_preferences_provider.dart';
@@ -61,16 +64,20 @@ class PDFService {
     final document = pdf.Document();
     final as = AppLocalizations.of(context)!;
 
-    // Load PDF font
-    final font = await PdfGoogleFonts.nunitoExtraLight();
+    final baseFont = await PdfGoogleFonts.nunitoExtraLight();
+    final emojiFont = await PdfGoogleFonts.notoColorEmoji();
 
-    // Page theme definition
     final pageTheme = pdf.PageTheme(
       margin: pdf.EdgeInsets.all(_pagePadding),
       pageFormat: PdfPageFormat.a5,
       orientation: pdf.PageOrientation.portrait,
       clip: true,
-      theme: pdf.ThemeData(defaultTextStyle: pdf.TextStyle(font: font)),
+      theme: pdf.ThemeData(
+        defaultTextStyle: pdf.TextStyle(
+          font: baseFont,
+          fontFallback: [emojiFont],
+        ),
+      ),
     );
 
     if (!context.mounted) return null;
@@ -272,144 +279,350 @@ class _PDFPages {
   /// - Stop city
   /// - Arrival/leave dates
   /// - Experiences (as tags/labels)
+  /// - Reviews with author info, description, and images
+  /// Generates pages for each travel stop with smart pagination.
+  /// Tries to fit reviews on the same page as stop info, creates new pages for
+  /// overflow.
   List<pdf.Page> generateStopsPages() {
     final pages = <pdf.Page>[];
 
     for (final stop in travel.stops) {
-      debugPrint('Stop: $stop');
+      debugPrint('Stop: ${stop.place.city}');
+
+      final stopPages = _createStopPages(stop);
+      pages.addAll(stopPages);
     }
 
-    for (final stop in travel.stops) {
-      final page = _basePage(
-        build: (_) {
-          return pdf.Column(
-            children: [
-              pdf.Text(stop.place.city!, style: pdf.TextStyle(fontSize: 24)),
-              pdf.Padding(padding: pdf.EdgeInsets.all(8)),
-              pdf.Text(stop.arriveDate!.getFormattedDateWithYear(locale)),
-              pdf.Text(stop.leaveDate!.getFormattedDateWithYear(locale)),
-              pdf.Padding(padding: pdf.EdgeInsets.all(8)),
+    return pages;
+  }
+
+  /// Creates pages for a single stop, handling review overflow
+  List<pdf.Page> _createStopPages(TravelStop stop) {
+    final stopPages = <pdf.Page>[];
+    final reviews = stop.reviews ?? <Review>[];
+
+    if (reviews.isEmpty) {
+      stopPages.add(_createStopPageWithoutReviews(stop));
+      return stopPages;
+    }
+
+    var reviewIndex = 0;
+    var isFirstPage = true;
+
+    while (reviewIndex < reviews.length) {
+      if (isFirstPage) {
+        final result = _createFirstStopPage(stop, reviews, reviewIndex);
+        stopPages.add(result['page']);
+        reviewIndex = result['nextReviewIndex'];
+        isFirstPage = false;
+      } else {
+        final result = _createReviewContinuationPage(
+          stop,
+          reviews,
+          reviewIndex,
+        );
+        stopPages.add(result['page']);
+        reviewIndex = result['nextReviewIndex'];
+      }
+    }
+
+    return stopPages;
+  }
+
+  /// Creates the first page with stop info and as many reviews as can fit
+  Map<String, dynamic> _createFirstStopPage(
+    TravelStop stop,
+    List<Review> reviews,
+    int startIndex,
+  ) {
+    const maxReviewsPerFirstPage = 2;
+
+    final reviewsToShow = <Review>[];
+    var nextIndex = startIndex;
+
+    while (nextIndex < reviews.length &&
+        reviewsToShow.length < maxReviewsPerFirstPage) {
+      reviewsToShow.add(reviews[nextIndex]);
+      nextIndex++;
+    }
+
+    final page = _basePage(
+      build: (_) {
+        final as = AppLocalizations.of(context)!;
+
+        return pdf.Column(
+          crossAxisAlignment: pdf.CrossAxisAlignment.start,
+          children: [
+            ..._buildStopInfoSection(stop),
+
+            if (reviewsToShow.isNotEmpty) ...[
+              pdf.Padding(padding: pdf.EdgeInsets.all(12)),
               pdf.Align(
                 alignment: pdf.Alignment.centerLeft,
                 child: pdf.Text(
-                  as.experiences,
-                  style: pdf.TextStyle(fontSize: 20),
+                  as.reviews,
+                  style: pdf.TextStyle(
+                    fontSize: 20,
+                    fontWeight: pdf.FontWeight.bold,
+                  ),
                 ),
               ),
-              pdf.Padding(padding: pdf.EdgeInsets.all(6)),
-              pdf.Wrap(
-                spacing: 6,
-                runSpacing: 6,
-                children: List.generate(stop.experiences!.length, (i) {
-                  return _PDFWidgets().experienceContainer(
-                    context,
-                    stop.experiences![i],
-                  );
-                }),
-              ),
+              pdf.Padding(padding: pdf.EdgeInsets.all(8)),
 
-              if (stop.reviews!.isNotEmpty)
-                pdf.Column(
-                  children: [
-                    pdf.Align(
-                      alignment: pdf.Alignment.centerLeft,
-                      child: pdf.Text(
-                        as.reviews,
-                        style: pdf.TextStyle(fontSize: 20),
+              for (final review in reviewsToShow) _buildReviewWidget(review),
+
+              if (nextIndex < reviews.length)
+                pdf.Container(
+                  margin: pdf.EdgeInsets.only(top: 16),
+                  padding: pdf.EdgeInsets.all(12),
+                  decoration: pdf.BoxDecoration(
+                    color: PdfColors.grey100,
+                    borderRadius: pdf.BorderRadius.circular(8),
+                  ),
+                  child: pdf.Center(
+                    child: pdf.Text(
+                      as.continued_on_next_page(reviews.length - nextIndex),
+                      style: pdf.TextStyle(
+                        fontSize: 12,
+                        color: PdfColors.grey600,
+                        fontStyle: pdf.FontStyle.italic,
                       ),
                     ),
-                    pdf.Padding(padding: pdf.EdgeInsets.all(8)),
-
-                    for (final review in stop.reviews!)
-                      pdf.Container(
-                        decoration: pdf.BoxDecoration(
-                          borderRadius: pdf.BorderRadius.circular(12),
-                          border: pdf.Border.all(
-                            width: 1,
-                            color: PdfColors.grey,
-                          ),
-                        ),
-                        margin: pdf.EdgeInsets.only(top: 8),
-                        padding: pdf.EdgeInsets.all(16),
-                        child: pdf.Column(
-                          crossAxisAlignment: pdf.CrossAxisAlignment.start,
-                          mainAxisAlignment: pdf.MainAxisAlignment.start,
-                          children: [
-                            pdf.Row(
-                              mainAxisAlignment: pdf.MainAxisAlignment.start,
-                              crossAxisAlignment: pdf.CrossAxisAlignment.start,
-                              children: [
-                                pdf.SizedBox(
-                                  height: 32,
-                                  width: 32,
-                                  child: pdf.ClipRRect(
-                                    verticalRadius: 12,
-                                    horizontalRadius: 12,
-                                    child: pdf.Image(
-                                      pdf.MemoryImage(
-                                        review.author.profilePicture
-                                            .readAsBytesSync(),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                pdf.Padding(padding: pdf.EdgeInsets.all(8)),
-                                pdf.Column(
-                                  mainAxisAlignment:
-                                      pdf.MainAxisAlignment.start,
-                                  crossAxisAlignment:
-                                      pdf.CrossAxisAlignment.start,
-                                  children: [
-                                    pdf.Text(
-                                      review.author.name,
-                                      style: pdf.TextStyle(fontSize: 20),
-                                    ),
-                                    pdf.Text(
-                                      review.reviewDate.getFormattedDate(
-                                        locale,
-                                      ),
-                                      style: pdf.TextStyle(fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                                pdf.Padding(padding: pdf.EdgeInsets.all(8)),
-                                pdf.Text(
-                                  '${review.stars} stars',
-                                  style: pdf.TextStyle(fontSize: 16),
-                                ),
-                              ],
-                            ),
-                            pdf.Padding(padding: pdf.EdgeInsets.all(4)),
-                            pdf.Text(
-                              review.description,
-                              style: pdf.TextStyle(fontSize: 18),
-                            ),
-                            pdf.Padding(padding: pdf.EdgeInsets.all(4)),
-                            pdf.GridView(
-                              children: [
-                                for (final image in review.images)
-                                  pdf.ClipRRect(
-                                    child: pdf.Image(
-                                      pdf.MemoryImage(image.readAsBytesSync()),
-                                    ),
-                                    horizontalRadius: 12,
-                                    verticalRadius: 12,
-                                  ),
-                              ],
-                              crossAxisCount: 2,
-                            ),
-                          ],
-                        ),
-                      ),
-                  ],
+                  ),
                 ),
             ],
-          );
-        },
-      );
-      pages.add(page);
+          ],
+        );
+      },
+    );
+
+    return {'page': page, 'nextReviewIndex': nextIndex};
+  }
+
+  /// Creates a continuation page with only reviews
+  Map<String, dynamic> _createReviewContinuationPage(
+    TravelStop stop,
+    List<Review> reviews,
+    int startIndex,
+  ) {
+    const maxReviewsPerPage = 3;
+
+    final reviewsToShow = <Review>[];
+    var nextIndex = startIndex;
+
+    while (nextIndex < reviews.length &&
+        reviewsToShow.length < maxReviewsPerPage) {
+      reviewsToShow.add(reviews[nextIndex]);
+      nextIndex++;
     }
-    return pages;
+
+    final page = _basePage(
+      build: (_) {
+        return pdf.Column(
+          crossAxisAlignment: pdf.CrossAxisAlignment.start,
+          children: [
+            pdf.Center(
+              child: pdf.Text(
+                '${stop.place.city!} - ${as.reviews_continued}',
+                style: pdf.TextStyle(
+                  fontSize: 18,
+                  fontWeight: pdf.FontWeight.bold,
+                  color: PdfColors.grey700,
+                ),
+              ),
+            ),
+            pdf.Padding(padding: pdf.EdgeInsets.all(8)),
+            pdf.Divider(color: PdfColors.grey300),
+            pdf.Padding(padding: pdf.EdgeInsets.all(12)),
+
+            for (final review in reviewsToShow) _buildReviewWidget(review),
+
+            if (nextIndex < reviews.length)
+              pdf.Container(
+                margin: pdf.EdgeInsets.only(top: 16),
+                padding: pdf.EdgeInsets.all(12),
+                decoration: pdf.BoxDecoration(
+                  color: PdfColors.grey100,
+                  borderRadius: pdf.BorderRadius.circular(8),
+                ),
+                child: pdf.Center(
+                  child: pdf.Text(
+                    as.continued_on_next_page(reviews.length - nextIndex),
+                    style: pdf.TextStyle(
+                      fontSize: 12,
+                      color: PdfColors.grey600,
+                      fontStyle: pdf.FontStyle.italic,
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
+    );
+
+    return {'page': page, 'nextReviewIndex': nextIndex};
+  }
+
+  /// Creates a simple stop page without reviews
+  pdf.Page _createStopPageWithoutReviews(TravelStop stop) {
+    return _basePage(
+      build: (_) {
+        return pdf.Column(
+          crossAxisAlignment: pdf.CrossAxisAlignment.start,
+          children: [
+            ..._buildStopInfoSection(stop),
+
+            pdf.Spacer(),
+            pdf.Center(
+              child: pdf.Text(
+                as.no_reviews_for_this_stop,
+                style: pdf.TextStyle(
+                  fontSize: 14,
+                  color: PdfColors.grey500,
+                  fontStyle: pdf.FontStyle.italic,
+                ),
+              ),
+            ),
+            pdf.Spacer(),
+          ],
+        );
+      },
+    );
+  }
+
+  /// Builds the stop information section (city, dates, experiences)
+  List<pdf.Widget> _buildStopInfoSection(TravelStop stop) {
+    return [
+      pdf.Center(
+        child: pdf.Text(
+          stop.place.city!,
+          style: pdf.TextStyle(fontSize: 24, fontWeight: pdf.FontWeight.bold),
+        ),
+      ),
+      pdf.Padding(padding: pdf.EdgeInsets.all(8)),
+
+      pdf.Center(
+        child: pdf.Column(
+          children: [
+            pdf.Text(
+              stop.arriveDate!.getFormattedDateWithYear(locale),
+              style: pdf.TextStyle(fontSize: 16),
+            ),
+            pdf.Text(
+              stop.leaveDate!.getFormattedDateWithYear(locale),
+              style: pdf.TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
+      ),
+      pdf.Padding(padding: pdf.EdgeInsets.all(12)),
+
+      pdf.Align(
+        alignment: pdf.Alignment.centerLeft,
+        child: pdf.Text(
+          as.experiences,
+          style: pdf.TextStyle(fontSize: 20, fontWeight: pdf.FontWeight.bold),
+        ),
+      ),
+      pdf.Padding(padding: pdf.EdgeInsets.all(6)),
+      pdf.Wrap(
+        spacing: 6,
+        runSpacing: 6,
+        children: List.generate(stop.experiences!.length, (i) {
+          return _PDFWidgets().experienceContainer(
+            context,
+            stop.experiences![i],
+          );
+        }),
+      ),
+    ];
+  }
+
+  /// Builds a single review widget
+  pdf.Widget _buildReviewWidget(Review review) {
+    return pdf.Container(
+      decoration: pdf.BoxDecoration(
+        borderRadius: pdf.BorderRadius.circular(12),
+        border: pdf.Border.all(width: 1, color: PdfColors.grey300),
+      ),
+      margin: pdf.EdgeInsets.only(bottom: 16),
+      padding: pdf.EdgeInsets.all(16),
+      child: pdf.Column(
+        crossAxisAlignment: pdf.CrossAxisAlignment.start,
+        children: [
+          pdf.Row(
+            crossAxisAlignment: pdf.CrossAxisAlignment.start,
+            children: [
+              pdf.SizedBox(
+                height: 32,
+                width: 32,
+                child: pdf.ClipRRect(
+                  verticalRadius: 16,
+                  horizontalRadius: 16,
+                  child: pdf.Image(
+                    pdf.MemoryImage(
+                      review.author.profilePicture.readAsBytesSync(),
+                    ),
+                    fit: pdf.BoxFit.cover,
+                  ),
+                ),
+              ),
+              pdf.SizedBox(width: 12),
+              pdf.Expanded(
+                child: pdf.Column(
+                  crossAxisAlignment: pdf.CrossAxisAlignment.start,
+                  children: [
+                    pdf.Text(
+                      review.author.name,
+                      style: pdf.TextStyle(
+                        fontSize: 16,
+                        fontWeight: pdf.FontWeight.bold,
+                      ),
+                    ),
+                    pdf.Text(
+                      review.reviewDate.getFormattedDate(locale),
+                      style: pdf.TextStyle(
+                        fontSize: 12,
+                        color: PdfColors.grey600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              pdf.Text('${review.stars} ⭐', style: pdf.TextStyle(fontSize: 14)),
+            ],
+          ),
+
+          pdf.SizedBox(height: 8),
+
+          pdf.Text(review.description, style: pdf.TextStyle(fontSize: 14)),
+
+          if (review.images.isNotEmpty) ...[
+            pdf.SizedBox(height: 12),
+            pdf.Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final image in review.images)
+                  pdf.Container(
+                    width: 60,
+                    height: 60,
+                    child: pdf.ClipRRect(
+                      child: pdf.Image(
+                        pdf.MemoryImage(image.readAsBytesSync()),
+                        fit: pdf.BoxFit.cover,
+                      ),
+                      horizontalRadius: 8,
+                      verticalRadius: 8,
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ],
+      ),
+    );
   }
 
   /// Creates the **final page**.
@@ -422,7 +635,7 @@ class _PDFPages {
     final now = DateTime.now();
     final formatted = now.getFormattedDateWithYear(locale);
 
-    final logoBytes = await rootBundle.load('assets/images/app_logo.png');
+    final logoBytes = await rootBundle.load(AssetsPaths.appLogo);
     final logoImage = pdf.MemoryImage(logoBytes.buffer.asUint8List());
 
     return _basePage(

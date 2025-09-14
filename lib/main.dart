@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +24,7 @@ Future<void> main() async {
   /// Initialize Firebase App
   await Firebase.initializeApp();
 
-  // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
   /// Instantiate dependencies needed for dependency injection
   final travelRepository = SQLiteTravelRepository();
@@ -61,7 +62,7 @@ Future<void> main() async {
 
 Future<void> _resetTestDB(TravelUseCases travelUseCases) async {
   final db = await DBConnection().getDatabase(delete: true);
-  await DBConnection().printAllTables(db);
+  // await DBConnection().printAllTables(db);
 
   final travels = await generateSampleTravels();
   travels.forEach(travelUseCases.registerTravel.call);

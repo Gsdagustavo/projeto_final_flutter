@@ -249,6 +249,15 @@
       "time": {}
     }
   },
+  "continued_on_next_page": "Continued on next page... {reviews} more reviews",
+  "@@continued_on_next_page": {
+    "placeholders": {
+      "reviews": {}
+    }
+  },
+  "reviews_continued": "Reviews (continued)",
+  "no_reviews_for_this_stop": "No reviews for this stop yet",
+
   "@@util": {},
   "yes": "Yes",
   "no": "No",
