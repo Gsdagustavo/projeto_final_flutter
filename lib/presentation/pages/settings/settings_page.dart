@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/constants/assets_paths.dart';
 import '../../../core/extensions/date_extensions.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../services/file_service.dart';
@@ -12,7 +13,6 @@ import '../../../services/user_preferences_service.dart';
 import '../../providers/login_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../util/app_routes.dart';
-import '../../../core/constants/assets_paths.dart';
 import '../../widgets/fab_circle_avatar.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';

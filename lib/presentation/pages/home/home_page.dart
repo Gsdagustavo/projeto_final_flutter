@@ -8,6 +8,7 @@ import 'package:lottie/lottie.dart';
 import 'package:persistent_header_adaptive/persistent_header_adaptive.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/constants/assets_paths.dart';
 import '../../../core/extensions/date_extensions.dart';
 import '../../../domain/entities/enums.dart';
 import '../../../domain/entities/travel.dart';
@@ -16,7 +17,6 @@ import '../../extensions/enums_extensions.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../util/app_routes.dart';
-import '../../../core/constants/assets_paths.dart';
 import '../../widgets/fab_animated_list.dart';
 import '../../widgets/fab_page.dart';
 import '../../widgets/loading_dialog.dart';

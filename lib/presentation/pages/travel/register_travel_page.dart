@@ -674,10 +674,6 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
             padding: const EdgeInsets.all(cardPadding),
             child: Consumer<RegisterTravelProvider>(
               builder: (_, state, __) {
-                final baseColor = Theme.of(
-                  context,
-                ).elevatedButtonTheme.style!.backgroundColor!.resolve({})!;
-
                 return SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(

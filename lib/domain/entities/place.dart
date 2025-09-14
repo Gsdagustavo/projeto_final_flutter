@@ -12,6 +12,11 @@ class Place {
   /// Automatically generated using a UUID if not provided.
   final String id;
 
+  /// Unique identifier for the place.
+  ///
+  /// Retrieved from Autocomplete API.
+  final String? placeId;
+
   /// Name of the city (optional).
   final String? city;
 
@@ -46,6 +51,7 @@ class Place {
   /// [longitude] – Geographical longitude (required).
   Place({
     String? id,
+    this.placeId,
     this.city,
     this.state,
     this.country,
@@ -63,6 +69,7 @@ class Place {
   /// [latitude] – New latitude (optional).
   /// [longitude] – New longitude (optional).
   Place copyWith({
+    String? placeId,
     String? city,
     String? state,
     String? country,
@@ -72,6 +79,7 @@ class Place {
   }) {
     return Place(
       id: id,
+      placeId: placeId,
       city: city ?? this.city,
       state: state ?? this.state,
       country: country ?? this.country,

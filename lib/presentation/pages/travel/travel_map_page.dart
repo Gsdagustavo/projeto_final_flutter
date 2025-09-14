@@ -39,44 +39,10 @@ class _TravelMapPageState extends State<TravelMapPage> {
 
   final _searchController = TextEditingController();
   final _uuid = const Uuid();
-  String _sessionToken = '1234567890';
+  String _sessionToken = '123456780';
   final List<Place> _placeList = [];
 
   bool _isCreatingMap = true;
-
-  @override
-  void initState() {
-    super.initState();
-
-    final travelState = Provider.of<RegisterTravelProvider>(
-      context,
-      listen: false,
-    );
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final pos = await LocationService().getCurrentPosition();
-      if (pos == null) return;
-
-      setState(() {
-        _center = LatLng(pos.latitude, pos.longitude);
-        _isCreatingMap = false;
-      });
-
-      if (!mounted) return;
-
-      final markersState = Provider.of<MapMarkersProvider>(
-        context,
-        listen: false,
-      );
-
-      markersState.resetMarkers(
-        stops: travelState.stops,
-        onTap: (stop) async {
-          await showTravelStopModal(stop.place.latLng);
-        },
-      );
-    });
-  }
 
   /// Handles long press events on the map.
   ///
@@ -102,30 +68,110 @@ class _TravelMapPageState extends State<TravelMapPage> {
 
   /// Updates the search suggestions based on the current input.
   Future<void> _onChanged() async {
-    if (_sessionToken.isEmpty) {
-      setState(() {
-        _sessionToken = _uuid.v4();
-      });
-    }
+    setState(() {
+      _sessionToken = _uuid.v4();
+    });
 
     if (_searchController.text.isEmpty) {
       setState(_placeList.clear);
       return;
     }
 
-    final places = await LocationService().getSuggestion(
+    final places = await LocationService().getSuggestions(
       input: _searchController.text,
       sessionToken: _sessionToken,
     );
 
     setState(() {
-      _placeList.clear();
-      _placeList.addAll(places);
+      _placeList
+        ..clear()
+        ..addAll(places);
     });
 
     if (_searchController.text.isEmpty) {
       setState(_placeList.clear);
     }
+  }
+
+  void _moveToViewport(
+    GoogleMapController controller,
+    Map<String, dynamic> geometry,
+  ) async {
+    final viewport = geometry['viewport'];
+    final northeast = viewport['northeast'];
+    final southwest = viewport['southwest'];
+
+    final bounds = LatLngBounds(
+      northeast: LatLng(northeast['lat'], northeast['lng']),
+      southwest: LatLng(southwest['lat'], southwest['lng']),
+    );
+
+    await controller.animateCamera(CameraUpdate.newLatLngBounds(bounds, 50));
+  }
+
+  void _onPlaceListTileTap(Place place) async {
+    Place? resolved;
+    Map<String, dynamic>? geometry;
+
+    if (place.placeId != null && place.placeId!.isNotEmpty) {
+      resolved = await LocationService().getPlaceDetails(place.placeId!);
+      geometry = await LocationService().getPlaceGeometry(place.placeId!);
+    } else {
+      final query = [
+        place.city,
+        place.state,
+        place.country,
+      ].where((e) => e != null && e.isNotEmpty).join(', ');
+
+      resolved = await LocationService().getPositionByPlaceQuery(query);
+    }
+
+    if (resolved == null) return;
+
+    if (_mapController != null) {
+      if (geometry != null && geometry['viewport'] != null) {
+        _moveToViewport(_mapController!, geometry);
+      } else {
+        await _mapController!.animateCamera(
+          CameraUpdate.newLatLngZoom(
+            LatLng(resolved.latitude, resolved.longitude),
+            _defaultZoom,
+          ),
+        );
+      }
+    }
+
+    setState(() {
+      _searchController.clear();
+      _placeList.clear();
+    });
+
+    if (!mounted) return;
+    FocusScope.of(context).unfocus();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final pos = await LocationService().getCurrentPosition();
+      if (pos == null) return;
+
+      setState(() {
+        _center = LatLng(pos.latitude, pos.longitude);
+        _isCreatingMap = false;
+      });
+
+      if (!mounted) return;
+
+      context.read<MapMarkersProvider>().resetMarkers(
+        stops: context.read<RegisterTravelProvider>().stops,
+        onTap: (stop) async {
+          await showTravelStopModal(stop.place.latLng);
+        },
+      );
+    });
   }
 
   @override
@@ -231,30 +277,16 @@ class _TravelMapPageState extends State<TravelMapPage> {
                         itemCount: _placeList.length,
                         itemBuilder: (context, index) {
                           final place = _placeList[index];
-                          return ListTile(
-                            onTap: () async {
-                              final p = await LocationService()
-                                  .getPositionByPlaceQuery(place.toString());
+                          final title = [
+                            place.city,
+                            place.state,
+                            place.country,
+                          ].where((e) => e != null && e.isNotEmpty).join(', ');
 
-                              if (p != null) {
-                                unawaited(
-                                  _mapController?.animateCamera(
-                                    CameraUpdate.newLatLngZoom(
-                                      LatLng(p.latitude, p.longitude),
-                                      _defaultZoom,
-                                    ),
-                                  ),
-                                );
-                              }
-                            },
-                            title: Text(
-                              place.toString(),
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            leading: Icon(
-                              Icons.location_on,
-                              color: Colors.black,
-                            ),
+                          return _AutocompletePlaceListTile(
+                            onTap: () async => _onPlaceListTileTap(place),
+                            place: place,
+                            title: title,
                           );
                         },
                       ),
@@ -266,6 +298,30 @@ class _TravelMapPageState extends State<TravelMapPage> {
           );
         },
       ),
+    );
+  }
+}
+
+class _AutocompletePlaceListTile extends StatelessWidget {
+  const _AutocompletePlaceListTile({
+    required this.onTap,
+    required this.place,
+    required this.title,
+  });
+
+  final VoidCallback onTap;
+  final Place place;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: onTap,
+      title: Text(
+        title.isEmpty ? place.toString() : title,
+        style: const TextStyle(color: Colors.black),
+      ),
+      leading: const Icon(Icons.location_on, color: Colors.black),
     );
   }
 }

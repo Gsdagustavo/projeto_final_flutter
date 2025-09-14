@@ -11,6 +11,12 @@ abstract final class PlacesTable {
   /// `TEXT PRIMARY KEY`
   static const String placeId = 'placeId';
 
+
+  /// Column name for the Place ID given by the Autocomplete API
+  ///
+  /// `TEXT`
+  static const String apiPlaceId = 'apiPlaceId';
+
   /// Column name for the city
   ///
   /// `TEXT`
@@ -46,6 +52,7 @@ abstract final class PlacesTable {
       '''
       CREATE TABLE $tableName(
         $placeId TEXT PRIMARY KEY, 
+        $apiPlaceId TEXT,
         $city TEXT,
         $state TEXT,
         $country TEXT,

@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../core/constants/api_keys.dart';
+import '../../../core/constants/assets_paths.dart';
 import '../../../core/extensions/date_extensions.dart';
 import '../../../domain/entities/participant.dart';
 import '../../../domain/entities/review.dart';
@@ -24,7 +25,6 @@ import '../../providers/review_provider.dart';
 import '../../providers/travel_list_provider.dart';
 import '../../providers/user_preferences_provider.dart';
 import '../../util/app_routes.dart';
-import '../../../core/constants/assets_paths.dart';
 import '../../widgets/fab_animated_list.dart';
 import '../../widgets/fab_circle_avatar.dart';
 import '../../widgets/fab_page.dart';
