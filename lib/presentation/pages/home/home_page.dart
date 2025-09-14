@@ -1,5 +1,4 @@
-import 'dart:async';
-
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -167,6 +166,8 @@ class _TravelListItem extends StatefulWidget {
 }
 
 class _TravelListItemState extends State<_TravelListItem> {
+  int _currentIndex = 0;
+
   Future<void> _onTravelStarted(Travel travel) async {
     final as = AppLocalizations.of(context)!;
     final result = await showDialog<bool>(
@@ -177,14 +178,11 @@ class _TravelListItemState extends State<_TravelListItem> {
       ),
     );
 
-    if (result == null || !result) {
-      return;
-    }
+    if (result == null || !result) return;
 
     if (!mounted) return;
 
     final state = context.read<TravelListProvider>();
-
     await showLoadingDialog(
       context: context,
       function: () async => await state.startTravel(travel),
@@ -197,7 +195,6 @@ class _TravelListItemState extends State<_TravelListItem> {
     }
 
     if (!mounted) return;
-
     showSuccessSnackBar(context, as.travel_started_successfully);
   }
 
@@ -211,14 +208,10 @@ class _TravelListItemState extends State<_TravelListItem> {
       ),
     );
 
-    if (result == null || !result) {
-      return;
-    }
-
+    if (result == null || !result) return;
     if (!mounted) return;
 
     final state = context.read<TravelListProvider>();
-
     await showLoadingDialog(
       context: context,
       function: () async => await state.finishTravel(travel),
@@ -231,13 +224,12 @@ class _TravelListItemState extends State<_TravelListItem> {
     }
 
     if (!mounted) return;
-
     showSuccessSnackBar(context, as.travel_finished_successfully);
   }
 
   @override
   Widget build(BuildContext context) {
-    final as = AppLocalizations.of(context)!;
+    final images = widget.travel.photos;
 
     return Card(
       child: InkWell(
@@ -249,21 +241,71 @@ class _TravelListItemState extends State<_TravelListItem> {
           children: [
             Stack(
               children: [
-                Builder(
-                  builder: (context) {
-                    if (widget.travel.photos.isEmpty) {
-                      return Image.asset(AssetsPaths.placeholderImage);
-                    }
+                if (images.isNotEmpty)
+                  CarouselSlider(
+                    items: images
+                        .map(
+                          (img) => ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(12),
+                              topRight: Radius.circular(12),
+                            ),
+                            child: Image.file(
+                              img!,
+                              width: double.infinity,
+                              height: 180,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        )
+                        .toList(),
+                    options: CarouselOptions(
+                      height: 180,
+                      viewportFraction: 1.0,
+                      enableInfiniteScroll: false,
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          _currentIndex = index;
+                        });
+                      },
+                    ),
+                  )
+                else
+                  ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      topRight: Radius.circular(12),
+                    ),
+                    child: Image.asset(
+                      AssetsPaths.placeholderImage,
+                      width: double.infinity,
+                      height: 180,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
 
-                    return ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(12),
-                        topRight: Radius.circular(12),
-                      ),
-                      child: Image.file(widget.travel.photos.first!),
-                    );
-                  },
-                ),
+                if (images.isNotEmpty)
+                  Positioned(
+                    bottom: 8,
+                    left: 0,
+                    right: 0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: images.asMap().entries.map((entry) {
+                        return Container(
+                          width: _currentIndex == entry.key ? 10 : 6,
+                          height: 6,
+                          margin: const EdgeInsets.symmetric(horizontal: 3),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: _currentIndex == entry.key
+                                ? Colors.white
+                                : Colors.white54,
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
 
                 Positioned(
                   top: 12,
@@ -276,50 +318,49 @@ class _TravelListItemState extends State<_TravelListItem> {
                   top: 12,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor.withValues(alpha: 0.7),
+                      color: Theme.of(context).cardColor.withAlpha(180),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Consumer<TravelListProvider>(
                       builder: (_, state, __) {
                         final parentContext = context;
-
                         return PopupMenuButton(
-                          popUpAnimationStyle: AnimationStyle(
-                            curve: Curves.easeInOutQuart,
-                            duration: Duration(milliseconds: 750),
-                          ),
                           icon: const Icon(Icons.more_vert),
                           itemBuilder: (context) => [
-                            if (widget.travel.status ==
-                                TravelStatus.upcoming) ...[
+                            if (widget.travel.status == TravelStatus.upcoming)
                               PopupMenuItem(
                                 child: ListTile(
                                   leading: const Icon(FontAwesomeIcons.play),
-                                  title: Text(as.start_travel),
+                                  title: Text(
+                                    AppLocalizations.of(context)!.start_travel,
+                                  ),
                                   onTap: () async {
                                     Navigator.of(parentContext).pop();
                                     await _onTravelStarted(widget.travel);
                                   },
                                 ),
                               ),
-                            ] else if (widget.travel.status ==
-                                TravelStatus.ongoing) ...[
+                            if (widget.travel.status == TravelStatus.ongoing)
                               PopupMenuItem(
                                 child: ListTile(
                                   leading: const Icon(FontAwesomeIcons.flag),
-                                  title: Text(as.finish_travel),
+                                  title: Text(
+                                    AppLocalizations.of(context)!.finish_travel,
+                                  ),
                                   onTap: () async {
                                     Navigator.of(parentContext).pop();
                                     await _onTravelFinished(widget.travel);
                                   },
                                 ),
                               ),
-                            ],
-
                             PopupMenuItem(
                               child: ListTile(
                                 leading: const Icon(FontAwesomeIcons.route),
-                                title: Text(as.view_travel_route),
+                                title: Text(
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.view_travel_route,
+                                ),
                                 onTap: () {
                                   Navigator.of(parentContext).pop();
                                   context.push(
@@ -329,9 +370,12 @@ class _TravelListItemState extends State<_TravelListItem> {
                                 },
                               ),
                             ),
-
                             PopupMenuItem(
                               child: ListTile(
+                                leading: const Icon(Icons.delete),
+                                title: Text(
+                                  AppLocalizations.of(context)!.delete_travel,
+                                ),
                                 onTap: () async {
                                   Navigator.of(parentContext).pop();
                                   await onTravelDeleted(
@@ -340,8 +384,6 @@ class _TravelListItemState extends State<_TravelListItem> {
                                     popContext: false,
                                   );
                                 },
-                                leading: const Icon(Icons.delete),
-                                title: Text(as.delete_travel),
                               ),
                             ),
                           ],
@@ -352,125 +394,92 @@ class _TravelListItemState extends State<_TravelListItem> {
                 ),
               ],
             ),
-            const Padding(padding: EdgeInsets.all(8)),
+
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(
-                spacing: 16,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     widget.travel.travelTitle,
-                    style: TextStyle(fontSize: 18),
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
+                  const SizedBox(height: 6),
+
                   Row(
                     children: [
                       const Icon(Icons.location_on),
-                      const Padding(padding: EdgeInsets.all(4)),
+                      const SizedBox(width: 4),
                       Builder(
                         builder: (context) {
-                          if (widget.travel.stops.last.place.city! !=
-                              widget.travel.stops.first.place.city!) {
+                          final startCity =
+                              widget.travel.stops.first.place.city ?? '';
+                          final endCity =
+                              widget.travel.stops.last.place.city ?? '';
+                          if (startCity != endCity) {
                             return Row(
                               children: [
-                                Text(widget.travel.stops.first.place.city!),
+                                Text(startCity),
                                 const Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 5),
                                   child: Icon(Icons.arrow_forward, size: 12),
                                 ),
-                                Text(widget.travel.stops.last.place.city!),
+                                Text(endCity),
                               ],
                             );
                           }
-
-                          return Text(widget.travel.stops.first.place.city!);
+                          return Text(startCity);
                         },
                       ),
                     ],
                   ),
 
-                  Stack(
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(Icons.calendar_today),
-                          const Padding(padding: EdgeInsets.all(4)),
-                          Consumer<UserPreferencesProvider>(
-                            builder: (_, state, __) {
-                              return Text.rich(
-                                TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: widget.travel.startDate.getMonthDay(
-                                        state.languageCode,
-                                      ),
-                                    ),
-                                    const TextSpan(text: ' - '),
-                                    TextSpan(
-                                      text: widget.travel.endDate.getMonthDay(
-                                        state.languageCode,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
+                  const SizedBox(height: 8),
 
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Row(
-                          spacing: 12,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 4,
-                                horizontal: 8,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                                color: Theme.of(
-                                  context,
-                                ).cardColor.withValues(alpha: 0.7),
-                                border: BoxBorder.all(
-                                  color: Theme.of(context).iconTheme.color!,
-                                  width: 1,
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                spacing: 4,
+                  Consumer<UserPreferencesProvider>(
+                    builder: (_, prefs, __) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '${widget.travel.startDate.getMonthDay(prefs.languageCode)} - '
+                            '${widget.travel.endDate.getMonthDay(prefs.languageCode)}',
+                          ),
+                          Row(
+                            children: [
+                              Row(
                                 children: [
-                                  Icon(Icons.people),
+                                  const Icon(Icons.people),
                                   Text('${widget.travel.participants.length}'),
                                 ],
                               ),
-                            ),
-
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 4,
-                                horizontal: 8,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                                color: Theme.of(
-                                  context,
-                                ).cardColor.withValues(alpha: 0.7),
-                                border: BoxBorder.all(
-                                  color: Theme.of(context).iconTheme.color!,
-                                  width: 1,
+                              const SizedBox(width: 8),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 4,
+                                  horizontal: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                  color: Theme.of(
+                                    context,
+                                  ).cardColor.withAlpha(180),
+                                  border: Border.all(
+                                    color: Theme.of(context).iconTheme.color!,
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Text(
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.stop(widget.travel.stops.length),
                                 ),
                               ),
-                              child: Text(as.stop(widget.travel.stops.length)),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                            ],
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),
@@ -490,18 +499,15 @@ class _TravelStatusWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color color;
-
     switch (status) {
       case TravelStatus.upcoming:
-        color = Colors.lightBlueAccent.shade400.withValues(alpha: 0.8);
+        color = Colors.lightBlueAccent.shade400.withAlpha(200);
         break;
-
       case TravelStatus.ongoing:
-        color = Colors.green.withValues(alpha: 0.8);
+        color = Colors.green.withAlpha(200);
         break;
-
       case TravelStatus.finished:
-        color = Colors.grey.withValues(alpha: 0.8);
+        color = Colors.grey.withAlpha(200);
         break;
     }
 
