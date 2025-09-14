@@ -11,7 +11,6 @@ abstract final class PlacesTable {
   /// `TEXT PRIMARY KEY`
   static const String placeId = 'placeId';
 
-
   /// Column name for the Place ID given by the Autocomplete API
   ///
   /// `TEXT`

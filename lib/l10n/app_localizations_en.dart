@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -116,7 +117,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get experience_historical_places => 'Visit Historical Places';
 
   @override
-  String get experience_visit_local_establishments => 'Visit Local Establishments';
+  String get experience_visit_local_establishments =>
+      'Visit Local Establishments';
 
   @override
   String get experience_contact_with_nature => 'Contact With Nature';
@@ -166,7 +168,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get travel_started_successfully => 'Travel Started Successfully!';
 
   @override
-  String get travel_has_already_started => 'This travel has already been started';
+  String get travel_has_already_started =>
+      'This travel has already been started';
 
   @override
   String get finish_travel => 'Finish Travel';
@@ -320,13 +323,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get add_stop => 'Add Travel Stop';
 
   @override
-  String get remove_stop_confirmation => 'Do you really want to remove this stop?';
+  String get remove_stop_confirmation =>
+      'Do you really want to remove this stop?';
 
   @override
   String get planned_experiences => 'Planned Experiences';
 
   @override
-  String get err_register_travel_generic => 'An error occurred while registering the travel';
+  String get err_register_travel_generic =>
+      'An error occurred while registering the travel';
 
   @override
   String get long_press_to_add_stops => 'Long press to add stops';
@@ -347,10 +352,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get registered_stops => 'Registered Stops';
 
   @override
-  String get no_stops_registered => 'No stops registered yet. Use the map to plan your route across different cities and countries';
+  String get no_stops_registered =>
+      'No stops registered yet. Use the map to plan your route across different cities and countries';
 
   @override
-  String get use_the_map_add_waypoints => 'Use the map to modify your route or to add more stops';
+  String get use_the_map_add_waypoints =>
+      'Use the map to modify your route or to add more stops';
 
   @override
   String get travel_photos => 'Travel Photos';
@@ -368,7 +375,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get choose_photos => 'Choose Photos';
 
   @override
-  String get add_photos_label => 'Add photos to make your travel more memorable and visually appealing';
+  String get add_photos_label =>
+      'Add photos to make your travel more memorable and visually appealing';
 
   @override
   String get travel_photo_added => 'Travel photo added';
@@ -380,7 +388,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invalid_travel_data => 'Invalid Travel Data';
 
   @override
-  String get travel_registered_successfully => 'Your Travel was successfully registered!';
+  String get travel_registered_successfully =>
+      'Your Travel was successfully registered!';
 
   @override
   String get travel_stop => 'Travel Stop';
@@ -401,7 +410,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get stop_registered_successfully => 'Stop registered successfully!';
 
   @override
-  String get err_register_stop => 'An error occurred while trying to register the stop';
+  String get err_register_stop =>
+      'An error occurred while trying to register the stop';
 
   @override
   String get update_stop => 'Update Stop';
@@ -416,13 +426,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get leave_date => 'Leave Date';
 
   @override
-  String get err_you_must_select_arrive_date_first => 'You must select the Arrive Date first!';
+  String get err_you_must_select_arrive_date_first =>
+      'You must select the Arrive Date first!';
 
   @override
   String get finish => 'Finish';
 
   @override
-  String get err_pdf_generation => 'An unexpected error occurred while trying to generate the Travel PDF';
+  String get err_pdf_generation =>
+      'An unexpected error occurred while trying to generate the Travel PDF';
 
   @override
   String get duration => 'Duration';
@@ -487,13 +499,15 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get error_review => 'An error has occurred while registering the review';
+  String get error_review =>
+      'An error has occurred while registering the review';
 
   @override
   String get remove_review => 'Remove review';
 
   @override
-  String get remove_review_confirmation => 'Do you really want to remove this review?';
+  String get remove_review_confirmation =>
+      'Do you really want to remove this review?';
 
   @override
   String get err_invalid_review_data => 'Invalid review data';
@@ -511,13 +525,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete_review => 'Delete Review';
 
   @override
-  String get delete_review_confirmation => 'Do you really want to delete this review?';
+  String get delete_review_confirmation =>
+      'Do you really want to delete this review?';
 
   @override
   String get review_deleted_successfully => 'Review Deleted Successfully!';
 
   @override
-  String get review_requires_content => 'You must add at least one image or write a description before submitting your review. Reviews cannot be empty.';
+  String get review_requires_content =>
+      'You must add at least one image or write a description before submitting your review. Reviews cannot be empty.';
 
   @override
   String get success => 'Success!';
@@ -535,7 +551,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sign_out_question => 'Sign Out?';
 
   @override
-  String get sign_out_confirmation => 'Are you sure you want to sign out? You\'ll need to sign in again to access your travels';
+  String get sign_out_confirmation =>
+      'Are you sure you want to sign out? You\'ll need to sign in again to access your travels';
 
   @override
   String get sign_out => 'Sign Out';
@@ -547,7 +564,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get no_internet => 'No Internet Connection';
 
   @override
-  String get no_internet_message => 'You\'re currently offline. Some features may not be available until you reconnect to the internet';
+  String get no_internet_message =>
+      'You\'re currently offline. Some features may not be available until you reconnect to the internet';
 
   @override
   String get try_again => 'Try Again';
@@ -556,10 +574,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get continue_offline => 'Continue Offline';
 
   @override
-  String get travel_phrase_intro => 'A journey is not measured in miles, but in moments.';
+  String get travel_phrase_intro =>
+      'A journey is not measured in miles, but in moments.';
 
   @override
-  String get travel_phrase_body => 'Each page of this booklet holds more than landscapes: it holds spontaneous smiles, unexpected discoveries, conversations that touched the soul, and silences that spoke louder than words.';
+  String get travel_phrase_body =>
+      'Each page of this booklet holds more than landscapes: it holds spontaneous smiles, unexpected discoveries, conversations that touched the soul, and silences that spoke louder than words.';
 
   @override
   String document_generated_timestamp(Object time) {
