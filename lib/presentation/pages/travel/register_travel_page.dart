@@ -47,7 +47,6 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
 
   static const int _maxYear = 2100;
 
-  /// TODO: intl
   final DateFormat _dateFormat = DateFormat('MM/dd/yyyy');
 
   final _participantNameController = TextEditingController();
@@ -623,9 +622,9 @@ class _RegisterTravelPageState extends State<RegisterTravelPage> {
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
-                              // childAspectRatio: 1,
-                              // crossAxisSpacing: 8,
-                              // mainAxisSpacing: 8,
+                              childAspectRatio: 1,
+                              crossAxisSpacing: 8,
+                              mainAxisSpacing: 8,
                             ),
                         itemBuilder: (context, index) {
                           final image = state.travelPhotos[index];

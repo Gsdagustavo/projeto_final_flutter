@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
-import 'data/local/database/database.dart';
 import 'data/repositories/review/sqlite_review_repository.dart';
 import 'data/repositories/travel/sqlite_travel_repository.dart';
 import 'domain/usecases/review/review_use_cases.dart';
@@ -15,7 +14,6 @@ import 'presentation/providers/register_travel_provider.dart';
 import 'presentation/providers/review_provider.dart';
 import 'presentation/providers/travel_list_provider.dart';
 import 'presentation/providers/user_preferences_provider.dart';
-import 'presentation/util/mock_data.dart';
 import 'presentation/widgets/my_app.dart';
 
 Future<void> main() async {
@@ -32,8 +30,6 @@ Future<void> main() async {
 
   final reviewRepository = SQLiteReviewRepository();
   final reviewUseCases = ReviewUseCases.create(reviewRepository);
-
-  await _resetTestDB(travelUseCases);
 
   /// Build App
   runApp(
@@ -58,12 +54,4 @@ Future<void> main() async {
 
   /// Initialize dotenv
   await dotenv.load(fileName: '.env');
-}
-
-Future<void> _resetTestDB(TravelUseCases travelUseCases) async {
-  final db = await DBConnection().getDatabase(delete: true);
-  // await DBConnection().printAllTables(db);
-
-  final travels = await generateSampleTravels();
-  travels.forEach(travelUseCases.registerTravel.call);
 }

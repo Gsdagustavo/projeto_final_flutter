@@ -28,6 +28,9 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
     apiKey: dotenv.get(ApiKeys.mapsApiKey),
   );
 
+  bool _isLoading = true;
+  String? _errorMessage;
+
   LatLngBounds _calculateBounds(List<LatLng> points) {
     var minLat = points.first.latitude;
     var maxLat = points.first.latitude;
@@ -51,13 +54,18 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
   Set<Marker> _calculateMarkers() {
     final stops = widget.travel.stops;
 
-    return stops.map((stop) {
+    return stops.asMap().entries.map((entry) {
+      final index = entry.key;
+      final stop = entry.value;
       final lat = stop.place.latitude;
       final lon = stop.place.longitude;
 
       return Marker(
         markerId: MarkerId('$lat,$lon'),
-        infoWindow: InfoWindow(title: stop.place.toString()),
+        infoWindow: InfoWindow(
+          title: stop.place.toString(),
+          snippet: 'Stop ${index + 1}',
+        ),
         position: LatLng(lat, lon),
       );
     }).toSet();
@@ -68,56 +76,87 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
 
     if (stops.length < 2) return [];
 
-    final origin = PointLatLng(
-      stops.first.place.latitude,
-      stops.first.place.longitude,
-    );
-
-    final destination = PointLatLng(
-      stops.last.place.latitude,
-      stops.last.place.longitude,
-    );
-
-    final waypoints = stops.sublist(1, stops.length - 1).map((stop) {
-      return PolylineWayPoint(
-        location: '${stop.place.latitude},${stop.place.longitude}',
+    try {
+      final origin = PointLatLng(
+        stops.first.place.latitude,
+        stops.first.place.longitude,
       );
-    }).toList();
 
-    final result = await _polylinePoints.getRouteBetweenCoordinates(
-      // ignore: deprecated_member_use
-      request: PolylineRequest(
-        origin: origin,
-        destination: destination,
-        mode: TravelMode.driving,
-        wayPoints: waypoints,
-      ),
-    );
+      final destination = PointLatLng(
+        stops.last.place.latitude,
+        stops.last.place.longitude,
+      );
 
-    if (result.points.isEmpty) {
-      return [];
+      final waypoints = stops.sublist(1, stops.length - 1).map((stop) {
+        return PolylineWayPoint(
+          location: '${stop.place.latitude},${stop.place.longitude}',
+        );
+      }).toList();
+
+      final result = await _polylinePoints.getRouteBetweenCoordinates(
+        request: PolylineRequest(
+          origin: origin,
+          destination: destination,
+          mode: TravelMode.driving,
+          wayPoints: waypoints,
+        ),
+      );
+
+      if (result.points.isEmpty) {
+        return [];
+      }
+
+      return result.points.map((e) {
+        return LatLng(e.latitude, e.longitude);
+      }).toList();
+    } catch (e) {
+      debugPrint('Error fetching polylines: $e');
+      return _createFallbackPolyline();
     }
+  }
 
-    return result.points.map((e) {
-      return LatLng(e.latitude, e.longitude);
-    }).toList();
+  List<LatLng> _createFallbackPolyline() {
+    final stops = widget.travel.stops;
+    return stops
+        .map((stop) => LatLng(stop.place.latitude, stop.place.longitude))
+        .toList();
   }
 
   Future<void> _generatePolyline() async {
-    final polylineCoords = await _calculatePolylines();
-
-    final polyline = Polyline(
-      polylineId: const PolylineId('Route'),
-      color: Colors.red,
-      width: 5,
-      points: polylineCoords,
-    );
-
     setState(() {
-      _polylines = {polyline};
+      _isLoading = true;
+      _errorMessage = null;
     });
 
-    _fitBounds();
+    try {
+      final polylineCoords = await _calculatePolylines();
+
+      final polyline = Polyline(
+        polylineId: const PolylineId('Route'),
+        color: Colors.red,
+        width: 5,
+        points: polylineCoords,
+        patterns: polylineCoords.length == widget.travel.stops.length
+            ? [PatternItem.dash(20), PatternItem.gap(10)]
+            : [],
+      );
+
+      setState(() {
+        _polylines = {polyline};
+        _isLoading = false;
+        if (polylineCoords.length == widget.travel.stops.length) {
+          _errorMessage = 'Network unavailable - showing direct connections';
+        }
+      });
+
+      _fitBounds();
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = 'Unable to load route: ${e.toString()}';
+      });
+      _fitBounds();
+    }
   }
 
   LatLng _getInitialPosition() {
@@ -135,6 +174,10 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
     _controller?.animateCamera(CameraUpdate.newLatLngBounds(bounds, 50));
   }
 
+  void _retryLoadRoute() {
+    _generatePolyline();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -149,22 +192,52 @@ class _TravelRoutePageState extends State<TravelRoutePage> {
         title: widget.travel.travelTitle,
         automaticallyImplyLeading: true,
       ),
-
-      body: GoogleMap(
-        onMapCreated: (controller) {
-          setState(() {
-            _controller = controller;
-            _fitBounds();
-          });
-        },
-
-        initialCameraPosition: CameraPosition(
-          target: _getInitialPosition(),
-          zoom: 15,
-        ),
-
-        markers: _calculateMarkers(),
-        polylines: _polylines,
+      body: Stack(
+        children: [
+          GoogleMap(
+            onMapCreated: (controller) {
+              setState(() {
+                _controller = controller;
+                _fitBounds();
+              });
+            },
+            initialCameraPosition: CameraPosition(
+              target: _getInitialPosition(),
+              zoom: 15,
+            ),
+            markers: _calculateMarkers(),
+            polylines: _polylines,
+          ),
+          if (_isLoading) const Center(child: CircularProgressIndicator()),
+          if (_errorMessage != null)
+            Positioned(
+              top: 16,
+              left: 16,
+              right: 16,
+              child: Card(
+                color: Colors.orange.shade100,
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.warning, color: Colors.orange),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          _errorMessage!,
+                          style: const TextStyle(color: Colors.orange),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: _retryLoadRoute,
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

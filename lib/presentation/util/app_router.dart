@@ -19,7 +19,10 @@ import 'app_routes.dart';
 /// Custom transition animations for different types of navigation
 class PageTransitions {
   /// Slide transition from right to left (for forward navigation)
-  static Page<T> slideFromRight<T extends Object?>(Widget child, GoRouterState state) {
+  static Page<T> slideFromRight<T extends Object?>(
+    Widget child,
+    GoRouterState state,
+  ) {
     return CustomTransitionPage<T>(
       key: state.pageKey,
       child: child,
@@ -30,20 +33,21 @@ class PageTransitions {
         const end = Offset.zero;
         const curve = Curves.easeInOut;
 
-        var tween = Tween(begin: begin, end: end).chain(
-          CurveTween(curve: curve),
-        );
+        var tween = Tween(
+          begin: begin,
+          end: end,
+        ).chain(CurveTween(curve: curve));
 
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
+        return SlideTransition(position: animation.drive(tween), child: child);
       },
     );
   }
 
   /// Slide transition from bottom to top (for modal-style pages)
-  static Page<T> slideFromBottom<T extends Object?>(Widget child, GoRouterState state) {
+  static Page<T> slideFromBottom<T extends Object?>(
+    Widget child,
+    GoRouterState state,
+  ) {
     return CustomTransitionPage<T>(
       key: state.pageKey,
       child: child,
@@ -54,14 +58,12 @@ class PageTransitions {
         const end = Offset.zero;
         const curve = Curves.easeOutCubic;
 
-        var tween = Tween(begin: begin, end: end).chain(
-          CurveTween(curve: curve),
-        );
+        var tween = Tween(
+          begin: begin,
+          end: end,
+        ).chain(CurveTween(curve: curve));
 
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
+        return SlideTransition(position: animation.drive(tween), child: child);
       },
     );
   }
@@ -83,7 +85,10 @@ class PageTransitions {
   }
 
   /// Scale and fade transition (for special pages like details)
-  static Page<T> scaleAndFade<T extends Object?>(Widget child, GoRouterState state) {
+  static Page<T> scaleAndFade<T extends Object?>(
+    Widget child,
+    GoRouterState state,
+  ) {
     return CustomTransitionPage<T>(
       key: state.pageKey,
       child: child,
@@ -93,9 +98,10 @@ class PageTransitions {
         const curve = Curves.easeOutQuart;
 
         return ScaleTransition(
-          scale: Tween<double>(begin: 0.95, end: 1.0).animate(
-            CurvedAnimation(parent: animation, curve: curve),
-          ),
+          scale: Tween<double>(
+            begin: 0.95,
+            end: 1.0,
+          ).animate(CurvedAnimation(parent: animation, curve: curve)),
           child: FadeTransition(
             opacity: CurvedAnimation(parent: animation, curve: curve),
             child: child,
@@ -106,11 +112,11 @@ class PageTransitions {
   }
 
   /// No transition (for bottom navigation tabs to avoid jarring movement)
-  static Page<T> noTransition<T extends Object?>(Widget child, GoRouterState state) {
-    return NoTransitionPage<T>(
-      key: state.pageKey,
-      child: child,
-    );
+  static Page<T> noTransition<T extends Object?>(
+    Widget child,
+    GoRouterState state,
+  ) {
+    return NoTransitionPage<T>(key: state.pageKey, child: child);
   }
 }
 
@@ -146,8 +152,10 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: AppRoutes.registerTravel,
-                pageBuilder: (context, state) =>
-                    PageTransitions.noTransition(const RegisterTravelPage(), state),
+                pageBuilder: (context, state) => PageTransitions.noTransition(
+                  const RegisterTravelPage(),
+                  state,
+                ),
               ),
             ],
           ),
@@ -169,7 +177,10 @@ class AppRouter {
         pageBuilder: (context, state) {
           final travel = state.extra as Travel;
           debugPrint('travel passed to travel details page: $travel');
-          return PageTransitions.scaleAndFade(TravelDetailsPage(travel: travel), state);
+          return PageTransitions.scaleAndFade(
+            TravelDetailsPage(travel: travel),
+            state,
+          );
         },
       ),
       GoRoute(
@@ -182,7 +193,10 @@ class AppRouter {
         path: AppRoutes.travelRoute,
         pageBuilder: (context, state) {
           final travel = state.extra as Travel;
-          return PageTransitions.slideFromRight(TravelRoutePage(travel: travel), state);
+          return PageTransitions.slideFromRight(
+            TravelRoutePage(travel: travel),
+            state,
+          );
         },
       ),
 
@@ -247,21 +261,17 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar>
       vsync: this,
     );
 
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0.1, 0),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOutCubic,
-    ));
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0.1, 0), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeOutCubic,
+          ),
+        );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOut,
-    ));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
+    );
 
     _animationController.forward();
   }

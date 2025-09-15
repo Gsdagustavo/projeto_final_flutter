@@ -379,6 +379,36 @@ abstract class AppLocalizations {
   /// **'Invalid stops dates'**
   String get invalid_stop_dates;
 
+  /// No description provided for @no_travels_registered.
+  ///
+  /// In en, this message translates to:
+  /// **'No travels registered'**
+  String get no_travels_registered;
+
+  /// No description provided for @no_travels_found.
+  ///
+  /// In en, this message translates to:
+  /// **'No travels found matching {search}'**
+  String no_travels_found(Object search);
+
+  /// No description provided for @use_the.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the'**
+  String get use_the;
+
+  /// No description provided for @travel_register_page.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel register page'**
+  String get travel_register_page;
+
+  /// No description provided for @to_register_one.
+  ///
+  /// In en, this message translates to:
+  /// **'to register one right now'**
+  String get to_register_one;
+
   /// No description provided for @my_travels.
   ///
   /// In en, this message translates to:

@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/constants/assets_paths.dart';
 import '../../../core/extensions/date_extensions.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../services/file_service.dart';
@@ -45,14 +44,6 @@ class _SettingsPageState extends State<SettingsPage> {
     final loginProvider = Provider.of<LoginProvider>(modalContext);
     final user = loginProvider.loggedUser;
 
-    const defaultPfpPath = AssetsPaths.defaultProfilePicturePath;
-
-    final Widget backgroundImage;
-    if (_profilePicture != null) {
-      backgroundImage = Image.file(_profilePicture!);
-    } else {
-      backgroundImage = Image.asset(defaultPfpPath);
-    }
 
     final locale = Localizations.localeOf(modalContext).toString();
 
@@ -74,9 +65,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   Stack(
                     alignment: Alignment.bottomRight,
                     children: [
-                      FabCircleAvatar(
-                        radius: 32,
-                        child: InstaImageViewer(child: backgroundImage),
+                      InstaImageViewer(
+                        child: FabCircleAvatar(
+                          imageFile: _profilePicture,
+                          radius: 36,
+                        ),
                       ),
                       InkWell(
                         onTap: () async {
@@ -90,7 +83,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           setState(() => _profilePicture = image);
                         },
                         child: const CircleAvatar(
-                          radius: 14,
+                          radius: 16,
                           child: Icon(Icons.camera_alt, size: 16),
                         ),
                       ),

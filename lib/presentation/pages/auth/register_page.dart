@@ -33,6 +33,8 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _obscurePassword = true;
 
   void _register() async {
+    FocusScope.of(context).requestFocus(FocusNode());
+
     if (!_formKey.currentState!.validate()) return;
 
     final as = AppLocalizations.of(context)!;
@@ -51,6 +53,10 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
 
+    if (mounted) {
+      FocusScope.of(context).requestFocus(FocusNode());
+    }
+
     /// Check if any error has occurred while trying to create the user
     if (loginProvider.hasError) {
       if (!mounted) return;
@@ -60,6 +66,10 @@ class _RegisterPageState extends State<RegisterPage> {
         builder: (context) => ErrorModal(message: loginProvider.errorMsg),
       );
       return;
+    }
+
+    if (mounted) {
+      FocusScope.of(context).requestFocus(FocusNode());
     }
 
     /// Try to sign in
@@ -94,6 +104,10 @@ class _RegisterPageState extends State<RegisterPage> {
         return OkCancelModal(title: as.login, content: as.register_login);
       },
     );
+
+    if (mounted) {
+      FocusScope.of(context).requestFocus(FocusNode());
+    }
 
     if (!mounted) return;
 

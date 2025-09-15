@@ -4,7 +4,16 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:insta_image_viewer/insta_image_viewer.dart';
 
+/// A carousel slider widget that displays a list of images with optional
+/// zooming capabilities using [InstaImageViewer].
+///
+/// Supports automatic sliding, infinite scroll, and indicator dots for multiple
+/// images.
 class FabCarouselSlider extends StatefulWidget {
+  /// Creates a [FabCarouselSlider].
+  ///
+  /// The [photos] parameter must not be null and should contain at least one
+  /// image file.
   const FabCarouselSlider({
     super.key,
     this.autoPlay = true,
@@ -12,15 +21,25 @@ class FabCarouselSlider extends StatefulWidget {
     this.useImageViewer = true,
   });
 
+  /// Determines whether tapping on an image should allow zooming
+  /// using [InstaImageViewer]. Defaults to `true`.
   final bool useImageViewer;
+
+  /// Determines whether the carousel should automatically scroll
+  /// through the images. Defaults to `true`.
   final bool autoPlay;
+
+  /// A list of image files to be displayed in the carousel.
   final List<File?> photos;
 
   @override
   State<FabCarouselSlider> createState() => _FabCarouselSliderState();
 }
 
+/// The state for [FabCarouselSlider] that manages the current photo index
+/// and builds the carousel slider with optional indicators.
 class _FabCarouselSliderState extends State<FabCarouselSlider> {
+  /// The index of the currently displayed photo in the carousel.
   int _currentPhotoIndex = 0;
 
   @override
@@ -60,7 +79,7 @@ class _FabCarouselSliderState extends State<FabCarouselSlider> {
             viewportFraction: 1.0,
             enlargeCenterPage: true,
             enableInfiniteScroll: true,
-            autoPlay: true,
+            autoPlay: widget.autoPlay,
             onPageChanged: (index, reason) {
               setState(() {
                 _currentPhotoIndex = index % widget.photos.length;
@@ -69,6 +88,7 @@ class _FabCarouselSliderState extends State<FabCarouselSlider> {
           ),
         ),
 
+        /// Shows indicator dots if there is more than one image.
         if (widget.photos.length > 1)
           Padding(
             padding: const EdgeInsets.only(top: 8),

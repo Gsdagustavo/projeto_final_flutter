@@ -49,8 +49,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final as = AppLocalizations.of(context)!;
 
-    debugPrint('home page build called');
-
     return Consumer<TravelListProvider>(
       builder: (_, state, __) {
         if (state.isLoading) {
@@ -61,7 +59,7 @@ class _HomePageState extends State<HomePage> {
           title: as.title_home,
           body: Builder(
             builder: (context) {
-              if (state.travels.isEmpty) {
+              if (state.travels.isEmpty && searchController.text.isEmpty) {
                 return Column(
                   children: [
                     Lottie.asset('assets/animations/paperplane.json'),
@@ -74,19 +72,18 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Nenhuma viagem cadastrada',
+                            as.no_travels_registered,
                             style: Theme.of(context).textTheme.headlineSmall,
                             textAlign: TextAlign.center,
                           ),
-
                           Text.rich(
                             textAlign: TextAlign.center,
                             TextSpan(
                               style: Theme.of(context).textTheme.bodyMedium,
                               children: [
-                                TextSpan(text: 'Use a '),
+                                TextSpan(text: '${as.use_the} '),
                                 TextSpan(
-                                  text: 'página de registro de viagem',
+                                  text: as.travel_register_page,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
@@ -96,14 +93,28 @@ class _HomePageState extends State<HomePage> {
                                       context.go(AppRoutes.registerTravel);
                                     },
                                 ),
-                                TextSpan(
-                                  text: ' para registrar uma agora mesmo',
-                                ),
+                                TextSpan(text: ' ${as.to_register_one}'),
                               ],
                             ),
                           ),
                         ],
                       ),
+                    ),
+                  ],
+                );
+              }
+
+              if (state.travels.isEmpty && searchController.text.isNotEmpty) {
+                return Column(
+                  spacing: 16,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Lottie.asset('assets/animations/paperplane.json'),
+                    Text(
+                      as.no_travels_found(searchController.text),
+                      style: Theme.of(context).textTheme.headlineSmall,
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 );

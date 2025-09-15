@@ -152,6 +152,23 @@ class AppLocalizationsPt extends AppLocalizations {
   String get invalid_stop_dates => 'Datas das paradas inválidas';
 
   @override
+  String get no_travels_registered => 'Nenhuma viagem cadastrada';
+
+  @override
+  String no_travels_found(Object search) {
+    return 'Nenhuma viagem encontrada para $search';
+  }
+
+  @override
+  String get use_the => 'Use a';
+
+  @override
+  String get travel_register_page => 'página de registro de viagem';
+
+  @override
+  String get to_register_one => 'para cadastrar uma agora mesmo';
+
+  @override
   String get my_travels => 'Minhas Viagens';
 
   @override

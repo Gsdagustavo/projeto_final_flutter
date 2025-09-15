@@ -29,12 +29,14 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
 
-  final _emailController = TextEditingController(text: 'test@gmail.com');
-  final _passwordController = TextEditingController(text: '123456');
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   bool _obscurePassword = true;
 
   void _login() async {
+    FocusScope.of(context).requestFocus(FocusNode());
+
     if (!_formKey.currentState!.validate()) return;
 
     final as = AppLocalizations.of(context)!;
@@ -52,6 +54,10 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
 
+    if (mounted) {
+      FocusScope.of(context).requestFocus(FocusNode());
+    }
+
     if (!mounted) return;
 
     if (loginProvider.hasError) {
@@ -63,10 +69,16 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
+    FocusScope.of(context).requestFocus(FocusNode());
+
     await showDialog(
       context: context,
       builder: (context) => SuccessModal(message: as.logged_in_successfully),
     );
+
+    if (mounted) {
+      FocusScope.of(context).requestFocus(FocusNode());
+    }
 
     if (!mounted) return;
 

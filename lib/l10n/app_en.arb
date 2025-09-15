@@ -63,6 +63,16 @@
   "invalid_participant_data": "Invalid participant data",
   "invalid_stop_dates": "Invalid stops dates",
   "@@home_page": {},
+  "no_travels_registered": "No travels registered",
+  "no_travels_found": "No travels found matching {search}",
+  "@@no_travels_found": {
+    "placeholders": {
+      "search": {}
+    }
+  },
+  "use_the": "Use the",
+  "travel_register_page": "Travel register page",
+  "to_register_one": "to register one right now",
   "my_travels": "My Travels",
   "start_travel": "Start Travel",
   "start_travel_confirmation": "Start Travel {travel}?",
@@ -257,7 +267,6 @@
   },
   "reviews_continued": "Reviews (continued)",
   "no_reviews_for_this_stop": "No reviews for this stop yet",
-
   "@@util": {},
   "yes": "Yes",
   "no": "No",

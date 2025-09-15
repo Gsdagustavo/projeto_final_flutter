@@ -63,6 +63,16 @@
   "invalid_participant_data": "Dados do participante inválidos",
   "invalid_stop_dates": "Datas das paradas inválidas",
   "@@home_page": {},
+  "no_travels_registered": "Nenhuma viagem cadastrada",
+  "no_travels_found": "Nenhuma viagem encontrada para {search}",
+  "@@no_travels_found": {
+    "placeholders": {
+      "search": {}
+    }
+  },
+  "use_the": "Use a",
+  "travel_register_page": "página de registro de viagem",
+  "to_register_one": "para cadastrar uma agora mesmo",
   "my_travels": "Minhas Viagens",
   "start_travel": "Iniciar Viagem",
   "start_travel_confirmation": "Iniciar Viagem {travel}?",
